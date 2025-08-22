@@ -1,16 +1,34 @@
 "use client";
-import { CssBaseline } from "@mui/material";
-import Navbar from "@/components/navbar/index";
+import { CssBaseline, Box } from "@mui/material";
+import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import "../../src/app/globals.css"
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <title>zenith</title>
+      <head>
+        <title>Zenith</title>
+      </head>
       <body>
         <CssBaseline />
+        {/* Sticky Navbar */}
         <Navbar />
-        {children}
+
+        {/* Main content area */}
+        <Box
+          component="main"
+          sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+          }}
+        >
+          {children}
+        </Box>
+
+        {/* Footer */}
         <Footer />
       </body>
     </html>

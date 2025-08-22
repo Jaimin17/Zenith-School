@@ -10,30 +10,30 @@ import {
   Stack,
 } from "@mui/material";
 import { Facebook, Instagram, YouTube, WhatsApp, Search } from "@mui/icons-material";
-import NavDropdown from "./NavDropdown"; // Import the new dropdown component
+import NavDropdown from "./NavDropdown";
 import NavLinkBtn from "./NavLinkBtn";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Navbar() {
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [openIndex, setOpenIndex] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openIndex, setOpenIndex] = useState(null);
 
-    const handleOpen = (index, event) => {
-        setAnchorEl(event.currentTarget); // ✅ keep track of button element
-        setOpenIndex(index);
-    };
+  const handleOpen = (index, event) => {
+    setAnchorEl(event.currentTarget);
+    setOpenIndex(index);
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
     setOpenIndex(null);
   };
 
-
   return (
     <Box>
-      {/* Top Info Bar */}
+      {/* ✅ Top Info Bar (NOT sticky) */}
       <Box sx={{ display: "flex", width: "100%" }}>
-        {/* Left - Socials (Orange) */}
+        {/* Left - Socials */}
         <Box
           sx={{
             flex: 1,
@@ -58,7 +58,7 @@ export default function Navbar() {
           </Stack>
         </Box>
 
-        {/* Right - Contact Info (Green) */}
+        {/* Right - Contact Info */}
         <Box
           sx={{
             flex: 2,
@@ -80,13 +80,25 @@ export default function Navbar() {
         </Box>
       </Box>
 
-      {/* Main Navbar */}
-      <AppBar position="static" elevation={0} sx={{ bgcolor: "white", color: "black", px: 4 }}>
+      {/* ✅ Sticky Navbar only */}
+      <AppBar
+        position="sticky"
+        elevation={0}
+        sx={{
+          bgcolor: "white",
+          color: "black",
+          px: 4,
+          top: 0,
+          zIndex: (theme) => theme.zIndex.drawer + 1, // keeps above everything
+        }}
+      >
         <Toolbar>
           {/* Logo */}
-          <Typography variant="h5" sx={{ flexGrow: 1, fontWeight: "bold", color: "#0f5c4d" }}>
-            edu<span style={{ color: "orange" }}>ka</span>
-          </Typography>
+          <Link href="/" style={{ textDecoration: "none", color: "inherit", paddingRight: 60 }}>
+            <Typography variant="h4" sx={{ flexGrow: 1, fontWeight: "900", color: "#0f5c4d" }}>
+              Zeni<span style={{ color: "orange" }}>th</span>
+            </Typography>
+          </Link>
 
           {/* Menu Items */}
           <Stack direction="row" spacing={2}>
@@ -100,11 +112,15 @@ export default function Navbar() {
               onClose={handleClose}
             />
 
-            {/* Reusable Dropdowns */}
             <NavDropdown
               title="About"
               items={["From Principal’s Desk", "State-of-the-Art Infrastructure", "Timeline", "Awards"]}
-              links={["/about/from-principal-desk", "/about/state-of-the-art-infrastructure", "/about/timeline", "/about/awards"]}
+              links={[
+                "/about/from-principal-desk",
+                "/about/state-of-the-art-infrastructure",
+                "/about/timeline",
+                "/about/awards",
+              ]}
               open={openIndex === 1}
               anchorEl={anchorEl}
               onOpen={(event) => handleOpen(1, event)}
@@ -135,7 +151,7 @@ export default function Navbar() {
             <NavLinkBtn href={"/alumni"} title="Alumni" />
           </Stack>
 
-          {/* Right Side - Search + Apply Button */}
+          {/* Right Side */}
           <Stack direction="row" spacing={2} alignItems="center" sx={{ ml: 3 }}>
             <IconButton>
               <Search />

@@ -6,9 +6,9 @@ import Banner from "@/components/Banner";
 export default function TributeToOurFoundersPage() {
     const dummyData = {
         image1:
-            "https://media.istockphoto.com/id/2172627567/photo/happy-multi-generation-family-sitting-on-sofa-at-home-during-diwali.webp?s=2048x2048&w=is&k=20&c=dAbfJWvVfqhujisMfyVkMz7Z-xPeVJisu92dJ6uZgaI=",
+            "https://images.unsplash.com/photo-1601933973706-34bd411ffd67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         firstText: TRIBUTE_PAGE_TEXT.TEXT1,
-        image2: "https://cdn.pixabay.com/photo/2022/10/07/17/32/potrait-7505585_1280.jpg",
+        image2: "https://images.unsplash.com/photo-1755626006620-5ca1ca4de3a7?q=80&w=1468&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         image3: "https://cdn.pixabay.com/photo/2022/09/26/10/40/cat-7480374_1280.jpg",
         secondText: TRIBUTE_PAGE_TEXT?.TEXT2,
     };

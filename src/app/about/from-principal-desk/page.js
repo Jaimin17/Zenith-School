@@ -40,111 +40,118 @@ export default function fromPrincipalDeskPage() {
               borderRadius: 3,
               boxShadow: 3,
               position: "relative",
+              display: 'flex',
+              justifyContent: 'space-between'
             }}
           >
-            {/* Decorative Accent Line */}
-            <Box
-              sx={{
-                width: 60,
-                height: 4,
-                backgroundColor: "primary.main",
-                borderRadius: 2,
-                mb: 2,
-              }}
-            />
+            <Box>
 
-            {/* Heading */}
-            <Typography
-              variant="h4"
-              sx={{
-                fontWeight: 700,
-                mb: 2,
-                fontFamily: "serif",
-                color: "text.primary",
-              }}
-            >
-              From the Principal’s Desk
-            </Typography>
-
-            {/* Quote Style Text */}
-            <Typography
-              variant="body1"
-              sx={{
-                lineHeight: 1.9,
-                textAlign: "justify",
-                color: "text.secondary",
-                fontSize: "1.05rem",
-                fontStyle: "italic",
-              }}
-            >
-              {principalData.description}
-            </Typography>
-
-            {/* Signature Line (Optional) */}
-            <Typography
-              variant="subtitle1"
-              sx={{
-                mt: 3,
-                fontWeight: 600,
-                color: "primary.main",
-                fontFamily: "cursive",
-                textAlign: "right",
-              }}
-            >
-              — {principalData.name}
-            </Typography>
-          </Box>
-
-          {/* Right: Principal Card */}
-          <Box
-            sx={{
-              flex: 1,
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Box
-              sx={{
-                maxWidth: 350,
-                minWidth: 300,
-                textAlign: "center",
-                p: 3,
-                borderRadius: 2,
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                "&:hover": {
-                  transform: "translateY(-6px)",
-                  boxShadow: 4,
-                },
-              }}
-            >
-              {/* Principal Image */}
-              <CardMedia
-                component="img"
-                image={principalData.image}
-                alt={principalData.name}
+              {/* Decorative Accent Line */}
+              <Box
                 sx={{
-                  height: 300,
-                  width: "100%",
-                  objectFit: "cover",
+                  width: 60,
+                  height: 4,
+                  backgroundColor: "primary.main",
                   borderRadius: 2,
                   mb: 2,
                 }}
               />
 
-              {/* Principal Details */}
-              <CardContent sx={{ p: 0 }}>
-                <Typography variant="h6" sx={{ fontWeight: 900, mb: 1, color: "text.primary" }}>
-                  {principalData.name}
-                </Typography>
-                <Typography
-                  variant="subtitle1"
-                  sx={{ color: "text.secondary", fontStyle: "italic" }}
-                >
-                  {principalData.title}
-                </Typography>
-              </CardContent>
+              {/* Heading */}
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight: 700,
+                  mb: 2,
+                  fontFamily: "serif",
+                  color: "text.primary",
+                }}
+              >
+                From the Principal’s Desk
+              </Typography>
+
+              {/* Quote Style Text */}
+              <Typography
+                variant="body1"
+                sx={{
+                  lineHeight: 1.9,
+                  textAlign: "justify",
+                  color: "text.secondary",
+                  fontSize: "1.05rem",
+                  fontStyle: "italic",
+                }}
+              >
+                {principalData.description}
+              </Typography>
+
+              {/* Signature Line (Optional) */}
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  mt: 3,
+                  fontWeight: 600,
+                  color: "primary.main",
+                  fontFamily: "cursive",
+                  textAlign: "right",
+                }}
+              >
+                — {principalData.name}
+              </Typography>
+            </Box>
+            {/* Right: Principal Card */}
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                justifyContent: "center",
+                ml: 5
+              }}
+            >
+              <Box
+                sx={{
+                  maxWidth: 350,
+                  minWidth: 300,
+                  textAlign: "center",
+                  p: 3,
+                  borderRadius: 2,
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                  "&:hover": {
+                    transform: "translateY(-6px)",
+                    boxShadow: 4,
+                  },
+                }}
+              >
+                {/* Principal Image */}
+                <CardMedia
+                  component="img"
+                  image={principalData.image}
+                  alt={principalData.name}
+                  sx={{
+                    height: 300,
+                    width: "100%",
+                    objectFit: "cover",
+                    borderRadius: 2,
+                    mb: 2,
+                  }}
+                />
+
+                {/* Principal Details */}
+                <CardContent sx={{ p: 0 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 900, mb: 1, color: "text.primary" }}>
+                    {principalData.name}
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: "text.secondary", fontStyle: "italic" }}
+                  >
+                    {principalData.title}
+                  </Typography>
+                </CardContent>
+              </Box>
             </Box>
           </Box>
+
+
         </Box>
       </Container>
     </>

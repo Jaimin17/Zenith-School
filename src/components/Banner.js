@@ -72,7 +72,7 @@ const Banner = ({ title, backgroundImage = null }) => {
                 >
                     <NavLinkBtn href="/" title="Home" sx={{ color: 'white !important', padding: "0px" }} />
 
-                    <Typography>{title}</Typography>    
+                    <Typography className='text-orange-300'>{title}</Typography>    
                 </Breadcrumbs>
             </Box>
         </Box>

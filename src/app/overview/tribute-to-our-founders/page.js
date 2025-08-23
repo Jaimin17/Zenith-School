@@ -39,18 +39,18 @@ export default function TributeToOurFoundersPage() {
                     />
                     <Typography
                         variant="h4"
-                        sx={{ fontWeight: 600, mt: 4 }}
+                        sx={{ fontWeight: 600, mt: 5, mb: 1 }}
                     >
                         {TRIBUTE_PAGE_TEXT.TEXT1_HEADING}
                     </Typography>
-                    <Typography sx={{}}>
+                    <Typography sx={{ color: "text.secondary", fontWeight: 500 }}>
                         {dummyData.firstText}
                     </Typography>
                 </Box>
 
                 {/* Section 2: Two Images Side by Side with Text */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 4 }}>
                         {/* Here two images side by side */}
                         <CardMedia
                             component="img"
@@ -78,11 +78,11 @@ export default function TributeToOurFoundersPage() {
                     <Box>
                         <Typography
                             variant="h4"
-                            sx={{ fontWeight: 600, }}
+                            sx={{ fontWeight: 600, mb: 1, mt: 2 }}
                         >
                             {TRIBUTE_PAGE_TEXT.TEXT2_HEADING}
                         </Typography>
-                        <Typography >
+                        <Typography sx={{ color: "text.secondary", fontWeight: 500 }}>
                             Here is the second text that describes the images and the tribute to our founders. {dummyData?.secondText}
                         </Typography>
                     </Box>

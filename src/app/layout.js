@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
         {/* Main Content */}
         <Box
           component="main"
-          sx={{ flex: 1, display: "flex", flexDirection: "column" }}
+          sx={{ display: "flex", flexDirection: "column" }}
         >
           <ProtectedRoute>
             {children}

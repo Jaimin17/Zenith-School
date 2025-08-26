@@ -38,6 +38,16 @@ export const BANNER_DATA = {
     title: "Contact Us",
     imageUrl: "https://images.unsplash.com/photo-1504275107627-0c2ba7a43dba?q=80&w=3948&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
+  "events-gallery": {
+    title: "Events Gallery",
+    imageUrl:
+      "https://images.unsplash.com/photo-1628336707631-68131ca720c3?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  "photos-gallery": {
+    title: "Photo Gallery",
+    imageUrl:
+      "https://images.unsplash.com/photo-1583144584182-1717fab24b1e?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  }
   // etc.
 };
 

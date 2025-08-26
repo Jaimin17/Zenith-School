@@ -12,7 +12,7 @@ import Banner from "@/components/Banner";
 
 const principalData = {
   image:
-    "https://cdn.pixabay.com/photo/2022/10/07/18/35/potrait-7505634_1280.jpg",
+    "https://images.unsplash.com/photo-1750090669148-761d67513434?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   name: "Ms. Jayshree Shah",
   title: "Principal, Zenith School",
   description: CONTENT_WRITEN_DATA?.PRICIPLES_INTERVIEW,

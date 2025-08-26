@@ -32,10 +32,6 @@ const Card = ({
           borderRadius: 2,
           marginTop: 3,
           transition: "transform 0.3s, box-shadow 0.3s",
-          "&:hover": {
-            transform: "translateY(-8px)",
-            boxShadow: 6,
-          },
         }}
         component="img"
         image={image}

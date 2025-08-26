@@ -15,9 +15,10 @@ export function ContactUsForm() {
     e.preventDefault();
     console.log("Form submitted");
   };
+
   return (
     <div
-      className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
+      className="shadow-input mx-auto w-full max-w-none rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black" >
       <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
         Send us a message
       </h2>

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Button, Menu, MenuItem } from "@mui/material";
 import Link from "next/link";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -56,17 +55,6 @@ export default function NavDropdown({ title, items, links, open, anchorEl, onOpe
             <Link href={links[index]}
                 style={{ textDecoration: "none", color: "inherit", width: "100%", display: "flex", alignItems: "center" }}
             >
-                <span
-                className="slashes"
-                style={{
-                  opacity: 0,
-                  transform: "translateX(-10px)",
-                  transition: "all 0.3s ease",
-                  paddingLeft: "5px",
-                }}
-              >
-                //
-              </span>
               <span
                 className="itemText"
                 style={{

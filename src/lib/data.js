@@ -16,6 +16,10 @@ export const STATE_OF_ART_INFRASTRUCTURE_CARD_IMAGE =
   "https://images.unsplash.com/photo-1728206415817-edd426280277?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
 export const BANNER_DATA = {
+  "why-zenith-school": {
+    title: "Why Zenith School",
+    imageUrl: "https://cdn.pixabay.com/photo/2018/10/27/15/40/zhejiang-university-3776783_1280.jpg",
+  },
   "tribute-to-our-founders": {
     title: "Tribute to Our Founder",
     imageUrl: "",
@@ -55,3 +59,9 @@ export const CONTENT_WRITEN_DATA = {
   PRICIPLES_INTERVIEW:
     "As the Principal of this esteemed institution, I feel a deep sense of pride and responsibility in shaping young minds. Our goal is not only to impart academic knowledge but to nurture values, confidence, and a spirit of curiosity in every student. I believe education is a shared journey between the school, the students, and their families—and together, we strive to create an environment where every child can thrive, dream big, and grow into a kind, capable individual ready to face the world.",
 };
+
+export const WHY_ZENITH_DATA = {
+  title: "Building Bright Futures with Knowledge, Values, and Care",
+  description: "At our school, education goes beyond classrooms—we nurture curious minds, inspire creativity, and instill values that last a lifetime. With a strong commitment to academic excellence, modern teaching methods, and a supportive learning environment, we empower every student to discover their potential. Our dedicated teachers, well-rounded curriculum, and state-of-the-art facilities ensure that students are not just prepared for exams, but for life. Here, every child matters, every talent is celebrated, and every dream finds a path",
+  image: "https://cdn.pixabay.com/photo/2020/02/21/19/20/london-4868437_1280.jpg"
+}

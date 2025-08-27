@@ -55,7 +55,12 @@ export const BANNER_DATA = {
   "timeline": {
     title: "Timeline",
     imageUrl:
-      "https://images.unsplash.com/photo-1606674556490-c2bbb4ee05e5?q=80&w=2148&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      "https://images.unsplash.com/photo-1583307919732-59004f55ed06?q=80&w=2410&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  "awards": {
+    title: "Awards",
+    imageUrl: 
+      "https://images.unsplash.com/photo-1641628878413-5ef336e3a350?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
   }
   // etc.
 };

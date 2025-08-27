@@ -34,7 +34,7 @@ export const Timeline = ({
         </h2>
         <p
           className="text-neutral-700 dark:text-neutral-300 text-sm md:text-base max-w-sm">
-            Our journey till now.
+            Our journey till now. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum delectus saepe reiciendis.
         </p>
       </div>
       <div ref={ref} className="relative max-w-7xl mx-auto pb-20">

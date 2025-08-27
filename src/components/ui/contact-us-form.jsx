@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { Label } from "./contact-us/label"; 
-import { Input } from "./contact-us/input"; 
+import { Label } from "./contact-us/label";
+import { Input } from "./contact-us/input";
 import { cn } from "@/lib/utils";
 import {
   IconBrandGithub,
@@ -18,8 +18,8 @@ export function ContactUsForm() {
 
   return (
     <div
-      className="shadow-input mx-auto w-full max-w-none rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black" >
-      <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
+      className="shadow-input mx-auto w-full max-w-none rounded-none bg-gray-50 p-4 md:rounded-2xl md:p-8 border border-gray-200" >
+      <h2 className="text-xl font-bold text-gray-800">
         Send us a message
       </h2>
       <form className="my-8" onSubmit={handleSubmit}>
@@ -27,7 +27,7 @@ export function ContactUsForm() {
           className="mb-4 flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2">
           <LabelInputContainer>
             <Label htmlFor="firstname">First name</Label>
-            <Input id="firstname" placeholder="Tyler" type="text" />
+            <Input id="firstname" placeholder="Tyler" type="text" sx={{ background: 'red' }} />
           </LabelInputContainer>
           <LabelInputContainer>
             <Label htmlFor="lastname">Last name</Label>
@@ -48,14 +48,14 @@ export function ContactUsForm() {
         </LabelInputContainer>
 
         <button
-          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+          className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-gray-800 to-gray-600 font-medium text-white shadow-[0px_1px_0px_0px_rgba(255,255,255,0.4)_inset,0px_-1px_0px_0px_rgba(0,0,0,0.1)_inset] hover:from-gray-700 hover:to-gray-500 transition-all duration-200"
           type="submit">
           Send Message &rarr;
           <BottomGradient />
         </button>
 
         <div
-          className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
+          className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
       </form>
     </div>
   );
@@ -65,9 +65,9 @@ const BottomGradient = () => {
   return (
     <>
       <span
-        className="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
+        className="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
       <span
-        className="absolute inset-x-10 -bottom-px mx-auto block h-px w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
+        className="absolute inset-x-10 -bottom-px mx-auto block h-px w-1/2 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
     </>
   );
 };

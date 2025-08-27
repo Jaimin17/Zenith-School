@@ -14,41 +14,57 @@ export default function ContactUsPage() {
       <Container sx={{ py: 6 }}>
         <Box
           display="flex"
-          justifyContent="center" // ✅ centers whole section horizontally
-          alignItems="center" // keeps top aligned
+          justifyContent="center"
+          alignItems="flex-start" // better alignment for different content heights
           flexWrap="wrap"
-          gap={6}
+          gap={12}
+          sx={{
+            minHeight: '500px',
+          }}
         >
           {/* Left Side - Form */}
           <Box
             flex={1}
             display="flex"
-            justifyContent="center" // ✅ centers form inside its box
-            minWidth="600px"
+            justifyContent="center"
+            sx={{
+              minWidth: { xs: '100%', md: '500px' }, // responsive min width
+              maxWidth: '650px',
+
+            }}
           >
             <ContactUsForm />
           </Box>
 
           {/* Right Side - Map + Info */}
           <Box
-            minWidth="400px"
-            display={"flex"}
-            flexDirection="column"
-            gap={3}
-            justifyContent={"right"}
-            paddingLeft={10}
+            sx={{
+              minWidth: { xs: '100%', md: '400px' },
+              maxWidth: '500px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 3,
+            }}
           >
             {/* Map */}
-            <Box sx={{ mb: 3 }}>
+            <Box sx={{
+              borderRadius: '16px',
+              overflow: 'hidden',
+              height: '300px' // fixed height for map
+            }}>
               <Map center={[28.6139, 77.209]} zoom={13} />
             </Box>
 
             {/* Contact Info */}
-            <Box>
-              <Typography variant="subtitle1" fontWeight="bold">
+            <Box sx={{ p: 2 }}>
+              <Typography variant="h6" fontWeight="bold" mb={1}>
+                Visit Our School
+              </Typography>
+
+              <Typography variant="subtitle1" fontWeight="bold" mt={2}>
                 Address:
               </Typography>
-              <Typography variant="body2" mb={2}>
+              <Typography variant="body2" mb={2} color="text.secondary">
                 Dabhoi Road, Pratapnagar – Makarpura Road, <br />
                 Vadodara, Gujarat 390004
               </Typography>
@@ -56,29 +72,26 @@ export default function ContactUsPage() {
               <Typography variant="subtitle1" fontWeight="bold">
                 Hours:
               </Typography>
-              <Typography variant="body2" mb={2}>
+              <Typography variant="body2" mb={3} color="text.secondary">
                 07:00 am – 06:00 pm
               </Typography>
-              <Box display={"flex"} flexDirection={"row"} gap={6}>
+
+              <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={3}>
                 <Box>
                   <Typography variant="subtitle1" fontWeight="bold">
                     Phone:
                   </Typography>
-                  <Typography
-                    variant="body2"
-                  >
+                  <Typography variant="body2" color="text.secondary">
                     9825220510
                   </Typography>
                 </Box>
                 <Box>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  Email:
-                </Typography>
-                <Typography
-                  variant="body2"
-                >
-                  zenithschool.brd@gmail.com
-                </Typography>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Email:
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    zenithschool.brd@gmail.com
+                  </Typography>
                 </Box>
               </Box>
             </Box>

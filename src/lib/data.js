@@ -70,3 +70,51 @@ export const WHY_ZENITH_DATA = {
   description: "At our school, education goes beyond classrooms—we nurture curious minds, inspire creativity, and instill values that last a lifetime. With a strong commitment to academic excellence, modern teaching methods, and a supportive learning environment, we empower every student to discover their potential. Our dedicated teachers, well-rounded curriculum, and state-of-the-art facilities ensure that students are not just prepared for exams, but for life. Here, every child matters, every talent is celebrated, and every dream finds a path",
   image: "https://cdn.pixabay.com/photo/2020/02/21/19/20/london-4868437_1280.jpg"
 }
+
+
+export const AWARDS_DATA = [
+  {
+    title: "Best School 2023",
+    description: "Awarded for outstanding academic performance.",
+    image: "https://placehold.co/400"
+  },
+  {
+    title: "Sports Excellence",
+    description: "Recognized for winning state-level championships.Recognized for winning state-level championships.",
+    image: "https://placehold.co/400"
+  },
+  {
+    title: "Innovation Award",
+    description: "Honored for creative teaching methods.",
+    image: "https://placehold.co/400"
+  },
+  {
+    title: "Cultural Fest Winner",
+    description: "Secured first place in national cultural events.",
+    image: "https://placehold.co/400"
+  },
+];
+
+
+export const CURRICULUM_DATA = [
+  {
+    title: "Kindergarten Section",
+    description: "Kindergarten schooling marks the beginning of a child’s formal education journey. Zenith School Curriculum is planned for the holistic development of a child focusing on social, emotional, cognitive and physical growth. The School is dedicated to embracing every student in a safe and welcoming environment. We understand the importance of early learning and literacy, for which we have designed small classrooms to encourage individualized education..",
+    image: "https://placehold.co/600x400"
+  },
+  {
+    title: "Primary (Classes I to VIII)",
+    description: "Primary education is the first step a child takes towards formal learning. Zenith School curriculum provides the development of basic concepts and skills in various subject areas. The Primary curriculum here reinforces learning experience and provides a planned sequential course of study including English, Mathematics, Science, Social Studies, Gujarati, Hindi, Computers, Art, Physical Education, Scout & Guide, Music – vocal and instrumental, and Dance. In addition to the curriculum, special projects, field trips and lessons are planned to encourage children to explore different areas of interest that complement the curriculum which builds on basic skills and prepares the children to be more responsible for the next stage of learning.",
+    image: "https://placehold.co/600x400"
+  },
+  {
+    title: "Secondary (Classes IX and X)",
+    description: "Moving into the Secondary section entails more organized study time for the students. The educational program shifts in its emphasis towards preparation of students for the GSEB examination. The curriculum during these years becomes more specialized and focused. Students have the option to choose elective subjects based on their interest and future aspirations. The class 10 Board Exams are crucial, as the results determine a student’s eligibility for further studies and serve as a foundation for the academic future. The students are prepared emotionally to handle the stress and anxiety of examination pressure.",
+    image: "https://placehold.co/600x400"
+  },
+  {
+    title: "Higher Secondary (Classes XI and XII) Commerce and Science Stream",
+    description: "Grade 11 and 12 is a significant phase in a student’s educational journey as they prepare for higher education and future career paths. The school offers Commerce and Science Streams at the Higher Secondary level. The curriculum becomes more specialized and demanding aiming to provide a deeper understanding of the chosen stream. Learning is imparted through observation, experimentation, group discussions and project work. Special emphasis is laid on working with students who need improvement in particular subjects to clear the board examinations.",
+    image: "https://placehold.co/600x400"
+  },
+];

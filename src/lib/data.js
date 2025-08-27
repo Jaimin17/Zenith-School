@@ -65,3 +65,27 @@ export const WHY_ZENITH_DATA = {
   description: "At our school, education goes beyond classrooms—we nurture curious minds, inspire creativity, and instill values that last a lifetime. With a strong commitment to academic excellence, modern teaching methods, and a supportive learning environment, we empower every student to discover their potential. Our dedicated teachers, well-rounded curriculum, and state-of-the-art facilities ensure that students are not just prepared for exams, but for life. Here, every child matters, every talent is celebrated, and every dream finds a path",
   image: "https://cdn.pixabay.com/photo/2020/02/21/19/20/london-4868437_1280.jpg"
 }
+
+
+export const AWARDS_DATA = [
+  {
+    title: "Best School 2023",
+    description: "Awarded for outstanding academic performance.",
+    image: "https://placehold.co/400"
+  },
+  {
+    title: "Sports Excellence",
+    description: "Recognized for winning state-level championships.Recognized for winning state-level championships.",
+    image: "https://placehold.co/400"
+  },
+  {
+    title: "Innovation Award",
+    description: "Honored for creative teaching methods.",
+    image: "https://placehold.co/400"
+  },
+  {
+    title: "Cultural Fest Winner",
+    description: "Secured first place in national cultural events.",
+    image: "https://placehold.co/400"
+  },
+];

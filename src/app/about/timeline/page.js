@@ -1,5 +1,15 @@
+import Banner from "@/components/Banner";
+import { OurTimeline } from "@/components/ui/our-timeline";
+import { BANNER_DATA } from "@/lib/data";
+
 export default function TimelinePage() {
+    const bannerData = BANNER_DATA["timeline"];
+
     return (
-        <h1>Timeline of Events</h1>
+        <>
+            <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+
+            <OurTimeline />
+        </>
     );
 }

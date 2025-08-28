@@ -30,8 +30,8 @@ export const BANNER_DATA = {
       "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   sports: {
-    title: "Sports and Spirit",
-    imageUrl: "/images/sports-banner.jpg",
+    title: "Sports",
+    imageUrl: "https://placehold.co/1500x300",
   },
   "state-of-the-art-infrastructure": {
     title: "State-of-the-Art Infrastructure",
@@ -59,7 +59,7 @@ export const BANNER_DATA = {
   },
   "awards": {
     title: "Awards",
-    imageUrl: 
+    imageUrl:
       "https://images.unsplash.com/photo-1641628878413-5ef336e3a350?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
   }
   // etc.

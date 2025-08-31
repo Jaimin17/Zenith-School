@@ -8,7 +8,7 @@ export function OurTimeline() {
       content: (
         <div>
           <p
-            className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
+            className="mb-8 text-xs font-normal text-neutral-800 md:text-sm">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium distinctio soluta quibusdam fugit
           </p>
           <div className="grid grid-cols-2 gap-4">
@@ -45,11 +45,11 @@ export function OurTimeline() {
       content: (
         <div>
           <p
-            className="mb-8 text-lg font-bold text-neutral-800 md:text-3xl dark:text-neutral-200">
+            className="mb-8 text-lg font-bold text-neutral-800 md:text-3xl">
             70 Years of Excellence in Education
           </p>
           <p
-            className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
+            className="mb-8 text-xs font-normal text-neutral-800 md:text-sm">
             The School celebrated “70 Years of Excellence in Education” as an opportunity to reflect on the institution’s legacy, achievements, and contributions to education and society. It brought together the school community, inspired future generations, and underscored the importance of education in shaping individuals and communities over the years.
           </p>
         </div>
@@ -60,11 +60,11 @@ export function OurTimeline() {
       content: (
         <div>
           <p
-            className="mb-8 text-xl font-bold text-neutral-800 md:text-3xl dark:text-neutral-200">
+            className="mb-8 text-xl font-bold text-neutral-800 md:text-3xl">
             Indoor Sports Stadium
           </p>
           <p
-            className="mb-8 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
+            className="mb-8 text-xs font-normal text-neutral-800 md:text-sm">
             To provide a safe, versatile, and accessible space for a wide range of sports and physical activities, an “Indoor Sports Stadium”, was constructed inside the school premises. It enables the children to play various games like, basket-ball, hand-ball, badminton, table tennis and many more.
           </p>
         </div>

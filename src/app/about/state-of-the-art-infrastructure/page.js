@@ -38,7 +38,7 @@ export default function stateOfTheArtInfrastructurePage() {
       image:
         "https://images.unsplash.com/photo-1625510884762-522d5c1c8811?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
-  ]
+  ];
 
   const bannerData = BANNER_DATA["state-of-the-art-infrastructure"];
 
@@ -90,11 +90,11 @@ export default function stateOfTheArtInfrastructurePage() {
                 variant="body1"
                 sx={{ color: "text.secondary", mb: 2, lineHeight: 1.7 }}
               >
-                Our state-of-the-art infrastructure is designed to provide an optimal
-                learning environment for our students. From modern classrooms equipped
-                with the latest technology to spacious libraries and laboratories,
-                every aspect of our campus is tailored to enhance the educational
-                experience.
+                Our state-of-the-art infrastructure is designed to provide an
+                optimal learning environment for our students. From modern
+                classrooms equipped with the latest technology to spacious
+                libraries and laboratories, every aspect of our campus is
+                tailored to enhance the educational experience.
               </Typography>
 
               <Typography
@@ -102,9 +102,9 @@ export default function stateOfTheArtInfrastructurePage() {
                 sx={{ color: "text.secondary", lineHeight: 1.7 }}
               >
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae
-                ab illo inventore veritatis et quasi architecto beatae vitae dicta
-                sunt explicabo.
+                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+                quae ab illo inventore veritatis et quasi architecto beatae
+                vitae dicta sunt explicabo.
               </Typography>
             </Box>
 
@@ -144,7 +144,8 @@ export default function stateOfTheArtInfrastructurePage() {
         >
           {dummyCardData.map((card, index) => {
             return (
-              <Box key={index}
+              <Box
+                key={index}
                 sx={{
                   flexBasis: { xs: "100%", md: "45%" }, // 1 per row on mobile, 2 per row on desktop
                   maxWidth: { xs: "100%", md: "45%" },
@@ -156,7 +157,7 @@ export default function stateOfTheArtInfrastructurePage() {
                   image={card.image}
                 />
               </Box>
-            )
+            );
           })}
         </Box>
       </Container>

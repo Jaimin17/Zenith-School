@@ -135,3 +135,55 @@ export const CURRICULUM_DATA = [
     image: "https://placehold.co/600x400",
   },
 ];
+
+export const SPORTS_DATA = [
+  {
+    image: "https://placehold.co/600x800",
+    title: "Football",
+    description: "Team spirit, endurance, and strategy on the field.",
+  },
+  {
+    image: "https://placehold.co/600x800",
+    title: "Basketball",
+    description: "Fast-paced action and teamwork.",
+  },
+  {
+    image: "https://placehold.co/600x800",
+    title: "Cricket",
+    description: "The gentleman’s game loved by all.",
+  },
+  {
+    image: "https://placehold.co/600x800",
+    title: "Swimming",
+    description: "Strength and stamina in the water.",
+  },
+  {
+    image: "https://placehold.co/600x800",
+    title: "Tennis",
+    description: "Precision, agility, and power.",
+  },
+];
+
+export const ALUMNI_DATA = [
+  {
+    name: "Ravi Sharma",
+    role: "Software Engineer @ Google",
+    image: "https://placehold.co/100x100",
+    testimonial:
+      "My time at Zenith School gave me the foundation and confidence to pursue my dreams.",
+  },
+  {
+    name: "Priya Mehta",
+    role: "Research Scholar @ MIT",
+    image: "https://placehold.co/100x100",
+    testimonial:
+      "The faculty and peers here shaped my career journey and gave lifelong memories.",
+  },
+  {
+    name: "Arjun Patel",
+    role: "Entrepreneur",
+    image: "https://placehold.co/100x100",
+    testimonial:
+      "The culture at Zenith taught me teamwork, leadership, and perseverance.",
+  },
+];

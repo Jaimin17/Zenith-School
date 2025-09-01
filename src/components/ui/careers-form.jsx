@@ -81,7 +81,7 @@ export function CareersForm({ positions }) {
         </LabelInputContainer>
 
         <button
-          className="group/btn relative block h-10 w-2xs  m-auto rounded-md bg-gradient-to-br from-gray-800 to-gray-600 font-medium text-white shadow-[0px_1px_0px_0px_rgba(255,255,255,0.4)_inset,0px_-1px_0px_0px_rgba(0,0,0,0.1)_inset] hover:from-gray-700 hover:to-gray-500 transition-all duration-200"
+          className="group/btn relative block h-10 w-2xs  m-auto rounded-md bg-gradient-to-br from-gray-800 to-gray-600 font-medium text-white shadow-[0px_1px_0px_0px_rgba(255,255,255,0.4)_inset,0px_-1px_0px_0px_rgba(0,0,0,0.1)_inset] hover:from-gray-700 hover:to-gray-500 transition-all duration-200 cursor-pointer"
           type="submit"
         >
           Submit &rarr;

@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { Box } from "@mui/material";
 import { AnimatePresence, motion } from "motion/react";
 
 import { useState } from "react";
@@ -16,9 +17,8 @@ export const HoverEffect = ({ items, className }) => {
       )}
     >
       {items.map((item, idx) => (
-        <a
-          href={item?.link}
-          key={item?.link}
+        <Box
+          key={idx}
           className="relative group  block p-2 h-full w-full"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
@@ -65,13 +65,13 @@ export const HoverEffect = ({ items, className }) => {
                         block: "start",
                     });
                 }}
-                className="flex-1 px-4 py-2 rounded-full from-gray-800 to-gray-600 text-white font-medium text-center hover:bg-gray-900 transition bg-gradient-to-br"
+                className="flex-1 px-4 py-2 rounded-full from-gray-800 to-gray-600 text-white font-medium text-center hover:bg-gray-900 transition bg-gradient-to-br cursor-pointer"
               >
                 Apply Now
               </a>
             </div>
           </Card>
-        </a>
+        </Box>
       ))}
     </div>
   );

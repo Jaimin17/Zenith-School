@@ -1,7 +1,8 @@
 "use client";
 
 import { Box, Typography } from "@mui/material";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 // Variants for title animation (char by char)
 const container = {
@@ -51,14 +52,17 @@ export function AnimatedHeader({
     titleVariant = "h4",
     subtitleVariant = "body1",
 }) {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-100px" });
+
     return (
-        <Box sx={{ textAlign: align, px: 2 }}>
+        <Box ref={ref} sx={{ textAlign: align, px: 2 }}>
             {/* Title Animation */}
             <Typography
                 component={motion.h1}
                 variants={container}
                 initial="hidden"
-                animate="visible"
+                animate={isInView ? "visible" : "hidden"}
                 variant={titleVariant}
                 aria-label={title}
                 sx={{
@@ -85,7 +89,7 @@ export function AnimatedHeader({
                 component={motion.p}
                 variants={subContainer}
                 initial="hidden"
-                animate="visible"
+                animate={isInView ? "visible" : "hidden"}
                 variant={subtitleVariant}
                 sx={{
                     maxWidth: "700px",

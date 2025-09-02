@@ -15,9 +15,9 @@ export default function WhyZenithSchoolPage() {
                     <Typography
                         variant="h4"
                         sx={{
-                            fontWeight: 700,
+                            fontWeight: 800,
                             mb: 2,
-                            fontFamily: "serif",
+                            // fontFamily: "serif",
                             color: "text.primary",
                         }}
                     >

@@ -1,9 +1,16 @@
 "use client";
 
 import React from "react";
-import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Typography,
+  useTheme,
+  useMediaQuery,
+  Container,
+} from "@mui/material";
 import { AWARDS_DATA, BANNER_DATA } from "@/lib/data";
 import Banner from "@/components/Banner";
+import { AnimatedHeader } from "@/components/AnimatedHeader";
 
 export default function AwardsPage() {
   const theme = useTheme();
@@ -12,11 +19,11 @@ export default function AwardsPage() {
 
   return (
     <>
-        <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+      <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
 
-      <Box sx={{ p: { xs: 2, sm: 4 } }}>
+      <Container sx={{ p: { xs: 2, sm: 4 } }}>
         {/* Page Title */}
-        <Typography
+        {/* <Typography
           variant="h4"
           component="h1"
           gutterBottom
@@ -27,7 +34,19 @@ export default function AwardsPage() {
           }}
         >
           Awards and Recognition
-        </Typography>
+        </Typography> */}
+
+        <Box sx={{
+          pb: 8
+        }}>
+          <AnimatedHeader
+            title="Awards and Recognition"
+            subtitle="Celebrating achievements that inspire excellence and pride."
+            align="center"
+            titleVariant="h3"
+            subtitleVariant="body1"
+          />
+        </Box>
 
         {/* Awards Grid */}
         <Box
@@ -121,7 +140,7 @@ export default function AwardsPage() {
             </Box>
           ))}
         </Box>
-      </Box>
+      </Container>
     </>
   );
 }

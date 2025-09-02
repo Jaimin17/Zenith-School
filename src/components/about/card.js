@@ -18,7 +18,7 @@ const Card = ({
         flexDirection: "column",
         height: "100%", // ensures uniform height
         width: "100%",
-        // boxShadow: 3,
+        boxShadow: 3,
         transition: "transform 0.3s, box-shadow 0.3s",
         "&:hover": {
           transform: "translateY(-8px)",

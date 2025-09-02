@@ -122,7 +122,7 @@ export default function stateOfTheArtInfrastructurePage() {
                 alt="State of the Art Infrastructure"
                 sx={{
                   width: "100%",
-                  height: { xs: 250, sm: 350, md: 450 },
+                  height: { xs: 250, sm: 300, md: 350 },
                   objectFit: "cover",
                   borderRadius: 3,
                   boxShadow: 3,

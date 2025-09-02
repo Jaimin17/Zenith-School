@@ -62,8 +62,8 @@ export default function careersPage() {
         className="m-0 p-0 overflow-x-hidden"
       >
         {/* Section 1 - Form Section */}
-        <Box sx={{ bgcolor: "#f9fafb", width: "100%", py: { xs: 6, md: 10 } }}>
-          <Container maxWidth="lg">
+        <Box sx={{ bgcolor: "#f9fafb", width: "100%", pt: { xs: 6, md: 10 } }}>
+          <Container maxWidth="lg" id={"formTitle"}>
             <Box display="flex" flexDirection="row" justifyContent="center">
               <Typography
                 variant="h4"

@@ -4,10 +4,8 @@ import { Box } from "@mui/material";
 
 export default function HomePage() {
   return (
-    <Box
+    <Box className="w-full h-full"
       sx={{
-        width: "100vw",
-        height: "100vh", // fullscreen
         overflow: "hidden",
       }}
     >

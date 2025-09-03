@@ -17,9 +17,7 @@ export default function RootLayout({ children }) {
       <body
         style={{
           margin: 0,
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "100vh",
+          height: "100%"
         }}
       >
         {/* Normalize & baseline styles */}
@@ -31,7 +29,7 @@ export default function RootLayout({ children }) {
         {/* Main Content */}
         <Box
           component="main"
-          sx={{ display: "flex", flexDirection: "column" }}
+          sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
         >
           <ProtectedRoute>
             {children}

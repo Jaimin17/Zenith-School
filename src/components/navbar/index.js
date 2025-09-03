@@ -9,7 +9,13 @@ import {
   Typography,
   Stack,
 } from "@mui/material";
-import { Facebook, Instagram, YouTube, WhatsApp, Search } from "@mui/icons-material";
+import {
+  Facebook,
+  Instagram,
+  YouTube,
+  WhatsApp,
+  Search,
+} from "@mui/icons-material";
 import NavDropdown from "./NavDropdown";
 import NavLinkBtn from "./NavLinkBtn";
 import { useState } from "react";
@@ -30,9 +36,9 @@ export default function Navbar() {
   };
 
   return (
-    <Box>
+    <>
       {/* ✅ Top Info Bar (NOT sticky) */}
-      <Box sx={{ display: "flex", width: "100%" }}>
+      <Box sx={{ display: "flex", width: "100%", position: "relative"}}>
         {/* Left - Socials */}
         <Box
           sx={{
@@ -51,10 +57,22 @@ export default function Navbar() {
             <Typography variant="body2" fontWeight="bold">
               Follow Us:
             </Typography>
-            <Facebook fontSize="large" sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }} />
-            <Instagram fontSize="large" sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }} />
-            <YouTube fontSize="large" sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }} />
-            <WhatsApp fontSize="large" sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }} />
+            <Facebook
+              fontSize="large"
+              sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }}
+            />
+            <Instagram
+              fontSize="large"
+              sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }}
+            />
+            <YouTube
+              fontSize="large"
+              sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }}
+            />
+            <WhatsApp
+              fontSize="large"
+              sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }}
+            />
           </Stack>
         </Box>
 
@@ -81,31 +99,51 @@ export default function Navbar() {
       </Box>
 
       {/* ✅ Sticky Navbar only */}
-      <AppBar
-        position="sticky"
-        elevation={0}
+      <Box
         sx={{
+          position: "sticky",
           bgcolor: "white",
           color: "black",
+          width: "100%",
           px: 4,
-          top: 0,
-          zIndex: (theme) => theme.zIndex.drawer + 1, // keeps above everything
+          top: 0, // sticky offset
+          zIndex: (theme) => theme.zIndex.drawer + 1, 
         }}
       >
-        <Toolbar>
+        <Box
+          sx={{
+            bgcolor: "white",
+            color: "black",
+            px: 4
+          }}
+        >
+        <Toolbar sx={{ minHeight: "64px" }}>
           {/* Logo */}
-          <Link href="/" style={{ textDecoration: "none", color: "inherit", paddingRight: 60 }}>
-            <Typography variant="h4" sx={{ flexGrow: 1, fontWeight: "900", color: "#0f5c4d" }}>
+          <Link
+            href="/"
+            style={{
+              textDecoration: "none",
+              color: "inherit",
+              paddingRight: 60,
+            }}
+          >
+            <Typography
+              variant="h4"
+              sx={{ flexGrow: 1, fontWeight: "900", color: "#0f5c4d" }}
+            >
               Zeni<span style={{ color: "orange" }}>th</span>
             </Typography>
           </Link>
 
           {/* Menu Items */}
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={2} display={"flex"} justifyContent="center" alignItems={"center"}>
             <NavDropdown
               title="Overview"
               items={["Tribute to Our Founders", "Why Zenith School"]}
-              links={["/overview/tribute-to-our-founders", "/overview/why-zenith-school"]}
+              links={[
+                "/overview/tribute-to-our-founders",
+                "/overview/why-zenith-school",
+              ]}
               open={openIndex === 0}
               anchorEl={anchorEl}
               onOpen={(event) => handleOpen(0, event)}
@@ -114,7 +152,12 @@ export default function Navbar() {
 
             <NavDropdown
               title="About"
-              items={["From Principal’s Desk", "State-of-the-Art Infrastructure", "Timeline", "Awards"]}
+              items={[
+                "From Principal’s Desk",
+                "State-of-the-Art Infrastructure",
+                "Timeline",
+                "Awards",
+              ]}
               links={[
                 "/about/from-principal-desk",
                 "/about/state-of-the-art-infrastructure",
@@ -130,7 +173,10 @@ export default function Navbar() {
             <NavDropdown
               title="Academics"
               items={["Curriculum", "Activities beyond Academics"]}
-              links={["/academics/curriculum", "/academics/activities-beyond-academics"]}
+              links={[
+                "/academics/curriculum",
+                "/academics/activities-beyond-academics",
+              ]}
               open={openIndex === 2}
               anchorEl={anchorEl}
               onOpen={(event) => handleOpen(2, event)}
@@ -146,7 +192,7 @@ export default function Navbar() {
               onOpen={(event) => handleOpen(3, event)}
               onClose={handleClose}
             />
-            <NavLinkBtn href={"/contact-us"} title="Contact Us" />
+            <NavLinkBtn href={"/contact-us"} title="Contact Us" sx={{ width: "max-content" }} />
             <NavLinkBtn href={"/careers"} title="Careers" />
             <NavLinkBtn href={"/alumni"} title="Alumni" />
           </Stack>
@@ -169,7 +215,8 @@ export default function Navbar() {
             </Button>
           </Stack>
         </Toolbar>
-      </AppBar>
-    </Box>
+        </Box>
+      </Box>
+    </>
   );
 }

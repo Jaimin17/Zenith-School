@@ -39,10 +39,10 @@ export default function StackCards({ data }) {
                                 whileTap={{ scale: 0.95 }}
                             >
                                 <Box
-                                    className={`relative px-6 py-2 font-semibold text-sm text-white shadow-lg`}
+                                    className={`relative px-6 py-2 font-semibold text-sm text-white shadow-lg transition-all duration-300`}
                                     sx={{
                                         background: isActive
-                                            ? "linear-gradient(135deg, #2563eb, #1e3a8a)"
+                                            ? "linear-gradient(135deg, #facc15, #ca8a04)"
                                             : "linear-gradient(135deg, #6b7280, #374151)",
                                         clipPath:
                                             "polygon(0 0, 100% 0, 85% 50%, 100% 100%, 0 100%, 10% 50%)",
@@ -53,9 +53,10 @@ export default function StackCards({ data }) {
                                     {item.bookmark}
                                     {/* Ribbon connector */}
                                     <Box
-                                        className="absolute left-[-14px] top-1/2 transform -translate-y-1/2 w-4 h-4 rounded-full border-2 border-white"
+                                        className="absolute left-[-14px] top-1/2 transform -translate-y-1/2 w-4 h-4 rounded-full border-2 border-white shadow-md"
                                         sx={{
-                                            backgroundColor: isActive ? "#2563eb" : "#6b7280",
+                                            backgroundColor: isActive ? "#facc15" : "#6b7280",
+                                            transition: "background-color 0.3s ease",
                                         }}
                                     />
                                 </Box>
@@ -73,7 +74,7 @@ export default function StackCards({ data }) {
                             className="absolute top-0 left-0 w-full h-full"
                             animate={{
                                 zIndex: isActive ? 10 : 5,
-                                scale: isActive ? 1 : 0.95,
+                                scale: isActive ? 1 : 1,
                                 y: isActive ? 0 : index * 20,
                                 opacity: isActive ? 1 : 0.85,
                                 rotate: isActive ? 0 : index % 2 === 0 ? -2 : 2, // tilt only inactive

@@ -2,9 +2,7 @@
 
 import { Box, Typography, Card, Avatar } from "@mui/material";
 import InfiniteCarousel from "@/components/ui/InfiniteCarousel";
-import { ALUMNI_DATA, BANNER_DATA } from "@/lib/data";
-import { AnimatedHeader } from "@/components/AnimatedHeader";
-import Banner from "@/components/Banner";
+import { ALUMNI_DATA } from "@/lib/data";
 
 export const CardCarousel = () => {
     return (

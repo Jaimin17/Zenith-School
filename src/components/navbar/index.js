@@ -107,7 +107,8 @@ export default function Navbar() {
           width: "100%",
           px: 4,
           top: 0, // sticky offset
-          zIndex: (theme) => theme.zIndex.drawer + 1, 
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.1)", 
         }}
       >
         <Box

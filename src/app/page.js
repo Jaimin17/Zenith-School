@@ -1,4 +1,5 @@
 "use client";
+import ActivityEventGallery from "@/components/activityAndEvents/ActivityEventGallery";
 import { ImagesSliderDemo } from "@/components/home/ImagesSlider";
 import StackCards from "@/components/ui/StackCards";
 import { VisionMissionData } from "@/lib/data";
@@ -15,7 +16,8 @@ export default function HomePage() {
       }}
     >
       <ImagesSliderDemo />
-
+      {/* Activities And Events Gallery Section */}
+      <ActivityEventGallery />
       {/* Vission and Mission Cards */}
       <StackCards data={VisionMissionData} />
 
@@ -41,3 +43,4 @@ export default function HomePage() {
     </Box>
   );
 }
+

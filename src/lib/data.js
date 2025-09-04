@@ -76,7 +76,7 @@ export const BANNER_DATA = {
   },
   admission: {
     title: "Admission",
-    imageUrl: 
+    imageUrl:
       "https://images.unsplash.com/photo-1754506824681-4dd2a5fe7f6b?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
   }
   // etc.
@@ -195,5 +195,24 @@ export const ALUMNI_DATA = [
     image: "https://placehold.co/100x100",
     testimonial:
       "The culture at Zenith taught me teamwork, leadership, and perseverance.",
+  },
+];
+
+export const VisionMissionData = [
+  {
+    title: "Vision",
+    description:
+      "Our vision is to nurture confident, compassionate, and innovative individuals who are equipped with the knowledge, skills, and values to thrive in a rapidly changing world. We aspire to create future leaders who not only excel academically but also contribute positively to society, upholding integrity, empathy, and lifelong learning.",
+    image:
+      "https://placehold.co/800x500",
+    bookmark: "Vision",
+  },
+  {
+    title: "Mission",
+    description:
+      "Our mission is to provide a holistic education that fosters curiosity, creativity, and critical thinking. We are committed to building a safe and inclusive environment where students are encouraged to explore their potential, embrace diversity, and develop a sense of social responsibility. Through innovative teaching methods and strong community engagement, we aim to empower learners to become active global citizens.",
+    image:
+      "https://placehold.co/800x500",
+    bookmark: "Mission",
   },
 ];

@@ -1,5 +1,7 @@
 "use client";
 import { ImagesSliderDemo } from "@/components/home/ImagesSlider";
+import StackCards from "@/components/ui/StackCards";
+import { VisionMissionData } from "@/lib/data";
 import { Box } from "@mui/material";
 
 export default function HomePage() {
@@ -10,6 +12,9 @@ export default function HomePage() {
       }}
     >
       <ImagesSliderDemo />
+
+
+      <StackCards data={VisionMissionData} />
     </Box>
   );
 }

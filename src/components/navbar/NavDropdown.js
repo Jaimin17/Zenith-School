@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Menu, MenuItem } from "@mui/material";
+import { Button, Paper, MenuList, MenuItem, Popper, Grow, ClickAwayListener } from "@mui/material";
 import Link from "next/link";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
@@ -9,8 +9,8 @@ export default function NavDropdown({ title, items, links, open, onOpen, onClose
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleEnter = (event) => {
-    setAnchorEl(event.currentTarget); // local anchor
-    onOpen(event);                    // tell parent which index to open
+    setAnchorEl(event.currentTarget); // anchor for Popper
+    onOpen(event);                    // tell parent which index is open
   };
 
   const handleLeave = () => {
@@ -34,43 +34,55 @@ export default function NavDropdown({ title, items, links, open, onOpen, onClose
         <KeyboardArrowDownIcon sx={{ ml: "4px" }} />
       </Button>
 
-      <Menu
-        anchorEl={anchorEl}
+      <Popper
         open={open}
-        onClose={handleLeave}
-        MenuListProps={{
-          onMouseLeave: handleLeave,
-        }}
-        PaperProps={{
-          sx: { bgcolor: "#0f5c4d", color: "white", mt: '13px' },
-        }}
+        anchorEl={anchorEl}
+        placement="bottom-start"
+        transition
+        disablePortal
+        style={{ zIndex: 1300 }}
       >
-        {items.map((item, i) => (
-          <MenuItem key={i} onClick={handleLeave}
-            sx={{
-              "&:hover .itemText": {
-                color: "orange",
-                transform: "translateX(5px)",
-              },
-            }}
-          >
-            <Link
-              href={links[i]}
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-              }}
+        {({ TransitionProps }) => (
+          <Grow {...TransitionProps}>
+            <Paper
+              onMouseLeave={handleLeave}
+              sx={{ bgcolor: "#0f5c4d", color: "white", mt: "6px" }}
             >
-              <span className="itemText" style={{ transition: "all 0.3s ease" }}>
-                {item}
-              </span>
-            </Link>
-          </MenuItem>
-        ))}
-      </Menu>
+              <ClickAwayListener onClickAway={handleLeave}>
+                <MenuList autoFocusItem={open}>
+                  {items.map((item, i) => (
+                    <MenuItem
+                      key={i}
+                      onClick={handleLeave}
+                      sx={{
+                        "&:hover .itemText": {
+                          color: "orange",
+                          transform: "translateX(5px)",
+                        },
+                      }}
+                    >
+                      <Link
+                        href={links[i]}
+                        style={{
+                          textDecoration: "none",
+                          color: "inherit",
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <span className="itemText" style={{ transition: "all 0.3s ease" }}>
+                          {item}
+                        </span>
+                      </Link>
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
     </>
   );
 }

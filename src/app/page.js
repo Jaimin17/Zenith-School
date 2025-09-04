@@ -24,10 +24,14 @@ export default function HomePage() {
       {/* Vission and Mission Cards */}
       <StackCards data={VisionMissionData} />
 
-      {/* Alumni Reviews */}
+      {/* Animated Header */}
       <AnimatedHeader
-        title="Our Proud Alumni"
-        subtitle="Meet the incredible alumni who inspire the next generation."
+        miniHeader="🏫 Foundation"
+        title="Our Proud "
+        highlight="Alumni"
+        descriptions={[
+          "Meet the incredible alumni who inspire the next generation."
+        ]}
         align="center"
         titleVariant="h3"
         subtitleVariant="body1"
@@ -36,12 +40,19 @@ export default function HomePage() {
 
       {/* Contact Us */}
       <AnimatedHeader
-        title="Get in Touch"
+        miniHeader="📞 Contact Us"
+        title="Get in "
+        highlight="Touch"
         subtitle="We'd love to hear from you!"
+        descriptions={[
+          "Whether you have questions about admissions, programs, or events, our team is here to assist you every step of the way.",
+          "Reach out to us via email, phone, or visit our campus — we’d be happy to connect with you.",
+        ]}
         align="center"
         titleVariant="h3"
         subtitleVariant="body1"
       />
+
       <ContactUsContainer />
 
       <SchoolStatistics />

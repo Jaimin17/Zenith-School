@@ -40,12 +40,16 @@ export default function AwardsPage() {
           pb: 8
         }}>
           <AnimatedHeader
-            title="Awards and Recognition"
+            miniHeader="🏆 Achievements"
+            title="Awards and "
+            highlight="Recognition"
             subtitle="Celebrating achievements that inspire excellence and pride."
             align="center"
+            color="#f59e0b" // optional: sets highlight + underline color (amber/orange)
             titleVariant="h3"
             subtitleVariant="body1"
           />
+
         </Box>
 
         {/* Awards Grid */}

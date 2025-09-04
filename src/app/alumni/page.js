@@ -16,12 +16,18 @@ export default function AlumniPage() {
 
             {/* Animated Header */}
             <AnimatedHeader
-                title="Our Proud Alumni"
-                subtitle="Meet the incredible alumni who inspire the next generation."
+                miniHeader="🏫 Foundation"
+                title="Our Proud "
+                highlight="Alumni"
+                descriptions={[
+                    "Meet the incredible alumni who inspire the next generation."
+                ]}
                 align="center"
                 titleVariant="h3"
                 subtitleVariant="body1"
             />
+
+
 
             {/* Carousel */}
             <CardCarousel />

@@ -24,10 +24,10 @@ export default function StackCards({ data }) {
     const [activeIndex, setActiveIndex] = useState(0);
 
     return (
-        <Box className="relative flex justify-center items-center py-10">
-            <Box className="relative w-full max-w-4xl h-[420px]">
+        <Box className="relative flex justify-center items-center py-10 px-4" sx={{ px: 12 }}>
+            <Box className="relative w-full max-w-5xl h-[420px] md:h-[480px]">
                 {/* Ribbon Bookmarks */}
-                <Box className="absolute right-[-100px] top-6 flex flex-col gap-8 z-20">
+                <Box className="absolute right-[-80px] top-6 flex flex-col gap-6 z-20">
                     {data.map((item, index) => {
                         const isActive = activeIndex === index;
                         return (
@@ -74,16 +74,16 @@ export default function StackCards({ data }) {
                             className="absolute top-0 left-0 w-full h-full"
                             animate={{
                                 zIndex: isActive ? 10 : 5,
-                                scale: isActive ? 1 : 1,
+                                scale: isActive ? 1 : 0.95,
                                 y: isActive ? 0 : index * 20,
                                 opacity: isActive ? 1 : 0.85,
                                 rotate: isActive ? 0 : index % 2 === 0 ? -2 : 2, // tilt only inactive
                             }}
                             transition={{ type: "spring", stiffness: 200, damping: 24 }}
                         >
-                            <Card className="flex h-full shadow-xl rounded-2xl overflow-hidden relative">
+                            <Card className="flex flex-col md:flex-row h-full shadow-xl rounded-2xl overflow-hidden relative">
                                 {/* Left Side Image */}
-                                <Box className="w-1/2 h-full">
+                                <Box className="w-full md:w-1/2 h-40 md:h-full">
                                     <img
                                         src={item.image}
                                         alt={item.title}
@@ -92,8 +92,8 @@ export default function StackCards({ data }) {
                                 </Box>
 
                                 {/* Right Side Text */}
-                                <CardContent className="w-1/2 flex flex-col justify-center p-6">
-                                    <Typography variant="h4" gutterBottom>
+                                <CardContent className="w-full md:w-1/2 flex flex-col justify-center p-4 md:p-6">
+                                    <Typography variant="h5" md={{ variant: "h4" }} gutterBottom>
                                         {item.title}
                                     </Typography>
                                     <motion.div

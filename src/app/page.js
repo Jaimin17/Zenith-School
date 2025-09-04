@@ -1,6 +1,8 @@
 "use client";
 import ActivityEventGallery from "@/components/activityAndEvents/ActivityEventGallery";
 import { ImagesSliderDemo } from "@/components/home/ImagesSlider";
+import StackCards from "@/components/ui/StackCards";
+import { VisionMissionData } from "@/lib/data";
 import { Box } from "@mui/material";
 
 export default function HomePage() {
@@ -11,9 +13,10 @@ export default function HomePage() {
       }}
     >
       <ImagesSliderDemo />
-      
       {/* Activities And Events Gallery Section */}
       <ActivityEventGallery />
+
+      <StackCards data={VisionMissionData} />
     </Box>
   );
 }

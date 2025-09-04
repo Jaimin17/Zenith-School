@@ -24,7 +24,7 @@ export default function StackCards({ data }) {
     const [activeIndex, setActiveIndex] = useState(0);
 
     return (
-        <Box className="relative flex justify-center items-center py-10">
+        <Box className="relative flex justify-center items-center py-24 bg-gray-100">
             <Box className="relative w-full max-w-4xl h-[420px]">
                 {/* Ribbon Bookmarks */}
                 <Box className="absolute right-[-100px] top-6 flex flex-col gap-8 z-20">

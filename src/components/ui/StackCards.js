@@ -93,13 +93,14 @@ export default function StackCards({ data }) {
 
                                 {/* Right Side Text */}
                                 <CardContent className="w-full md:w-1/2 flex flex-col justify-center p-4 md:p-6">
-                                    <Typography variant="h5" md={{ variant: "h4" }} gutterBottom>
+                                    <Typography variant="h4" fontWeight={600} md={{ variant: "h3" }} gutterBottom>
                                         {item.title}
                                     </Typography>
                                     <motion.div
                                         variants={textContainer}
                                         initial="hidden"
                                         animate={isActive ? "visible" : "hidden"}
+                                        color="text.secondary"
                                     >
                                         {item.description.split(" ").map((word, i) => (
                                             <motion.span

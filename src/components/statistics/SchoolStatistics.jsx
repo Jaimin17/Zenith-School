@@ -15,7 +15,7 @@ function SchoolStatistics() {
   ];
 
   return (
-    <Container sx={{ py: 8 }}>
+    <Container sx={{ py: 8 }} className="bg-gray-100 min-w-full">
       <Box className="flex flex-wrap justify-center gap-10">
         {stats.map((stat, index) => (
           <Box

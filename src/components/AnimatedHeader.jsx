@@ -55,7 +55,7 @@ export function AnimatedHeader({
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
-        <Box ref={ref} sx={{ textAlign: align, px: 2 }}>
+        <Box ref={ref} sx={{ textAlign: align, p: 2, pt: 6 }}>
             {/* Mini Header */}
             {miniHeader && (
                 <Typography
@@ -64,6 +64,7 @@ export function AnimatedHeader({
                     initial="hidden"
                     animate={isInView ? "visible" : "hidden"}
                     variant="subtitle2"
+                    align="left"
                     sx={{
                         color,
                         fontWeight: 600,
@@ -105,7 +106,7 @@ export function AnimatedHeader({
                     >
                         {char === " " ? "\u00A0" : char}
                     </motion.span>
-                ))}{" "}
+                ))}
                 {highlight && (
                     <motion.span
                         variants={child}

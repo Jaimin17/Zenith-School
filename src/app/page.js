@@ -19,10 +19,14 @@ export default function HomePage() {
       // }}
     >
       <ImagesSliderDemo />
-      {/* Activities And Events Gallery Section */}
-      <ActivityEventGallery />
+      
       {/* Vission and Mission Cards */}
       <StackCards data={VisionMissionData} />
+
+      
+      {/* Activities And Events Gallery Section */}
+      <ActivityEventGallery />
+      
 
       {/* Animated Header */}
       <AnimatedHeader
@@ -38,6 +42,13 @@ export default function HomePage() {
       />
       <CardCarousel />
 
+      
+
+
+      <OurTimeline />
+
+      <SchoolStatistics />
+      
       {/* Contact Us */}
       <AnimatedHeader
         miniHeader="📞 Contact Us"
@@ -52,12 +63,7 @@ export default function HomePage() {
         titleVariant="h3"
         subtitleVariant="body1"
       />
-
       <ContactUsContainer />
-
-      <SchoolStatistics />
-
-      <OurTimeline />
     </Box>
   );
 }

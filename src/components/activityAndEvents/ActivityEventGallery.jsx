@@ -12,7 +12,7 @@ function ActivityEventGallery() {
 
         <AnimatedHeader
           miniHeader="🎉 Activities & Events"
-          title="Activities And "
+          title="Activities And"
           highlight="Events Gallery"
           subtitle="Discover memorable moments from our school’s activities, celebrations, and special events."
 

@@ -23,7 +23,7 @@ export default function TributeToOurFoundersPage() {
                 backgroundImage={bannerData.imageUrl}
             />
 
-            <Container maxWidth="lg" sx={{ py: 6 }}>
+            <Container maxWidth="lg" sx={{ py: 6 }} className="max-w-screen overflow-hidden">
                 {/* Section 1: One Image with Text */}
                 <Box sx={{ mb: 6 }}>
                     <CardMedia
@@ -50,7 +50,7 @@ export default function TributeToOurFoundersPage() {
 
                 {/* Section 2: Two Images Side by Side with Text */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 4 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
                         {/* Here two images side by side */}
                         <CardMedia
                             component="img"

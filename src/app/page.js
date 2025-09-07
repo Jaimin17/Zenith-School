@@ -19,40 +19,37 @@ export default function HomePage() {
       // }}
     >
       <ImagesSliderDemo />
-      
+
       {/* Vission and Mission Cards */}
       <StackCards data={VisionMissionData} />
 
-      
       {/* Activities And Events Gallery Section */}
       <ActivityEventGallery />
-      
 
-      {/* Animated Header */}
-      <AnimatedHeader
-        miniHeader="🏫 Foundation"
-        title="Our Proud "
-        highlight="Alumni"
-        descriptions={[
-          "Meet the incredible alumni who inspire the next generation."
-        ]}
-        align="center"
-        titleVariant="h3"
-        subtitleVariant="body1"
-      />
-      <CardCarousel />
-
-      
-
+      <Box className="bg-gray-100">
+        {/* Animated Header */}
+        <AnimatedHeader
+          miniHeader="🏫 Foundation"
+          title="Our Proud"
+          highlight="Alumni"
+          descriptions={[
+            "Meet the incredible alumni who inspire the next generation.",
+          ]}
+          align="center"
+          titleVariant="h3"
+          subtitleVariant="body1"
+        />
+        <CardCarousel />
+      </Box>
 
       <OurTimeline />
 
       <SchoolStatistics />
-      
+
       {/* Contact Us */}
       <AnimatedHeader
         miniHeader="📞 Contact Us"
-        title="Get in "
+        title="Get in"
         highlight="Touch"
         subtitle="We'd love to hear from you!"
         descriptions={[

@@ -32,7 +32,6 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function Navbar() {
-
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpand, setMobileExpand] = useState({
     overview: false,
@@ -45,14 +44,12 @@ export default function Navbar() {
   const [openIndex, setOpenIndex] = useState(null);
 
   const handleOpen = (index, event) => {
-    setOpenIndex(index);          // only track which index is open
+    setOpenIndex(index); // only track which index is open
   };
 
   const handleClose = () => {
-    setOpenIndex(null);           // close all
+    setOpenIndex(null); // close all
   };
-
-
 
   const handleMobileMenuOpen = () => setMobileOpen(true);
   const handleMobileMenuClose = () => setMobileOpen(false);
@@ -62,7 +59,13 @@ export default function Navbar() {
   return (
     <>
       {/* ✅ Top Info Bar (NOT sticky) */}
-      <Box sx={{ display: "flex", width: "100%", position: "relative" }}>
+      <Box
+        sx={{
+          display: { xs: "none", md: "flex" },
+          width: "100%",
+          position: "relative",
+        }}
+      >
         {/* Left - Socials */}
         <Box
           sx={{
@@ -81,10 +84,22 @@ export default function Navbar() {
             <Typography variant="body2" fontWeight="bold">
               Follow Us:
             </Typography>
-            <Facebook fontSize="large" sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }} />
-            <Instagram fontSize="large" sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }} />
-            <YouTube fontSize="large" sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }} />
-            <WhatsApp fontSize="large" sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }} />
+            <Facebook
+              fontSize="large"
+              sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }}
+            />
+            <Instagram
+              fontSize="large"
+              sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }}
+            />
+            <YouTube
+              fontSize="large"
+              sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }}
+            />
+            <WhatsApp
+              fontSize="large"
+              sx={{ p: "6px", bgcolor: "green", borderRadius: "50%" }}
+            />
           </Stack>
         </Box>
 
@@ -120,10 +135,16 @@ export default function Navbar() {
           top: 0,
           zIndex: (theme) => theme.zIndex.drawer + 1,
           borderBottom: "1px solid #eee",
-          justifyContent: 'space-between'
+          justifyContent: "space-between",
         }}
       >
-        <Toolbar sx={{ minHeight: { xs: "56px", md: "64px" }, px: { xs: 2, md: 4 }, justifyContent: 'space-between' }}>
+        <Toolbar
+          sx={{
+            minHeight: { xs: "56px", md: "64px" },
+            px: { xs: 2, md: 4 },
+            justifyContent: "space-between",
+          }}
+        >
           {/* Logo */}
           <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
             <Typography
@@ -153,7 +174,10 @@ export default function Navbar() {
               className="nav-item"
               title="Overview"
               items={["Tribute to Our Founders", "Why Zenith School"]}
-              links={["/overview/tribute-to-our-founders", "/overview/why-zenith-school"]}
+              links={[
+                "/overview/tribute-to-our-founders",
+                "/overview/why-zenith-school",
+              ]}
               open={openIndex === 0}
               anchorEl={anchorEl}
               onOpen={(event) => handleOpen(0, event)}
@@ -162,7 +186,12 @@ export default function Navbar() {
             <NavDropdown
               className="nav-item"
               title="About"
-              items={["From Principal’s Desk", "State-of-the-Art Infrastructure", "Timeline", "Awards"]}
+              items={[
+                "From Principal’s Desk",
+                "State-of-the-Art Infrastructure",
+                "Timeline",
+                "Awards",
+              ]}
               links={[
                 "/about/from-principal-desk",
                 "/about/state-of-the-art-infrastructure",
@@ -174,12 +203,19 @@ export default function Navbar() {
               onOpen={(event) => handleOpen(1, event)}
               onClose={handleClose}
             />
-            <NavLinkBtn className="nav-item" href={"/admission"} title="Admissions" />
+            <NavLinkBtn
+              className="nav-item"
+              href={"/admission"}
+              title="Admissions"
+            />
             <NavDropdown
               className="nav-item"
               title="Academics"
               items={["Curriculum", "Activities beyond Academics"]}
-              links={["/academics/curriculum", "/academics/activities-beyond-academics"]}
+              links={[
+                "/academics/curriculum",
+                "/academics/activities-beyond-academics",
+              ]}
               open={openIndex === 2}
               anchorEl={anchorEl}
               onOpen={(event) => handleOpen(2, event)}
@@ -196,8 +232,16 @@ export default function Navbar() {
               onOpen={(event) => handleOpen(3, event)}
               onClose={handleClose}
             />
-            <NavLinkBtn className="nav-item" href={"/contact-us"} title="Contact Us" />
-            <NavLinkBtn className="nav-item" href={"/careers"} title="Careers" />
+            <NavLinkBtn
+              className="nav-item"
+              href={"/contact-us"}
+              title="Contact Us"
+            />
+            <NavLinkBtn
+              className="nav-item"
+              href={"/careers"}
+              title="Careers"
+            />
             <NavLinkBtn className="nav-item" href={"/alumni"} title="Alumni" />
           </Stack>
 
@@ -244,10 +288,20 @@ export default function Navbar() {
       </Box>
 
       {/* ✅ Mobile Drawer with nested (collapsible) lists */}
-      <Drawer anchor="right" open={mobileOpen} onClose={handleMobileMenuClose} sx={{ zIndex: 12002 }}>
+      <Drawer
+        anchor="right"
+        open={mobileOpen}
+        onClose={handleMobileMenuClose}
+        sx={{ zIndex: 12002 }}
+      >
         <Box sx={{ width: 280, p: 2 }}>
           {/* Drawer Header */}
-          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ mb: 1 }}
+          >
             <Typography variant="h6" fontWeight="bold" color="#0f5c4d">
               Zenith
             </Typography>
@@ -301,13 +355,24 @@ export default function Navbar() {
             <Collapse in={mobileExpand.about} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 {[
-                  { t: "From Principal’s Desk", h: "/about/from-principal-desk" },
-                  { t: "State-of-the-Art Infrastructure", h: "/about/state-of-the-art-infrastructure" },
+                  {
+                    t: "From Principal’s Desk",
+                    h: "/about/from-principal-desk",
+                  },
+                  {
+                    t: "State-of-the-Art Infrastructure",
+                    h: "/about/state-of-the-art-infrastructure",
+                  },
                   { t: "Timeline", h: "/about/timeline" },
                   { t: "Awards", h: "/about/awards" },
                 ].map((it) => (
                   <ListItem key={it.h} disablePadding>
-                    <ListItemButton component={Link} href={it.h} onClick={handleMobileMenuClose} sx={{ pl: 4 }}>
+                    <ListItemButton
+                      component={Link}
+                      href={it.h}
+                      onClick={handleMobileMenuClose}
+                      sx={{ pl: 4 }}
+                    >
                       <ListItemText primary={it.t} />
                     </ListItemButton>
                   </ListItem>
@@ -317,7 +382,11 @@ export default function Navbar() {
 
             {/* ✅ Admissions */}
             <ListItem disablePadding>
-              <ListItemButton component={Link} href="/admission" onClick={handleMobileMenuClose}>
+              <ListItemButton
+                component={Link}
+                href="/admission"
+                onClick={handleMobileMenuClose}
+              >
                 <ListItemText primary="Admissions" />
               </ListItemButton>
             </ListItem>
@@ -333,10 +402,18 @@ export default function Navbar() {
               <List component="div" disablePadding>
                 {[
                   { t: "Curriculum", h: "/academics/curriculum" },
-                  { t: "Activities beyond Academics", h: "/academics/activities-beyond-academics" },
+                  {
+                    t: "Activities beyond Academics",
+                    h: "/academics/activities-beyond-academics",
+                  },
                 ].map((it) => (
                   <ListItem key={it.h} disablePadding>
-                    <ListItemButton component={Link} href={it.h} onClick={handleMobileMenuClose} sx={{ pl: 4 }}>
+                    <ListItemButton
+                      component={Link}
+                      href={it.h}
+                      onClick={handleMobileMenuClose}
+                      sx={{ pl: 4 }}
+                    >
                       <ListItemText primary={it.t} />
                     </ListItemButton>
                   </ListItem>
@@ -346,7 +423,11 @@ export default function Navbar() {
 
             {/* ✅ Sports */}
             <ListItem disablePadding>
-              <ListItemButton component={Link} href="/sports" onClick={handleMobileMenuClose}>
+              <ListItemButton
+                component={Link}
+                href="/sports"
+                onClick={handleMobileMenuClose}
+              >
                 <ListItemText primary="Sports" />
               </ListItemButton>
             </ListItem>
@@ -365,7 +446,12 @@ export default function Navbar() {
                   { t: "Event Gallery", h: "/gallery/events" },
                 ].map((it) => (
                   <ListItem key={it.h} disablePadding>
-                    <ListItemButton component={Link} href={it.h} onClick={handleMobileMenuClose} sx={{ pl: 4 }}>
+                    <ListItemButton
+                      component={Link}
+                      href={it.h}
+                      onClick={handleMobileMenuClose}
+                      sx={{ pl: 4 }}
+                    >
                       <ListItemText primary={it.t} />
                     </ListItemButton>
                   </ListItem>
@@ -380,7 +466,11 @@ export default function Navbar() {
               { t: "Alumni", h: "/alumni" },
             ].map((it) => (
               <ListItem key={it.h} disablePadding>
-                <ListItemButton component={Link} href={it.h} onClick={handleMobileMenuClose}>
+                <ListItemButton
+                  component={Link}
+                  href={it.h}
+                  onClick={handleMobileMenuClose}
+                >
                   <ListItemText primary={it.t} />
                 </ListItemButton>
               </ListItem>

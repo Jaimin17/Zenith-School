@@ -10,7 +10,7 @@ export default function WhyZenithSchoolPage() {
             <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
 
             {/* Subheading Section */}
-            <Container maxWidth="md">
+            <Container maxWidth="md" className="max-w-screen overflow-hidden">
                 <Box textAlign="center" mt={6} mb={3}>
                     <Typography
                         variant="h4"
@@ -38,17 +38,16 @@ export default function WhyZenithSchoolPage() {
                 </Box>
 
                 {/* Horizontal School Image */}
-                <Box display="flex" justifyContent="center" mb={6}>
+                <Box display="flex" justifyContent="center" mb={6} padding={2}>
                     <img
                         src={WHY_ZENITH_DATA?.image}
                         alt="Zenith School"
                         style={{
-                            height: "400px",
+                            maxHeight: "400px",
                             // width: "100%",s
                             maxWidth: "900px",
                             borderRadius: "16px",
                             boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
-
                         }}
                     />
                 </Box>

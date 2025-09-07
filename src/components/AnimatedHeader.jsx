@@ -89,28 +89,50 @@ export function AnimatedHeader({
                 </Typography>
             )}
 
-            {/* Title with Highlight */}
+            {/* Title with Highlight - Fixed to prevent word breaking */}
             <Typography
                 component={motion.h2}
                 variants={container}
                 initial="hidden"
                 animate={isInView ? "visible" : "hidden"}
                 variant={titleVariant}
-                sx={{ fontWeight: 800, mb: 2, lineHeight: 1.3 }}
+                sx={{ 
+                    fontWeight: 800, 
+                    mb: 2, 
+                    lineHeight: 1.3,
+                    wordBreak: "keep-all",
+                    overflowWrap: "break-word"
+                }}
             >
-                {title.split("").map((char, i) => (
+                {title.split(" ").map((word, wordIndex) => (
                     <motion.span
-                        key={i}
+                        key={wordIndex}
                         variants={child}
-                        style={{ display: "inline-block" }}
+                        style={{ 
+                            display: "inline-block",
+                            marginRight: "0.35em",
+                            whiteSpace: "nowrap"
+                        }}
                     >
-                        {char === " " ? "\u00A0" : char}
+                        {word.split("").map((char, charIndex) => (
+                            <motion.span
+                                key={charIndex}
+                                variants={child}
+                                style={{ display: "inline-block" }}
+                            >
+                                {char}
+                            </motion.span>
+                        ))}
                     </motion.span>
                 ))}
                 {highlight && (
                     <motion.span
                         variants={child}
-                        style={{ display: "inline-block", color }}
+                        style={{ 
+                            display: "inline-block", 
+                            color,
+                            whiteSpace: "nowrap"
+                        }}
                     >
                         {highlight}
                     </motion.span>

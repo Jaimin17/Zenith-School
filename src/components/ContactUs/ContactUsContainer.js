@@ -1,104 +1,159 @@
 "use client";
 
-import { ContactUsForm } from "@/components/ui/contact-us-form";
-import { BANNER_DATA } from "@/lib/data";
-import { Box, Typography, Container } from "@mui/material";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 const Map = dynamic(() => import("@/components/Map"), {
-ssr: true,
+  ssr: true,
 });
 
-
 export const ContactUsContainer = () => {
-    return (
-        <Container sx={{ py: 6 }}>
-            <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="flex-start" // better alignment for different content heights
-                flexWrap="wrap"
-                gap={12}
-                sx={{
-                    minHeight: '500px',
-                }}
-            >
-                {/* Left Side - Form */}
-                <Box
-                    flex={1}
-                    display="flex"
-                    justifyContent="center"
-                    sx={{
-                        minWidth: { xs: '100%', md: '500px' }, // responsive min width
-                        maxWidth: '650px',
+  return (
+    <>
+      <div className="contact-area py-120">
+        <div className="container">
+          <div className="contact-content">
+            <div className="row">
+              <div className="col-md-3">
+                <div className="contact-info">
+                  <div className="contact-info-icon">
+                    <i className="fal fa-map-location-dot"></i>
+                  </div>
+                  <div className="contact-info-content">
+                    <h5>Office Address</h5>
+                    <p>25/B Milford, New York, USA</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="contact-info">
+                  <div className="contact-info-icon">
+                    <i className="fal fa-phone-volume"></i>
+                  </div>
+                  <div className="contact-info-content">
+                    <h5>Call Us</h5>
+                    <p>+2 123 4565 789</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="contact-info">
+                  <div className="contact-info-icon">
+                    <i className="fal fa-envelopes"></i>
+                  </div>
+                  <div className="contact-info-content">
+                    <h5>Email Us</h5>
+                    <p>
+                      <a
+                        href="https://live.themewild.com/cdn-cgi/l/email-protection"
+                        className="__cf_email__"
+                        data-cfemail="87eee9e1e8c7e2ffe6eaf7ebe2a9e4e8ea"
+                      >
+                        [email&#160;protected]
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="contact-info">
+                  <div className="contact-info-icon">
+                    <i className="fal fa-alarm-clock"></i>
+                  </div>
+                  <div className="contact-info-content">
+                    <h5>Open Time</h5>
+                    <p>Mon - Sat (10.00AM - 05.30PM)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="contact-wrapper">
+            <div className="row">
+              <div className="col-lg-5">
+                <div className="contact-img">
+                  <Image
+                    src={"/assets/img/contact/01.jpg"}
+                    alt=""
+                    width={10}
+                    height={10}
+                  />
+                </div>
+              </div>
+              <div className="col-lg-7 align-self-center">
+                <div className="contact-form">
+                  <div className="contact-form-header">
+                    <h2>Get In Touch</h2>
+                    <p>
+                      It is a long established fact that a reader will be
+                      distracted by the readable content of a page randomised
+                      words which don't look even slightly when looking at its
+                      layout.{" "}
+                    </p>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="name"
+                          placeholder="Your Name"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <input
+                          type="email"
+                          className="form-control"
+                          name="email"
+                          placeholder="Your Email"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="subject"
+                      placeholder="Your Subject"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <textarea
+                      name="message"
+                      cols="30"
+                      rows="5"
+                      className="form-control"
+                      placeholder="Write Your Message"
+                    ></textarea>
+                  </div>
+                  <button
+                    type="submit"
+                    className="theme-btn"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    Send Message <i className="far fa-paper-plane"></i>
+                  </button>
+                  <div className="col-md-12 mt-3">
+                    <div className="form-messege text-success"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                    }}
-                >
-                    <ContactUsForm />
-                </Box>
-
-                {/* Right Side - Map + Info */}
-                <Box
-                    sx={{
-                        minWidth: { xs: '100%', md: '400px' },
-                        maxWidth: '500px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 3,
-                    }}
-                >
-                    {/* Map */}
-                    <Box sx={{
-                        borderRadius: '16px',
-                        overflow: 'hidden',
-                        height: '300px' // fixed height for map
-                    }}>
-                        <Map center={[28.6139, 77.209]} zoom={13} />
-                    </Box>
-
-                    {/* Contact Info */}
-                    <Box sx={{ p: 2 }}>
-                        <Typography variant="h6" fontWeight="bold" mb={1}>
-                            Visit Our School
-                        </Typography>
-
-                        <Typography variant="subtitle1" fontWeight="bold" mt={2}>
-                            Address:
-                        </Typography>
-                        <Typography variant="body2" mb={2} color="text.secondary">
-                            Dabhoi Road, Pratapnagar – Makarpura Road, <br />
-                            Vadodara, Gujarat 390004
-                        </Typography>
-
-                        <Typography variant="subtitle1" fontWeight="bold">
-                            Hours:
-                        </Typography>
-                        <Typography variant="body2" mb={3} color="text.secondary">
-                            07:00 am – 06:00 pm
-                        </Typography>
-
-                        <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={3}>
-                            <Box>
-                                <Typography variant="subtitle1" fontWeight="bold">
-                                    Phone:
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    9825220510
-                                </Typography>
-                            </Box>
-                            <Box>
-                                <Typography variant="subtitle1" fontWeight="bold">
-                                    Email:
-                                </Typography>
-                                <Typography variant="body2" color="text.secondary">
-                                    zenithschool.brd@gmail.com
-                                </Typography>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Box>
-            </Box>
-        </Container>
-    )
-}
+      <div class="contact-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d615510.5022021453!2d72.68842878400444!3d21.92553907244295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be0241d43bf5073%3A0x31ca5d2247a19cc4!2sZenith%20High%20School!5e1!3m2!1sen!2sin!4v1757358371115!5m2!1sen!2sin" width="600" height="450" style={{ border: "0" }} allowFullScreen="" loading="lazy"></iframe>
+      </div>
+    </>
+  );
+};
 
 export default ContactUsContainer;

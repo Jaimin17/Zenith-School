@@ -50,7 +50,7 @@ const Banner = ({ title, backgroundImage = null }) => {
         }}
       >
         <Typography
-          className="font-bold text-xl md:text-6xl text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 py-4"
+          className="font-bold text-xl md:text-6xl text-white text-center bg-clip-text bg-gradient-to-b from-neutral-50 to-neutral-400 py-4"
           variant="h3"
           component="h1"
           sx={{

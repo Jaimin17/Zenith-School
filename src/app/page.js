@@ -9,11 +9,14 @@ import { Box, Typography } from "@mui/material";
 import { AnimatedHeader } from "@/components/AnimatedHeader";
 import { CardCarousel } from "@/components/alumni/CardCarousel";
 import ContactUsContainer from "@/components/ContactUs/ContactUsContainer";
+import FeaturesCard from "@/components/home/FeaturesCard";
 
 export default function HomePage() {
   return (
     <>
       <ImagesSliderDemo />
+
+      <FeaturesCard />
 
       {/* <StackCards data={VisionMissionData} />
 

@@ -1,5 +1,3 @@
-"use client";
-
 import { CssBaseline, Box } from "@mui/material";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";

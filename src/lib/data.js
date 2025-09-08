@@ -254,3 +254,32 @@ export const VisionMissionData = [
     bookmark: "Mission",
   },
 ];
+
+
+
+
+
+
+
+export const featureCardData = [
+  {
+    img: "assets/img/icon/scholarship.svg",
+    title: "Scholarship Facility",
+    description: "It is a long established fact that a reader will be distracted.",
+  },
+  {
+    img: "assets/img/icon/teacher.svg",
+    title: "Skilled Lecturers",
+    description: "It is a long established fact that a reader will be distracted.",
+  },
+  {
+    img: "assets/img/icon/library.svg",
+    title: "Book Library Facility",
+    description: "It is a long established fact that a reader will be distracted.",
+  },
+  {
+    img: "assets/img/icon/money.svg",
+    title: "Affordable Price",
+    description: "It is a long established fact that a reader will be distracted.",
+  }
+];

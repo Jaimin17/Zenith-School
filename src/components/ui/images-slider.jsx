@@ -1,6 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 function ImagesSlider({ images }) {
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.$) {
+      window.$(".hero-slider").owlCarousel({
+        loop: true,
+        margin: 10,
+        nav: true,
+        items: 1,
+        autoplay: true,
+        autoplayTimeout: 3000,
+        autoplayHoverPause: true,
+      });
+    }
+  }, []);
   return (
     <>
       <div className="hero-section">
@@ -9,13 +22,12 @@ function ImagesSlider({ images }) {
             <div
               key={index}
               className="hero-single"
-              background={image}
-              // style={{
-              //   backgroundImage: `url(${image})`,
-              //   backgroundSize: "cover",
-              //   backgroundPosition: "center",
-              //   backgroundRepeat: "no-repeat"
-              // }}
+              style={{
+                backgroundImage: `url(${image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
             >
               <div className="container">
                 <div className="row align-items-center">
@@ -27,7 +39,7 @@ function ImagesSlider({ images }) {
                         data-delay=".25s"
                       >
                         <i className="far fa-book-open-reader"></i>Welcome To
-                        Eduka!
+                        Zenith!
                       </h6>
                       <h1
                         className="hero-title"

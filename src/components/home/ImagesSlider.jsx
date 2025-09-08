@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import ImagesSlider from "../ui/images-slider";
 

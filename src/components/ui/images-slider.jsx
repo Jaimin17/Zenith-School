@@ -1,137 +1,68 @@
-"use client";
-import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "motion/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-export const ImagesSlider = ({
-  images,
-  children,
-  overlay = true,
-  overlayClassName,
-  className,
-  autoplay = true,
-  direction = "up"
-}) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [loadedImages, setLoadedImages] = useState([]);
-
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex + 1 === images.length ? 0 : prevIndex + 1);
-  };
-
-  const handlePrevious = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex - 1 < 0 ? images.length - 1 : prevIndex - 1);
-  };
-
-  useEffect(() => {
-    loadImages();
-  }, []);
-
-  const loadImages = () => {
-    setLoading(true);
-    const loadPromises = images.map((image) => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = image;
-        img.onload = () => resolve(image);
-        img.onerror = reject;
-      });
-    });
-
-    Promise.all(loadPromises)
-      .then((loadedImages) => {
-        setLoadedImages(loadedImages);
-        setLoading(false);
-      })
-      .catch((error) => console.error("Failed to load images", error));
-  };
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === "ArrowRight") {
-        handleNext();
-      } else if (event.key === "ArrowLeft") {
-        handlePrevious();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    // autoplay
-    let interval;
-    if (autoplay) {
-      interval = setInterval(() => {
-        handleNext();
-      }, 5000);
-    }
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      clearInterval(interval);
-    };
-  }, []);
-
-  const slideVariants = {
-    initial: {
-      scale: 0,
-      opacity: 0,
-      rotateX: 45,
-    },
-    visible: {
-      scale: 1,
-      rotateX: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: [0.645, 0.045, 0.355, 1.0],
-      },
-    },
-    upExit: {
-      opacity: 1,
-      y: "-150%",
-      transition: {
-        duration: 1,
-      },
-    },
-    downExit: {
-      opacity: 1,
-      y: "150%",
-      transition: {
-        duration: 1,
-      },
-    },
-  };
-
-  const areImagesLoaded = loadedImages.length > 0;
-
+function ImagesSlider({ images }) {
   return (
-    <div
-      className={cn(
-        "overflow-hidden h-full w-full relative flex items-center justify-center",
-        className
-      )}
-      style={{
-        perspective: "1000px",
-      }}>
-      {areImagesLoaded && children}
-      {areImagesLoaded && overlay && (
-        <div className={cn("absolute inset-0 bg-black/60 z-40", overlayClassName)} />
-      )}
-      {areImagesLoaded && (
-        <AnimatePresence>
-          <motion.img
-            key={currentIndex}
-            src={loadedImages[currentIndex]}
-            initial="initial"
-            animate="visible"
-            exit={direction === "up" ? "upExit" : "downExit"}
-            variants={slideVariants}
-            className="image h-full w-full absolute inset-0 object-cover object-center"
-            style={{ width: "99vw" }} />
-        </AnimatePresence>
-      )}
-    </div>
+    <>
+      <div className="hero-section">
+        <div className="hero-slider owl-carousel owl-theme">
+          {images.map((image, index) => (
+            <div
+              key={index}
+              className="hero-single"
+              background={image}
+              // style={{
+              //   backgroundImage: `url(${image})`,
+              //   backgroundSize: "cover",
+              //   backgroundPosition: "center",
+              //   backgroundRepeat: "no-repeat"
+              // }}
+            >
+              <div className="container">
+                <div className="row align-items-center">
+                  <div className="col-md-12 col-lg-7">
+                    <div className="hero-content">
+                      <h6
+                        className="hero-sub-title"
+                        data-animation="fadeInDown"
+                        data-delay=".25s"
+                      >
+                        <i className="far fa-book-open-reader"></i>Welcome To
+                        Eduka!
+                      </h6>
+                      <h1
+                        className="hero-title"
+                        data-animation="fadeInRight"
+                        data-delay=".50s"
+                      >
+                        Start Your Beautiful And <span>Bright</span> Future
+                      </h1>
+                      <p data-animation="fadeInLeft" data-delay=".75s">
+                        There are many variations of passages orem psum
+                        available but the majority have suffered alteration in
+                        some repeat predefined chunks form injected humour.
+                      </p>
+                      <div
+                        className="hero-btn"
+                        data-animation="fadeInUp"
+                        data-delay="1s"
+                      >
+                        <a href="about.html" className="theme-btn">
+                          About More<i className="fas fa-arrow-right-long"></i>
+                        </a>
+                        <a href="contact.html" className="theme-btn theme-btn2">
+                          Learn More<i className="fas fa-arrow-right-long"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
-};
+}
+
+export default ImagesSlider;

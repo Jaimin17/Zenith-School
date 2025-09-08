@@ -16,7 +16,7 @@ export default function Footer() {
         
         {/* Logo & About */}
         <Grid item xs={12} sm={4} md={3}>
-          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+          <Typography variant="h5" sx={{ fontWeight: "bold", color: "white" }}>
             Zenith<span style={{ color: "#ccc" }}>School</span>
           </Typography>
           <Typography variant="body2" sx={{ mt: 2, color: "#b0bec5" }}>
@@ -44,7 +44,7 @@ export default function Footer() {
 
         {/* Links */}
         <Grid item xs={12} sm={4} md={3}>
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
+          <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold", color: "white" }}>
             Quick Links
           </Typography>
           {quickLinksTitle.map(
@@ -100,7 +100,7 @@ export default function Footer() {
 
         {/* Address */}
         <Grid item xs={12} sm={4} md={3}>
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
+          <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold", color: "white" }}>
             Address
           </Typography>
           <Typography variant="body2" sx={{ color: "#b0bec5", mb: 1 }}>

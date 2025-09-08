@@ -12,22 +12,16 @@ import ContactUsContainer from "@/components/ContactUs/ContactUsContainer";
 
 export default function HomePage() {
   return (
-    <Box
-      className="w-full h-full"
-      // sx={{
-      //   overflow: "hidden",
-      // }}
-    >
+    <>
       <ImagesSliderDemo />
 
-      {/* Vission and Mission Cards */}
-      <StackCards data={VisionMissionData} />
+      {/* <StackCards data={VisionMissionData} />
 
-      {/* Activities And Events Gallery Section */}
+
       <ActivityEventGallery />
 
       <Box className="bg-gray-100">
-        {/* Animated Header */}
+
         <AnimatedHeader
           miniHeader="🏫 Foundation"
           title="Our Proud"
@@ -46,7 +40,6 @@ export default function HomePage() {
 
       <SchoolStatistics />
 
-      {/* Contact Us */}
       <AnimatedHeader
         miniHeader="📞 Contact Us"
         title="Get in"
@@ -60,7 +53,7 @@ export default function HomePage() {
         titleVariant="h3"
         subtitleVariant="body1"
       />
-      <ContactUsContainer />
-    </Box>
+      <ContactUsContainer /> */}
+    </>
   );
 }

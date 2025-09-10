@@ -47,120 +47,122 @@ export default function stateOfTheArtInfrastructurePage() {
       <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
 
       <Container sx={{ py: 6 }}>
-        <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
-          <Box
-            display="flex"
-            flexDirection={{ xs: "column", md: "row" }}
-            alignItems="flex-start"
-            gap={6}
-          >
-            {/* Left Content */}
-            <Box flex={1}>
-              {/* Small Orange Heading */}
-              <Typography
-                variant="subtitle2"
-                sx={{
-                  color: "orange",
-                  fontWeight: 600,
-                  textTransform: "uppercase",
-                  letterSpacing: 1,
-                  mb: 1,
-                  display: "inline-block",
-                  borderBottom: "2px solid orange",
-                  pb: 0.5,
+
+        <div className="campus-tour pt-120 pb-80">
+          <div className="container">
+            <div className="row align-items-center">
+
+              {/* Left Content */}
+              <div className="col-lg-6">
+                <div className="content-info wow fadeInUp" data-wow-delay=".25s">
+                  <div className="site-heading mb-3">
+                    <span className="site-title-tagline">
+                      <i className="far fa-book-open-reader"></i> Campus Tour
+                    </span>
+                    <h2 className="site-title">
+                      Details About <span>State-of-the-Art</span> Infrastructure.
+                    </h2>
+                  </div>
+
+                  <p className="content-text">
+                    Our state-of-the-art infrastructure is designed to provide an
+                    optimal learning environment for our students. From modern
+                    classrooms equipped with the latest technology to spacious
+                    libraries and laboratories, every aspect of our campus is
+                    tailored to enhance the educational experience.
+                  </p>
+
+                  <p className="content-text mt-2">
+                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                    accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+                    quae ab illo inventore veritatis et quasi architecto beatae vitae
+                    dicta sunt explicabo.
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Image */}
+              <div className="col-lg-6">
+                <div className="content-img wow fadeInRight" data-wow-delay=".25s">
+                  <img
+                    src={dummyData.image} // ✅ put your React image variable or static path
+                    alt="State of the Art Infrastructure"
+                  />
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+
+        <div className="row">
+          {dummyCardData.map((card, index) => (
+            <div className="col-lg-4 mt-4" key={index}>
+              <div
+                className="event-item wow fadeInUp"
+                data-wow-delay=".25s"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "100%",
                 }}
               >
-                🏫 Infrastructure
-              </Typography>
+                {/* Image */}
+                <div className="event-img">
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    style={{
+                      width: "100%",
+                      height: "250px", // fixed height
+                      objectFit: "cover", // keeps aspect ratio
+                      borderRadius: "8px",
+                    }}
+                  />
+                </div>
 
-              {/* Main Heading */}
-              <Typography
-                variant="h4"
-                sx={{ fontWeight: 800, mb: 2, lineHeight: 1.3 }}
-              >
-                Details About{" "}
-                <Box component="span" sx={{ color: "orange" }}>
-                  State-of-the-Art
-                </Box>{" "}
-                Infrastructure.
-              </Typography>
+                {/* Info Section */}
+                <div
+                  className="event-info"
+                  style={{
+                    flex: "1",
+                    display: "flex",
+                    flexDirection: "column",
+                    marginTop: "15px", // ✅ space between image & text
+                  }}
+                >
+                  <h4 className="event-title" style={{ marginBottom: "10px" }}>
+                    <a href={card.link || "#"}>{card.title}</a>
+                  </h4>
 
-              {/* Description */}
-              <Typography
-                variant="body1"
-                sx={{ color: "text.secondary", mb: 2, lineHeight: 1.7 }}
-              >
-                Our state-of-the-art infrastructure is designed to provide an
-                optimal learning environment for our students. From modern
-                classrooms equipped with the latest technology to spacious
-                libraries and laboratories, every aspect of our campus is
-                tailored to enhance the educational experience.
-              </Typography>
+                  {/* Truncated description */}
+                  <p
+                    style={{
+                      flexGrow: 1,
+                      margin: 0,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 3, // ✅ max 3 lines
+                      WebkitBoxOrient: "vertical",
+                      lineHeight: "1.5",
+                    }}
+                  >
+                    {card.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
 
-              <Typography
-                variant="body1"
-                sx={{ color: "text.secondary", lineHeight: 1.7 }}
-              >
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-                quae ab illo inventore veritatis et quasi architecto beatae
-                vitae dicta sunt explicabo.
-              </Typography>
-            </Box>
 
-            {/* Right Image */}
-            <Box
-              sx={{
-                flex: 1,
-                maxWidth: { xs: "100%", md: "500px" },
-                width: "100%",
-              }}
-            >
-              <CardMedia
-                component="img"
-                image={dummyData.image}
-                alt="State of the Art Infrastructure"
-                sx={{
-                  width: "100%",
-                  height: { xs: 250, sm: 300, md: 350 },
-                  objectFit: "cover",
-                  borderRadius: 3,
-                  boxShadow: 3,
-                }}
-              />
-            </Box>
-          </Box>
-        </Container>
-        <Box
-          display={"flex"}
-          flexDirection={"row"}
-          gap={4}
-          sx={{
-            flexWrap: { xs: "wrap" },
-          }}
-          alignItems={"center"}
-          justifyContent={"space-between"}
-          mt={6}
-        >
-          {dummyCardData.map((card, index) => {
-            return (
-              <Box
-                key={index}
-                sx={{
-                  flexBasis: { xs: "100%", md: "45%" }, // 1 per row on mobile, 2 per row on desktop
-                  maxWidth: { xs: "100%", md: "45%" },
-                }}
-              >
-                <Card
-                  title={card.title}
-                  description={card.description}
-                  image={card.image}
-                />
-              </Box>
-            );
-          })}
-        </Box>
+
+
       </Container>
     </>
   );
 }
+

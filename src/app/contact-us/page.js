@@ -1,7 +1,7 @@
 "use client";
 
 import Banner from "@/components/Banner";
-import ContactUsContainer from "@/components/ContactUs/ContactUsContainer";
+import ContactUsContainer from "@/components/contactUs/ContactUsContainer";
 import Map from "@/components/Map";
 import { ContactUsForm } from "@/components/ui/contact-us-form";
 import { BANNER_DATA } from "@/lib/data";

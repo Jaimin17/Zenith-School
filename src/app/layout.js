@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
         <Footer />
 
 
-        <Script src="/assets/js/jquery-3.7.1.min.js" strategy="afterInteractive" />
+        <Script src="/assets/js/jquery-3.7.1.min.js" strategy="beforeInteractive" />
         <Script src="/assets/js/modernizr.min.js" strategy="afterInteractive" />
         <Script src="/assets/js/bootstrap.bundle.min.js" strategy="afterInteractive" />
         <Script src="/assets/js/imagesloaded.pkgd.min.js" strategy="afterInteractive" />

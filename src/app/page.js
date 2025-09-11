@@ -8,7 +8,7 @@ import { VisionMissionData } from "@/lib/data";
 import { Box, Typography } from "@mui/material";
 import { AnimatedHeader } from "@/components/AnimatedHeader";
 import { CardCarousel } from "@/components/alumni/CardCarousel";
-import ContactUsContainer from "@/components/ContactUs/ContactUsContainer";
+import ContactUsContainer from "@/components/contactUs/ContactUsContainer";
 import FeaturesCard from "@/components/home/FeaturesCard";
 
 export default function HomePage() {

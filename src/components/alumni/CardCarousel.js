@@ -1,78 +1,69 @@
 "use client";
 
-import { Box, Typography, Card, Avatar } from "@mui/material";
+import { Box, Typography, Card, Avatar, Icon } from "@mui/material";
 import InfiniteCarousel from "@/components/ui/InfiniteCarousel";
 import { ALUMNI_DATA } from "@/lib/data";
+import StarIcon from '@mui/icons-material/Star';
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 
 export const CardCarousel = () => {
     return (
-        <Box sx={{}}>
+        <Box sx={{ py: 8, bgcolor: "#f9f9f9" }}>
             <InfiniteCarousel
                 data={ALUMNI_DATA}
-                cardWidth={360}
+                cardWidth={320}
                 gap={24}
                 speed={45}
                 renderCard={(alumni) => (
                     <Card
                         sx={{
-                            width: { xs: 260, sm: 300, md: 340, lg: 360 },
-                            height: "100%",
-                            borderRadius: "16px",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-between",
+                            width: { xs: 260, sm: 300, md: 320 },
                             p: 3,
-                            boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
-                            transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                            "&:hover": {
-                                transform: "translateY(-6px)",
-                                boxShadow: "0 12px 40px rgba(0,0,0,0.12)",
-                            },
-                            background: "linear-gradient(145deg, #ffffff 0%, #f9f9f9 100%)",
+                            borderRadius: 3,
+                            boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                            position: "relative",
+                            bgcolor: "white",
                         }}
                     >
-                        {/* Testimonial */}
-                        <Typography
-                            variant="body1"
-                            sx={{
-                                fontStyle: "italic",
-                                color: "text.primary",
-                                mb: 3,
-                                lineHeight: 1.6,
-                            }}
-                        >
+                        {/* Star Rating */}
+                        <Box sx={{ display: "flex", gap: 0.5, mb: 2 }}>
+                            {[...Array(5)].map((_, i) => (
+                                <StarIcon key={i} sx={{ fontSize: 20, color: "#facc15" }} />
+                            ))}
+                        </Box>
+
+                        {/* Quote */}
+                        <Typography variant="body2" sx={{ fontStyle: "italic", mb: 3 }}>
                             “{alumni.testimonial}”
                         </Typography>
 
-                        {/* Profile */}
-                        <Box sx={{ display: "flex", alignItems: "center", mt: "auto" }}>
+                        {/* Author Info */}
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Avatar
                                 src={alumni.image}
                                 alt={alumni.name}
-                                sx={{
-                                    mr: 2,
-                                    width: 56,
-                                    height: 56,
-                                    border: "2px solid #eee",
-                                }}
+                                sx={{ width: 56, height: 56, border: "2px solid #eee", mr: 2 }}
                             />
                             <Box>
-                                <Typography
-                                    variant="subtitle1"
-                                    fontWeight={700}
-                                    sx={{ lineHeight: 1.3 }}
-                                >
+                                <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
                                     {alumni.name}
                                 </Typography>
-                                <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                    sx={{ fontSize: "0.9rem" }}
-                                >
+                                <Typography variant="body2" color="text.secondary">
                                     {alumni.role}
                                 </Typography>
                             </Box>
                         </Box>
+
+                        {/* Quote Icon Overlay */}
+                        <FormatQuoteIcon
+                            sx={{
+                                position: "absolute",
+                                bottom: 16,
+                                right: 16,
+                                fontSize: 40,
+                                color: "#f0f0f0",
+                            }}
+                        />
                     </Card>
                 )}
             />

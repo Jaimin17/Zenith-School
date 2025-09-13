@@ -246,6 +246,95 @@ export const EventsData = [
   // "https://images.unsplash.com/photo-1649471323554-aa4cb720261c?q=80&w=2344&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 ];
 
+export const SINGLE_EVENTS_DETAILS = [
+  {
+    id: 1,
+    singleImage: "/assets/img/event/single.jpg",
+    about: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomized words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.",
+    images: [
+      "/assets/img/event/01.jpg",
+      "/assets/img/event/02.jpg"
+    ],
+    heading: "It is a long established fact that a reader will be distracted the readable content.",
+    date: "25 June 2024",
+    time: "08: 00 AM - 04:00 PM",
+    location: "Bharuch, India",
+    cost: "200",
+    where: "All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
+    for: "Ggenerators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
+    organizer: {
+      image: "/assets/img/event/author.jpg",
+      name: "Richard M Bell",
+      detail: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+    }
+  },
+  {
+    id: 2,
+    singleImage: "/assets/img/event/single.jpg",
+    about: "Join us for an exciting event filled with inspiring talks and hands-on workshops. Explore new ideas and network with professionals from diverse industries.",
+    images: [
+      "/assets/img/event/01.jpg",
+      "/assets/img/event/02.jpg"
+    ],
+    heading: "Empower your skills and expand your knowledge with expert-led sessions.",
+    date: "10 July 2024",
+    time: "09:00 AM - 05:00 PM",
+    location: "Vadodara, India",
+    cost: "150",
+    where: "All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
+    for: "Ggenerators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
+    organizer: {
+      image: "/assets/img/event/author.jpg",
+      name: "Emily J Parker",
+      detail: "Emily is passionate about creating environments that foster learning and collaboration. Join her for an unforgettable experience."
+    }
+  },
+  {
+    id: 3,
+    singleImage: "/assets/img/event/single.jpg",
+    about: "Discover how innovation and technology are transforming industries across the globe. This event offers insightful sessions and interactive discussions.",
+    images: [
+      "/assets/img/event/01.jpg",
+      "https://images.unsplash.com/photo-1677124762571-4be75ea56289?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    ],
+    heading: "Unlock the future with cutting-edge technology and global insights.",
+    date: "18 August 2024",
+    time: "10:00 AM - 06:00 PM",
+    location: "Ahmedabad, India",
+    cost: "250",
+    where: "All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
+    for: "Ggenerators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
+    organizer: {
+      image: "/assets/img/event/author.jpg",
+      name: "Michael T Roberts",
+      detail: "Michael is an industry leader with years of experience in driving change and inspiring teams to innovate and excel."
+    }
+  },
+  {
+    id: 4,
+    singleImage: "/assets/img/event/single.jpg",
+    about: "Be part of an engaging event designed to equip you with practical tools and strategies for personal and professional growth.",
+    images: [
+      "https://images.unsplash.com/photo-1754506824681-4dd2a5fe7f6b?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1677124762571-4be75ea56289?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1677124762571-4be75ea56289?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1677124762571-4be75ea56289?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    ],
+    heading: "Take charge of your future with actionable insights and expert guidance.",
+    date: "5 September 2024",
+    time: "07:30 AM - 03:00 PM",
+    location: "Surat, India",
+    cost: "180",
+    where: "All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
+    for: "Ggenerators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
+    organizer: {
+      image: "/assets/img/event/author.jpg",
+      name: "Sophia L Grant",
+      detail: "Sophia believes in empowering individuals to reach their full potential. She brings a wealth of experience and compassion to every event."
+    }
+  }
+];
+
 export const VisionMissionData = [
   {
     title: "Vision",
@@ -266,7 +355,12 @@ export const VisionMissionData = [
 ];
 
 
-
+export const SCHOOL_STATISTIC = [
+  { value: 25, label: "Total Courses", image: "/assets/img/icon/course.svg" },
+  { value: 50, label: "Our Students", image: "/assets/img/icon/graduation.svg" },
+  { value: 3000, label: "Skilled Lecturers", image: "/assets/img/icon/teacher-2.svg" },
+  { value: 200, label: "Win Awards", image: "/assets/img/icon/award.svg" },
+];
 
 
 

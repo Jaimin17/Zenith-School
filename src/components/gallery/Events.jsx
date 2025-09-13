@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 function Events({ data }) {
@@ -34,7 +35,7 @@ function Events({ data }) {
                                         <h4 className="event-title"><a href="#">{item.title}</a></h4>
                                         <p>{item.description}</p>
                                         <div className="event-btn">
-                                            <a href="#" className="theme-btn">Join Event<i className="fas fa-arrow-right-long"></i></a>
+                                            <Link href={"/gallery/events/" + (index + 1)} className="theme-btn">Join Event<i className="fas fa-arrow-right-long"></i></Link>
                                         </div>
                                     </div>
                                 </div>

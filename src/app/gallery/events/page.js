@@ -1,5 +1,5 @@
 import Banner from "@/components/Banner";
-import DynamicGallery from "@/components/ui/dynamic-gallery";
+import Events from "@/components/gallery/Events";
 import { BANNER_DATA, EventsData } from "@/lib/data";
 
 export default function eventsPage() {
@@ -9,7 +9,7 @@ export default function eventsPage() {
         <>
             <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
 
-            <DynamicGallery data={EventsData} />
+            <Events data={EventsData} />
         </>
     );
 }

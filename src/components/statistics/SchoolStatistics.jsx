@@ -2,46 +2,31 @@
 
 import React from "react";
 import NumberSpinner from "../ui/number-spinner";
-import { Box, Container, Typography } from "@mui/material";
+import Image from "next/image";
+import { SCHOOL_STATISTIC } from "@/lib/data";
 
 function SchoolStatistics() {
-  const stats = [
-    { value: 25, label: "Acres Campus Area" },
-    { value: 50, label: "Years of Excellence" },
-    { value: 3000, label: "Students" },
-    { value: 200, label: "Faculties" },
-    { value: 100, label: "Co-Curricular Activities" },
-    { value: 500, label: "Class Modules of all Subjects" },
-  ];
 
   return (
-    <Container sx={{ py: 8 }} className="bg-gray-100 min-w-full">
-      <Box className="flex flex-wrap justify-center gap-10">
-        {stats.map((stat, index) => (
-          <Box
-            key={index}
-            className="flex flex-col items-center text-center w-80"
-          >
-            <Typography
-              variant="h3"
-              component="div"
-              color="primary"
-              fontWeight="500"
-              className="flex items-center"
-            >
-              <NumberSpinner trend={1} value={stat.value} />
-              {index > 0 && <span>+</span>}
-            </Typography>
-            <Typography
-              variant="subtitle1"
-              sx={{ fontWeight: 500, color: "text.secondary" }}
-            >
-              {stat.label}
-            </Typography>
-          </Box>
-        ))}
-      </Box>
-    </Container>
+    <div className="counter-area pt-60 pb-60">
+      <div className="container">
+        <div className="row">
+          {SCHOOL_STATISTIC.map((stat, index) => (
+            <div className="col-lg-3 col-sm-6" key={index}>
+              <div className="counter-box">
+                <div className="icon">
+                  <Image src={stat.image} alt={stat.label + " icon"} width={300} height={300} />
+                </div>
+                <div>
+                  <NumberSpinner trend={1} value={stat.value} />
+                  <h6 className="title">+ {stat.label} </h6>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 

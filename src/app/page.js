@@ -18,6 +18,8 @@ export default function HomePage() {
 
       <FeaturesCard />
 
+      <SchoolStatistics />
+
       {/* <StackCards data={VisionMissionData} />
 
 

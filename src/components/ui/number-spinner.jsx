@@ -17,12 +17,12 @@ function NumberSpinner({ trend = -1, value = 0 }) {
   }, [isInView, value]);
 
   return (
-    <div ref={ref} className="text-6xl">
+    <div ref={ref} className="counter">
       <NumberFlow
         trend={trend}
         value={displayValue}
-        transformTiming={{ duration: 1000 }}
-        spinTiming={{ duration: 1000 }}
+        transformTiming={{ duration: 3000 }}
+        spinTiming={{ duration: 3000 }}
         opacityTiming={{ duration: 400, easing: "ease-out" }}
       />
     </div>

@@ -178,21 +178,28 @@ export const ALUMNI_DATA = [
   {
     name: "Ravi Sharma",
     role: "Software Engineer @ Google",
-    image: "https://placehold.co/100x100",
+    image: "/assets/img/testimonial/01.jpg",
     testimonial:
       "My time at Zenith School gave me the foundation and confidence to pursue my dreams.",
   },
   {
     name: "Priya Mehta",
     role: "Research Scholar @ MIT",
-    image: "https://placehold.co/100x100",
+    image: "/assets/img/testimonial/02.jpg",
     testimonial:
       "The faculty and peers here shaped my career journey and gave lifelong memories.",
   },
   {
     name: "Arjun Patel",
     role: "Entrepreneur",
-    image: "https://placehold.co/100x100",
+    image: "/assets/img/testimonial/03.jpg",
+    testimonial:
+      "The culture at Zenith taught me teamwork, leadership, and perseverance.",
+  },
+  {
+    name: "Atul Purohit",
+    role: "Singer",
+    image: "/assets/img/testimonial/04.jpg",
     testimonial:
       "The culture at Zenith taught me teamwork, leadership, and perseverance.",
   },

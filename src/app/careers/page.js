@@ -92,7 +92,7 @@ export default function careersPage() {
               </Typography>
             </Box>
 
-            <CareersForm positions={jobItems} />
+            {/* <CareersForm positions={jobItems} /> */}
           </Container>
         </Box>
 

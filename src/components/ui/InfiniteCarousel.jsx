@@ -47,16 +47,13 @@ export default function InfiniteCarousel({
     }, [x, singleSetWidth]);
 
     return (
-        <Box sx={{ overflow: "hidden", py: 6, bgcolor: "#f9f9f9" }}>
+        <Box sx={{ overflow: "hidden", bgcolor: "#ffffff" }}>
             <Box
                 sx={{
-                    p: "10px 10px 40px 10px",
+                    p: "10px 10px 10px 10px",
                     position: "relative",
                     overflow: "hidden",
-                    WebkitMaskImage:
-                        "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-                    maskImage:
-                        "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+
                     cursor: "grab",
                     "&:active": { cursor: "grabbing" },
                 }}

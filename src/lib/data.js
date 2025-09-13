@@ -121,30 +121,98 @@ export const AWARDS_DATA = [
 
 export const CURRICULUM_DATA = [
   {
-    title: "Kindergarten Section",
+    tagline: "Kindergarten",
+    titlePrefix: "Details About",
+    highlight: "Kindergarten",
+    titleSuffix: "Section",
     description:
-      "Kindergarten schooling marks the beginning of a child’s formal education journey. Zenith School Curriculum is planned for the holistic development of a child focusing on social, emotional, cognitive and physical growth. The School is dedicated to embracing every student in a safe and welcoming environment. We understand the importance of early learning and literacy, for which we have designed small classrooms to encourage individualized education..",
+      "Kindergarten schooling marks the beginning of a child’s formal education journey. Zenith School Curriculum is planned for the holistic development of a child focusing on social, emotional, cognitive and physical growth. The School is dedicated to embracing every student in a safe and welcoming environment.",
+    extra:
+      "We understand the importance of early learning and literacy, for which we have designed small classrooms to encourage individualized education.",
     image: "https://placehold.co/600x400",
   },
   {
-    title: "Primary (Classes I to VIII)",
+    tagline: "Primary",
+    titlePrefix: "Details About",
+    highlight: "Primary",
+    titleSuffix: "(Classes I to VIII)",
     description:
-      "Primary education is the first step a child takes towards formal learning. Zenith School curriculum provides the development of basic concepts and skills in various subject areas. The Primary curriculum here reinforces learning experience and provides a planned sequential course of study including English, Mathematics, Science, Social Studies, Gujarati, Hindi, Computers, Art, Physical Education, Scout & Guide, Music – vocal and instrumental, and Dance. In addition to the curriculum, special projects, field trips and lessons are planned to encourage children to explore different areas of interest that complement the curriculum which builds on basic skills and prepares the children to be more responsible for the next stage of learning.",
+      "Primary education is the first step a child takes towards formal learning. Zenith School curriculum provides the development of basic concepts and skills in various subject areas. The Primary curriculum reinforces learning experience and provides a planned sequential course of study.",
+    extra:
+      "Subjects include English, Mathematics, Science, Social Studies, Gujarati, Hindi, Computers, Art, Physical Education, Scout & Guide, Music and Dance. Field trips and projects are also included.",
     image: "https://placehold.co/600x400",
   },
   {
-    title: "Secondary (Classes IX and X)",
+    tagline: "Secondary",
+    titlePrefix: "Details About",
+    highlight: "Secondary",
+    titleSuffix: "(Classes IX and X)",
     description:
-      "Moving into the Secondary section entails more organized study time for the students. The educational program shifts in its emphasis towards preparation of students for the GSEB examination. The curriculum during these years becomes more specialized and focused. Students have the option to choose elective subjects based on their interest and future aspirations. The class 10 Board Exams are crucial, as the results determine a student’s eligibility for further studies and serve as a foundation for the academic future. The students are prepared emotionally to handle the stress and anxiety of examination pressure.",
+      "Moving into the Secondary section entails more organized study time for students. The educational program focuses on preparation for the GSEB examination. The curriculum becomes more specialized and focused with elective subject options.",
+    extra:
+      "Class 10 Board Exams are crucial, determining eligibility for further studies. Students are also prepared emotionally to handle examination stress and pressure.",
     image: "https://placehold.co/600x400",
   },
   {
-    title: "Higher Secondary (Classes XI and XII) Commerce and Science Stream",
+    tagline: "Higher Secondary",
+    titlePrefix: "Details About",
+    highlight: "Higher Secondary",
+    titleSuffix: "(Classes XI and XII)",
     description:
-      "Grade 11 and 12 is a significant phase in a student’s educational journey as they prepare for higher education and future career paths. The school offers Commerce and Science Streams at the Higher Secondary level. The curriculum becomes more specialized and demanding aiming to provide a deeper understanding of the chosen stream. Learning is imparted through observation, experimentation, group discussions and project work. Special emphasis is laid on working with students who need improvement in particular subjects to clear the board examinations.",
+      "Grade 11 and 12 is a significant phase in a student’s journey as they prepare for higher education and careers. The school offers Commerce and Science Streams at this level, making the curriculum specialized and demanding.",
+    extra:
+      "Learning methods include observation, experimentation, discussions, and project work. Special support is provided to students who need improvement to clear board exams.",
     image: "https://placehold.co/600x400",
   },
 ];
+
+export const ACTIVITIES_DATA = [
+  {
+    tagline: "Sports & Fitness",
+    titlePrefix: "Details About",
+    highlight: "Sports",
+    titleSuffix: "and Fitness",
+    description:
+      "At Zenith School, we believe physical activity is essential for overall development. Our sports program encourages teamwork, discipline, and a healthy lifestyle. Students participate in inter-house and inter-school competitions across a variety of games.",
+    extra:
+      "Facilities include cricket, football, basketball, volleyball, athletics, and indoor games. Regular fitness sessions, yoga, and martial arts training are also part of the program.",
+    image: "https://placehold.co/600x400",
+  },
+  {
+    tagline: "Cultural Activities",
+    titlePrefix: "Details About",
+    highlight: "Cultural",
+    titleSuffix: "Programs",
+    description:
+      "Cultural activities provide a platform for students to showcase creativity and talent. Events are designed to enhance confidence, leadership, and appreciation of diverse traditions.",
+    extra:
+      "Activities include annual day performances, drama, debates, public speaking, dance, music, art exhibitions, and festivals celebrated with great enthusiasm.",
+    image: "https://placehold.co/600x400",
+  },
+  {
+    tagline: "Clubs & Societies",
+    titlePrefix: "Details About",
+    highlight: "Clubs",
+    titleSuffix: "and Societies",
+    description:
+      "Beyond the classroom, Zenith School fosters learning through various student clubs. Each club helps students explore areas of personal interest and encourages leadership roles.",
+    extra:
+      "Clubs include Science Club, Eco Club, Literature Society, Robotics Club, and Community Service groups that engage in real-world problem solving.",
+    image: "https://placehold.co/600x400",
+  },
+  {
+    tagline: "Field Trips & Excursions",
+    titlePrefix: "Details About",
+    highlight: "Educational",
+    titleSuffix: "Trips",
+    description:
+      "Experiential learning is an integral part of our teaching approach. Regular field trips and excursions expose students to the real-world application of knowledge and broaden their perspectives.",
+    extra:
+      "Trips include visits to science centers, historical sites, industries, and nature camps, giving students a chance to bond, explore, and learn outside the classroom.",
+    image: "https://placehold.co/600x400",
+  },
+];
+
 
 export const SPORTS_DATA = [
   {

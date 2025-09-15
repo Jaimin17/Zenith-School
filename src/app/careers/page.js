@@ -93,6 +93,7 @@ export default function careersPage() {
             </Box>
 
             {/* <CareersForm positions={jobItems} /> */}
+            <CareersForm positions={jobItems} />
           </Container>
         </Box>
 

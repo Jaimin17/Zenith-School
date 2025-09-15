@@ -14,8 +14,6 @@ async function Event(props) {
             <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
 
             <SingleEvents eventData={data} />
-
-            <DynamicGallery data={data.images} />
         </>
     )
 }

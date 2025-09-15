@@ -321,7 +321,9 @@ export const SINGLE_EVENTS_DETAILS = [
     about: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomized words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.",
     images: [
       "/assets/img/event/01.jpg",
-      "/assets/img/event/02.jpg"
+      "/assets/img/event/02.jpg",
+      "https://images.unsplash.com/photo-1677124762571-4be75ea56289?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1677124762571-4be75ea56289?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     ],
     heading: "It is a long established fact that a reader will be distracted the readable content.",
     date: "25 June 2024",
@@ -342,7 +344,9 @@ export const SINGLE_EVENTS_DETAILS = [
     about: "Join us for an exciting event filled with inspiring talks and hands-on workshops. Explore new ideas and network with professionals from diverse industries.",
     images: [
       "/assets/img/event/01.jpg",
-      "/assets/img/event/02.jpg"
+      "/assets/img/event/02.jpg",
+      "https://images.unsplash.com/photo-1677124762571-4be75ea56289?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1677124762571-4be75ea56289?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     ],
     heading: "Empower your skills and expand your knowledge with expert-led sessions.",
     date: "10 July 2024",
@@ -363,6 +367,8 @@ export const SINGLE_EVENTS_DETAILS = [
     about: "Discover how innovation and technology are transforming industries across the globe. This event offers insightful sessions and interactive discussions.",
     images: [
       "/assets/img/event/01.jpg",
+      "https://images.unsplash.com/photo-1677124762571-4be75ea56289?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1677124762571-4be75ea56289?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       "https://images.unsplash.com/photo-1677124762571-4be75ea56289?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     ],
     heading: "Unlock the future with cutting-edge technology and global insights.",

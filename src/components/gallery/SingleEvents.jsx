@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
+import DynamicGallery from '../ui/dynamic-gallery'
 
 function SingleEvents({ eventData }) {
     return (
@@ -69,6 +70,7 @@ function SingleEvents({ eventData }) {
                             </div>
                         </div>
                     </div>
+                    <DynamicGallery data={eventData.images} />
                 </div>
             </div>
         </>

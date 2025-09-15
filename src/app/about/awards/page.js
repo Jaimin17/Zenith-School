@@ -28,7 +28,7 @@ export default function AwardsPage() {
         }}>
           <AnimatedHeader
             miniHeader="🏆 Achievements"
-            title="Awards and "
+            title="Awards and"
             highlight="Recognition"
             subtitle="Celebrating achievements that inspire excellence and pride."
             align="center"

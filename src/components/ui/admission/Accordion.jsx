@@ -8,28 +8,19 @@ const Accordion = ({ i, expanded, setExpanded, contentData }) => {
   const isOpen = i === expanded;
 
   return (
-    <div className="mb-4 rounded-xl shadow-sm border border-gray-200 overflow-hidden bg-white">
-      {/* Header */}
+    <div className="accordion-item border border-gray-200 rounded-lg overflow-hidden bg-white mb-4">
       <motion.header
         initial={false}
         animate={{ backgroundColor: isOpen ? "#fff0db" : "#ffffff" }}
         onClick={() => setExpanded(isOpen ? false : i)}
-        className="cursor-pointer px-5 py-4 flex justify-between items-center"
+        className="accordion-header cursor-pointer"
       >
-        <span className="text-lg font-semibold text-gray-800">
+        <h2 className="accordion-button flex justify-between gap-2">
+          <i className="far fa-question"></i>
           {contentData.title}
-        </span>
-        <motion.span
-          initial={false}
-          animate={{ rotate: isOpen ? 90 : 0 }}
-          transition={{ duration: 0.3 }}
-          className="text-gray-500"
-        >
-          ▶
-        </motion.span>
+        </h2>
       </motion.header>
 
-      {/* Body */}
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.section
@@ -41,9 +32,12 @@ const Accordion = ({ i, expanded, setExpanded, contentData }) => {
               open: { opacity: 1, height: "auto" },
               collapsed: { opacity: 0, height: 0 },
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+            transition={{ duration: 0.5, ease: [0.04, 0.62, 0.23, 0.98] }}
+            className="accordion-collapse"
           >
-            <ContentPlaceHolder contentData={contentData} />
+            <div className="accordion-body px-5 py-4 border-t border-gray-200">
+              <ContentPlaceHolder contentData={contentData} />
+            </div>
           </motion.section>
         )}
       </AnimatePresence>
@@ -55,16 +49,43 @@ export const AdmissionAccordion = ({ contents }) => {
   const [expanded, setExpanded] = useState(0);
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      {contents.map((contentData, index) => (
-        <Accordion
-          key={index}
-          i={index}
-          expanded={expanded}
-          setExpanded={setExpanded}
-          contentData={contentData}
-        />
-      ))}
+    <div className="faq-area py-120">
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-6">
+            <div className="faq-right">
+              <div className="site-heading mb-3">
+                <span className="site-title-tagline justify-content-start"><i className="far fa-book-open-reader"></i> Faq's</span>
+                <h2 className="site-title my-3">General <span>frequently</span> asked questions</h2>
+              </div>
+              <p className="mb-3">There are many variations of passages of Lorem Ipsum available,
+                but the majority have suffered alteration in some form, by injected humour, or
+                randomised words which don't look even.</p>
+              <p className="mb-4">
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta
+                sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+              </p>
+              <a href="#" className="theme-btn mt-2">Have Any Question ?</a>
+            </div>
+          </div>
+
+          {/* Accordion */}
+          <div  className="col-lg-6">
+            <div className="accordion" id="accordionExample">
+              {contents.map((contentData, index) => (
+                <Accordion
+                  key={index}
+                  i={index}
+                  expanded={expanded}
+                  setExpanded={setExpanded}
+                  contentData={contentData}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

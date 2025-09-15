@@ -46,7 +46,7 @@ export default function NavDropdown({ title, items, links, open, onOpen, onClose
           <Grow {...TransitionProps}>
             <Paper
               onMouseLeave={handleLeave}
-              sx={{ bgcolor: "#0f5c4d", color: "white", mt: "6px" }}
+              sx={{ bgcolor: "#0f5c4d", color: "white", mt: "12px" }}
             >
               <ClickAwayListener onClickAway={handleLeave}>
                 <MenuList autoFocusItem={open}>

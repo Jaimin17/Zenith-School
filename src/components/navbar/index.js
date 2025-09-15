@@ -85,6 +85,7 @@ export default function Navbar() {
                 </div>
             </div>
         </div>
+        </div>
 
         {/* ✅ Sticky Responsive Navbar */}
         <Box
@@ -469,7 +470,7 @@ export default function Navbar() {
             </Stack>
           </Box>
         </Drawer>
-      </div>
+      {/* </div> */}
     </>
   );
 }

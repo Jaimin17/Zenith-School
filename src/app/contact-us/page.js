@@ -1,10 +1,8 @@
 "use client";
 
 import Banner from "@/components/Banner";
-import ContactUsContainer from "@/components/contactUs/ContactUsContainer";
-import Map from "@/components/Map";
+import ContactUsContainer from "@/components/ContactUs/ContactUsContainer";
 import { BANNER_DATA } from "@/lib/data";
-import { Box, Typography, Container } from "@mui/material";
 
 
 

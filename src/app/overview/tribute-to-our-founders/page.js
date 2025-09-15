@@ -34,7 +34,7 @@ export default function TributeToOurFoundersPage() {
                             width: "100%",
                             height: { xs: 250, sm: 350, md: 450 },
                             objectFit: "cover",
-                            borderRadius: 2,
+                            borderRadius: 10,
                         }}
                     />
                     <Typography
@@ -60,7 +60,7 @@ export default function TributeToOurFoundersPage() {
                                 width: "100%",
                                 height: { xs: 200, sm: 250, md: 300 },
                                 objectFit: "cover",
-                                borderRadius: 2,
+                                borderRadius: 10,
                             }}
                         />
                         <CardMedia
@@ -71,7 +71,7 @@ export default function TributeToOurFoundersPage() {
                                 width: "100%",
                                 height: { xs: 200, sm: 250, md: 300 },
                                 objectFit: "cover",
-                                borderRadius: 2,
+                                borderRadius: 10,
                             }}
                         />
                     </Box>

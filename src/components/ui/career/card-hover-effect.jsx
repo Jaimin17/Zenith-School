@@ -26,7 +26,7 @@ export const HoverEffect = ({ items, className }) => {
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
-                className="absolute inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800/[0.8] block  rounded-3xl"
+                className="absolute inset-0 h-full w-full bg-orange-200 dark:bg-orange/[0.8] block rounded-3xl"
                 layoutId="hoverBackground"
                 initial={{ opacity: 0 }}
                 animate={{
@@ -38,6 +38,7 @@ export const HoverEffect = ({ items, className }) => {
                   transition: { duration: 0.15, delay: 0.2 },
                 }}
               />
+
             )}
           </AnimatePresence>
           <Card>
@@ -59,16 +60,17 @@ export const HoverEffect = ({ items, className }) => {
             <div className="flex mt-6">
               <a
                 onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById("formTitle")?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                    });
+                  e.preventDefault();
+                  document.getElementById("formTitle")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
                 }}
-                className="flex-1 px-4 py-2 rounded-full from-gray-800 to-gray-600 text-white font-medium text-center hover:bg-gray-900 transition bg-gradient-to-br cursor-pointer"
+                className="theme-btn"
               >
                 Apply Now
               </a>
+
             </div>
           </Card>
         </Box>

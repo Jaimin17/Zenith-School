@@ -16,10 +16,6 @@ import {
   Divider,
 } from "@mui/material";
 import {
-  Facebook,
-  Instagram,
-  YouTube,
-  WhatsApp,
   Search,
   Menu,
   Close,

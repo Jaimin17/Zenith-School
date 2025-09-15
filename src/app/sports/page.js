@@ -18,27 +18,28 @@ export default function photoGalleryPage() {
             <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
 
             <Fragment>
-                <Box
-                    sx={{
-                        pb: 2,
-                    }}
-                >
-                    <AnimatedHeader
-                        miniHeader="🏟️ Sports Complex"
-                        title="Multipurpose "
-                        highlight="Sports Complex"
-                        subtitle="Explore our state-of-the-art sports facilities and the vibrant athletic culture at our school."
-                        descriptions={[
-                            "Our campus is home to a modern multipurpose sports complex designed to encourage physical fitness and team spirit.",
-                            "From indoor courts and swimming pools to outdoor fields and arenas, students have access to facilities that nurture talent, discipline, and a passion for sports."
-                        ]}
-                        align="center"
-                        titleVariant="h3"
-                        subtitleVariant="body1"
-                    />
 
-                </Box>
-                <DynamicGallery data={GALLERY_DATA} />
+                <div className="gallery-area py-120">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-lg-6 mx-auto">
+                                <div className="site-heading text-center">
+                                    <span className="site-title-tagline">
+                                        <i className="far fa-book-open-reader"></i> Sports Complex
+                                    </span>
+                                    <h2 className="site-title">
+                                        Multipurpose <span>Sports Complex</span>
+                                    </h2>
+                                    <p>
+                                        Explore our state-of-the-art sports facilities and the vibrant athletic culture at our school.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <DynamicGallery data={GALLERY_DATA} />
+                    </div>
+                </div>
+
             </Fragment>
 
             {/* About Sports Section */}
@@ -54,8 +55,6 @@ export default function photoGalleryPage() {
                         title="Our "
                         highlight="Sports Programs"
                         descriptions={[
-
-                            "We offer a wide range of sports designed to foster teamwork, discipline, and holistic growth. From popular field games to individual skill-based sports, every student finds their passion here Our diverse sports curriculum includes football, basketball, cricket, athletics, badminton, swimming, and more — ensuring opportunities for both team players and individual achievers.",
                             "Each program is guided by experienced coaches who instill discipline, perseverance, and sportsmanship, helping students build lifelong skills beyond the field."
                         ]}
                         align="center"

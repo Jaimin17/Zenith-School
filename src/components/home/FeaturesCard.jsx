@@ -13,8 +13,8 @@ function FeaturesCard() {
                 <div key={index} className="col-md-6 col-lg-3">
                   <div className="feature-item">
                     <span className="count">0{index + 1}</span>
-                    <div className="feature-icon">
-                      <Image src={feature.img} alt="" width={10} height={10} />
+                    <div className="feature-icon flex justify-center">
+                      <Image src={feature.img} alt="" width={20} height={20} />
                     </div>
                     <div className="feature-content">
                       <h4 className="feature-title">{feature.title}</h4>

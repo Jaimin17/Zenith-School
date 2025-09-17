@@ -18,7 +18,7 @@ function AboutUs() {
                                                 alt="About Zenith"
                                             />
                                             <div className="about-experience mt-4">
-                                                <div className="about-experience-icon">
+                                                <div className="about-experience-icon flex justify-center">
                                                     <img
                                                         src="/assets/img/icon/exchange-idea.svg"
                                                         alt="Experience Icon"
@@ -69,7 +69,7 @@ function AboutUs() {
                                     <div className="row">
                                         <div className="col-md-7">
                                             <div className="about-item">
-                                                <div className="about-item-icon">
+                                                <div className="about-item-icon flex justify-center">
                                                     <img
                                                         src="/assets/img/icon/open-book.svg"
                                                         alt="Education Icon"
@@ -85,7 +85,7 @@ function AboutUs() {
                                             </div>
 
                                             <div className="about-item">
-                                                <div className="about-item-icon">
+                                                <div className="about-item-icon flex justify-center">
                                                     <img
                                                         src="/assets/img/icon/global-education.svg"
                                                         alt="Global Icon"

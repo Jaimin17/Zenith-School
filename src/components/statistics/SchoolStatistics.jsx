@@ -14,7 +14,7 @@ function SchoolStatistics() {
           {SCHOOL_STATISTIC.map((stat, index) => (
             <div className="col-lg-3 col-sm-6" key={index}>
               <div className="counter-box">
-                <div className="icon">
+                <div className="icon flex justify-center">
                   <Image src={stat.image} alt={stat.label + " icon"} width={300} height={300} />
                 </div>
                 <div>

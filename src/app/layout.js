@@ -28,19 +28,7 @@ export default function RootLayout({ children }) {
       <body>
         <CssBaseline />
 
-        {/* <Loader /> */}
-        {/* Sticky Navbar */}
-        <Navbar />
-
-        <SearchPopUp />
-
-        {/* Main Content */}
-        <Box component="main" className="main">
-          <ProtectedRoute>{children}</ProtectedRoute>
-        </Box>
-
-        {/* Footer always at bottom */}
-        <Footer />
+        {children}
 
 
         <Script src="/assets/js/jquery-3.7.1.min.js" strategy="beforeInteractive" />

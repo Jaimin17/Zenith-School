@@ -14,7 +14,7 @@ export default function PublicLayout({ children }) {
 
             {/* Main Content */}
             <Box component="main" className="main">
-                <ProtectedRoute>{children}</ProtectedRoute>
+                <>{children}</>
             </Box>
 
             {/* Footer always at bottom */}

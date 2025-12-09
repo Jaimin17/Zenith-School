@@ -41,14 +41,15 @@ export const LOGIN_API: ApiType = {
 //   showToast: true
 // }
 
-// // Get Profile API
-// export const GET_PROFILE_DETAILS: ApiType = {
-//   url: apiUrls.GET_PROFILE_URL,
-//   method: 'GET',
-//   withToken: true,
-//   isMultipart: false,
-//   showToast: false
-// }
+// Get Profile API
+export const GET_PROFILE_DETAILS: ApiType = {
+  url: apiUrls.UER_PROFILE_ENDPOINT,
+  method: "GET",
+  withToken: true,
+  isMultipart: false,
+  showToast: false
+}
+
 
 // // Refresh Token API
 // export const REFRESH_TOKEN_API: ApiType = {
@@ -60,10 +61,10 @@ export const LOGIN_API: ApiType = {
 // }
 
 // // Logout API
-// export const LOGOUT_API: ApiType = {
-//   url: apiUrls.LOGOUT_URL,
-//   method: 'POST',
-//   withToken: true,
-//   isMultipart: false,
-//   showToast: true
-// }
+export const LOGOUT_API: ApiType = {
+  url: apiUrls.LOGOUT_URL,
+  method: 'POST',
+  withToken: true,
+  isMultipart: false,
+  showToast: true
+}

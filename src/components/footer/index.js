@@ -6,14 +6,14 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import Link from "next/link";
 
 export default function Footer() {
-    const quickLinksTitle = ["About Us", "Timeline", "Curriculum", "Gallery", "Contact Us", "Careers"];
-    const quickLinks = ["/about/from-principal-desk", "/about/timeline", "/academics/curriculum", "/gallery/photos", "/contact-us", "/careers"];
+  const quickLinksTitle = ["About Us", "Timeline", "Curriculum", "Gallery", "Contact Us", "Careers"];
+  const quickLinks = ["/about/from-principal-desk", "/about/timeline", "/academics/curriculum", "/gallery/photos", "/contact-us", "/careers"];
 
 
   return (
     <Box sx={{ bgcolor: "#0c2840", color: "white", py: { xs: 6, sm: 8 }, px: { xs: 4, md: 12 } }}>
       <Grid container spacing={6}>
-        
+
         {/* Logo & About */}
         <Grid item xs={12} sm={4} md={3}>
           <Typography variant="h5" sx={{ fontWeight: "bold", color: "white" }}>
@@ -49,21 +49,23 @@ export default function Footer() {
           </Typography>
           {quickLinksTitle.map(
             (item, i) => (
-                <Link key={i} href={quickLinks[i]} passHref legacyBehavior>
-                    <MuiLink
-                        underline="none"
-                        sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        color: "#b0bec5",
-                        mb: 1,
-                        transition: "color 0.3s ease",
-                        "&:hover": { color: "orange" },
-                        }}
-                    >
-                    <ArrowRightIcon />{item}
-                    </MuiLink>
-                </Link>
+              <MuiLink
+                key={i}
+                href={quickLinks[i]}
+                component={Link}
+                underline="none"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  color: "#b0bec5",
+                  mb: 1,
+                  transition: "color 0.3s ease",
+                  "&:hover": { color: "orange" },
+                }}
+              >
+                <ArrowRightIcon /> {item}
+              </MuiLink>
+
             )
           )}
         </Grid>

@@ -1,53 +1,68 @@
 'use client'
 
 // React Imports
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import { createContext, useState, useEffect, useCallback, useRef, useContext } from 'react'
 
 // Next Imports
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 // API Imports
 import { api } from '@/api/api'
-import { LOGIN_API, REGISTER_API, GET_PROFILE_DETAILS, LOGOUT_API } from '@/api/apiParams/auth'
 
-// Utils Imports
-import { setAuthTokens, createCookie } from '@/utils/cookie'
-import { clearAllAuthData, getAccessToken, extractTokens } from '@/utils/authHelpers'
-import { ENGLO_USER, ACCESS_TOKEN, REFRESH_TOKEN } from '@/constants/appConstants'
+
+
+
+
 
 // Type Imports
-import type { User, LoginResponse, AuthContextType } from '@/types/auth'
+import { createCookie, getAuthTokens, getClientCookie, setAuthTokens } from '@/utils/cookie'
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined)
+// import type { Locale } from '@/configs/'
+import { LOGED_IN_USER_DATA, USER_ROLES } from '@/constants/appConstants';
+import { GET_PROFILE_DETAILS, LOGIN_API, LOGOUT_API } from '../api/apiParams/auth';
+import { clearAllAuthData, getAccessToken } from '@/utils/authHelpers'
+
+export const AuthContext = createContext(undefined)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState(null)
+  const [role, setRole] = useState(null)
+
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+  const params = useParams()
+  const isInitialized = useRef(false)
+  const previousPathname = useRef<string | null>(null)
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await api<User | LoginResponse>({
+      const response = await api({
         endpoint: GET_PROFILE_DETAILS,
-        payloadData: {}
-      })
 
-      if (!response?.error && response?.data) {
-        const userData = (response.data?.data as User) || null
+      })
+      console.log('fetch user', response)
+
+      if (!response?.error) {
+        const userData = (response?.data) || null
+
+        console.log('userData in fetch user', userData)
 
         if (userData) {
-          setUser(userData as User)
-          createCookie(ENGLO_USER, JSON.stringify(userData), { path: '/' })
+          setUser(userData)
+          createCookie(LOGED_IN_USER_DATA, JSON.stringify(userData), { path: '/' })
 
-          return userData as User
+
+          return userData
         }
       }
 
       throw new Error('Failed to fetch user data')
     } catch (error) {
       console.error('Error fetching user:', error)
-      clearAllAuthData()
-      setUser(null)
+
+
+      // clearAllAuthData()
+      // setUser(null)
 
       return null
     } finally {
@@ -55,172 +70,182 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [])
 
-  // Initialize auth state on mount
+  const initAuth = useCallback(async () => {
+    const token = getAccessToken()
+
+    console.log('token', token)
+
+    if (token) {
+      // Check if user data exists in cookie first (only for initial load)
+      if (!isInitialized.current) {
+        const cachedUser = getClientCookie(LOGED_IN_USER_DATA)
+        const cachedRole = getClientCookie('ROLE')
+
+
+        console.log('cachedUser', cachedUser)
+
+
+        if (cachedUser && cachedRole) {
+          try {
+            const userData = JSON.parse(cachedUser)
+
+            console.log('if cached then userData', userData)
+
+            setUser(userData)
+            setRole(cachedRole)
+
+
+            setLoading(false)
+            isInitialized.current = true
+
+            return
+          } catch (error) {
+            console.error('Error parsing cached user:', error)
+          }
+        }
+      }
+
+      // Fetch from API
+      const res = await fetchUser()
+
+      if (res) {
+        isInitialized.current = true
+      }
+    } else {
+      setLoading(false)
+      router.push('/')
+    }
+  }, [])
+
   useEffect(() => {
-    const initAuth = async () => {
-      const token = getAccessToken()
-
-      if (token) {
-        await fetchUser()
-      } else {
-        setLoading(false)
-      }
-    }
-
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'logout-event' || (e.key === 'access_token' && e.newValue === null)) {
-        setUser(null)
-        clearAllAuthData()
-      }
-    }
-
-    const handleLogoutEvent = () => {
-      setUser(null)
-      clearAllAuthData()
-    }
 
     initAuth()
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('storage', handleStorageChange)
-      window.addEventListener('logout', handleLogoutEvent)
-    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initAuth])
 
-    return () => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('storage', handleStorageChange)
-        window.removeEventListener('logout', handleLogoutEvent)
-      }
-    }
-  }, [fetchUser])
 
-  // Login function (legacy - kept for backward compatibility)
-  const login = useCallback(async (email: string, password: string): Promise<boolean | object> => {
-    try {
-      setLoading(true)
+  const login = useCallback(
+    async (username: string, password: string) => {
+      try {
+        setLoading(true)
 
-      const response = await api({
-        endpoint: LOGIN_API,
-        payloadData: { email, password }
-      })
-
-      if (!response?.error && response?.data) {
-        const tokens = extractTokens(response.data)
-
-        if (!tokens) {
-          throw new Error('Invalid response format: missing tokens')
+        // Build payload based on mode
+        const payload = {
+          username, // you said you pass challenge_id as email in MFA screen
+          password
         }
 
-        const userData = response.data
-        console.log('UserData', userData)
+        const response = await api({
+          endpoint: LOGIN_API,
+          payloadData: payload
+        })
+        // Response structure
+        const res2 = {
+          data: {
+            access_token: '',
+            refresh_token: '',
+            role: '',
+            token_type: '',
+            user: {
+              id: '',
+              username: ''
+            }
 
+          },
+          error: '',
+          message: '',
+          status: ''
+        }
+        console.log('response', response)
+        if (response?.error) {
+          return response?.data ?? false
+        }
+
+        const tokens = {
+          accessToken: response?.data?.access_token,
+          refreshToken: response?.data?.refresh_token
+        }
+
+
+        const userData = response?.data?.user
+
+        console.log('something like prev with', userData)
         if (userData) {
-          setUser(userData as User)
-          createCookie("TOKEN", JSON.stringify(userData), { path: '/' })
-        }
-
-        if (typeof window !== 'undefined') {
-          localStorage.setItem(ACCESS_TOKEN, tokens.accessToken)
-          localStorage.setItem(REFRESH_TOKEN, tokens.refreshToken)
+          setUser(userData)
+          setRole(response?.data?.role)
+          createCookie('USER', JSON.stringify(userData), { path: '/' })
+          createCookie('ROLE', response?.data?.role, { path: '/' })
         }
 
         setAuthTokens(tokens.accessToken, tokens.refreshToken)
 
-        return response.status === 200
-      }
+        if (response.data?.role === USER_ROLES.ADMIN) {
 
-      return false
-    } catch (error) {
-      console.error('Login failed:', error)
-
-      return false
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  // Register function
-  const register = useCallback(
-    async (email: string, password: string, full_name: string, phone_number: string): Promise<boolean> => {
-      try {
-        setLoading(true)
-
-        const response = await api({
-          endpoint: REGISTER_API,
-          payloadData: { email, password, full_name, phone_number }
-        })
-
-        if (!response?.error && response?.data) {
-          // Check if registration response includes tokens (auto-login)
-          const tokens = extractTokens(response.data)
-          const userData = response.data
-
-          if (tokens && userData) {
-            // Auto-login after registration
-            if (userData) {
-              setUser(userData as User)
-              createCookie(ENGLO_USER, JSON.stringify(userData), { path: '/' })
-            }
-
-            if (typeof window !== 'undefined') {
-              localStorage.setItem(ACCESS_TOKEN, tokens.accessToken)
-              localStorage.setItem(REFRESH_TOKEN, tokens.refreshToken)
-            }
-
-            setAuthTokens(tokens.accessToken, tokens.refreshToken)
-
-            return response.status === 200 || response.status === 201
-          }
-
-          return response.status === 200 || response.status === 201
+          router.push('/admin')
+        } else if (response.data?.role === USER_ROLES.TEACHER) {
+          router.push('/teacher')
+        } else if (response.data?.role === USER_ROLES.PARENT) {
+          router.push('/parent')
+        } else if (response.data?.role === USER_ROLES.STUDENT) {
+          router.push('/student')
+        } else {
+          router.push('/')
         }
 
-        return false
+        return (userData) ?? false
       } catch (error) {
-        console.error('Registration failed:', error)
+        console.error('Login failed:', error)
 
         return false
       } finally {
         setLoading(false)
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   )
 
   // Logout function
-  const logout = useCallback(async () => {
+  const logout = useCallback(async (): Promise<void> => {
     try {
-      await api({
+      setLoading(true)
+      const { refreshToken } = getAuthTokens()
+
+      const res = await api({
         endpoint: LOGOUT_API,
-        payloadData: {}
+        payloadData: { refresh: refreshToken }
       })
+
+      if (!res?.error) {
+        console.log('In logout')
+        clearAllAuthData()
+        setUser(null)
+
+        isInitialized.current = false // Reset initialization flag for next login
+
+        router.push('/login')
+      }
     } catch (error) {
       console.error('Logout API error:', error)
     } finally {
-      clearAllAuthData()
-      setUser(null)
-
-      if (typeof window !== 'undefined') {
-        localStorage.clear()
-        localStorage.setItem('logout-event', Date.now().toString())
-        localStorage.removeItem('logout-event')
-      }
-
-      router.push('/login')
+      setLoading(false)
     }
   }, [router])
 
   return (
+
     <AuthContext.Provider
       value={{
         user,
+        role,
         loading,
         login,
-        register,
         logout,
         isAuthenticated: !!user,
         fetchUser,
-        setUser
+        setUser,
+
       }}
     >
       {children}
@@ -229,11 +254,5 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 }
 
 export const useAuth = () => {
-  const context = useContext(AuthContext)
-
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-
-  return context
-}
+  return useContext(AuthContext);
+};

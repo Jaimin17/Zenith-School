@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 // Import necessary MUI components
 import {
     Container,
@@ -11,6 +11,7 @@ import {
     Box,
     CircularProgress,
 } from "@mui/material";
+import { useAuth } from "@/contexts/authContext";
 
 // Mocking the router functionality for demonstration purposes in a single-file environment
 const useMockRouter = () => ({
@@ -25,6 +26,7 @@ const App = () => {
     const [password, setPassword] = useState("");
     const [msg, setMsg] = useState("");
     const [loading, setLoading] = useState(false);
+    const { login } = useAuth()
 
     // Mock Router
     const router = useMockRouter();
@@ -42,16 +44,7 @@ const App = () => {
         // Simulate API call delay
         await new Promise(resolve => setTimeout(resolve, 800));
 
-        // --- Mocked Login Logic ---
-        const MOCK_USERNAME = "user123";
-        const MOCK_PASSWORD = "password123";
-
-        if (username === MOCK_USERNAME && password === MOCK_PASSWORD) {
-            setMsg("Login successful! Redirecting...");
-            router.push("/dashboard");
-        } else {
-            setMsg("Invalid username or password.");
-        }
+        await login(username, password)
 
         setLoading(false);
     };

@@ -8,28 +8,41 @@ import CountChartContainer from "@/components/FromAnother/CountChartContainer";
 import EventCalendarContainer from "@/components/FromAnother/EventCalendarContainer";
 import FinanceChart from "@/components/FromAnother/FinanceChart";
 import UserCard from "@/components/FromAnother/UserCard";
+import { Box, Typography, Chip } from "@mui/material";
 
 const AdminPage = ({
     searchParams,
 }) => {
     const { user } = useAuth()
     console.log('User in admin Page', user)
+
+    const userStats = [
+        { name: "admin", count: 2 },
+        { name: "teacher", count: 213 },
+        { name: "student", count: 49 },
+        { name: "parent", count: 234 },
+    ];
+
+    const studentStats = [
+        { sex: "MALE", count: 120 },
+        { sex: "FEMALE", count: 95 },
+    ];
+
     return (
         <><div className="p-4 flex gap-4 flex-col md:flex-row">
             {/* LEFT */}
             <div className="w-full lg:w-2/3 flex flex-col gap-8">
                 {/* USER CARDS */}
-                <div className="flex gap-4 justify-between flex-wrap">
-                    <UserCard type="admin" />
-                    <UserCard type="teacher" />
-                    <UserCard type="student" />
-                    <UserCard type="parent" />
-                </div>
+                <Box display="flex" gap={2} flexWrap="wrap">
+                    {userStats.map(stat => (
+                        <UserCard key={stat.name} stat={stat} />
+                    ))}
+                </Box>
                 {/* MIDDLE CHARTS */}
                 <div className="flex gap-4 flex-col lg:flex-row">
                     {/* COUNT CHART */}
                     <div className="w-full lg:w-1/3 h-[450px]">
-                        <CountChartContainer />
+                        <CountChartContainer data={studentStats} />
                     </div>
                     {/* ATTENDANCE CHART */}
                     <div className="w-full lg:w-2/3 h-[450px]">

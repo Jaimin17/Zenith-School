@@ -1,84 +1,76 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
 import CountChart from "./CountChart";
 
-interface GenderCount {
-  sex: string;
-  _count: number;
-}
+type StudentCount = {
+  sex: "MALE" | "FEMALE";
+  count: number;
+};
 
-const CountChartContainer = () => {
-  const [data, setData] = useState<GenderCount[]>([]);
+const CountChartContainer = ({ data }: { data: StudentCount[] }) => {
+  const boys = data.find(d => d.sex === "MALE")?.count ?? 0;
+  const girls = data.find(d => d.sex === "FEMALE")?.count ?? 0;
 
-  useEffect(() => {
-    async function load() {
-      try {
-        // REAL API CALL (uncomment later)
-        // const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/students/count`, {
-        //   method: "GET",
-        //   cache: "no-store",
-        // });
-
-        const res = { ok: false }; // dummy for now
-
-        if (res.ok) {
-          const json = await res.json();
-          setData(json);
-        } else {
-          // fallback dummy data
-          setData([
-            { sex: "MALE", _count: 40 },
-            { sex: "FEMALE", _count: 30 },
-          ]);
-        }
-      } catch {
-        setData([
-          { sex: "MALE", _count: 40 },
-          { sex: "FEMALE", _count: 30 },
-        ]);
-      }
-    }
-
-    load();
-  }, []);
-
-  const boys = data.find(d => d.sex === "MALE")?._count ?? 0;
-  const girls = data.find(d => d.sex === "FEMALE")?._count ?? 0;
+  const total = boys + girls;
 
   return (
-    <div className="bg-white rounded-xl w-full h-full p-4">
+    <Box
+      sx={{
+        bgcolor: "#fff",
+        borderRadius: 2,
+        width: "100%",
+        height: "100%",
+        p: 2,
+      }}
+    >
       {/* TITLE */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-lg font-semibold">Students</h1>
-        <Image src="/moreDark.png" alt="" width={20} height={20} />
-      </div>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography variant="h6" fontWeight={600}>
+          Students
+        </Typography>
+        <Image src="/moreDark.png" alt="menu" width={20} height={20} />
+      </Box>
 
       {/* CHART */}
       <CountChart boys={boys} girls={girls} />
 
       {/* BOTTOM */}
-      <div className="flex justify-center gap-16">
-        {/* BOYS */}
-        <div className="flex flex-col gap-1 items-center">
-          <div className="w-5 h-5 bg-lamaSky rounded-full" />
-          <h1 className="font-bold">{boys}</h1>
-          <h2 className="text-xs text-gray-300">
-            Boys ({Math.round((boys / (boys + girls || 1)) * 100)}%)
-          </h2>
-        </div>
+      <Box display="flex" justifyContent="center" gap={8} mt={2}>
+        {/* Boys */}
+        <Box display="flex" flexDirection="column" gap={0.5} alignItems="center">
+          <Box
+            sx={{
+              width: 20,
+              height: 20,
+              borderRadius: "50%",
+              bgcolor: "lamaSky.main",
+            }}
+          />
+          <Typography fontWeight={700}>{boys}</Typography>
+          <Typography variant="caption" color="text.secondary">
+            Boys ({total ? Math.round((boys / total) * 100) : 0}%)
+          </Typography>
+        </Box>
 
-        {/* GIRLS */}
-        <div className="flex flex-col gap-1 items-center">
-          <div className="w-5 h-5 bg-lamaYellow rounded-full" />
-          <h1 className="font-bold">{girls}</h1>
-          <h2 className="text-xs text-gray-300">
-            Girls ({Math.round((girls / (boys + girls || 1)) * 100)}%)
-          </h2>
-        </div>
-      </div>
-    </div>
+        {/* Girls */}
+        <Box display="flex" flexDirection="column" gap={0.5} alignItems="center">
+          <Box
+            sx={{
+              width: 20,
+              height: 20,
+              borderRadius: "50%",
+              bgcolor: "lamaYellow.main",
+            }}
+          />
+          <Typography fontWeight={700}>{girls}</Typography>
+          <Typography variant="caption" color="text.secondary">
+            Girls ({total ? Math.round((girls / total) * 100) : 0}%)
+          </Typography>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

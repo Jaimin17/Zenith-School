@@ -1,27 +1,47 @@
-"use client";
-
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { Box, Typography } from "@mui/material";
 import EventCalendar from "./EventCalendar";
 import EventList from "./EventList";
 
-const EventCalendarContainer = () => {
-  const searchParams = useSearchParams();
-  const date = searchParams.get("date") || undefined;
+const EventCalendarContainer = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const { date } = searchParams;
 
   return (
-    <div className="bg-white p-4 rounded-md">
+    <Box
+      sx={{
+        bgcolor: "#fff",
+        p: 2,
+        borderRadius: 2,
+      }}
+    >
+      {/* CALENDAR */}
       <EventCalendar />
 
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold my-4">Events</h1>
-        <Image src="/moreDark.png" alt="" width={20} height={20} />
-      </div>
+      {/* HEADER */}
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        my={2}
+      >
+        <Typography variant="h6" fontWeight={600}>
+          Events
+        </Typography>
 
-      <div className="flex flex-col gap-4">
-        <EventList dateParam={date} />
-      </div>
-    </div>
+        <Image src="/moreDark.png" alt="menu" width={20} height={20} />
+      </Box>
+
+      {/* EVENT LIST */}
+      <Box display="flex" flexDirection="column" gap={2}>
+
+        {/* <EventCalendarContainer searchParams={searchParams} /> */}
+        {/* <EventList dateParam={date} /> */}
+      </Box>
+    </Box>
   );
 };
 

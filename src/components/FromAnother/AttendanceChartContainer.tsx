@@ -1,72 +1,101 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Image from "next/image";
+import { Box, Typography } from "@mui/material";
 import AttendanceChart from "./AttendanceChart";
 
-const AttendanceChartContainer = () => {
-  const [data, setData] = useState([]);
+type RawAttendance = {
+  date: Date | string;
+  present: boolean;
+};
 
-  useEffect(() => {
-    const today = new Date();
-    const dayOfWeek = today.getDay();
-    const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+type AttendanceDay = {
+  name: string;
+  present: number;
+  absent: number;
+};
 
-    const lastMonday = new Date(today);
-    lastMonday.setDate(today.getDate() - daysSinceMonday);
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
-    // Simulated API call
-    const fetchData = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+const AttendanceChartContainer = async () => {
+  const today = new Date();
+  const dayOfWeek = today.getDay();
+  const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
 
-      // Dummy data (replace later)
-      const resData = [
-        { date: new Date(), present: true },
-        { date: new Date(), present: false },
-        { date: new Date(), present: true },
-      ];
+  const lastMonday = new Date(today);
+  lastMonday.setDate(today.getDate() - daysSinceMonday);
 
-      const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+  // -------------------------
+  //  API CALL (DUMMY FOR NOW)
+  // -------------------------
+  // const res = await fetch(
+  //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/attendance?from=${lastMonday.toISOString()}`,
+  //   { cache: "no-store" }
+  // );
 
-      const attendanceMap = {
-        Mon: { present: 0, absent: 0 },
-        Tue: { present: 0, absent: 0 },
-        Wed: { present: 0, absent: 0 },
-        Thu: { present: 0, absent: 0 },
-        Fri: { present: 0, absent: 0 },
-      };
+  const res: Response | null = null;
 
-      resData.forEach((item) => {
-        const itemDate = new Date(item.date);
-        const dow = itemDate.getDay();
+  let resData: RawAttendance[] = [];
 
-        if (dow >= 1 && dow <= 5) {
-          const day = daysOfWeek[dow - 1];
-          if (item.present) attendanceMap[day].present += 1;
-          else attendanceMap[day].absent += 1;
-        }
-      });
+  if (res && res.ok) {
+    resData = await res.json();
+  } else {
+    // --------------- DUMMY DATA ---------------
+    resData = [
+      { date: new Date(), present: true },
+      { date: new Date(), present: false },
+      { date: new Date(), present: true },
+    ];
+  }
 
-      const formatted = daysOfWeek.map((day) => ({
-        name: day,
-        present: attendanceMap[day].present,
-        absent: attendanceMap[day].absent,
-      }));
+  const attendanceMap: Record<
+    string,
+    { present: number; absent: number }
+  > = {
+    Mon: { present: 0, absent: 0 },
+    Tue: { present: 0, absent: 0 },
+    Wed: { present: 0, absent: 0 },
+    Thu: { present: 0, absent: 0 },
+    Fri: { present: 0, absent: 0 },
+  };
 
-      setData(formatted);
-    };
+  resData.forEach(item => {
+    const date = new Date(item.date);
+    const dow = date.getDay(); // 1 = Mon, 5 = Fri
 
-    fetchData();
-  }, []);
+    if (dow >= 1 && dow <= 5) {
+      const day = DAYS[dow - 1];
+      item.present
+        ? attendanceMap[day].present++
+        : attendanceMap[day].absent++;
+    }
+  });
+
+  const data: AttendanceDay[] = DAYS.map(day => ({
+    name: day,
+    present: attendanceMap[day].present,
+    absent: attendanceMap[day].absent,
+  }));
 
   return (
-    <div className="bg-white rounded-lg p-4 h-full">
-      <div className="flex justify-between items-center">
-        <h1 className="text-lg font-semibold">Attendance</h1>
-        <Image src="/moreDark.png" alt="" width={20} height={20} />
-      </div>
+    <Box
+      sx={{
+        bgcolor: "#fff",
+        borderRadius: 2,
+        p: 2,
+        height: "100%",
+      }}
+    >
+      {/* HEADER */}
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography variant="h6" fontWeight={600}>
+          Attendance
+        </Typography>
+
+        <Image src="/moreDark.png" alt="menu" width={20} height={20} />
+      </Box>
+
+      {/* CHART */}
       <AttendanceChart data={data} />
-    </div>
+    </Box>
   );
 };
 

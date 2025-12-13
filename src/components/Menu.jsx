@@ -12,7 +12,7 @@ const menuItems = [
             {
                 icon: "/home.png",
                 label: "Home",
-                href: "/",
+                href: "/", // based on the role i want to change the page like /teacher /admin /student or /parent
                 visible: ["admin", "teacher", "student", "parent"],
             },
             {
@@ -120,23 +120,25 @@ const menuItems = [
     },
 ];
 
+const homeRouteMap = {
+    admin: "/admin",
+    teacher: "/teacher",
+    student: "/student",
+    parent: "/parent",
+};
+
 const Menu = () => {
+    const { role } = useAuth();
 
-    const { role } = useAuth()
-
-
-    const user = {
-        id: "admin1",
-        role: "admin" // or "teacher", "student", "parent"
-    }
-
-    console.log('Hello', role)
+    const homeHref =
+        role && homeRouteMap[role]
+            ? homeRouteMap[role]
+            : "/";
 
     return (
         <Box mt={2} fontSize="14px">
             {menuItems.map((section) => (
                 <Box key={section.title} display="flex" flexDirection="column" gap={1}>
-
                     {/* SECTION TITLE */}
                     <Typography
                         variant="body2"
@@ -147,37 +149,48 @@ const Menu = () => {
                     </Typography>
 
                     <List disablePadding>
-                        {section.items.map((item) =>
-                            item.visible.includes(role) ? (
-                                <ListItem
-                                    key={item.label}
-                                    disablePadding
-                                >
+                        {section.items.map((item) => {
+                            if (!item.visible.includes(role)) return null;
+
+                            const href =
+                                item.label === "Home"
+                                    ? homeHref
+                                    : item.href;
+
+                            return (
+                                <ListItem key={item.label} disablePadding>
                                     <ListItemButton
                                         component={Link}
-                                        href={item.href}
+                                        href={href}
                                         sx={{
                                             borderRadius: "8px",
                                             px: 2,
                                             py: 1,
-                                            "&:hover": { backgroundColor: "rgba(0, 150, 255, 0.1)" }
+                                            "&:hover": {
+                                                backgroundColor: "rgba(0, 150, 255, 0.1)",
+                                            },
                                         }}
                                     >
                                         <ListItemIcon sx={{ minWidth: 32 }}>
-                                            <Image src={item.icon} alt="icon" width={20} height={20} />
+                                            <Image
+                                                src={item.icon}
+                                                alt={item.label}
+                                                width={20}
+                                                height={20}
+                                            />
                                         </ListItemIcon>
 
                                         <ListItemText
                                             primary={item.label}
                                             sx={{
                                                 display: { xs: "none", lg: "block" },
-                                                color: "gray"
+                                                color: "gray",
                                             }}
                                         />
                                     </ListItemButton>
                                 </ListItem>
-                            ) : null
-                        )}
+                            );
+                        })}
                     </List>
                 </Box>
             ))}

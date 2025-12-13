@@ -1,56 +1,63 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Box, Typography, Chip } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 
-const UserCard = ({ type }: {
-  type: "admin" | "teacher" | "student" | "parent";
-}) => {
+type UserStat = {
+  name: "admin" | "teacher" | "student" | "parent";
+  count: number;
+};
 
-  const [data, setData] = useState<number | null>(null);
+const typeColorMap: Record<UserStat["name"], string> = {
+  admin: "#4CAF50",
+  teacher: "#2196F3",
+  student: "#FF9800",
+  parent: "#9C27B0",
+};
 
-  useEffect(() => {
-    async function load() {
-      try {
-        // TODO: enable when API is ready
-        // const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/${type}/count`);
-        // const json = await res.json();
-        // setData(json.count);
-
-        // temporary dummy fallback
-        const fallback =
-          type === "admin" ? 3 :
-            type === "teacher" ? 25 :
-              type === "student" ? 540 :
-                120;
-
-        setData(fallback);
-      } catch {
-        setData(0);
-      }
-    }
-
-    load();
-  }, [type]);
-
+const UserCard = ({ stat }: { stat: UserStat }) => {
+  const baseColor = typeColorMap[stat.name];
 
   return (
-    <div className="rounded-2xl odd:bg-lamaPurple even:bg-lamaYellow p-4 flex-1 min-w-[130px]">
-      <div className="flex justify-between items-center">
-        <span className="text-[10px] bg-white px-2 py-1 rounded-full text-green-600">
-          2024/25
-        </span>
-        <Image src="/more.png" alt="" width={20} height={20} />
-      </div>
+    <Box
+      sx={{
+        borderRadius: 2,
+        p: 2,
+        flex: 1,
+        minWidth: 130,
+        backgroundColor: alpha(baseColor, 0.12),
+        border: `1px solid ${alpha(baseColor, 0.3)}`,
+      }}
+    >
+      {/* Top Row */}
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Chip
+          label="2024 / 25"
+          size="small"
+          sx={{
+            fontSize: 10,
+            bgcolor: "#fff",
+            height: 20,
+          }}
+        />
 
-      <h1 className="text-2xl font-semibold my-4">
-        {data === null ? "…" : data}
-      </h1>
+        <Image src="/more.png" alt="menu" width={20} height={20} />
+      </Box>
 
-      <h2 className="capitalize text-sm font-medium text-gray-500">
-        {type}s
-      </h2>
-    </div>
+      {/* Count */}
+      <Typography variant="h5" fontWeight={600} my={2}>
+        {stat.count}
+      </Typography>
+
+      {/* Label */}
+      <Typography
+        variant="body2"
+        sx={{ textTransform: "capitalize", color: "text.secondary" }}
+      >
+        {stat.name}s
+      </Typography>
+    </Box>
   );
 };
 

@@ -1,63 +1,114 @@
-'use client'
+import { Box, Typography } from "@mui/material";
 
-import { useEffect, useState } from "react";
-
-type AnnouncementType = {
+type Announcement = {
+  id: string;
   title: string;
   description: string;
   date: string;
 };
 
-// Dummy fetch function
-const fetchData = async (url: string, payload?: any): Promise<AnnouncementType[]> => {
-  // Simulate network delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
+const cardColors = [
+  "rgba(56, 189, 248, 0.15)",   // sky light
+  "rgba(168, 85, 247, 0.15)",   // purple light
+  "rgba(250, 204, 21, 0.15)",   // yellow light
+];
 
-  // Return dummy data
-  return [
-    { title: "New Lesson Added", description: "A new lesson has been added to your class.", date: "2025-12-09" },
-    { title: "Exam Schedule", description: "The exam schedule has been published.", date: "2025-12-08" },
-    { title: "Holiday Announcement", description: "School will be closed tomorrow.", date: "2025-12-07" },
-  ];
-};
-
-const Announcements = () => {
-  const [data, setData] = useState<AnnouncementType[]>([]);
+const Announcements = async () => {
   const userId = "admin1";
   const role = "admin";
 
-  useEffect(() => {
-    const getAnnouncements = async () => {
-      // const result = await fetchData("/api/announcements", { userId, role });
-      const result = [];
-      setData(result.slice(0, 3)); // take only first 3
-    };
-    getAnnouncements();
-  }, []);
+  // -------------------------
+  // API CALL
+  // -------------------------
+  let data: Announcement[] = [];
 
-  const colors = ["bg-lamaSkyLight", "bg-lamaPurpleLight", "bg-lamaYellowLight"];
+  // try {
+  //   // const res = await fetch(
+  //   //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/announcements?role=${role}&userId=${userId}&limit=3`,
+  //   //   { cache: "no-store" }
+  //   // );
+
+  //   const res = {}
+
+  //   if (res.ok) {
+  //     data = await res.json();
+  //   }
+  // } catch {
+  // ---------- FALLBACK DUMMY DATA ----------
+  data = [
+    {
+      id: "1",
+      title: "Exam Schedule Released",
+      description: "Mid-term exams will start from 10th Oct.",
+      date: new Date().toISOString(),
+    },
+    {
+      id: "2",
+      title: "Parent Meeting",
+      description: "PTM scheduled for next Friday.",
+      date: new Date().toISOString(),
+    },
+    {
+      id: "3",
+      title: "Holiday Notice",
+      description: "School will remain closed on Monday.",
+      date: new Date().toISOString(),
+    },
+  ];
+  // }
 
   return (
-    <div className="bg-white p-4 rounded-md">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Announcements</h1>
-        <span className="text-xs text-gray-400 cursor-pointer">View All</span>
-      </div>
+    <Box bgcolor="#fff" p={2} borderRadius={2}>
+      {/* HEADER */}
+      <Box display="flex" alignItems="center" justifyContent="space-between">
+        <Typography variant="h6" fontWeight={600}>
+          Announcements
+        </Typography>
+        <Typography variant="caption" color="text.secondary">
+          View All
+        </Typography>
+      </Box>
 
-      <div className="flex flex-col gap-4 mt-4">
-        {data.map((announcement, idx) => (
-          <div key={idx} className={`${colors[idx % colors.length]} rounded-md p-4`}>
-            <div className="flex items-center justify-between">
-              <h2 className="font-medium">{announcement.title}</h2>
-              <span className="text-xs text-gray-400 bg-white rounded-md px-1 py-1">
-                {new Intl.DateTimeFormat("en-GB").format(new Date(announcement.date))}
-              </span>
-            </div>
-            <p className="text-sm text-gray-400 mt-1">{announcement.description}</p>
-          </div>
+      {/* LIST */}
+      <Box display="flex" flexDirection="column" gap={2} mt={2}>
+        {data.map((item, index) => (
+          <Box
+            key={item.id}
+            sx={{
+              bgcolor: cardColors[index % cardColors.length],
+              p: 2,
+              borderRadius: 2,
+            }}
+          >
+            <Box display="flex" justifyContent="space-between">
+              <Typography fontWeight={500}>{item.title}</Typography>
+              <Box
+                sx={{
+                  bgcolor: "#fff",
+                  px: 1,
+                  py: 0.5,
+                  borderRadius: 1,
+                }}
+              >
+                <Typography variant="caption" color="text.secondary">
+                  {new Intl.DateTimeFormat("en-GB").format(
+                    new Date(item.date)
+                  )}
+                </Typography>
+              </Box>
+            </Box>
+
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              mt={0.5}
+            >
+              {item.description}
+            </Typography>
+          </Box>
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

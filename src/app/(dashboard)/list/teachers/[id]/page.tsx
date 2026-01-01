@@ -1,18 +1,31 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import Announcements from "../../../../../components/FromAnother/Announcements";
-import BigCalendarContainer from "../../../../../components/FromAnother/BigCalendarContainer";
-import FormContainer from "../../../../../components/FromAnother/FormContainer";
-import Performance from "../../../../../components/FromAnother/Performance";
-import prisma from "@/lib/prisma";
+import Announcements from "@/components/FromAnother/Announcements";
+import BigCalendarContainer from "@/components/FromAnother/BigCalendarContainer";
+import FormContainer from "@/components/FromAnother/FormContainer";
+import Performance from "@/components/FromAnother/Performance";
+import { api } from "@/api/api";
 // import { auth } from "@clerk/nextjs/server";
 
+// TODO: Replace with actual API endpoint
+// const GET_TEACHER_DETAILS = { method: 'GET', url: '/api/teachers/:id' };
 
-import { Teacher } from "@prisma/client";
-// here also i dont want to use the prisma i want to use the api based structure 
-
-// like const res = await api({endpoint: '', payload: ''})
+interface Teacher {
+  id: string;
+  name: string;
+  surname: string;
+  img?: string | null;
+  bloodType?: string | null;
+  birthday: Date | string;
+  email?: string | null;
+  phone?: string | null;
+  _count?: {
+    subjects: number;
+    lessons: number;
+    classes: number;
+  };
+}
 
 
 
@@ -25,24 +38,32 @@ const SingleTeacherPage = async ({
   // const { sessionClaims } = auth();
   // const role = (sessionClaims?.metadata as { role?: string })?.role;
 
-  const role = 'admin' // use the useAuth to get the role 
+  const role = 'admin' // TODO: use the useAuth to get the role 
 
-  const teacher:
-    | (Teacher & {
-      _count: { subjects: number; lessons: number; classes: number };
-    })
-    | null = await prisma.teacher.findUnique({
-      where: { id },
-      include: {
-        _count: {
-          select: {
-            subjects: true,
-            lessons: true,
-            classes: true,
-          },
-        },
-      },
-    });
+  // TODO: Replace with actual API call
+  // const response = await api({
+  //   endpoint: GET_TEACHER_DETAILS,
+  //   id: id,
+  //   isServer: true,
+  // });
+  // const teacher: Teacher | null = response?.data || null;
+
+  // Temporary mock data - replace with API call above
+  const teacher: Teacher | null = {
+    id,
+    name: "John",
+    surname: "Doe",
+    img: "/noAvatar.png",
+    bloodType: "O+",
+    birthday: new Date("1990-01-01"),
+    email: "john.doe@example.com",
+    phone: "+1234567890",
+    _count: {
+      subjects: 3,
+      lessons: 15,
+      classes: 2,
+    },
+  };
 
   if (!teacher) {
     return notFound();

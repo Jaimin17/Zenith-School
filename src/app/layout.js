@@ -1,12 +1,7 @@
-import { CssBaseline, Box } from "@mui/material";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
+import { CssBaseline } from "@mui/material";
 import "./globals.css";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import Loader from "@/components/loader/preloader";
-import SearchPopUp from "@/components/search-popup/SearchPopUp";
 import Script from "next/script";
-import { AuthProvider } from "@/contexts/authContext";
+import { AuthProvider } from "../contexts/authContext";
 
 export default function RootLayout({ children }) {
   return (

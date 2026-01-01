@@ -1,6 +1,6 @@
 'use client'
 
-import { useAuth } from "@/contexts/authContext"
+import { useAuth } from "@/contexts/authContext";
 
 import Announcements from "@/components/FromAnother/Announcements";
 import AttendanceChartContainer from "@/components/FromAnother/AttendanceChartContainer";
@@ -8,28 +8,39 @@ import CountChartContainer from "@/components/FromAnother/CountChartContainer";
 import EventCalendarContainer from "@/components/FromAnother/EventCalendarContainer";
 import FinanceChart from "@/components/FromAnother/FinanceChart";
 import UserCard from "@/components/FromAnother/UserCard";
-import { Box, Typography, Chip } from "@mui/material";
+import { Box } from "@mui/material";
 
-const AdminPage = ({
-    searchParams,
-}) => {
+interface AdminPageProps {
+    searchParams?: { [key: string]: string | undefined };
+}
+
+type UserStat = {
+    name: "admin" | "teacher" | "student" | "parent";
+    count: number;
+};
+
+type StudentCount = {
+    sex: "MALE" | "FEMALE";
+    count: number;
+};
+
+const AdminPage = ({ searchParams }: AdminPageProps) => {
     const { user } = useAuth()
-    console.log('User in admin Page', user)
 
-    const userStats = [
+    const userStats: UserStat[] = [
         { name: "admin", count: 2 },
         { name: "teacher", count: 213 },
         { name: "student", count: 49 },
         { name: "parent", count: 234 },
     ];
 
-    const studentStats = [
+    const studentStats: StudentCount[] = [
         { sex: "MALE", count: 120 },
         { sex: "FEMALE", count: 95 },
     ];
 
     return (
-        <><div className="p-4 flex gap-4 flex-col md:flex-row">
+        <div className="p-4 flex gap-4 flex-col md:flex-row">
             {/* LEFT */}
             <div className="w-full lg:w-2/3 flex flex-col gap-8">
                 {/* USER CARDS */}
@@ -60,9 +71,8 @@ const AdminPage = ({
                 <Announcements />
             </div>
         </div>
-        </>
     )
-
 }
 
 export default AdminPage
+

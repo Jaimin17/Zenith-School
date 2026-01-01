@@ -6,14 +6,19 @@ import EventCalendar from "@/components/FromAnother/EventCalendar";
 import { useAuth } from "@/contexts/authContext";
 import { useEffect, useState } from "react";
 
+interface ClassItem {
+    id: string;
+    name: string;
+}
+
 const StudentPage = () => {
     const { user } = useAuth();
-    const [classItem, setClassItem] = useState([{ id: "", name: "" }]);
+    const [classItem, setClassItem] = useState<ClassItem[]>([{ id: "", name: "" }]);
 
     useEffect(() => {
         if (!user) return;
 
-        const fetchClass = async (userId) => {
+        const fetchClass = async (userId: string | number) => {
             try {
                 // Dummy fetch
                 const res = null;
@@ -57,3 +62,6 @@ const StudentPage = () => {
 };
 
 export default StudentPage;
+
+
+

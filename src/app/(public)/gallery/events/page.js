@@ -2,7 +2,7 @@ import Banner from "@/components/Banner";
 import Events from "@/components/gallery/Events";
 import { BANNER_DATA, EventsData } from "@/lib/data";
 
-export default function eventsPage() {
+export default function EventsPage() {
     const bannerData = BANNER_DATA["events-gallery"];
 
     return (

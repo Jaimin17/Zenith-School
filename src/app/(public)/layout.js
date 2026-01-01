@@ -1,8 +1,7 @@
-import Banner from "@/components/Banner";
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import SearchPopUp from "@/components/search-popup/SearchPopUp";
+import Footer from "../../components/footer";
+import Navbar from "../../components/navbar";
+import ProtectedRoute from "../../components/ProtectedRoute";
+import SearchPopUp from "../../components/search-popup/SearchPopUp";
 import { Box } from "@mui/material";
 
 export default function PublicLayout({ children }) {

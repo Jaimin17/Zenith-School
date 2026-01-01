@@ -4,8 +4,8 @@
  */
 
 import { getAuthTokens, clearAuthTokens } from './cookie'
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/constants/appConstants'
-import type { TokenResponse, Tokens } from '@/types/auth'
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants/appConstants'
+import type { TokenResponse, Tokens } from '../types/auth'
 
 /**
  * Gets the access token from cookies or localStorage

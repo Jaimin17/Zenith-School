@@ -12,7 +12,7 @@ import { AdmissionAccordion } from "@/components/ui/admission/Accordion";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useState } from "react";
 
-export default function admissionPage() {
+export default function AdmissionPage() {
   const bannerData = BANNER_DATA["admission"];
   const [openIndex, setOpenIndex] = useState(0);
 

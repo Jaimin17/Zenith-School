@@ -5,9 +5,16 @@ import BigCalendarContainer from "@/components/FromAnother/BigCalendarContainer"
 import { useAuth } from "@/contexts/authContext";
 import { useEffect, useState } from "react";
 
+interface Student {
+    id: string;
+    name: string;
+    surname: string;
+    classId: string;
+}
+
 const ParentPage = () => {
     const { user } = useAuth();
-    const [students, setStudents] = useState([]);
+    const [students, setStudents] = useState<Student[]>([]);
 
     useEffect(() => {
         if (!user) return;
@@ -31,7 +38,7 @@ const ParentPage = () => {
                     setStudents([]);
                 }
             } catch (error) {
-                console.error(error);
+                // Error fetching students
                 setStudents([]);
             }
         };
@@ -68,3 +75,6 @@ const ParentPage = () => {
 };
 
 export default ParentPage;
+
+
+

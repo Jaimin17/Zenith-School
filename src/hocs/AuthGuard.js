@@ -15,7 +15,7 @@ export default function AuthGuard({ children }) {
         if (!status) {
             router.push('/') // navigate only inside useEffect
         }
-    }, [])
+    }, [router])
 
     // while checking auth, return nothing or a loader
     if (auth === null) return null

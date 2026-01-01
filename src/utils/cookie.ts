@@ -11,7 +11,7 @@ import type { cookies } from 'next/headers'
 // Client-side cookie library (only imported when needed)
 import Cookies from 'js-cookie'
 
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/constants/appConstants'
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants/appConstants'
 
 /**
  * Type alias for Next.js cookie store

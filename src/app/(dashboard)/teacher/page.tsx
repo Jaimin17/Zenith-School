@@ -1,7 +1,3 @@
-// import Announcements from "@/components/Announcements";
-// import BigCalendarContainer from "@/components/BigCalendarContainer";
-// import { auth } from "@clerk/nextjs/server";
-
 import Announcements from "@/components/FromAnother/Announcements";
 import BigCalendarContainer from "@/components/FromAnother/BigCalendarContainer";
 
@@ -26,3 +22,6 @@ const TeacherPage = () => {
 };
 
 export default TeacherPage;
+
+
+

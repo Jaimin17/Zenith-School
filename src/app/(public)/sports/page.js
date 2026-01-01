@@ -6,11 +6,10 @@ import { BANNER_DATA, SPORTS_DATA } from "@/lib/data";
 import { GALLERY_DATA } from "../gallery/photos/page";
 import { Box, Card, CardMedia, Typography } from "@mui/material";
 import { Fragment } from "react";
-import SportsCarousel from "@/components/ui/InfiniteCarousel";
 import InfiniteCarousel from "@/components/ui/InfiniteCarousel";
 import { AnimatedHeader } from "@/components/AnimatedHeader";
 
-export default function photoGalleryPage() {
+export default function SportsPage() {
     const bannerData = BANNER_DATA["sports"];
 
     return (

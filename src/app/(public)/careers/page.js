@@ -4,7 +4,7 @@ import { CareersForm } from "@/components/ui/careers-form";
 import { BANNER_DATA } from "@/lib/data";
 import { Box, Container, Typography } from "@mui/material";
 
-export default function careersPage() {
+export default function CareersPage() {
   const bannerData = BANNER_DATA["careers"];
 
   const jobItems = [

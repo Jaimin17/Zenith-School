@@ -3,7 +3,7 @@ import { BANNER_DATA } from "@/lib/data";
 import { Box, CardMedia, Container, Typography } from "@mui/material";
 import Card from "@/components/about/card";
 
-export default function stateOfTheArtInfrastructurePage() {
+export default function StateOfTheArtInfrastructurePage() {
   const dummyData = {
     image:
       "https://images.unsplash.com/photo-1728206348193-9b5ae74a7d32?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",

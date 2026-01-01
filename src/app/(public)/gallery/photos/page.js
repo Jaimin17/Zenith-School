@@ -1,6 +1,7 @@
-import Banner from "@/components/Banner";
-import DynamicGallery from "@/components/ui/dynamic-gallery";
-import { BANNER_DATA } from "@/lib/data";
+// import Banner from "@/components/Banner";
+import Banner from "../../../../components/Banner";
+import DynamicGallery from "../../../../components/ui/dynamic-gallery";
+import { BANNER_DATA } from "../../../../lib/data";
 
 export const GALLERY_DATA = [
     "/assets/img/gallery/01.jpg",
@@ -10,7 +11,7 @@ export const GALLERY_DATA = [
     "https://images.unsplash.com/photo-1524369609384-10ce89e42d14?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTAzfHxyYW5kb218ZW58MHwwfDB8fHww",
     "https://images.unsplash.com/photo-1571327352610-1c5484ccc840?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzZ8fGFlc3RoZXRpY3xlbnwwfDB8MHx8fDA%3D",
 ]
-export default function photoGalleryPage() {
+export default function PhotoGalleryPage() {
     const bannerData = BANNER_DATA["photos-gallery"];
 
 

@@ -5,7 +5,7 @@ import { Box, Typography, Grid, Card, CardMedia } from "@mui/material";
 import { motion } from "framer-motion";
 import { ACTIVITIES_DATA } from "@/lib/data";
 
-export default function activitiesBeyondAcademicsPage() {
+export default function ActivitiesBeyondAcademicsPage() {
   return (
     <Box sx={{ py: 8, px: 2 }}>
       {ACTIVITIES_DATA.map((section, index) => {

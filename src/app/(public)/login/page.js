@@ -11,7 +11,7 @@ import {
     Box,
     CircularProgress,
 } from "@mui/material";
-import { useAuth } from "@/contexts/authContext";
+import { useAuth } from "../../../contexts/authContext";
 
 // Mocking the router functionality for demonstration purposes in a single-file environment
 const useMockRouter = () => ({

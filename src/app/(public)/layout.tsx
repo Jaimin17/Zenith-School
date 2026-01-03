@@ -8,7 +8,7 @@ interface PublicLayoutProps {
   children: ReactNode;
 }
 
-export default function PublicLayout({ children }: PublicLayoutProps): JSX.Element {
+export default function PublicLayout({ children }: PublicLayoutProps) {
   return (
     <>
       <Navbar />

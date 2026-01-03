@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
       <Grid container spacing={6}>
 
         {/* Logo & About */}
-        <Grid item xs={12} sm={4} md={3}>
+        <Grid size={{ xs: 12, sm: 4, md: 3 }}>
           <Typography variant="h5" sx={{ fontWeight: "bold", color: "white" }}>
             Zenith<span style={{ color: "#ccc" }}>School</span>
           </Typography>
@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Links */}
-        <Grid item xs={12} sm={4} md={3}>
+        <Grid size={{ xs: 12, sm: 4, md: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold", color: "white" }}>
             Quick Links
           </Typography>
@@ -68,7 +68,7 @@ const Footer: React.FC = () => {
         </Grid>
 
         {/* Programs
-        <Grid item xs={12} sm={4} md={3}>
+        <Grid size={{ xs: 12, sm: 4, md: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
             Programs
           </Typography>
@@ -98,7 +98,7 @@ const Footer: React.FC = () => {
         </Grid> */}
 
         {/* Address */}
-        <Grid item xs={12} sm={4} md={3}>
+        <Grid size={{ xs: 12, sm: 4, md: 3 }}>
           <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold", color: "white" }}>
             Address
           </Typography>

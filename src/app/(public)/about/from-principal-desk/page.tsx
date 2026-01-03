@@ -27,7 +27,7 @@ const principalData: PrincipalData = {
 
 const bannerData = BANNER_DATA["from-principal-desk"];
 
-export default function FromPrincipalDeskPage(): JSX.Element {
+export default function FromPrincipalDeskPage() {
   return (
     <>
       <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />

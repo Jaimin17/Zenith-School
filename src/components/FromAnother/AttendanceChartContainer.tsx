@@ -31,20 +31,20 @@ const AttendanceChartContainer = async () => {
   //   { cache: "no-store" }
   // );
 
-  const res: Response | null = null;
+  // const res: Response | null = null;
 
   let resData: RawAttendance[] = [];
 
-  if (res && res.ok) {
-    resData = await res.json();
-  } else {
+  // if (res !== null && res.ok) {
+  //   resData = await res.json();
+  // } else {
     // --------------- DUMMY DATA ---------------
-    resData = [
+  resData = [
       { date: new Date(), present: true },
       { date: new Date(), present: false },
       { date: new Date(), present: true },
     ];
-  }
+  // }
 
   const attendanceMap: Record<
     string,

@@ -30,7 +30,7 @@ const BigCalendarContainer = ({
   type: "teacherId" | "classId";
   id: string | number;
 }) => {
-  const [schedule, setSchedule] = useState<{ title: string; start: string; end: string }[]>([]);
+  const [schedule, setSchedule] = useState<{ title: string; start: Date; end: Date }[]>([]);
 
   useEffect(() => {
     const getLessons = async () => {

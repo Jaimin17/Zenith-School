@@ -5,21 +5,10 @@ import { Box } from "@mui/material";
 import { motion } from "framer-motion";
 import { ACTIVITIES_DATA } from "../../../../lib/data";
 
-interface ActivitySection {
-  tagline?: string;
-  titlePrefix?: string;
-  highlight?: string;
-  titleSuffix?: string;
-  description: string;
-  extra?: string;
-  image: string;
-  title: string;
-}
-
-export default function ActivitiesBeyondAcademicsPage(): JSX.Element {
+export default function ActivitiesBeyondAcademicsPage() {
   return (
     <Box sx={{ py: 8, px: 2 }}>
-      {ACTIVITIES_DATA.map((section: ActivitySection, index: number) => {
+      {ACTIVITIES_DATA.map((section, index: number) => {
         const textDirection = index % 2 === 0 ? -100 : 100;
         const imageDirection = index % 2 === 0 ? 100 : -100;
 
@@ -63,7 +52,7 @@ export default function ActivitiesBeyondAcademicsPage(): JSX.Element {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     viewport={{ once: true, amount: 0.2 }}
                   >
-                    <img src={section.image} alt={section.title} />
+                    <img src={section.image} alt={section.highlight || "Activity"} />
                   </motion.div>
                 </div>
               </div>

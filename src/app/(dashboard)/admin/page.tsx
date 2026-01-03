@@ -9,16 +9,10 @@ import FinanceChart from "../../../components/FromAnother/FinanceChart";
 import UserCard from "../../../components/FromAnother/UserCard";
 import { Box } from "@mui/material";
 
-interface StudentStat {
-    sex: string;
-    count: number;
-}
+import type { StudentCount } from "../../../components/FromAnother/CountChartContainer";
+import type { UserStat } from "../../../components/FromAnother/UserCard";
 
-interface AdminPageProps {
-    searchParams?: Record<string, string | string[] | undefined>;
-}
-
-const AdminPage: React.FC<AdminPageProps> = ({ searchParams }) => {
+const AdminPage: React.FC = () => {
     const { user } = useAuth()
     console.log('User in admin Page', user)
 
@@ -29,7 +23,7 @@ const AdminPage: React.FC<AdminPageProps> = ({ searchParams }) => {
         { name: "parent", count: 234 },
     ];
 
-    const studentStats: StudentStat[] = [
+    const studentStats: StudentCount[] = [
         { sex: "MALE", count: 120 },
         { sex: "FEMALE", count: 95 },
     ];
@@ -62,7 +56,7 @@ const AdminPage: React.FC<AdminPageProps> = ({ searchParams }) => {
             </div>
             {/* RIGHT */}
             <div className="w-full lg:w-1/3 flex flex-col gap-8">
-                <EventCalendarContainer searchParams={searchParams} />
+                <EventCalendarContainer />
                 <Announcements />
             </div>
         </div>

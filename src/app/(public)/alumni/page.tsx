@@ -6,7 +6,7 @@ import { CardCarousel } from "../../../components/alumni/CardCarousel";
 import AlumniStory from "../../../components/alumni/AlumniStory";
 import { JSX } from "react";
 
-export default function AlumniPage(): JSX.Element {
+export default function AlumniPage() {
   const bannerData = BANNER_DATA["alumni"];
 
   return (

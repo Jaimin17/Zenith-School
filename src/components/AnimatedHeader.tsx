@@ -20,7 +20,7 @@ const child = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { type: "spring", damping: 16, stiffness: 240 },
+    transition: { type: "spring" as const, damping: 16, stiffness: 240 },
   },
 };
 
@@ -37,7 +37,7 @@ const subChild = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, ease: "easeOut" },
+    transition: { duration: 0.4 },
   },
 };
 

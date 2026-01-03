@@ -11,7 +11,7 @@ import {
   teacherSchema,
   TeacherSchema,
 } from "@/lib/formValidationSchemas";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import {
   createStudent,
   createTeacher,
@@ -19,7 +19,7 @@ import {
   updateTeacher,
 } from "@/lib/actions";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { CldUploadWidget } from "next-cloudinary";
 
 const StudentForm = ({
@@ -43,8 +43,11 @@ const StudentForm = ({
 
   const [img, setImg] = useState<any>();
 
-  const [state, formAction] = useFormState(
-    type === "create" ? createStudent : updateStudent,
+  const [state, formAction] = useActionState(
+    async (prevState: any, formData: FormData) => {
+      const data = Object.fromEntries(formData);
+      return type === "create" ? await createStudent({ ...data, img: img?.secure_url }) : await updateStudent({ ...data, img: img?.secure_url });
+    },
     {
       success: false,
       error: false,
@@ -54,7 +57,11 @@ const StudentForm = ({
   const onSubmit = handleSubmit((data) => {
     console.log("hello");
     console.log(data);
-    formAction({ ...data, img: img?.secure_url });
+    const formData = new FormData();
+    Object.entries({ ...data, img: img?.secure_url }).forEach(([key, value]) => {
+      formData.append(key, value as string);
+    });
+    formAction(formData);
   });
 
   const router = useRouter();

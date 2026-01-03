@@ -16,12 +16,12 @@ import { CardCarousel } from "@/components/alumni/CardCarousel";
 import FeaturesCard from "@/components/home/FeaturesCard";
 import AboutUs from "@/components/about/AboutUs";
 import { ContactUsForm } from "@/components/ui/contact-us-form";
-import { GALLERY_DATA } from "./(public)/gallery/photos/page";
+import { GALLERY_DATA } from "@/lib/data";
 import DynamicGallery from "@/components/ui/dynamic-gallery";
 import Events from "@/components/gallery/Events";
 import PublicLayout from "./(public)/layout";
 
-export default function HomePage(): JSX.Element {
+export default function HomePage() {
   return (
     <PublicLayout>
       <ImagesSliderDemo />

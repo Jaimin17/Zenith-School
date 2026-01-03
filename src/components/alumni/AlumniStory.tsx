@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 
-function AlumniStory: React.FC = () => {
+const AlumniStory: React.FC = () => {
   return (
     <>
         <div className="alumni pt-120 pb-80">

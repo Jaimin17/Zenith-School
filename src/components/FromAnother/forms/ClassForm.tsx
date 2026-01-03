@@ -15,9 +15,9 @@ import {
   updateClass,
   updateSubject,
 } from "@/lib/actions";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 const ClassForm = ({
@@ -39,10 +39,11 @@ const ClassForm = ({
     resolver: zodResolver(classSchema),
   });
 
-  // AFTER REACT 19 IT'LL BE USEACTIONSTATE
-
-  const [state, formAction] = useFormState(
-    type === "create" ? createClass : updateClass,
+  const [state, formAction] = useActionState(
+    async (prevState: any, formData: FormData) => {
+      const data = Object.fromEntries(formData);
+      return type === "create" ? await createClass(data) : await updateClass(data);
+    },
     {
       success: false,
       error: false,
@@ -51,7 +52,11 @@ const ClassForm = ({
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
-    formAction(data);
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value as string);
+    });
+    formAction(formData);
   });
 
   const router = useRouter();

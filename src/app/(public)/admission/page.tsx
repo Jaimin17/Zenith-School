@@ -16,7 +16,7 @@ interface DummyData {
   image: string;
 }
 
-export default function AdmissionPage(): JSX.Element {
+export default function AdmissionPage() {
   const bannerData = BANNER_DATA["admission"];
   const [openIndex, setOpenIndex] = useState<number>(0);
 

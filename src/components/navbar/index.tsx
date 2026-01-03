@@ -161,7 +161,6 @@ const Navbar: React.FC = () => {
                 "/overview/why-zenith-school",
               ]}
               open={openIndex === 0}
-              anchorEl={anchorEl}
               onOpen={(event) => handleOpen(0, event)}
               onClose={handleClose}
             />
@@ -181,7 +180,6 @@ const Navbar: React.FC = () => {
                 "/about/awards",
               ]}
               open={openIndex === 1}
-              anchorEl={anchorEl}
               onOpen={(event) => handleOpen(1, event)}
               onClose={handleClose}
             />
@@ -199,7 +197,6 @@ const Navbar: React.FC = () => {
                 "/academics/activities-beyond-academics",
               ]}
               open={openIndex === 2}
-              anchorEl={anchorEl}
               onOpen={(event) => handleOpen(2, event)}
               onClose={handleClose}
             />
@@ -214,7 +211,6 @@ const Navbar: React.FC = () => {
               items={["Photo Gallery", "Event Gallery"]}
               links={["/gallery/photos", "/gallery/events"]}
               open={openIndex === 3}
-              anchorEl={anchorEl}
               onOpen={(event) => handleOpen(3, event)}
               onClose={handleClose}
             />

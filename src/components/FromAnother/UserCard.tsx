@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Box, Typography, Chip } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 
-type UserStat = {
+export type UserStat = {
   name: "admin" | "teacher" | "student" | "parent";
   count: number;
 };

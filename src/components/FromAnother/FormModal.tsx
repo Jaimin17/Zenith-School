@@ -11,8 +11,8 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useFormState } from "react-dom";
-import { toast } from "react-toastify";
+import { useActionState } from "react";
+import { toast } from "sonner";
 import { FormContainerProps } from "./FormContainer";
 
 const deleteActionMap = {
@@ -59,7 +59,7 @@ const forms: {
     type: "create" | "update",
     data?: any,
     relatedData?: any
-  ) => JSX.Element;
+  ) => React.ReactElement;
 } = {
   subject: (setOpen, type, data, relatedData) => (
     <SubjectForm
@@ -122,10 +122,15 @@ const FormModal = ({
   const [open, setOpen] = useState(false);
 
   const Form = () => {
-    const [state, formAction] = useFormState(deleteActionMap[table], {
-      success: false,
-      error: false,
-    });
+    const [state, formAction] = useActionState(
+      async (prevState: any, formData: FormData) => {
+        return await deleteActionMap[table](formData);
+      },
+      {
+        success: false,
+        error: false,
+      }
+    );
 
     const router = useRouter();
 

@@ -18,7 +18,7 @@ const ActivityEventGallery: React.FC = () => {
           subtitleVariant="body1"
         />
 
-        <DynamicGallery data={EventsData} />
+        <DynamicGallery data={EventsData.map(event => event.img)} />
       </Container>
     </>
   );

@@ -3,12 +3,7 @@ import { Box, Typography } from "@mui/material";
 import EventCalendar from "./EventCalendar";
 import EventList from "./EventList";
 
-const EventCalendarContainer = async ({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | undefined };
-}) => {
-  const { date } = searchParams;
+const EventCalendarContainer = () => {
 
   return (
     <Box

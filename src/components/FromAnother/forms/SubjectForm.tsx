@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import { subjectSchema, SubjectSchema } from "@/lib/formValidationSchemas";
 import { createSubject, updateSubject } from "@/lib/actions";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 const SubjectForm = ({
@@ -31,8 +31,11 @@ const SubjectForm = ({
 
   // AFTER REACT 19 IT'LL BE USEACTIONSTATE
 
-  const [state, formAction] = useFormState(
-    type === "create" ? createSubject : updateSubject,
+  const [state, formAction] = useActionState(
+    async (prevState: any, formData: FormData) => {
+      const data = Object.fromEntries(formData);
+      return type === "create" ? await createSubject(data) : await updateSubject(data);
+    },
     {
       success: false,
       error: false,
@@ -41,7 +44,11 @@ const SubjectForm = ({
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
-    formAction(data);
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value as string);
+    });
+    formAction(formData);
   });
 
   const router = useRouter();

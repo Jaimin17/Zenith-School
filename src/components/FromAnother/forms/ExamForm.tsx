@@ -15,9 +15,9 @@ import {
   updateExam,
   updateSubject,
 } from "@/lib/actions";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 const ExamForm = ({
@@ -41,8 +41,11 @@ const ExamForm = ({
 
   // AFTER REACT 19 IT'LL BE USEACTIONSTATE
 
-  const [state, formAction] = useFormState(
-    type === "create" ? createExam : updateExam,
+  const [state, formAction] = useActionState(
+    async (prevState: any, formData: FormData) => {
+      const data = Object.fromEntries(formData);
+      return type === "create" ? await createExam(data) : await updateExam(data);
+    },
     {
       success: false,
       error: false,
@@ -51,7 +54,11 @@ const ExamForm = ({
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
-    formAction(data);
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value as string);
+    });
+    formAction(formData);
   });
 
   const router = useRouter();

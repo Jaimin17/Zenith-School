@@ -1,3 +1,4 @@
+import React from "react";
 import Banner from "@/components/Banner";
 import { HoverEffect } from "@/components/ui/career/card-hover-effect";
 import { CareersForm } from "@/components/ui/careers-form";
@@ -12,7 +13,7 @@ interface JobItem {
   applyLink: string;
 }
 
-export default function CareersPage(): JSX.Element {
+export default function CareersPage() {
   const bannerData = BANNER_DATA["careers"];
 
   const jobItems: JobItem[] = [

@@ -25,12 +25,12 @@ const EventList = ({ dateParam }: { dateParam: string | undefined }) => {
         //   { method: "GET", cache: "no-store" }
         // );
 
-        const res = { ok: false }; // temporary dummy
+        // const res = { ok: false }; // temporary dummy
 
-        if (res.ok) {
-          const data = await res.json();
-          setEvents(data);
-        } else {
+        // if (res.ok) {
+        //   const data = await res.json();
+        //   setEvents(data);
+        // } else {
           // DUMMY DATA
           setEvents([
             {
@@ -46,7 +46,7 @@ const EventList = ({ dateParam }: { dateParam: string | undefined }) => {
               startTime: new Date().setHours(13, 0, 0, 0).toString(),
             },
           ]);
-        }
+        // }
       } catch (error) {
         console.error("Events Load Error:", error);
       }

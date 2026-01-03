@@ -3,7 +3,7 @@
 import Banner from "@/components/Banner";
 import DynamicGallery from "@/components/ui/dynamic-gallery";
 import { BANNER_DATA, SPORTS_DATA } from "@/lib/data";
-import { GALLERY_DATA } from "../gallery/photos/page";
+import { GALLERY_DATA } from "@/lib/data";
 import { Box } from "@mui/material";
 import { Fragment } from "react";
 import InfiniteCarousel from "@/components/ui/InfiniteCarousel";
@@ -16,7 +16,7 @@ interface Sport {
   link?: string;
 }
 
-export default function SportsPage(): JSX.Element {
+export default function SportsPage() {
   const bannerData = BANNER_DATA["sports"];
 
   return (

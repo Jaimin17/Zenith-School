@@ -7,7 +7,7 @@ import SchoolStatistics from "@/components/statistics/SchoolStatistics";
 import { CardCarousel } from "@/components/alumni/CardCarousel";
 import AboutUs from "@/components/about/AboutUs";
 
-export default function WhyZenithSchoolPage(): JSX.Element {
+export default function WhyZenithSchoolPage() {
   const bannerData = BANNER_DATA["why-zenith-school"];
 
   return (

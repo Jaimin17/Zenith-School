@@ -9,18 +9,24 @@ interface EventProps {
   }>;
 }
 
-interface EventData {
-  id: string;
-  [key: string]: any;
-}
-
-async function Event(props: EventProps): Promise<JSX.Element> {
+async function Event(props: EventProps) {
   const bannerData = BANNER_DATA["events-gallery"];
   const { id } = await props.params;
   
-  const data: EventData | undefined = SINGLE_EVENTS_DETAILS.find(
-    (item: EventData) => item.id === id
+  const data = SINGLE_EVENTS_DETAILS.find(
+    (item) => item.id === Number(id)
   );
+
+  if (!data) {
+    return (
+      <>
+        <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+        <div className="container py-120">
+          <h2>Event not found</h2>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

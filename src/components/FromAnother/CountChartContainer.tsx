@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Box, Typography } from "@mui/material";
 import CountChart from "./CountChart";
 
-type StudentCount = {
+export type StudentCount = {
   sex: "MALE" | "FEMALE";
   count: number;
 };

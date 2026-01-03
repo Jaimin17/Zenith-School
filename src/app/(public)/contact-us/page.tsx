@@ -4,7 +4,7 @@ import Banner from "@/components/Banner";
 import ContactUsContainer from "@/components/ContactUs/ContactUsContainer";
 import { BANNER_DATA } from "@/lib/data";
 
-export default function ContactUsPage(): JSX.Element {
+export default function ContactUsPage() {
   const bannerData = BANNER_DATA["contact-us"];
 
   return (

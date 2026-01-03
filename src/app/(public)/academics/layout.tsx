@@ -6,7 +6,7 @@ interface AcademicsLayoutProps {
   children: ReactNode;
 }
 
-export default function AcademicsLayout({ children }: AcademicsLayoutProps): JSX.Element {
+export default function AcademicsLayout({ children }: AcademicsLayoutProps) {
   return (
     <Box sx={{}}>
       <Banner title={"Academics"} />

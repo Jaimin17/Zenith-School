@@ -13,9 +13,9 @@ interface DashboardParentComponentProps {
 }
 
 const DashboardParentComponent: React.FC<DashboardParentComponentProps> = ({ profile }) => {
-  const { user, userRole } = useAuth();
+  const { user, role } = useAuth();
 
-  console.log("auth user:", user, userRole);
+  console.log("auth user:", user, role);
   console.log("profile:", profile);
 
   return (

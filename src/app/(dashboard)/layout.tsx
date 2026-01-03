@@ -9,7 +9,7 @@ interface DashboardLayoutProps {
     children: ReactNode;
 }
 
-export default function DashboardLayout({ children }: DashboardLayoutProps): JSX.Element {
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
     return (
         <AuthGuard>
             <div className="h-screen flex">

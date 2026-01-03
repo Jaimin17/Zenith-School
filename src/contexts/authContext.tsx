@@ -22,11 +22,22 @@ import { LOGED_IN_USER_DATA, USER_ROLES } from '@/constants/appConstants';
 import { GET_PROFILE_DETAILS, LOGIN_API, LOGOUT_API } from '../api/apiParams/auth';
 import { clearAllAuthData, getAccessToken } from '@/utils/authHelpers'
 
-export const AuthContext = createContext(undefined)
+interface AuthContextType {
+  user: any;
+  role: string | null;
+  loading: boolean;
+  login: (username: string, password: string) => Promise<any>;
+  logout: () => Promise<void>;
+  isAuthenticated: boolean;
+  fetchUser: () => Promise<any>;
+  setUser: (user: any) => void;
+}
+
+export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [role, setRole] = useState(null)
+  const [user, setUser] = useState<any>(null)
+  const [role, setRole] = useState<string | null>(null)
 
   const [loading, setLoading] = useState(true)
   const router = useRouter()
@@ -254,5 +265,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 }
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };

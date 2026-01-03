@@ -32,10 +32,9 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
       //   cache: "no-store",
       // });
 
-      const res = {}
+      // const res = {}
 
-
-      if (res.ok) return res.json();
+      // if (res.ok) return res.json();
       return fallback;
     } catch {
       return fallback;

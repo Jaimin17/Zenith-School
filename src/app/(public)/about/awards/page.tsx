@@ -18,7 +18,7 @@ interface Award {
   link?: string;
 }
 
-export default function AwardsPage(): JSX.Element {
+export default function AwardsPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const bannerData = BANNER_DATA["awards"];

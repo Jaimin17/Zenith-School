@@ -22,7 +22,9 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
       const $ = (await import("jquery")).default;
       window.$ = window.jQuery = $;
 
+      // @ts-ignore - magnific-popup doesn't have types
       await import("magnific-popup");
+      // @ts-ignore - CSS import
       await import("magnific-popup/dist/magnific-popup.css");
 
       $(".popup-img").magnificPopup({

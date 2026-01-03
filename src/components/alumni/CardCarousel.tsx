@@ -3,6 +3,13 @@
 import Image from "next/image";
 import { useEffect } from "react";
 
+declare global {
+  interface Window {
+    $: any;
+    jQuery: any;
+  }
+}
+
 interface TestimonialItem {
   testimonial: string;
   image: string;
@@ -16,8 +23,17 @@ interface CardCarouselProps {
 
 export const CardCarousel: React.FC<CardCarouselProps> = ({ data }) => {
   useEffect(() => {
-    // Initialize Owl Carousel after component mounts
-    $(".testimonial-slider").owlCarousel({
+    async function initCarousel() {
+      if (typeof window === "undefined") return;
+      
+      const $ = (await import("jquery")).default;
+      window.$ = window.jQuery = $;
+      
+      // @ts-ignore - owl.carousel doesn't have types
+      await import("owl.carousel");
+      
+      // @ts-ignore - owlCarousel is added by owl.carousel plugin
+      ($(".testimonial-slider") as any).owlCarousel({
       loop: true,
       margin: 24,
       nav: false,
@@ -30,6 +46,9 @@ export const CardCarousel: React.FC<CardCarouselProps> = ({ data }) => {
         1000: { items: 3 }
       }
     });
+    }
+    
+    initCarousel();
   }, []);
 
   return (

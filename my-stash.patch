@@ -1,0 +1,2348 @@
+diff --git a/package-lock.json b/package-lock.json
+index b34f022..e2580af 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -10,6 +10,7 @@
+       "dependencies": {
+         "@emotion/react": "^11.14.0",
+         "@emotion/styled": "^11.14.1",
++        "@hookform/resolvers": "^5.2.2",
+         "@mui/icons-material": "^7.3.1",
+         "@mui/material": "^7.3.1",
+         "@number-flow/react": "^0.5.10",
+@@ -25,21 +26,26 @@
+         "moment": "^2.30.1",
+         "motion": "^12.23.12",
+         "next": "15.4.6",
++        "next-cloudinary": "^6.17.5",
+         "owl.carousel": "^2.3.4",
+         "react": "19.1.0",
+         "react-big-calendar": "^1.19.4",
+         "react-calendar": "^6.0.0",
+         "react-dom": "19.1.0",
++        "react-hook-form": "^7.68.0",
+         "react-leaflet": "^5.0.0",
+         "react-router-dom": "^7.8.1",
+         "recharts": "^3.5.1",
+         "sonner": "^2.0.7",
+-        "tailwind-merge": "^3.3.1"
++        "tailwind-merge": "^3.3.1",
++        "yup": "^1.7.1"
+       },
+       "devDependencies": {
++        "@types/node": "25.0.1",
+         "autoprefixer": "^10.4.21",
+         "postcss": "^8.5.6",
+-        "tailwindcss": "^4.1.12"
++        "tailwindcss": "^4.1.12",
++        "typescript": "5.9.3"
+       }
+     },
+     "node_modules/@alloc/quick-lru": {
+@@ -193,6 +199,54 @@
+         "node": ">=6.9.0"
+       }
+     },
++    "node_modules/@cloudinary-util/types": {
++      "version": "1.5.10",
++      "resolved": "https://registry.npmjs.org/@cloudinary-util/types/-/types-1.5.10.tgz",
++      "integrity": "sha512-n5lrm7SdAXhgWEbkSJKHZGnaoO9G/g4WYS6HYnq/k4nLj79sYfQZOoKjyR8hF2iyLRdLkT+qlk68RNFFv5tKew==",
++      "license": "MIT"
++    },
++    "node_modules/@cloudinary-util/url-loader": {
++      "version": "5.10.4",
++      "resolved": "https://registry.npmjs.org/@cloudinary-util/url-loader/-/url-loader-5.10.4.tgz",
++      "integrity": "sha512-gHkdvOaV+rlcwuIT7Vqd0ts/H5bsH4+bwFten/gIZ8oRjzdTBvgIY3R6F8bbJt0pFIEfpFEQLe4rPkl0NNqEWg==",
++      "license": "MIT",
++      "dependencies": {
++        "@cloudinary-util/types": "1.5.10",
++        "@cloudinary-util/util": "3.3.2",
++        "@cloudinary/url-gen": "1.15.0",
++        "zod": "^3.22.4"
++      }
++    },
++    "node_modules/@cloudinary-util/url-loader/node_modules/@cloudinary-util/util": {
++      "version": "3.3.2",
++      "resolved": "https://registry.npmjs.org/@cloudinary-util/util/-/util-3.3.2.tgz",
++      "integrity": "sha512-Cc0iFxzfl7fcOXuznpeZFGYC885Of/vDgccRDnhTe/8Rf8YKv2PjLtezyo0VgmdA/CpeZy29NCXAsf6liokbwg==",
++      "license": "MIT"
++    },
++    "node_modules/@cloudinary-util/util": {
++      "version": "4.0.0",
++      "resolved": "https://registry.npmjs.org/@cloudinary-util/util/-/util-4.0.0.tgz",
++      "integrity": "sha512-S4xcou/3A7l5o+bcKlw2VHBNgwups7/0lbVDT/cO5YmtrcEYXgj6LGmwnjvpTm/x571VPVN8x5jWdT3rLZiKJQ==",
++      "license": "MIT"
++    },
++    "node_modules/@cloudinary/transformation-builder-sdk": {
++      "version": "1.21.2",
++      "resolved": "https://registry.npmjs.org/@cloudinary/transformation-builder-sdk/-/transformation-builder-sdk-1.21.2.tgz",
++      "integrity": "sha512-ehOgKUaP+Nvuf7B0TosmB8iilL0kdiVjzjl8tIK06cjvsNnwSJI3xP9nEJmKkvqNxwwFwvYXT+mxUTqnSv9JOA==",
++      "license": "MIT",
++      "dependencies": {
++        "@cloudinary/url-gen": "^1.7.0"
++      }
++    },
++    "node_modules/@cloudinary/url-gen": {
++      "version": "1.15.0",
++      "resolved": "https://registry.npmjs.org/@cloudinary/url-gen/-/url-gen-1.15.0.tgz",
++      "integrity": "sha512-bjU67eZxLUgoRy/Plli4TQio7q6P31OYqnEgXxeN9TKXrzr6h0DeEdIUhKI9gy3HkEBWXWWJIPh7j7gkOJPnyA==",
++      "license": "MIT",
++      "dependencies": {
++        "@cloudinary/transformation-builder-sdk": "^1.10.0"
++      }
++    },
+     "node_modules/@emnapi/runtime": {
+       "version": "1.4.5",
+       "resolved": "https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.4.5.tgz",
+@@ -349,6 +403,18 @@
+       "integrity": "sha512-snKqtPW01tN0ui7yu9rGv69aJXr/a/Ywvl11sUjNtEcRc+ng/mQriFL0wLXMef74iHa/EkftbDzU9F8iFbH+zg==",
+       "license": "MIT"
+     },
++    "node_modules/@hookform/resolvers": {
++      "version": "5.2.2",
++      "resolved": "https://registry.npmjs.org/@hookform/resolvers/-/resolvers-5.2.2.tgz",
++      "integrity": "sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==",
++      "license": "MIT",
++      "dependencies": {
++        "@standard-schema/utils": "^0.3.0"
++      },
++      "peerDependencies": {
++        "react-hook-form": "^7.55.0"
++      }
++    },
+     "node_modules/@img/sharp-darwin-arm64": {
+       "version": "0.34.3",
+       "resolved": "https://registry.npmjs.org/@img/sharp-darwin-arm64/-/sharp-darwin-arm64-0.34.3.tgz",
+@@ -1724,6 +1790,16 @@
+       "integrity": "sha512-Ps3T8E8dZDam6fUyNiMkekK3XUsaUEik+idO9/YjPtfj2qruF8tFBXS7XhtE4iIXBLxhmLjP3SXpLhVf21I9Lw==",
+       "license": "MIT"
+     },
++    "node_modules/@types/node": {
++      "version": "25.0.1",
++      "resolved": "https://registry.npmjs.org/@types/node/-/node-25.0.1.tgz",
++      "integrity": "sha512-czWPzKIAXucn9PtsttxmumiQ9N0ok9FrBwgRWrwmVLlp86BrMExzvXRLFYRJ+Ex3g6yqj+KuaxfX1JTgV2lpfg==",
++      "dev": true,
++      "license": "MIT",
++      "dependencies": {
++        "undici-types": "~7.16.0"
++      }
++    },
+     "node_modules/@types/parse-json": {
+       "version": "4.0.2",
+       "resolved": "https://registry.npmjs.org/@types/parse-json/-/parse-json-4.0.2.tgz",
+@@ -3229,6 +3305,21 @@
+         }
+       }
+     },
++    "node_modules/next-cloudinary": {
++      "version": "6.17.5",
++      "resolved": "https://registry.npmjs.org/next-cloudinary/-/next-cloudinary-6.17.5.tgz",
++      "integrity": "sha512-YIyIWw5Ds30f4rnED+E9ssLUd94FOPTtbkO2KUvOcw9z4irOEIpb1goxMxbn2EUBnIGQOd6uUf1gFizjME7pMg==",
++      "license": "MIT",
++      "dependencies": {
++        "@cloudinary-util/types": "1.5.10",
++        "@cloudinary-util/url-loader": "5.10.4",
++        "@cloudinary-util/util": "4.0.0"
++      },
++      "peerDependencies": {
++        "next": "^12 || ^13 || ^14 || >=15.0.0-rc || ^15",
++        "react": "^17 || ^18 || >=19.0.0-beta || ^19"
++      }
++    },
+     "node_modules/next/node_modules/postcss": {
+       "version": "8.4.31",
+       "resolved": "https://registry.npmjs.org/postcss/-/postcss-8.4.31.tgz",
+@@ -3404,6 +3495,12 @@
+       "integrity": "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==",
+       "license": "MIT"
+     },
++    "node_modules/property-expr": {
++      "version": "2.0.6",
++      "resolved": "https://registry.npmjs.org/property-expr/-/property-expr-2.0.6.tgz",
++      "integrity": "sha512-SVtmxhRE/CGkn3eZY1T6pC8Nln6Fr/lu1mKSgRud0eC73whjGfoAogbn78LkD8aFL0zz3bAFerKSnOl7NlErBA==",
++      "license": "MIT"
++    },
+     "node_modules/proxy-from-env": {
+       "version": "1.1.0",
+       "resolved": "https://registry.npmjs.org/proxy-from-env/-/proxy-from-env-1.1.0.tgz",
+@@ -3493,6 +3590,22 @@
+         "react": "^19.1.0"
+       }
+     },
++    "node_modules/react-hook-form": {
++      "version": "7.68.0",
++      "resolved": "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.68.0.tgz",
++      "integrity": "sha512-oNN3fjrZ/Xo40SWlHf1yCjlMK417JxoSJVUXQjGdvdRCU07NTFei1i1f8ApUAts+IVh14e4EdakeLEA+BEAs/Q==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=18.0.0"
++      },
++      "funding": {
++        "type": "opencollective",
++        "url": "https://opencollective.com/react-hook-form"
++      },
++      "peerDependencies": {
++        "react": "^16.8.0 || ^17 || ^18 || ^19"
++      }
++    },
+     "node_modules/react-is": {
+       "version": "19.1.1",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-19.1.1.tgz",
+@@ -3885,18 +3998,56 @@
+         "node": ">=18"
+       }
+     },
++    "node_modules/tiny-case": {
++      "version": "1.0.3",
++      "resolved": "https://registry.npmjs.org/tiny-case/-/tiny-case-1.0.3.tgz",
++      "integrity": "sha512-Eet/eeMhkO6TX8mnUteS9zgPbUMQa4I6Kkp5ORiBD5476/m+PIRiumP5tmh5ioJpH7k51Kehawy2UDfsnxxY8Q==",
++      "license": "MIT"
++    },
+     "node_modules/tiny-invariant": {
+       "version": "1.3.3",
+       "resolved": "https://registry.npmjs.org/tiny-invariant/-/tiny-invariant-1.3.3.tgz",
+       "integrity": "sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==",
+       "license": "MIT"
+     },
++    "node_modules/toposort": {
++      "version": "2.0.2",
++      "resolved": "https://registry.npmjs.org/toposort/-/toposort-2.0.2.tgz",
++      "integrity": "sha512-0a5EOkAUp8D4moMi2W8ZF8jcga7BgZd91O/yabJCFY8az+XSzeGyTKs0Aoo897iV1Nj6guFq8orWDS96z91oGg==",
++      "license": "MIT"
++    },
+     "node_modules/tslib": {
+       "version": "2.8.1",
+       "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz",
+       "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==",
+       "license": "0BSD"
+     },
++    "node_modules/type-fest": {
++      "version": "2.19.0",
++      "resolved": "https://registry.npmjs.org/type-fest/-/type-fest-2.19.0.tgz",
++      "integrity": "sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==",
++      "license": "(MIT OR CC0-1.0)",
++      "engines": {
++        "node": ">=12.20"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/sindresorhus"
++      }
++    },
++    "node_modules/typescript": {
++      "version": "5.9.3",
++      "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz",
++      "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==",
++      "dev": true,
++      "license": "Apache-2.0",
++      "bin": {
++        "tsc": "bin/tsc",
++        "tsserver": "bin/tsserver"
++      },
++      "engines": {
++        "node": ">=14.17"
++      }
++    },
+     "node_modules/uncontrollable": {
+       "version": "7.2.1",
+       "resolved": "https://registry.npmjs.org/uncontrollable/-/uncontrollable-7.2.1.tgz",
+@@ -3912,6 +4063,13 @@
+         "react": ">=15.0.0"
+       }
+     },
++    "node_modules/undici-types": {
++      "version": "7.16.0",
++      "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-7.16.0.tgz",
++      "integrity": "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==",
++      "dev": true,
++      "license": "MIT"
++    },
+     "node_modules/update-browserslist-db": {
+       "version": "1.1.3",
+       "resolved": "https://registry.npmjs.org/update-browserslist-db/-/update-browserslist-db-1.1.3.tgz",
+@@ -4000,6 +4158,27 @@
+       "engines": {
+         "node": ">= 6"
+       }
++    },
++    "node_modules/yup": {
++      "version": "1.7.1",
++      "resolved": "https://registry.npmjs.org/yup/-/yup-1.7.1.tgz",
++      "integrity": "sha512-GKHFX2nXul2/4Dtfxhozv701jLQHdf6J34YDh2cEkpqoo8le5Mg6/LrdseVLrFarmFygZTlfIhHx/QKfb/QWXw==",
++      "license": "MIT",
++      "dependencies": {
++        "property-expr": "^2.0.5",
++        "tiny-case": "^1.0.3",
++        "toposort": "^2.0.2",
++        "type-fest": "^2.19.0"
++      }
++    },
++    "node_modules/zod": {
++      "version": "3.25.76",
++      "resolved": "https://registry.npmjs.org/zod/-/zod-3.25.76.tgz",
++      "integrity": "sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==",
++      "license": "MIT",
++      "funding": {
++        "url": "https://github.com/sponsors/colinhacks"
++      }
+     }
+   }
+ }
+diff --git a/src/app/(dashboard)/admin/page.js b/src/app/(dashboard)/admin/page.js
+deleted file mode 100644
+index 3507b70..0000000
+--- a/src/app/(dashboard)/admin/page.js
++++ /dev/null
+@@ -1,68 +0,0 @@
+-'use client'
+-
+-import { useAuth } from "@/contexts/authContext"
+-
+-import Announcements from "@/components/FromAnother/Announcements";
+-import AttendanceChartContainer from "@/components/FromAnother/AttendanceChartContainer";
+-import CountChartContainer from "@/components/FromAnother/CountChartContainer";
+-import EventCalendarContainer from "@/components/FromAnother/EventCalendarContainer";
+-import FinanceChart from "@/components/FromAnother/FinanceChart";
+-import UserCard from "@/components/FromAnother/UserCard";
+-import { Box, Typography, Chip } from "@mui/material";
+-
+-const AdminPage = ({
+-    searchParams,
+-}) => {
+-    const { user } = useAuth()
+-    console.log('User in admin Page', user)
+-
+-    const userStats = [
+-        { name: "admin", count: 2 },
+-        { name: "teacher", count: 213 },
+-        { name: "student", count: 49 },
+-        { name: "parent", count: 234 },
+-    ];
+-
+-    const studentStats = [
+-        { sex: "MALE", count: 120 },
+-        { sex: "FEMALE", count: 95 },
+-    ];
+-
+-    return (
+-        <><div className="p-4 flex gap-4 flex-col md:flex-row">
+-            {/* LEFT */}
+-            <div className="w-full lg:w-2/3 flex flex-col gap-8">
+-                {/* USER CARDS */}
+-                <Box display="flex" gap={2} flexWrap="wrap">
+-                    {userStats.map(stat => (
+-                        <UserCard key={stat.name} stat={stat} />
+-                    ))}
+-                </Box>
+-                {/* MIDDLE CHARTS */}
+-                <div className="flex gap-4 flex-col lg:flex-row">
+-                    {/* COUNT CHART */}
+-                    <div className="w-full lg:w-1/3 h-[450px]">
+-                        <CountChartContainer data={studentStats} />
+-                    </div>
+-                    {/* ATTENDANCE CHART */}
+-                    <div className="w-full lg:w-2/3 h-[450px]">
+-                        <AttendanceChartContainer />
+-                    </div>
+-                </div>
+-                {/* BOTTOM CHART */}
+-                <div className="w-full h-[500px]">
+-                    <FinanceChart />
+-                </div>
+-            </div>
+-            {/* RIGHT */}
+-            <div className="w-full lg:w-1/3 flex flex-col gap-8">
+-                <EventCalendarContainer searchParams={searchParams} />
+-                <Announcements />
+-            </div>
+-        </div>
+-        </>
+-    )
+-
+-}
+-
+-export default AdminPage
+\ No newline at end of file
+diff --git a/src/app/(dashboard)/dashboard/page.js b/src/app/(dashboard)/dashboard/page.js
+deleted file mode 100644
+index b8e3487..0000000
+--- a/src/app/(dashboard)/dashboard/page.js
++++ /dev/null
+@@ -1,13 +0,0 @@
+-import DashboardParentComponent from "@/components/dashboard/DashboardParentComponent";
+-import { api } from "@/api/api";
+-import { GET_PROFILE_DETAILS } from "@/api/apiParams/auth";
+-
+-export default async function DashboardPage() {
+-    const profile = await api({
+-        endpoint: GET_PROFILE_DETAILS,
+-        payloadData: {},
+-        isServer: true, // optional if you detect automatically
+-    });
+-
+-    return <DashboardParentComponent profile={profile?.data} />;
+-}
+diff --git a/src/app/(dashboard)/layout.jsx b/src/app/(dashboard)/layout.jsx
+deleted file mode 100644
+index 106fc03..0000000
+--- a/src/app/(dashboard)/layout.jsx
++++ /dev/null
+@@ -1,36 +0,0 @@
+-// import Menu from "@/components/Menu";
+-// import Navbar from "@/components/Navbar";
+-import Menu from "@/components/Menu";
+-import Sidebar from "@/components/Sidebar";
+-import AuthGuard from "@/hocs/AuthGuard";
+-import Image from "next/image";
+-import Link from "next/link";
+-
+-export default function DashboardLayout({
+-    children,
+-}) {
+-    return (
+-        <AuthGuard>
+-
+-            <div className="h-screen flex">
+-                {/* LEFT */}
+-                <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4">
+-                    <Link
+-                        href="/"
+-                        className="flex items-center justify-center lg:justify-start gap-2"
+-                    >
+-                        <Image src="/logo.png" alt="logo" width={32} height={32} />
+-                        <span className="hidden lg:block font-bold">SchooLama</span>
+-                    </Link>
+-                    <Menu />
+-                </div>
+-                {/* RIGHT */}
+-                <div className="w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] bg-[#F7F8FA] overflow-scroll flex flex-col">
+-                    <Sidebar />
+-                    {children}
+-                </div>
+-            </div>
+-        </AuthGuard>
+-
+-    );
+-}
+diff --git a/src/app/(dashboard)/parent/page.js b/src/app/(dashboard)/parent/page.js
+deleted file mode 100644
+index a1281c1..0000000
+--- a/src/app/(dashboard)/parent/page.js
++++ /dev/null
+@@ -1,70 +0,0 @@
+-'use client';
+-
+-import Announcements from "@/components/FromAnother/Announcements";
+-import BigCalendarContainer from "@/components/FromAnother/BigCalendarContainer";
+-import { useAuth } from "@/contexts/authContext";
+-import { useEffect, useState } from "react";
+-
+-const ParentPage = () => {
+-    const { user } = useAuth();
+-    const [students, setStudents] = useState([]);
+-
+-    useEffect(() => {
+-        if (!user) return;
+-
+-        const fetchStudents = async () => {
+-            try {
+-                // Replace this with real API call
+-                // const res = await fetch(`/api/students?parentId=${user.id}`, { cache: "no-store" });
+-
+-                const res = {
+-                    ok: true, json: async () => [
+-                        { id: "1", name: "John", surname: "Doe", classId: "class-1" },
+-                        { id: "2", name: "Jane", surname: "Doe", classId: "class-2" }
+-                    ]
+-                };
+-
+-                if (res.ok) {
+-                    const data = await res.json();
+-                    setStudents(data);
+-                } else {
+-                    setStudents([]);
+-                }
+-            } catch (error) {
+-                console.error(error);
+-                setStudents([]);
+-            }
+-        };
+-
+-        fetchStudents();
+-    }, [user]);
+-
+-    if (!user) return <div>Loading...</div>;
+-
+-    return (
+-        <div className="flex-1 p-4 flex gap-4 flex-col xl:flex-row">
+-            {/* LEFT */}
+-            <div className="flex-1 flex flex-col gap-4">
+-                {students.map((student) => (
+-                    <div className="w-full xl:w-2/3" key={student.id}>
+-                        <div className="h-full bg-white p-4 rounded-md">
+-                            <h1 className="text-xl font-semibold">
+-                                Schedule ({student.name} {student.surname})
+-                            </h1>
+-                            {student.classId && (
+-                                <BigCalendarContainer type="classId" id={student.classId} />
+-                            )}
+-                        </div>
+-                    </div>
+-                ))}
+-            </div>
+-
+-            {/* RIGHT */}
+-            <div className="w-full xl:w-1/3 flex flex-col gap-8">
+-                <Announcements />
+-            </div>
+-        </div>
+-    );
+-};
+-
+-export default ParentPage;
+diff --git a/src/app/(dashboard)/student/page.js b/src/app/(dashboard)/student/page.js
+deleted file mode 100644
+index ca76426..0000000
+--- a/src/app/(dashboard)/student/page.js
++++ /dev/null
+@@ -1,59 +0,0 @@
+-'use client';
+-
+-import Announcements from "@/components/FromAnother/Announcements";
+-import BigCalendarContainer from "@/components/FromAnother/BigCalendarContainer";
+-import EventCalendar from "@/components/FromAnother/EventCalendar";
+-import { useAuth } from "@/contexts/authContext";
+-import { useEffect, useState } from "react";
+-
+-const StudentPage = () => {
+-    const { user } = useAuth();
+-    const [classItem, setClassItem] = useState([{ id: "", name: "" }]);
+-
+-    useEffect(() => {
+-        if (!user) return;
+-
+-        const fetchClass = async (userId) => {
+-            try {
+-                // Dummy fetch
+-                const res = null;
+-                if (res && res.ok) {
+-                    const data = await res.json();
+-                    setClassItem(data || [{ id: "dummy-class-id", name: "4A" }]);
+-                } else {
+-                    setClassItem([{ id: "dummy-class-id", name: "4A" }]);
+-                }
+-            } catch {
+-                setClassItem([{ id: "dummy-class-id", name: "4A" }]);
+-            }
+-        };
+-
+-        fetchClass(user.id);
+-    }, [user]);
+-
+-    if (!user) return <div>Loading...</div>;
+-
+-    return (
+-        <div className="p-4 flex gap-4 flex-col xl:flex-row">
+-            {/* LEFT */}
+-            <div className="w-full xl:w-2/3">
+-                <div className="h-full bg-white p-4 rounded-md">
+-                    <h1 className="text-xl font-semibold">
+-                        Schedule ({classItem[0].name})
+-                    </h1>
+-                    {classItem[0].id && (
+-                        <BigCalendarContainer type="classId" id={classItem[0].id} />
+-                    )}
+-                </div>
+-            </div>
+-
+-            {/* RIGHT */}
+-            <div className="w-full xl:w-1/3 flex flex-col gap-8">
+-                <EventCalendar />
+-                <Announcements />
+-            </div>
+-        </div>
+-    );
+-};
+-
+-export default StudentPage;
+diff --git a/src/app/(dashboard)/teacher/page.js b/src/app/(dashboard)/teacher/page.js
+deleted file mode 100644
+index 5015524..0000000
+--- a/src/app/(dashboard)/teacher/page.js
++++ /dev/null
+@@ -1,28 +0,0 @@
+-// import Announcements from "@/components/Announcements";
+-// import BigCalendarContainer from "@/components/BigCalendarContainer";
+-// import { auth } from "@clerk/nextjs/server";
+-
+-import Announcements from "@/components/FromAnother/Announcements";
+-import BigCalendarContainer from "@/components/FromAnother/BigCalendarContainer";
+-
+-const TeacherPage = () => {
+-    // const { userId } = auth();
+-    const userId = '5dd780f6-cee9-42d9-a0f1-a9328091d302'
+-    return (
+-        <div className="flex-1 p-4 flex gap-4 flex-col xl:flex-row">
+-            {/* LEFT */}
+-            <div className="w-full xl:w-2/3">
+-                <div className="h-full bg-white p-4 rounded-md">
+-                    <h1 className="text-xl font-semibold">Schedule</h1>
+-                    <BigCalendarContainer type="teacherId" id={userId} />
+-                </div>
+-            </div>
+-            {/* RIGHT */}
+-            <div className="w-full xl:w-1/3 flex flex-col gap-8">
+-                <Announcements />
+-            </div>
+-        </div>
+-    );
+-};
+-
+-export default TeacherPage;
+diff --git a/src/app/(public)/about/awards/page.js b/src/app/(public)/about/awards/page.js
+deleted file mode 100644
+index 3ab4ab7..0000000
+--- a/src/app/(public)/about/awards/page.js
++++ /dev/null
+@@ -1,98 +0,0 @@
+-"use client";
+-
+-import React from "react";
+-import {
+-  Box,
+-  Typography,
+-  useTheme,
+-  useMediaQuery,
+-  Container,
+-} from "@mui/material";
+-import { AWARDS_DATA, BANNER_DATA } from "@/lib/data";
+-import Banner from "@/components/Banner";
+-import { AnimatedHeader } from "@/components/AnimatedHeader";
+-
+-export default function AwardsPage() {
+-  const theme = useTheme();
+-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+-  const bannerData = BANNER_DATA["awards"];
+-
+-  return (
+-    <>
+-      <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-
+-      <Container sx={{ p: { xs: 2, sm: 4, } }}>
+-
+-        <Box sx={{
+-          pb: 8
+-        }}>
+-          <AnimatedHeader
+-            miniHeader="🏆 Achievements"
+-            title="Awards and"
+-            highlight="Recognition"
+-            subtitle="Celebrating achievements that inspire excellence and pride."
+-            align="center"
+-            color="#f59e0b" // optional: sets highlight + underline color (amber/orange)
+-            titleVariant="h3"
+-            subtitleVariant="body1"
+-          />
+-
+-        </Box>
+-
+-
+-        {/* Awards Grid */}
+-        <div className="row">
+-          {AWARDS_DATA.map((award, index) => (
+-            <div className="col-md-6 col-lg-3" key={index}>
+-              <div
+-                className="team-item wow fadeInUp"
+-                data-wow-delay={`${0.25 * (index + 1)}s`}
+-                style={{
+-                  display: "flex",
+-                  flexDirection: "column",
+-                  height: "100%",
+-                }}
+-              >
+-                {/* Award Image */}
+-                <div className="team-img">
+-                  <img src={award.image} alt={award.title} />
+-                </div>
+-
+-                {/* Content */}
+-                <div
+-                  className="team-content"
+-                  style={{
+-                    marginTop: "15px", // ✅ space between image and text
+-                    flex: "1",
+-                    display: "flex",
+-                    flexDirection: "column",
+-                  }}
+-                >
+-                  <div className="team-bio">
+-                    <h5 style={{ marginBottom: "8px" }}>
+-                      <a href={award.link || "#"}>{award.title}</a>
+-                    </h5>
+-
+-                    <span
+-                      style={{
+-                        display: "-webkit-box",
+-                        WebkitLineClamp: 3, // ✅ max 3 lines
+-                        WebkitBoxOrient: "vertical",
+-                        overflow: "hidden",
+-                        textOverflow: "ellipsis",
+-                        minHeight: "60px", // ✅ consistent height
+-                        maxHeight: "60px",
+-                      }}
+-                    >
+-                      {award.description}
+-                    </span>
+-                  </div>
+-                </div>
+-              </div>
+-            </div>
+-          ))}
+-        </div>
+-      </Container>
+-    </>
+-  );
+-}
+diff --git a/src/app/(public)/about/from-principal-desk/page.js b/src/app/(public)/about/from-principal-desk/page.js
+deleted file mode 100644
+index 1396248..0000000
+--- a/src/app/(public)/about/from-principal-desk/page.js
++++ /dev/null
+@@ -1,122 +0,0 @@
+-import React from "react";
+-import {
+-  Box,
+-  Typography,
+-  Container,
+-  Card,
+-  CardMedia,
+-  CardContent,
+-} from "@mui/material";
+-import { BANNER_DATA, CONTENT_WRITEN_DATA } from "@/lib/data";
+-import Banner from "@/components/Banner";
+-
+-const principalData = {
+-  image:
+-    "https://images.unsplash.com/photo-1750090669148-761d67513434?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+-  name: "Ms. Jayshree Shah",
+-  title: "Principal, Zenith School",
+-  description: CONTENT_WRITEN_DATA?.PRICIPLES_INTERVIEW,
+-};
+-
+-const bannerData = BANNER_DATA["from-principal-desk"];
+-
+-export default function FromPrincipalDeskPage() {
+-  return (
+-    <>
+-      <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
+-        <Card
+-          sx={{
+-            display: "flex",
+-            flexDirection: { xs: "column", md: "row" },
+-            p: { xs: 2, md: 4 },
+-            borderRadius: 3,
+-            boxShadow: 3,
+-            gap: { xs: 2, md: 4 },
+-          }}
+-        >
+-          {/* Image Section */}
+-          <CardMedia
+-            component="img"
+-            image={principalData.image}
+-            alt={principalData.name}
+-            sx={{
+-              width: { xs: "80%", md: 300 },
+-              height: { xs: 250, md: 350 },
+-              borderRadius: 2,
+-              objectFit: "cover",
+-              alignSelf: "center",
+-            }}
+-          />
+-
+-          {/* Content Section */}
+-          <CardContent sx={{ flex: 1 }}>
+-            {/* Accent Line */}
+-            <Box
+-              sx={{
+-                width: 60,
+-                height: 4,
+-                backgroundColor: "primary.main",
+-                borderRadius: 2,
+-                mb: 2,
+-              }}
+-            />
+-
+-            {/* Heading */}
+-            <Typography
+-              variant="h5"
+-              sx={{
+-                fontWeight: 700,
+-                mb: 2,
+-                fontFamily: "serif",
+-                color: "text.primary",
+-              }}
+-            >
+-              From the Principal’s Desk
+-            </Typography>
+-
+-            {/* Quote Text */}
+-            <Typography
+-              variant="body1"
+-              sx={{
+-                lineHeight: 1.8,
+-                textAlign: "justify",
+-                color: "text.secondary",
+-                fontSize: { xs: "0.95rem", md: "1.05rem" },
+-                fontStyle: "italic",
+-              }}
+-            >
+-              {principalData.description}
+-            </Typography>
+-
+-            {/* Signature */}
+-            <Typography
+-              variant="subtitle1"
+-              sx={{
+-                mt: 3,
+-                fontWeight: 600,
+-                color: "primary.main",
+-                fontFamily: "cursive",
+-                textAlign: "right",
+-              }}
+-            >
+-              — {principalData.name}
+-            </Typography>
+-
+-            {/* Title */}
+-            <Typography
+-              variant="subtitle2"
+-              sx={{
+-                textAlign: "right",
+-                color: "text.secondary",
+-                fontStyle: "italic",
+-              }}
+-            >
+-              {principalData.title}
+-            </Typography>
+-          </CardContent>
+-        </Card>
+-      </Container>
+-    </>
+-  );
+-}
+diff --git a/src/app/(public)/about/state-of-the-art-infrastructure/page.js b/src/app/(public)/about/state-of-the-art-infrastructure/page.js
+deleted file mode 100644
+index ecc3fa5..0000000
+--- a/src/app/(public)/about/state-of-the-art-infrastructure/page.js
++++ /dev/null
+@@ -1,168 +0,0 @@
+-import Banner from "@/components/Banner";
+-import { BANNER_DATA } from "@/lib/data";
+-import { Box, CardMedia, Container, Typography } from "@mui/material";
+-import Card from "@/components/about/card";
+-
+-export default function stateOfTheArtInfrastructurePage() {
+-  const dummyData = {
+-    image:
+-      "https://images.unsplash.com/photo-1728206348193-9b5ae74a7d32?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+-  };
+-
+-  const dummyCardData = [
+-    {
+-      title: "Modern Classrooms",
+-      description:
+-        "Our classrooms are equipped with the latest technology to facilitate interactive learning and collaboration among students.",
+-      image:
+-        "https://images.unsplash.com/photo-1633716519837-0dd338bdcc59?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+-    },
+-    {
+-      title: "Advanced Laboratories",
+-      description:
+-        "State-of-the-art laboratories provide students with hands-on experience in science and technology, fostering innovation and discovery.",
+-      image:
+-        "https://images.unsplash.com/photo-1582719299074-be127353065f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+-    },
+-    {
+-      title: "Spacious Libraries",
+-      description:
+-        "Our libraries offer a vast collection of resources and a quiet environment conducive to study and research.",
+-      image:
+-        "https://images.unsplash.com/photo-1688110395685-ce24e1949bca?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+-    },
+-    {
+-      title: "Sports Facilities",
+-      description:
+-        "Our sports facilities include a gymnasium, swimming pool, and various outdoor fields to promote physical fitness and teamwork.",
+-      image:
+-        "https://images.unsplash.com/photo-1625510884762-522d5c1c8811?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+-    },
+-  ];
+-
+-  const bannerData = BANNER_DATA["state-of-the-art-infrastructure"];
+-
+-  return (
+-    <>
+-      <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-
+-      <Container sx={{ py: 6 }}>
+-
+-        <div className="campus-tour pt-120 pb-80">
+-          <div className="container">
+-            <div className="row align-items-center">
+-
+-              {/* Left Content */}
+-              <div className="col-lg-6">
+-                <div className="content-info wow fadeInUp" data-wow-delay=".25s">
+-                  <div className="site-heading mb-3">
+-                    <span className="site-title-tagline">
+-                      <i className="far fa-book-open-reader"></i> Campus Tour
+-                    </span>
+-                    <h2 className="site-title">
+-                      Details About <span>State-of-the-Art</span> Infrastructure.
+-                    </h2>
+-                  </div>
+-
+-                  <p className="content-text">
+-                    Our state-of-the-art infrastructure is designed to provide an
+-                    optimal learning environment for our students. From modern
+-                    classrooms equipped with the latest technology to spacious
+-                    libraries and laboratories, every aspect of our campus is
+-                    tailored to enhance the educational experience.
+-                  </p>
+-
+-                  <p className="content-text mt-2">
+-                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+-                    accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+-                    quae ab illo inventore veritatis et quasi architecto beatae vitae
+-                    dicta sunt explicabo.
+-                  </p>
+-                </div>
+-              </div>
+-
+-              {/* Right Image */}
+-              <div className="col-lg-6">
+-                <div className="content-img wow fadeInRight" data-wow-delay=".25s">
+-                  <img
+-                    src={dummyData.image} // ✅ put your React image variable or static path
+-                    alt="State of the Art Infrastructure"
+-                  />
+-                </div>
+-              </div>
+-
+-            </div>
+-          </div>
+-        </div>
+-
+-
+-
+-        <div className="row">
+-          {dummyCardData.map((card, index) => (
+-            <div className="col-lg-4 mt-4" key={index}>
+-              <div
+-                className="event-item wow fadeInUp"
+-                data-wow-delay=".25s"
+-                style={{
+-                  display: "flex",
+-                  flexDirection: "column",
+-                  height: "100%",
+-                }}
+-              >
+-                {/* Image */}
+-                <div className="event-img">
+-                  <img
+-                    src={card.image}
+-                    alt={card.title}
+-                    style={{
+-                      width: "100%",
+-                      height: "250px", // fixed height
+-                      objectFit: "cover", // keeps aspect ratio
+-                      borderRadius: "8px",
+-                    }}
+-                  />
+-                </div>
+-
+-                {/* Info Section */}
+-                <div
+-                  className="event-info"
+-                  style={{
+-                    flex: "1",
+-                    display: "flex",
+-                    flexDirection: "column",
+-                    marginTop: "15px", // ✅ space between image & text
+-                  }}
+-                >
+-                  <h4 className="event-title" style={{ marginBottom: "10px" }}>
+-                    <a href={card.link || "#"}>{card.title}</a>
+-                  </h4>
+-
+-                  {/* Truncated description */}
+-                  <p
+-                    style={{
+-                      flexGrow: 1,
+-                      margin: 0,
+-                      overflow: "hidden",
+-                      textOverflow: "ellipsis",
+-                      display: "-webkit-box",
+-                      WebkitLineClamp: 3, // ✅ max 3 lines
+-                      WebkitBoxOrient: "vertical",
+-                      lineHeight: "1.5",
+-                    }}
+-                  >
+-                    {card.description}
+-                  </p>
+-                </div>
+-              </div>
+-            </div>
+-          ))}
+-        </div>
+-
+-
+-
+-
+-      </Container>
+-    </>
+-  );
+-}
+-
+diff --git a/src/app/(public)/about/timeline/page.js b/src/app/(public)/about/timeline/page.js
+deleted file mode 100644
+index 6a31cd6..0000000
+--- a/src/app/(public)/about/timeline/page.js
++++ /dev/null
+@@ -1,15 +0,0 @@
+-import Banner from "@/components/Banner";
+-import { OurTimeline } from "@/components/ui/our-timeline";
+-import { BANNER_DATA } from "@/lib/data";
+-
+-export default function TimelinePage() {
+-    const bannerData = BANNER_DATA["timeline"];
+-
+-    return (
+-        <>
+-            <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-
+-            <OurTimeline />
+-        </>
+-    );
+-}
+\ No newline at end of file
+diff --git a/src/app/(public)/academics/activities-beyond-academics/page.js b/src/app/(public)/academics/activities-beyond-academics/page.js
+deleted file mode 100644
+index 74faee7..0000000
+--- a/src/app/(public)/academics/activities-beyond-academics/page.js
++++ /dev/null
+@@ -1,67 +0,0 @@
+-"use client";
+-
+-import React from "react";
+-import { Box, Typography, Grid, Card, CardMedia } from "@mui/material";
+-import { motion } from "framer-motion";
+-import { ACTIVITIES_DATA } from "@/lib/data";
+-
+-export default function activitiesBeyondAcademicsPage() {
+-  return (
+-    <Box sx={{ py: 8, px: 2 }}>
+-      {ACTIVITIES_DATA.map((section, index) => {
+-        // if image is left → text comes from right, image comes from left
+-        // if image is right → text comes from left, image comes from right
+-        const textDirection = index % 2 === 0 ? -100 : 100;
+-        const imageDirection = index % 2 === 0 ? 100 : -100;
+-
+-        return (
+-          <section className="activity pt-120 pb-80" key={index}>
+-            <div className="container">
+-              <div className="row align-items-center">
+-                {/* Left Content */}
+-                <div className={`col-lg-6 ${index % 2 === 0 ? "" : "order-lg-2"}`}>
+-                  <motion.div
+-                    className="content-info"
+-                    initial={{ opacity: 0, x: textDirection }}
+-                    whileInView={{ opacity: 1, x: 0 }}
+-                    transition={{ duration: 0.8, ease: "easeOut" }}
+-                    viewport={{ once: true, amount: 0.2 }}
+-                  >
+-                    <div className="site-heading mb-3">
+-                      <span className="site-title-tagline">
+-                        <i className="far fa-book-open-reader"></i>{" "}
+-                        {section.tagline || "Student Activity"}
+-                      </span>
+-                      <h2 className="site-title">
+-                        {section.titlePrefix || "Details About"}{" "}
+-                        <span>{section.highlight || "Eduka"}</span>{" "}
+-                        {section.titleSuffix || "Student Activity."}
+-                      </h2>
+-                    </div>
+-                    <p className="content-text">{section.description}</p>
+-                    {section.extra && (
+-                      <p className="content-text mt-2">{section.extra}</p>
+-                    )}
+-                  </motion.div>
+-                </div>
+-
+-                {/* Right Image */}
+-                <div className={`col-lg-6 ${index % 2 === 0 ? "" : "order-lg-1"}`}>
+-                  <motion.div
+-                    className="content-img"
+-                    initial={{ opacity: 0, x: imageDirection }}
+-                    whileInView={{ opacity: 1, x: 0 }}
+-                    transition={{ duration: 0.8, ease: "easeOut" }}
+-                    viewport={{ once: true, amount: 0.2 }}
+-                  >
+-                    <img src={section.image} alt={section.title} />
+-                  </motion.div>
+-                </div>
+-              </div>
+-            </div>
+-          </section>
+-        );
+-      })}
+-    </Box>
+-  );
+-}
+diff --git a/src/app/(public)/academics/curriculum/page.js b/src/app/(public)/academics/curriculum/page.js
+deleted file mode 100644
+index e219f32..0000000
+--- a/src/app/(public)/academics/curriculum/page.js
++++ /dev/null
+@@ -1,73 +0,0 @@
+-"use client";
+-
+-import React from "react";
+-import { Box, Typography, Grid, Card, CardMedia } from "@mui/material";
+-import { motion } from "framer-motion";
+-import { CURRICULUM_DATA } from "@/lib/data";
+-
+-export default function AcademicsCurriculumPage() {
+-  return (
+-    <Box sx={{ py: 8, px: 2 }}>
+-
+-
+-      {CURRICULUM_DATA.map((section, index) => {
+-        // if image is left → text comes from right, image comes from left
+-        // if image is right → text comes from left, image comes from right
+-        const textDirection = index % 2 === 0 ? -100 : 100;
+-        const imageDirection = index % 2 === 0 ? 100 : -100;
+-
+-        return (
+-          <section className="activity pt-120 pb-80" key={index}>
+-            <div className="container">
+-              <div className="row align-items-center">
+-                {/* Left Content */}
+-                <div className={`col-lg-6 ${index % 2 === 0 ? "" : "order-lg-2"}`}>
+-                  <motion.div
+-                    className="content-info"
+-                    initial={{ opacity: 0, x: textDirection }}
+-                    whileInView={{ opacity: 1, x: 0 }}
+-                    transition={{ duration: 0.8, ease: "easeOut" }}
+-                    viewport={{ once: true, amount: 0.2 }}
+-                  >
+-                    <div className="site-heading mb-3">
+-                      <span className="site-title-tagline">
+-                        <i className="far fa-book-open-reader"></i>{" "}
+-                        {section.tagline || "Student Activity"}
+-                      </span>
+-                      <h2 className="site-title">
+-                        {section.titlePrefix || "Details About"}{" "}
+-                        <span>{section.highlight || "Eduka"}</span>{" "}
+-                        {section.titleSuffix || "Student Activity."}
+-                      </h2>
+-                    </div>
+-                    <p className="content-text">{section.description}</p>
+-                    {section.extra && (
+-                      <p className="content-text mt-2">{section.extra}</p>
+-                    )}
+-                  </motion.div>
+-                </div>
+-
+-                {/* Right Image */}
+-                <div className={`col-lg-6 ${index % 2 === 0 ? "" : "order-lg-1"}`}>
+-                  <motion.div
+-                    className="content-img"
+-                    initial={{ opacity: 0, x: imageDirection }}
+-                    whileInView={{ opacity: 1, x: 0 }}
+-                    transition={{ duration: 0.8, ease: "easeOut" }}
+-                    viewport={{ once: true, amount: 0.2 }}
+-                  >
+-                    <img src={section.image} alt={section.title} />
+-                  </motion.div>
+-                </div>
+-              </div>
+-            </div>
+-          </section>
+-        );
+-      })}
+-
+-
+-
+-
+-    </Box>
+-  );
+-}
+diff --git a/src/app/(public)/academics/layout.js b/src/app/(public)/academics/layout.js
+deleted file mode 100644
+index 4a91f03..0000000
+--- a/src/app/(public)/academics/layout.js
++++ /dev/null
+@@ -1,11 +0,0 @@
+-import Banner from "@/components/Banner";
+-import { Box } from "@mui/material";
+-
+-export default function AcademicsLayout({ children }) {
+-  return (
+-    <Box sx={{}}>
+-      <Banner title={"Academics"} />
+-      {children}
+-    </Box>
+-  );
+-}
+diff --git a/src/app/(public)/admission/page.js b/src/app/(public)/admission/page.js
+deleted file mode 100644
+index f038073..0000000
+--- a/src/app/(public)/admission/page.js
++++ /dev/null
+@@ -1,130 +0,0 @@
+-"use client";
+-
+-import Banner from "@/components/Banner";
+-import { ContactUsForm } from "@/components/ui/contact-us-form";
+-import { BANNER_DATA } from "@/lib/data";
+-import {
+-  Box,
+-  Container,
+-  Typography,
+-} from "@mui/material";
+-import { AdmissionAccordion } from "@/components/ui/admission/Accordion";
+-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+-import { useState } from "react";
+-
+-export default function admissionPage() {
+-  const bannerData = BANNER_DATA["admission"];
+-  const [openIndex, setOpenIndex] = useState(0);
+-
+-  const toggleAccordion = (index) => {
+-    setOpenIndex(openIndex === index ? -1 : index);
+-  };
+-  const dummyData = {
+-    image:
+-      "https://images.unsplash.com/photo-1754506824681-4dd2a5fe7f6b?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+-  };
+-
+-  const dummyFAQData = [
+-    {
+-      title: "What are the special features of your school?",
+-      content:
+-        "We are living in a technology rich world. Science and technology are extremely popular with learners of today; they are also pathways to career opportunities in the future. Zenith school has a learning environment where all the students learn to be technology fluent and they develop real life skills such as co-operation, self-confidence, teamwork, creativity and innovation.",
+-    },
+-    {
+-      title: "Do you provide mid-day meal?",
+-      content:
+-        "We provide meal to the students of Nursery to class 2. For other students, we have a well maintained canteen, where students can enjoy hygienic meal during their break time.",
+-    },
+-    {
+-      title: "What is the qualification/background of teacher that we have?",
+-      content:
+-        "All our teachers are well qualified as per the Gujarat Government Education Board with minimum graduation as the requirement.",
+-    },
+-  ];
+-
+-  return (
+-    <>
+-      <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-
+-      <Container sx={{ py: 6, backgroundColor: "white" }}>
+-        <div className="how-apply pt-120 pb-80">
+-          <div className="container">
+-            <div className="row align-items-center">
+-              {/* Left Side - Content */}
+-              <div className="col-lg-6">
+-                <div className="content-info wow fadeInUp" data-wow-delay=".25s">
+-                  <div className="site-heading mb-3">
+-                    <span className="site-title-tagline">
+-                      <i className="far fa-book-open-reader"></i> How To Apply
+-                    </span>
+-                    <h2 className="site-title">
+-                      Details About <span>How To Apply</span> Eduka.
+-                    </h2>
+-                  </div>
+-
+-                  <p className="content-text">
+-                    For Nursery, the child has to complete three years of age, and for
+-                    Kindergarten, the child has to complete four years of age by 31st
+-                    May of the Academic session for which the parent is seeking
+-                    admission.
+-                  </p>
+-
+-                  <p className="content-text mt-2">
+-                    Admissions are conducted in different months for various classes as
+-                    per school norms. Please follow the official admission schedule.
+-                  </p>
+-
+-                  <div className="row my-3">
+-                    <div className="col-md-6">
+-                      <ul className="content-list">
+-                        <li>
+-                          <i className="fas fa-check-circle"></i> Nursery & K.G. –
+-                          Admissions in November
+-                        </li>
+-                        <li>
+-                          <i className="fas fa-check-circle"></i> Class I – Admissions in
+-                          January
+-                        </li>
+-                        <li>
+-                          <i className="fas fa-check-circle"></i> Class II to IX –
+-                          Admissions in March (Subject to vacancy)
+-                        </li>
+-                      </ul>
+-                    </div>
+-                    <div className="col-md-6">
+-                      <ul className="content-list">
+-                        <li>
+-                          <i className="fas fa-check-circle"></i> Class XI Science & General – After Board Results
+-                        </li>
+-                        <li>
+-                          <i className="fas fa-check-circle"></i> Submit Documents
+-                        </li>
+-                        <li>
+-                          <i className="fas fa-check-circle"></i> Final Confirmation
+-                        </li>
+-                      </ul>
+-                    </div>
+-                  </div>
+-
+-                  <div className="content-btn">
+-                    <a href="#" className="theme-btn">
+-                      Apply Now <i className="fas fa-arrow-right-long"></i>
+-                    </a>
+-                  </div>
+-                </div>
+-              </div>
+-
+-              {/* Right Side - Image */}
+-              <div className="col-lg-6">
+-                <div className="content-img wow fadeInRight" data-wow-delay=".25s">
+-                  <img src={dummyData.image} alt="Admission" />
+-                </div>
+-              </div>
+-            </div>
+-          </div>
+-        </div>
+-      </Container>
+-      <AdmissionAccordion contents={dummyFAQData} />
+-    </>
+-  );
+-}
+diff --git a/src/app/(public)/alumni/page.js b/src/app/(public)/alumni/page.js
+deleted file mode 100644
+index e66358b..0000000
+--- a/src/app/(public)/alumni/page.js
++++ /dev/null
+@@ -1,37 +0,0 @@
+-"use client";
+-
+-import { ALUMNI_DATA, BANNER_DATA } from "@/lib/data";
+-import { AnimatedHeader } from "@/components/AnimatedHeader";
+-import Banner from "@/components/Banner";
+-import { CardCarousel } from "@/components/alumni/CardCarousel";
+-import AlumniStory from "@/components/alumni/AlumniStory";
+-
+-export default function AlumniPage() {
+-    const bannerData = BANNER_DATA["alumni"];
+-
+-    return (
+-        <>
+-            <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-
+-            <AlumniStory />
+-
+-            <div className="testimonial-area bg py-120">
+-                <div className="container">
+-                    <div className="row">
+-                        <div className="col-lg-6 mx-auto">
+-                            <div className="site-heading text-center">
+-                                <span className="site-title-tagline"><i className="far fa-book-open-reader"></i> Testimonials</span>
+-                                <h2 className="site-title">What Our Students <span>Say's</span></h2>
+-                                <p>It is a long established fact that a reader will be distracted by the readable content of
+-                                    a page when looking at its layout.</p>
+-                            </div>
+-                        </div>
+-                    </div>
+-                    <div className="testimonial-slider owl-carousel owl-theme">
+-                        <CardCarousel data={ALUMNI_DATA} />
+-                    </div>
+-                </div>
+-            </div>
+-        </>
+-    );
+-}
+diff --git a/src/app/(public)/careers/page.js b/src/app/(public)/careers/page.js
+deleted file mode 100644
+index 18aaa42..0000000
+--- a/src/app/(public)/careers/page.js
++++ /dev/null
+@@ -1,151 +0,0 @@
+-import Banner from "@/components/Banner";
+-import { HoverEffect } from "@/components/ui/career/card-hover-effect";
+-import { CareersForm } from "@/components/ui/careers-form";
+-import { BANNER_DATA } from "@/lib/data";
+-import { Box, Container, Typography } from "@mui/material";
+-
+-export default function careersPage() {
+-  const bannerData = BANNER_DATA["careers"];
+-
+-  const jobItems = [
+-    {
+-      title: "Math Teacher",
+-      experience: "2+ Years",
+-      positions: "3",
+-      link: "#",
+-      applyLink: "/apply/math-teacher",
+-    },
+-    {
+-      title: "Science Teacher",
+-      experience: "3+ Years",
+-      positions: "2",
+-      link: "#",
+-      applyLink: "/apply/science-teacher",
+-    },
+-    {
+-      title: "English Teacher",
+-      experience: "1+ Year",
+-      positions: "4",
+-      link: "#",
+-      applyLink: "/apply/english-teacher",
+-    },
+-    {
+-      title: "Sports Coach",
+-      experience: "2+ Years",
+-      positions: "1",
+-      link: "#",
+-      applyLink: "/apply/sports-coach",
+-    },
+-    {
+-      title: "Music Teacher",
+-      experience: "1+ Year",
+-      positions: "2",
+-      link: "#",
+-      applyLink: "/apply/music-teacher",
+-    },
+-    {
+-      title: "Computer Science Teacher",
+-      experience: "2+ Years",
+-      positions: "2",
+-      link: "#",
+-      applyLink: "/apply/cs-teacher",
+-    },
+-  ];
+-
+-  return (
+-    <>
+-      <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-
+-      <Container
+-        disableGutters
+-        maxWidth={false}
+-        className="m-0 p-0 overflow-x-hidden"
+-      >
+-        {/* Section 1 - Form Section */}
+-        <Box sx={{ bgcolor: "#f9fafb", width: "100%", pt: { xs: 6, md: 10 } }}>
+-          <Container maxWidth="lg" id={"formTitle"}>
+-            <Box display="flex" flexDirection="row" justifyContent="center">
+-              <Typography
+-                variant="h4"
+-                sx={{
+-                  fontWeight: 500,
+-                  letterSpacing: 1,
+-                  mb: 1,
+-                  display: "inline-block",
+-                  pb: 0.5,
+-                }}
+-              >
+-                Don't be shy,&nbsp;
+-              </Typography>
+-              <Typography
+-                variant="h4"
+-                sx={{
+-                  fontWeight: 800,
+-                  letterSpacing: 1,
+-                  mb: 1,
+-                  display: "inline-block",
+-                  pb: 0.5,
+-                  color: "orange",
+-                }}
+-              >
+-                tell us your truth.
+-              </Typography>
+-            </Box>
+-
+-            {/* <CareersForm positions={jobItems} /> */}
+-            <CareersForm positions={jobItems} />
+-          </Container>
+-        </Box>
+-
+-        {/* Section 2 - Job Openings Section */}
+-        <Box sx={{ bgcolor: "#ffffff", width: "100%", py: { xs: 6, md: 10 } }}>
+-          <Container maxWidth="lg">
+-            <Box display="flex" flexDirection="row" justifyContent="center">
+-              <Typography
+-                variant="h4"
+-                sx={{
+-                  fontWeight: 500,
+-                  letterSpacing: 1,
+-                  mb: 1,
+-                  display: "inline-block",
+-                  pb: 0.5,
+-                }}
+-              >
+-                Current&nbsp;
+-              </Typography>
+-              <Typography
+-                variant="h4"
+-                sx={{
+-                  fontWeight: 800,
+-                  letterSpacing: 1,
+-                  mb: 1,
+-                  display: "inline-block",
+-                  pb: 0.5,
+-                  color: "orange",
+-                }}
+-              >
+-                Job Openings&nbsp;
+-              </Typography>
+-              <Typography
+-                variant="h4"
+-                sx={{
+-                  fontWeight: 500,
+-                  letterSpacing: 1,
+-                  mb: 1,
+-                  display: "inline-block",
+-                  pb: 0.5,
+-                }}
+-              >
+-                - Join Our Team!
+-              </Typography>
+-            </Box>
+-
+-            <Box className="max-w-5xl mx-auto">
+-              <HoverEffect items={jobItems} />
+-            </Box>
+-          </Container>
+-        </Box>
+-      </Container>
+-    </>
+-  );
+-}
+diff --git a/src/app/(public)/contact-us/page.js b/src/app/(public)/contact-us/page.js
+deleted file mode 100644
+index 75678f8..0000000
+--- a/src/app/(public)/contact-us/page.js
++++ /dev/null
+@@ -1,19 +0,0 @@
+-"use client";
+-
+-import Banner from "@/components/Banner";
+-import ContactUsContainer from "@/components/ContactUs/ContactUsContainer";
+-import { BANNER_DATA } from "@/lib/data";
+-
+-
+-
+-export default function ContactUsPage() {
+-  const bannerData = BANNER_DATA["contact-us"];
+-
+-  return (
+-    <>
+-      <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-
+-      <ContactUsContainer />
+-    </>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/(public)/gallery/events/[id]/page.js b/src/app/(public)/gallery/events/[id]/page.js
+deleted file mode 100644
+index b00ca97..0000000
+--- a/src/app/(public)/gallery/events/[id]/page.js
++++ /dev/null
+@@ -1,21 +0,0 @@
+-import Banner from '@/components/Banner';
+-import SingleEvents from '@/components/gallery/SingleEvents';
+-import DynamicGallery from '@/components/ui/dynamic-gallery';
+-import { BANNER_DATA, SINGLE_EVENTS_DETAILS } from '@/lib/data';
+-import React from 'react'
+-
+-async function Event(props) {
+-    const bannerData = BANNER_DATA["events-gallery"];
+-
+-    const { id } = await props.params;
+-    const data = SINGLE_EVENTS_DETAILS.filter((item) => item.id == id)[0];
+-    return (
+-        <>
+-            <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-
+-            <SingleEvents eventData={data} />
+-        </>
+-    )
+-}
+-
+-export default Event
+\ No newline at end of file
+diff --git a/src/app/(public)/gallery/events/page.js b/src/app/(public)/gallery/events/page.js
+deleted file mode 100644
+index f6d030d..0000000
+--- a/src/app/(public)/gallery/events/page.js
++++ /dev/null
+@@ -1,15 +0,0 @@
+-import Banner from "@/components/Banner";
+-import Events from "@/components/gallery/Events";
+-import { BANNER_DATA, EventsData } from "@/lib/data";
+-
+-export default function eventsPage() {
+-    const bannerData = BANNER_DATA["events-gallery"];
+-
+-    return (
+-        <>
+-            <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-
+-            <Events data={EventsData} />
+-        </>
+-    );
+-}
+\ No newline at end of file
+diff --git a/src/app/(public)/gallery/photos/page.js b/src/app/(public)/gallery/photos/page.js
+deleted file mode 100644
+index f66a885..0000000
+--- a/src/app/(public)/gallery/photos/page.js
++++ /dev/null
+@@ -1,44 +0,0 @@
+-import Banner from "@/components/Banner";
+-import DynamicGallery from "@/components/ui/dynamic-gallery";
+-import { BANNER_DATA } from "@/lib/data";
+-
+-export const GALLERY_DATA = [
+-    "/assets/img/gallery/01.jpg",
+-    "https://images.unsplash.com/photo-1755378988619-216a5a111e0f?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyNHx8fGVufDB8fHx8fA%3D%3D",
+-    "https://images.unsplash.com/photo-1755352728634-c0fbda74bb76?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw4Mnx8fGVufDB8fHx8fA%3D%3D",
+-    "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTB8fHJhbmRvbXxlbnwwfDB8MHx8fDA%3D",
+-    "https://images.unsplash.com/photo-1524369609384-10ce89e42d14?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTAzfHxyYW5kb218ZW58MHwwfDB8fHww",
+-    "https://images.unsplash.com/photo-1571327352610-1c5484ccc840?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzZ8fGFlc3RoZXRpY3xlbnwwfDB8MHx8fDA%3D",
+-]
+-export default function photoGalleryPage() {
+-    const bannerData = BANNER_DATA["photos-gallery"];
+-
+-
+-    return (
+-        <>
+-            <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-
+-            <div className="gallery-area py-120">
+-                <div className="container">
+-                    <div className="row">
+-                        <div className="col-lg-6 mx-auto">
+-                            <div className="site-heading text-center">
+-                                <span className="site-title-tagline">
+-                                    <i className="far fa-book-open-reader"></i> Gallery
+-                                </span>
+-                                <h2 className="site-title">
+-                                    Our Photo <span>Gallery</span>
+-                                </h2>
+-                                <p>
+-                                    It is a long established fact that a reader will be distracted
+-                                    by the readable content of a page when looking at its layout.
+-                                </p>
+-                            </div>
+-                        </div>
+-                    </div>
+-                    <DynamicGallery data={GALLERY_DATA} />
+-                </div>
+-            </div>
+-        </>
+-    );
+-}
+\ No newline at end of file
+diff --git a/src/app/(public)/layout.js b/src/app/(public)/layout.js
+deleted file mode 100644
+index 701301e..0000000
+--- a/src/app/(public)/layout.js
++++ /dev/null
+@@ -1,24 +0,0 @@
+-import Banner from "@/components/Banner";
+-import Footer from "@/components/footer";
+-import Navbar from "@/components/navbar";
+-import ProtectedRoute from "@/components/ProtectedRoute";
+-import SearchPopUp from "@/components/search-popup/SearchPopUp";
+-import { Box } from "@mui/material";
+-
+-export default function PublicLayout({ children }) {
+-    return (
+-        <>
+-            <Navbar />
+-
+-            <SearchPopUp />
+-
+-            {/* Main Content */}
+-            <Box component="main" className="main">
+-                <>{children}</>
+-            </Box>
+-
+-            {/* Footer always at bottom */}
+-            <Footer />
+-        </>
+-    );
+-}
+diff --git a/src/app/(public)/login/page.js b/src/app/(public)/login/page.js
+deleted file mode 100644
+index 23ca184..0000000
+--- a/src/app/(public)/login/page.js
++++ /dev/null
+@@ -1,144 +0,0 @@
+-"use client";
+-
+-import React, { useContext, useState } from "react";
+-// Import necessary MUI components
+-import {
+-    Container,
+-    Paper,
+-    Typography,
+-    TextField,
+-    Button,
+-    Box,
+-    CircularProgress,
+-} from "@mui/material";
+-import { useAuth } from "@/contexts/authContext";
+-
+-// Mocking the router functionality for demonstration purposes in a single-file environment
+-const useMockRouter = () => ({
+-    push: (path) => {
+-        console.log(`Navigation requested to: ${path}. (Mocked navigation)`);
+-        // In a real application, you would use next/navigation's useRouter here.
+-    }
+-});
+-
+-const App = () => {
+-    const [username, setUsername] = useState("");
+-    const [password, setPassword] = useState("");
+-    const [msg, setMsg] = useState("");
+-    const [loading, setLoading] = useState(false);
+-    const { login } = useAuth()
+-
+-    // Mock Router
+-    const router = useMockRouter();
+-
+-    const handleLogin = async () => {
+-        setMsg(""); // Clear previous messages
+-        setLoading(true);
+-
+-        if (!username || !password) {
+-            setMsg("Please enter both username and password.");
+-            setLoading(false);
+-            return;
+-        }
+-
+-        // Simulate API call delay
+-        await new Promise(resolve => setTimeout(resolve, 800));
+-
+-        await login(username, password)
+-
+-        setLoading(false);
+-    };
+-
+-    const isSuccess = msg.includes("successful");
+-
+-    // Using Tailwind classes for the main layout container and responsiveness (max-width, centering)
+-    return (
+-        <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+-            <Container maxWidth="xs">
+-                {/* Paper component provides elevation and a clean card look */}
+-                <Paper
+-                    elevation={12}
+-                    className="p-8 sm:p-10 rounded-2xl transition-shadow duration-300 hover:shadow-xl"
+-                    style={{
+-                        backgroundColor: '#ffffff',
+-                        border: '1px solid #e0e0e0',
+-                    }}
+-                >
+-                    <Typography
+-                        variant="h4"
+-                        component="h1"
+-                        align="center"
+-                        className="font-extrabold text-gray-800 mb-8"
+-                        style={{ color: '#1a202c' }}
+-                    >
+-                        Login
+-                    </Typography>
+-
+-                    <Box component="form" className="flex flex-col gap-6" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+-
+-                        {/* Username Field (FullWidth MUI TextField) */}
+-                        <TextField
+-                            label="Username"
+-                            variant="outlined"
+-                            fullWidth
+-                            value={username}
+-                            onChange={(e) => setUsername(e.target.value)}
+-                            disabled={loading}
+-                            required
+-                            InputLabelProps={{ shrink: true }}
+-                            className="bg-white rounded-lg"
+-                        />
+-
+-                        {/* Password Field (FullWidth MUI TextField) */}
+-                        <TextField
+-                            label="Password"
+-                            type="password"
+-                            variant="outlined"
+-                            fullWidth
+-                            value={password}
+-                            onChange={(e) => setPassword(e.target.value)}
+-                            disabled={loading}
+-                            required
+-                            InputLabelProps={{ shrink: true }}
+-                            className="bg-white rounded-lg"
+-                        />
+-
+-                        {/* Message Area */}
+-                        {msg && (
+-                            <Typography
+-                                align="center"
+-                                className={`font-medium ${isSuccess ? "text-green-600" : "text-red-600"}`}
+-                                variant="body2"
+-                            >
+-                                {msg}
+-                            </Typography>
+-                        )}
+-
+-                        {/* Login Button */}
+-                        <Button
+-                            variant="contained"
+-                            color="primary"
+-                            size="large"
+-                            fullWidth
+-                            onClick={handleLogin}
+-                            disabled={loading}
+-                            className="mt-2 py-3 rounded-xl font-bold transition-all duration-200"
+-                            style={{
+-                                backgroundColor: loading ? '#90CAF9' : '#1976D2',
+-                                '&:hover': { backgroundColor: '#1565C0' }
+-                            }}
+-                        >
+-                            {loading ? (
+-                                <CircularProgress size={24} color="inherit" />
+-                            ) : (
+-                                'Log In'
+-                            )}
+-                        </Button>
+-                    </Box>
+-                </Paper>
+-            </Container>
+-        </div>
+-    );
+-};
+-
+-export default App;
+\ No newline at end of file
+diff --git a/src/app/(public)/overview/tribute-to-our-founders/page.js b/src/app/(public)/overview/tribute-to-our-founders/page.js
+deleted file mode 100644
+index dce6e01..0000000
+--- a/src/app/(public)/overview/tribute-to-our-founders/page.js
++++ /dev/null
+@@ -1,94 +0,0 @@
+-import React from "react";
+-import { Box, CardMedia, Container, Grid, Typography } from "@mui/material";
+-import { BANNER_DATA, TRIBUTE_PAGE_TEXT } from "@/lib/data";
+-import Banner from "@/components/Banner";
+-
+-export default function TributeToOurFoundersPage() {
+-    const dummyData = {
+-        image1:
+-            "https://images.unsplash.com/photo-1601933973706-34bd411ffd67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+-        firstText: TRIBUTE_PAGE_TEXT.TEXT1,
+-        image2: "https://images.unsplash.com/photo-1755626006620-5ca1ca4de3a7?q=80&w=1468&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+-        image3: "https://cdn.pixabay.com/photo/2022/09/26/10/40/cat-7480374_1280.jpg",
+-        secondText: TRIBUTE_PAGE_TEXT?.TEXT2,
+-    };
+-
+-
+-    const bannerData = BANNER_DATA['tribute-to-our-founders'];
+-
+-    return (
+-        <>
+-            <Banner
+-                title={bannerData.title}
+-                backgroundImage={bannerData.imageUrl}
+-            />
+-
+-            <Container maxWidth="lg" sx={{ py: 6 }} className="max-w-screen overflow-hidden">
+-                {/* Section 1: One Image with Text */}
+-                <Box sx={{ mb: 6 }}>
+-                    <CardMedia
+-                        component="img"
+-                        image={dummyData.image1}
+-                        alt="Founders tribute image"
+-                        sx={{
+-                            width: "100%",
+-                            height: { xs: 250, sm: 350, md: 450 },
+-                            objectFit: "cover",
+-                            borderRadius: 10,
+-                        }}
+-                    />
+-                    <Typography
+-                        variant="h4"
+-                        sx={{ fontWeight: 600, mt: 5, mb: 1 }}
+-                    >
+-                        {TRIBUTE_PAGE_TEXT.TEXT1_HEADING}
+-                    </Typography>
+-                    <Typography sx={{ color: "text.secondary", fontWeight: 500 }}>
+-                        {dummyData.firstText}
+-                    </Typography>
+-                </Box>
+-
+-                {/* Section 2: Two Images Side by Side with Text */}
+-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+-                        {/* Here two images side by side */}
+-                        <CardMedia
+-                            component="img"
+-                            image={dummyData.image2}
+-                            alt="Founders side image 1"
+-                            sx={{
+-                                width: "100%",
+-                                height: { xs: 200, sm: 250, md: 300 },
+-                                objectFit: "cover",
+-                                borderRadius: 10,
+-                            }}
+-                        />
+-                        <CardMedia
+-                            component="img"
+-                            image={dummyData.image3}
+-                            alt="Founders side image 2"
+-                            sx={{
+-                                width: "100%",
+-                                height: { xs: 200, sm: 250, md: 300 },
+-                                objectFit: "cover",
+-                                borderRadius: 10,
+-                            }}
+-                        />
+-                    </Box>
+-                    <Box>
+-                        <Typography
+-                            variant="h4"
+-                            sx={{ fontWeight: 600, mb: 1, mt: 2 }}
+-                        >
+-                            {TRIBUTE_PAGE_TEXT.TEXT2_HEADING}
+-                        </Typography>
+-                        <Typography sx={{ color: "text.secondary", fontWeight: 500 }}>
+-                            Here is the second text that describes the images and the tribute to our founders. {dummyData?.secondText}
+-                        </Typography>
+-                    </Box>
+-                </Box>
+-
+-            </Container>
+-        </>
+-    );
+-}
+diff --git a/src/app/(public)/overview/why-zenith-school/page.js b/src/app/(public)/overview/why-zenith-school/page.js
+deleted file mode 100644
+index 006aadf..0000000
+--- a/src/app/(public)/overview/why-zenith-school/page.js
++++ /dev/null
+@@ -1,79 +0,0 @@
+-"use client";
+-
+-import { Box, Typography, Container } from "@mui/material";
+-import Banner from "@/components/Banner";
+-import { ALUMNI_DATA, BANNER_DATA, WHY_ZENITH_DATA } from "@/lib/data";
+-import SchoolStatistics from "@/components/statistics/SchoolStatistics";
+-import { CardCarousel } from "@/components/alumni/CardCarousel";
+-import AboutUs from "@/components/about/AboutUs";
+-
+-export default function WhyZenithSchoolPage() {
+-    const bannerData = BANNER_DATA["why-zenith-school"];
+-
+-    return (
+-        <>
+-            {/* Banner Section */}
+-            <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-
+-            {/* Subheading Section Hidden For Now */}
+-            <Container maxWidth="md" className="max-w-screen overflow-hidden" sx={{ display: 'none' }}>
+-                <Box textAlign="center" mt={6} mb={3}>
+-                    <Typography
+-                        variant="h4"
+-                        sx={{
+-                            fontWeight: 800,
+-                            mb: 2,
+-                            color: "text.primary",
+-                        }}
+-                    >
+-                        {WHY_ZENITH_DATA?.title}
+-                    </Typography>
+-                </Box>
+-
+-                {/* Paragraph Section */}
+-                <Box textAlign="center" mb={6}>
+-                    <Typography variant="body1" color="text.secondary" lineHeight={1.8}>
+-                        {WHY_ZENITH_DATA?.description}
+-                    </Typography>
+-                </Box>
+-
+-                {/* Horizontal School Image */}
+-                <Box display="flex" justifyContent="center" mb={6} padding={2}>
+-                    <img
+-                        src={WHY_ZENITH_DATA?.image}
+-                        alt="Zenith School"
+-                        style={{
+-                            maxHeight: "400px",
+-                            maxWidth: "900px",
+-                            borderRadius: "16px",
+-                            boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
+-                        }}
+-                    />
+-                </Box>
+-            </Container>
+-
+-            {/* About Section (from sir's HTML, converted to JSX) */}
+-            <AboutUs />
+-
+-            <SchoolStatistics />
+-
+-            <div className="testimonial-area bg py-120">
+-                <div className="container">
+-                    <div className="row">
+-                        <div className="col-lg-6 mx-auto">
+-                            <div className="site-heading text-center">
+-                                <span className="site-title-tagline"><i className="far fa-book-open-reader"></i> Testimonials</span>
+-                                <h2 className="site-title">What Our Students <span>Say's</span></h2>
+-                                <p>It is a long established fact that a reader will be distracted by the readable content of
+-                                    a page when looking at its layout.</p>
+-                            </div>
+-                        </div>
+-                    </div>
+-                    <div className="testimonial-slider owl-carousel owl-theme">
+-                        <CardCarousel data={ALUMNI_DATA} />
+-                    </div>
+-                </div>
+-            </div>
+-        </>
+-    );
+-}
+diff --git a/src/app/(public)/sports/page.js b/src/app/(public)/sports/page.js
+deleted file mode 100644
+index 95eda49..0000000
+--- a/src/app/(public)/sports/page.js
++++ /dev/null
+@@ -1,131 +0,0 @@
+-"use client";
+-
+-import Banner from "@/components/Banner";
+-import DynamicGallery from "@/components/ui/dynamic-gallery";
+-import { BANNER_DATA, SPORTS_DATA } from "@/lib/data";
+-import { GALLERY_DATA } from "../gallery/photos/page";
+-import { Box, Card, CardMedia, Typography } from "@mui/material";
+-import { Fragment } from "react";
+-import SportsCarousel from "@/components/ui/InfiniteCarousel";
+-import InfiniteCarousel from "@/components/ui/InfiniteCarousel";
+-import { AnimatedHeader } from "@/components/AnimatedHeader";
+-
+-export default function photoGalleryPage() {
+-    const bannerData = BANNER_DATA["sports"];
+-
+-    return (
+-        <>
+-            <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
+-
+-            <Fragment>
+-
+-                <div className="gallery-area py-120">
+-                    <div className="container">
+-                        <div className="row">
+-                            <div className="col-lg-6 mx-auto">
+-                                <div className="site-heading text-center">
+-                                    <span className="site-title-tagline">
+-                                        <i className="far fa-book-open-reader"></i> Sports Complex
+-                                    </span>
+-                                    <h2 className="site-title">
+-                                        Multipurpose <span>Sports Complex</span>
+-                                    </h2>
+-                                    <p>
+-                                        Explore our state-of-the-art sports facilities and the vibrant athletic culture at our school.
+-                                    </p>
+-                                </div>
+-                            </div>
+-                        </div>
+-                        <DynamicGallery data={GALLERY_DATA} />
+-                    </div>
+-                </div>
+-
+-            </Fragment>
+-
+-            {/* About Sports Section */}
+-            <Fragment>
+-
+-                <Box
+-                    sx={{
+-                        pb: 8,
+-                    }}
+-                >
+-                    <AnimatedHeader
+-                        miniHeader="⚽ Sports Programs"
+-                        title="Our "
+-                        highlight="Sports Programs"
+-                        descriptions={[
+-                            "Each program is guided by experienced coaches who instill discipline, perseverance, and sportsmanship, helping students build lifelong skills beyond the field."
+-                        ]}
+-                        align="center"
+-                        titleVariant="h3"
+-                        subtitleVariant="body1"
+-                    />
+-
+-                </Box>
+-
+-                <InfiniteCarousel
+-                    data={SPORTS_DATA}
+-                    cardWidth={400}
+-                    gap={20}
+-                    speed={60}
+-                    renderCard={(sport, index) => (
+-                        <div className="col-12" key={index}>
+-                            <div
+-                                className="team-item wow fadeInUp"
+-                                data-wow-delay={`${0.25 * (index + 1)}s`}
+-                                style={{
+-                                    display: "flex",
+-                                    flexDirection: "column",
+-                                    height: "100%",
+-                                }}
+-                            >
+-                                {/* Award Image */}
+-                                <div className="team-img">
+-                                    <img
+-                                        src={sport.image}
+-                                        alt={sport.title}
+-                                        draggable={false}
+-                                        style={{ userSelect: "none" }}
+-                                    />
+-                                </div>
+-
+-                                {/* Content */}
+-                                <div
+-                                    className="team-content"
+-                                    style={{
+-                                        marginTop: "15px",
+-                                        flex: "1",
+-                                        display: "flex",
+-                                        flexDirection: "column",
+-                                    }}
+-                                >
+-                                    <div className="team-bio">
+-                                        <h5 style={{ marginBottom: "8px" }}>
+-                                            <a href={sport.link || "#"}>{sport.title}</a>
+-                                        </h5>
+-
+-                                        <span
+-                                            style={{
+-
+-                                                overflow: "hidden",
+-                                                textOverflow: "ellipsis",
+-                                                minHeight: "60px",
+-                                                maxHeight: "60px",
+-                                                color: 'ButtonText'
+-                                            }}
+-                                        >
+-                                            {sport.description}
+-                                        </span>
+-                                    </div>
+-                                </div>
+-                            </div>
+-                        </div>
+-                    )}
+-
+-
+-                />
+-            </Fragment>
+-        </>
+-    );
+-}
+diff --git a/src/app/layout.js b/src/app/layout.js
+deleted file mode 100644
+index 835783d..0000000
+--- a/src/app/layout.js
++++ /dev/null
+@@ -1,55 +0,0 @@
+-import { CssBaseline, Box } from "@mui/material";
+-import Navbar from "@/components/navbar";
+-import Footer from "@/components/footer";
+-import "./globals.css";
+-import ProtectedRoute from "@/components/ProtectedRoute";
+-import Loader from "@/components/loader/preloader";
+-import SearchPopUp from "@/components/search-popup/SearchPopUp";
+-import Script from "next/script";
+-import { AuthProvider } from "@/contexts/authContext";
+-
+-export default function RootLayout({ children }) {
+-  return (
+-    <AuthProvider>
+-      <html lang="en">
+-        <head>
+-          <title>Zenith</title>
+-          <meta charSet="UTF-8" />
+-          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+-
+-          {/* THEME CSS */}
+-          <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+-          <link rel="stylesheet" href="/assets/css/all-fontawesome.min.css" />
+-          <link rel="stylesheet" href="/assets/css/animate.min.css" />
+-          <link rel="stylesheet" href="/assets/css/magnific-popup.min.css" />
+-          <link rel="stylesheet" href="/assets/css/owl.carousel.min.css" />
+-          <link rel="stylesheet" href="/assets/css/style.css" />
+-        </head>
+-
+-        <body>
+-          <CssBaseline />
+-
+-          {/* Scripts should load BEFORE components mount */}
+-          <Script src="/assets/js/jquery-3.7.1.min.js" strategy="beforeInteractive" />
+-          <Script src="/assets/js/owl.carousel.min.js" strategy="beforeInteractive" />
+-
+-          {/* other JS */}
+-          <Script src="/assets/js/modernizr.min.js" strategy="afterInteractive" />
+-          <Script src="/assets/js/bootstrap.bundle.min.js" strategy="afterInteractive" />
+-          <Script src="/assets/js/imagesloaded.pkgd.min.js" strategy="afterInteractive" />
+-          <Script src="/assets/js/jquery.magnific-popup.min.js" strategy="afterInteractive" />
+-          <Script src="/assets/js/isotope.pkgd.min.js" strategy="afterInteractive" />
+-          <Script src="/assets/js/jquery.appear.min.js" strategy="afterInteractive" />
+-          <Script src="/assets/js/jquery.easing.min.js" strategy="afterInteractive" />
+-          <Script src="/assets/js/counter-up.js" strategy="afterInteractive" />
+-          <Script src="/assets/js/wow.min.js" strategy="afterInteractive" />
+-          <Script src="/assets/js/main.js" strategy="afterInteractive" />
+-
+-          {children}
+-        </body>
+-      </html>
+-    </AuthProvider>
+-  );
+-}
+-
+diff --git a/src/app/not-found.js b/src/app/not-found.js
+deleted file mode 100644
+index 74acda5..0000000
+--- a/src/app/not-found.js
++++ /dev/null
+@@ -1,19 +0,0 @@
+-"use client";
+-
+-import { useEffect } from "react";
+-import { useRouter } from "next/navigation";
+-
+-export default function NotFound() {
+-    const router = useRouter();
+-
+-    useEffect(() => {
+-        const user = localStorage.getItem("user");
+-        if (user) {
+-            router.replace("/dashboard");
+-        } else {
+-            router.replace("/");
+-        }
+-    }, [router]);
+-
+-    return null;
+-}
+\ No newline at end of file
+diff --git a/src/app/page.js b/src/app/page.js
+deleted file mode 100644
+index a9e2029..0000000
+--- a/src/app/page.js
++++ /dev/null
+@@ -1,92 +0,0 @@
+-"use client";
+-import ActivityEventGallery from "@/components/activityAndEvents/ActivityEventGallery";
+-import { ImagesSliderDemo } from "@/components/home/ImagesSlider";
+-import SchoolStatistics from "@/components/statistics/SchoolStatistics";
+-import { OurTimeline } from "@/components/ui/our-timeline";
+-import StackCards from "@/components/ui/StackCards";
+-import { ALUMNI_DATA, EventsData, VisionMissionData } from "@/lib/data";
+-import { Box, Typography } from "@mui/material";
+-import { AnimatedHeader } from "@/components/AnimatedHeader";
+-import { CardCarousel } from "@/components/alumni/CardCarousel";
+-import FeaturesCard from "@/components/home/FeaturesCard";
+-import AboutUs from "@/components/about/AboutUs";
+-import { ContactUsForm } from "@/components/ui/contact-us-form";
+-import { GALLERY_DATA } from "./(public)/gallery/photos/page";
+-import DynamicGallery from "@/components/ui/dynamic-gallery";
+-import Events from "@/components/gallery/Events";
+-import PublicLayout from "./(public)/layout";
+-
+-export default function HomePage() {
+-
+-
+-
+-  return (
+-    <>
+-      <PublicLayout>
+-
+-        <ImagesSliderDemo />
+-
+-        <FeaturesCard />
+-
+-        <AboutUs />
+-
+-        <SchoolStatistics />
+-
+-        <Events data={EventsData} />
+-
+-        <div className="gallery-area py-120">
+-          <div className="container">
+-            <div className="row">
+-              <div className="col-lg-6 mx-auto">
+-                <div className="site-heading text-center">
+-                  <span className="site-title-tagline">
+-                    <i className="far fa-book-open-reader"></i> Gallery
+-                  </span>
+-                  <h2 className="site-title">
+-                    Our Photo <span>Gallery</span>
+-                  </h2>
+-                  <p>
+-                    It is a long established fact that a reader will be distracted
+-                    by the readable content of a page when looking at its layout.
+-                  </p>
+-                </div>
+-              </div>
+-            </div>
+-            <DynamicGallery data={GALLERY_DATA} />
+-          </div>
+-        </div>
+-
+-
+-        <div className="testimonial-area bg py-120">
+-          <div className="container">
+-            <div className="row">
+-              <div className="col-lg-6 mx-auto">
+-                <div className="site-heading text-center">
+-                  <span className="site-title-tagline"><i className="far fa-book-open-reader"></i> Testimonials</span>
+-                  <h2 className="site-title">What Our Students <span>Say's</span></h2>
+-                  <p>It is a long established fact that a reader will be distracted by the readable content of
+-                    a page when looking at its layout.</p>
+-                </div>
+-              </div>
+-            </div>
+-            <div className="testimonial-slider owl-carousel owl-theme">
+-              <CardCarousel data={ALUMNI_DATA} />
+-            </div>
+-          </div>
+-        </div>
+-
+-
+-        <div className="contact-area py-120">
+-          <div className="container">
+-            <ContactUsForm />
+-          </div>
+-        </div>
+-
+-        <div className="contact-map">
+-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d615510.5022021453!2d72.68842878400444!3d21.92553907244295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be0241d43bf5073%3A0x31ca5d2247a19cc4!2sZenith%20High%20School!5e1!3m2!1sen!2sin!4v1757358371115!5m2!1sen!2sin" width="600" height="450" style={{ border: "0" }} allowFullScreen="" loading="lazy"></iframe>
+-        </div>
+-
+-      </PublicLayout>
+-    </>
+-  );
+-}

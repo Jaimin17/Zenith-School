@@ -21,7 +21,7 @@
  */
 
 import type { ApiType } from '../api'
-import { apiUrls } from '@/constants/apiUrls'
+import { apiUrls } from '../../constants/apiUrls'
 
 // Login API
 export const LOGIN_API: ApiType = {

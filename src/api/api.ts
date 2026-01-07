@@ -5,8 +5,10 @@ import axios from 'axios'
 import { toast } from 'sonner'
 
 import { axiosInstance } from './apiinterceptors'
-import { convertObjToQueryString } from '@/utils/utils'
-import { ACCESS_TOKEN } from '@/constants/appConstants'
+// import { convertObjToQueryString } from '@/utils/utils'
+// import { ACCESS_TOKEN } from '@/constants/appConstants'
+import { convertObjToQueryString } from '../utils/utils'
+import { ACCESS_TOKEN } from '../constants/appConstants'
 
 /**
  * Interface defining the API endpoint configuration
@@ -355,10 +357,8 @@ export const api = async <T = any>({
   const finalWithoutToken = !shouldUseToken
 
   const { url, method, isMultipart, isForm, showToast, responseType } = endpoint
-  console.log('is', isForm)
 
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
-  console.log('base', baseUrl)
   const isServerSide = typeof window === 'undefined'
   const shouldUseServerMode = isServer || isServerSide
 
@@ -368,7 +368,6 @@ export const api = async <T = any>({
   try {
     // Build request configuration
     const headers = createRequestHeaders(isMultipart, isForm, token)
-    console.log('Header', headers)
     const requestUrl = buildRequestUrl(baseUrl, url, id, params)
 
     const requestConfig: AxiosRequestConfig = {

@@ -117,13 +117,13 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
 
   return (
     <div className="">
-      <FormModal
+      {/* <FormModal
         table={table}
         type={type}
         data={data}
         id={id}
         relatedData={relatedData}
-      />
+      /> */}
     </div>
   );
 };

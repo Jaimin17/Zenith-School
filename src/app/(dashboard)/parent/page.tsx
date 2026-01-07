@@ -39,7 +39,7 @@ const ParentPage: React.FC = () => {
                     setStudents([]);
                 }
             } catch (error) {
-                console.error(error);
+                // Error fetching students
                 setStudents([]);
             }
         };

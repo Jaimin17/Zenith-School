@@ -1,5 +1,6 @@
 'use client'
 
+import React from "react";
 import { useAuth } from "../../../contexts/authContext";
 import Announcements from "../../../components/FromAnother/Announcements";
 import AttendanceChartContainer from "../../../components/FromAnother/AttendanceChartContainer";
@@ -14,7 +15,6 @@ import type { UserStat } from "../../../components/FromAnother/UserCard";
 
 const AdminPage: React.FC = () => {
     const { user } = useAuth()
-    console.log('User in admin Page', user)
 
     const userStats: UserStat[] = [
         { name: "admin", count: 2 },
@@ -64,3 +64,4 @@ const AdminPage: React.FC = () => {
 }
 
 export default AdminPage
+

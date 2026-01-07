@@ -1,9 +1,9 @@
+import React from "react";
 import Announcements from "../../../components/FromAnother/Announcements";
 import BigCalendarContainer from "../../../components/FromAnother/BigCalendarContainer";
 
 const TeacherPage: React.FC = () => {
-    const userId: string = '5dd780f6-cee9-42d9-a0f1-a9328091d302'
-    
+    const userId: string = '5dd780f6-cee9-42d9-a0f1-a9328091d302';
     return (
         <div className="flex-1 p-4 flex gap-4 flex-col xl:flex-row">
             {/* LEFT */}

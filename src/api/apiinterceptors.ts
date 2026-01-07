@@ -2,8 +2,8 @@ import https from 'https'
 import type { InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import axios from 'axios'
 
-import { clearAuthTokens, createCookie, getCookieValue } from '@/utils/cookie'
-import { ACCESS_TOKEN } from '@/constants/appConstants'
+import { clearAuthTokens, createCookie, getCookieValue } from '../utils/cookie'
+import { ACCESS_TOKEN } from '../constants/appConstants'
 // import { ACCESS_TOKEN } from '@/constants/appConstants'
 
 // TODO: IN PRODUCTION CHANGE IT TO COOKIE BASED AUTHENTICATION (i.e. withcredentials: true)
@@ -54,7 +54,7 @@ const handleAuthFailure = async () => {
     clearAuthTokens()
     localStorage.removeItem(ACCESS_TOKEN)
   } catch (error) {
-    console.error('Failed to clear tokens:', error)
+    // Failed to clear tokens
   }
 
   if (typeof window !== 'undefined') {

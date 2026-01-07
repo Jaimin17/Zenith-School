@@ -18,7 +18,7 @@ const StudentPage: React.FC = () => {
     useEffect(() => {
         if (!user) return;
 
-        const fetchClass = async (userId: string) => {
+        const fetchClass = async (userId: string | number) => {
             try {
                 // Dummy fetch
                 const res = null;

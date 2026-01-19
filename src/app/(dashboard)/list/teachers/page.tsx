@@ -10,6 +10,7 @@ import { fetchTeachersListAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { getTeacherImageUrl } from "@/utils/imageHelpers";
+import { Eye } from "lucide-react";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -136,8 +137,11 @@ const TeacherListPage = async ({
       <td>
         <div className="flex items-center gap-2">
           <Link href={`/list/teachers/${item.id}`}>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky">
-              <Image src="/view.png" alt="" width={16} height={16} />
+            <button 
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 text-white shadow-md shadow-sky-500/20 transition-all duration-200 hover:scale-105 active:scale-95"
+              title="View Details"
+            >
+              <Eye className="w-4 h-4" />
             </button>
           </Link>
 

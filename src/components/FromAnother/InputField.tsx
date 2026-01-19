@@ -22,17 +22,24 @@ const InputField = ({
   inputProps,
 }: InputFieldProps) => {
   return (
-    <div className={hidden ? "hidden" : "flex flex-col gap-2 w-full md:w-1/4"}>
-      <label className="text-xs text-gray-500">{label}</label>
+    <div className={hidden ? "hidden" : "flex flex-col gap-2 w-full"}>
+      <label className="text-sm font-medium text-gray-700">{label}</label>
       <input
         type={type}
         {...register(name)}
-        className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+        className={`w-full px-4 py-3 border rounded-xl text-sm transition-all duration-200 bg-gray-50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${
+          error 
+            ? "border-red-300 focus:ring-red-500 focus:border-red-500" 
+            : "border-gray-300"
+        }`}
         {...inputProps}
         defaultValue={defaultValue}
       />
       {error?.message && (
-        <p className="text-xs text-red-400">{error.message.toString()}</p>
+        <p className="text-xs text-red-500 flex items-center gap-1">
+          <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+          {error.message.toString()}
+        </p>
       )}
     </div>
   );

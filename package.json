@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.36.7",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@hookform/resolvers": "^5.2.2",
@@ -17,7 +18,6 @@
     "@number-flow/react": "^0.5.10",
     "@radix-ui/react-label": "^2.1.7",
     "@tabler/icons-react": "^3.34.1",
-    "@tailwindcss/postcss": "^4.1.12",
     "axios": "^1.13.2",
     "clsx": "^2.1.1",
     "jquery": "^3.7.1",
@@ -29,18 +29,19 @@
     "next": "15.4.6",
     "next-cloudinary": "^6.17.5",
     "owl.carousel": "^2.3.4",
-    "react": "19.1.0",
+    "react": "^18.2.0",
     "react-big-calendar": "^1.19.4",
     "react-calendar": "^6.0.0",
-    "react-dom": "19.1.0",
+    "react-dom": "^18.2.0",
     "react-hook-form": "^7.68.0",
-    "react-leaflet": "^5.0.0",
+    "react-leaflet": "^4.2.1",
     "recharts": "^3.5.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "yup": "^1.7.1"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
     "@types/jquery": "^3.5.33",
     "@types/js-cookie": "^3.0.6",
     "@types/leaflet": "^1.9.21",

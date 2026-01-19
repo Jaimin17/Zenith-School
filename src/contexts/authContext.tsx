@@ -18,7 +18,7 @@ import { api } from '../api/api'
 import { createCookie, getAuthTokens, getClientCookie, setAuthTokens } from '../utils/cookie'
 
 // import type { Locale } from '@/configs/'
-import { LOGED_IN_USER_DATA, USER_ROLES } from '../constants/appConstants';
+import { LOGGED_IN_USER_DATA, USER_ROLES } from '../constants/appConstants';
 import { GET_PROFILE_DETAILS, LOGIN_API, LOGOUT_API } from '../api/apiParams/auth';
 import { clearAllAuthData, getAccessToken } from '../utils/authHelpers'
 
@@ -53,14 +53,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const response = await api({
         endpoint: GET_PROFILE_DETAILS,
-
       })
       if (!response?.error) {
         const userData = (response?.data) || null
 
         if (userData) {
           setUser(userData)
-          createCookie(LOGED_IN_USER_DATA, JSON.stringify(userData), { path: '/' })
+          createCookie(LOGGED_IN_USER_DATA, JSON.stringify(userData), { path: '/' })
 
 
           return userData
@@ -87,7 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (token) {
       // Check if user data exists in cookie first (only for initial load)
       if (!isInitialized.current) {
-        const cachedUser = getClientCookie(LOGED_IN_USER_DATA)
+        const cachedUser = getClientCookie(LOGGED_IN_USER_DATA)
         const cachedRole = getClientCookie('ROLE')
 
         if (cachedUser && cachedRole) {
@@ -182,7 +181,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setAuthTokens(tokens.accessToken, tokens.refreshToken)
 
         if (response.data?.role === USER_ROLES.ADMIN) {
-
           router.push('/admin')
         } else if (response.data?.role === USER_ROLES.TEACHER) {
           router.push('/teacher')
@@ -214,19 +212,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       const res = await api({
         endpoint: LOGOUT_API,
-        payloadData: { refresh: refreshToken }
+        payloadData: { refresh_token: refreshToken }
       })
 
       if (!res?.error) {
         clearAllAuthData()
         setUser(null)
+        setRole(null)
 
         isInitialized.current = false // Reset initialization flag for next login
 
         router.push('/login')
+      } else {
+        console.error('Logout API error:', res?.message)
+        clearAllAuthData()
+        setUser(null)
+        setRole(null)
+        isInitialized.current = false
+        router.push('/login')
       }
     } catch (error) {
       // Logout API error
+      console.error('Logout error:', error)
+      clearAllAuthData()
+      setUser(null)
+      setRole(null)
+      isInitialized.current = false
+      router.push('/login')
     } finally {
       setLoading(false)
     }
@@ -244,7 +256,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAuthenticated: !!user,
         fetchUser,
         setUser,
-
       }}
     >
       {children}

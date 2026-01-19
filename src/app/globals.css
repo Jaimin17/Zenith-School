@@ -8,6 +8,16 @@
     0px 0px 0px 1px rgba(25, 28, 33, 0.08);
 }
 
+@theme {
+  --color-lamaSky: "#C3EBFA";
+  --color-lamaSkyLight: "#EDF9FD";
+  --color-lamaPurple: "#CFCEFF";
+  --color-lamaPurpleLight: "#F1F0FF";
+  --color-lamaYellow: "#FAE27C";
+  --color-lamaYellowLight: "#FEFCE8",
+}
+
+
 html {
   scroll-behavior: smooth;
 }
@@ -22,10 +32,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 .react-calendar {
   width: 100% !important;

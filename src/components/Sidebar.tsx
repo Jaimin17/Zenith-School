@@ -2,20 +2,48 @@
 
 import { useAuth } from "@/contexts/authContext";
 import Image from "next/image";
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 interface User {
   id: string;
-  role: "admin" | "teacher" | "student" | "parent";
+  role: "admin" | "teacher" | "student" | "parent" | string;
 }
 
-const Sidebar: React.FC = () => {
-  // const { user } = useAuth();
-  // console.log("User ", user);
+const Navbar: React.FC = () => {
+  const { user, role, logout, loading } = useAuth();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const user: User = {
-    id: "admin1",
-    role: "admin", // or "teacher", "student", "parent"
+  const userDetail: User = {
+    id: `${user?.id}`,
+    role: role || "admin",
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   return (
@@ -46,17 +74,75 @@ const Sidebar: React.FC = () => {
             1
           </div>
         </div>
-        <div className="flex flex-col">
-          <span className="text-xs leading-3 font-medium">John Doe</span>
-          <span className="text-[10px] text-gray-500 text-right">
-            {user?.role}
-          </span>
+
+        {/* USER PROFILE WITH DROPDOWN */}
+        <div className="relative" ref={dropdownRef}>
+          <div 
+            className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={toggleDropdown}
+          >
+            <div className="flex flex-col">
+              <span className="text-xs leading-3 font-medium">
+                {user?.username}
+              </span>
+              <span className="text-[10px] text-gray-500 text-right capitalize">
+                {userDetail?.role}
+              </span>
+            </div>
+            <Image 
+              src="/avatar.png" 
+              alt="" 
+              width={36} 
+              height={36} 
+              className="rounded-full"
+            />
+          </div>
+
+          {/* DROPDOWN MENU */}
+          {isDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+              {/* Profile Option */}
+              <button
+                className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  // Add navigation to profile page if needed
+                }}
+              >
+                <PersonIcon sx={{ fontSize: 18 }} />
+                <span>Profile</span>
+              </button>
+
+              {/* Settings Option */}
+              <button
+                className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  // Add navigation to settings page if needed
+                }}
+              >
+                <SettingsIcon sx={{ fontSize: 18 }} />
+                <span>Settings</span>
+              </button>
+
+              {/* Divider */}
+              <div className="border-t border-gray-200 my-1"></div>
+
+              {/* Logout Option */}
+              <button
+                className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                onClick={handleLogout}
+                disabled={loading}
+              >
+                <LogoutIcon sx={{ fontSize: 18 }} />
+                <span>{loading ? 'Logging out...' : 'Logout'}</span>
+              </button>
+            </div>
+          )}
         </div>
-        {/* <Image src="/avatar.png" alt="" width={36} height={36} className="rounded-full"/> */}
-        {/* <UserButton /> */}
       </div>
     </div>
   );
 };
 
-export default Sidebar;
+export default Navbar;

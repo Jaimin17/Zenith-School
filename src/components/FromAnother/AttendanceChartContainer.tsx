@@ -15,7 +15,7 @@ type AttendanceDay = {
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
-const AttendanceChartContainer = async () => {
+const AttendanceChartContainer = () => {
   const today = new Date();
   const dayOfWeek = today.getDay();
   const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;

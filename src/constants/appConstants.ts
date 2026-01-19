@@ -8,4 +8,4 @@ export const USER_ROLES = {
     STUDENT: 'student'
 }
 
-export const LOGED_IN_USER_DATA = 'USER'
+export const LOGGED_IN_USER_DATA = 'USER'

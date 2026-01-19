@@ -1,75 +1,168 @@
-'use client';
-
+import { 
+    fetchAnnouncementsAction, 
+    fetchParentStudentsAction,
+    fetchLessonsForStudentsWeeklyAction 
+} from "@/actions/admin";
 import Announcements from "../../../components/FromAnother/Announcements";
 import BigCalendarContainer from "../../../components/FromAnother/BigCalendarContainer";
-import { useAuth } from "../../../contexts/authContext";
-import { useEffect, useState } from "react";
+import { Announcement, Student, Lesson } from "@/types/schemas";
+import { Suspense } from "react";
 
-interface Student {
-    id: string;
-    name: string;
-    surname: string;
-    classId: string;
-}
+// Skeleton Components
+const BigCalendarSkeleton = () => (
+    <div className="bg-white p-4 rounded-md animate-pulse">
+        <div className="h-6 bg-gray-200 rounded w-48 mb-4"></div>
+        <div className="space-y-3">
+            <div className="h-4 bg-gray-200 rounded w-full"></div>
+            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+            <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+            <div className="h-64 bg-gray-200 rounded w-full mt-4"></div>
+        </div>
+    </div>
+);
 
-const ParentPage: React.FC = () => {
-    const { user } = useAuth();
-    const [students, setStudents] = useState<Student[]>([]);
+const AnnouncementsSkeleton = () => (
+    <div className="bg-white p-4 rounded-md animate-pulse">
+        <div className="h-6 bg-gray-200 rounded w-32 mb-4"></div>
+        <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+                <div key={i} className="border-b pb-4">
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                </div>
+            ))}
+        </div>
+    </div>
+);
 
-    useEffect(() => {
-        if (!user) return;
+const StudentScheduleSkeleton = () => (
+    <div className="w-full">
+        <BigCalendarSkeleton />
+    </div>
+);
 
-        const fetchStudents = async () => {
-            try {
-                // Replace this with real API call
-                // const res = await fetch(`/api/students?parentId=${user.id}`, { cache: "no-store" });
+// Student Schedule Component with Error Boundary
+const StudentSchedule = async ({ student }: { student: Student }) => {
+    if (!student.related_class) {
+        return (
+            <div className="w-full">
+                <div className="bg-white p-4 rounded-md">
+                    <h1 className="text-xl font-semibold mb-4">
+                        Schedule ({student.first_name} {student.last_name})
+                    </h1>
+                    <p className="text-gray-500 text-sm">
+                        No class assigned to this student.
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
-                const res = {
-                    ok: true, 
-                    json: async (): Promise<Student[]> => [
-                        { id: "1", name: "John", surname: "Doe", classId: "class-1" },
-                        { id: "2", name: "Jane", surname: "Doe", classId: "class-2" }
-                    ]
-                };
+    const lessonsResult = await fetchLessonsForStudentsWeeklyAction(student.id);
 
-                if (res.ok) {
-                    const data = await res.json();
-                    setStudents(data);
-                } else {
-                    setStudents([]);
-                }
-            } catch (error) {
-                // Error fetching students
-                setStudents([]);
-            }
-        };
+    if (!lessonsResult.success || !lessonsResult.data) {
+        console.error(`Failed to fetch lessons for student ${student.id}:`, lessonsResult.error);
+        
+        return (
+            <div className="w-full">
+                <div className="bg-white p-4 rounded-md">
+                    <h1 className="text-xl font-semibold mb-4">
+                        Schedule ({student.first_name} {student.last_name})
+                    </h1>
+                    <p className="text-red-500 text-sm">
+                        Failed to load schedule. Please try again later.
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
-        fetchStudents();
-    }, [user]);
+    const lessons: Lesson[] = lessonsResult.data;
 
-    if (!user) return <div>Loading...</div>;
+    return (
+        <div className="w-full">
+            <div className="bg-white p-4 rounded-md">
+                <h1 className="text-xl font-semibold mb-4">
+                    Schedule ({student.first_name} {student.last_name})
+                </h1>
+                <div className="w-full overflow-auto">
+                    <BigCalendarContainer initialLessons={lessons} />
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const ParentPage: React.FC = async () => {
+    // Fetch students and announcements in parallel
+    const [studentResults, announcementsResult] = await Promise.all([
+        fetchParentStudentsAction(),
+        fetchAnnouncementsAction()
+    ]);
+
+    const hasStudentError = !studentResults.success || !studentResults.data;
+    const hasAnnouncementError = !announcementsResult.success || !announcementsResult.data;
+
+    if (hasStudentError) {
+        console.error('Failed to fetch students:', studentResults.error);
+    }
+
+    if (hasAnnouncementError) {
+        console.error('Failed to fetch announcements:', announcementsResult.error);
+    }
+
+    const students: Student[] = studentResults.data || [];
+    const announcements: Announcement[] = announcementsResult.data || [];
 
     return (
         <div className="flex-1 p-4 flex gap-4 flex-col xl:flex-row">
-            {/* LEFT */}
-            <div className="flex-1 flex flex-col gap-4">
-                {students.map((student) => (
-                    <div className="w-full xl:w-2/3" key={student.id}>
-                        <div className="h-full bg-white p-4 rounded-md">
-                            <h1 className="text-xl font-semibold">
-                                Schedule ({student.name} {student.surname})
+            {/* LEFT - Student Schedules */}
+            <div className="w-full xl:w-2/3 flex flex-col gap-4">
+                {hasStudentError ? (
+                    <div className="w-full">
+                        <div className="bg-white p-4 rounded-md">
+                            <h1 className="text-xl font-semibold text-red-500">
+                                Error Loading Students
                             </h1>
-                            {student.classId && (
-                                <BigCalendarContainer type="classId" id={student.classId} />
-                            )}
+                            <p className="text-gray-600 mt-2">
+                                {studentResults.error || 'Unable to load student information. Please try again later.'}
+                            </p>
                         </div>
                     </div>
-                ))}
+                ) : students.length === 0 ? (
+                    <div className="w-full">
+                        <div className="bg-white p-4 rounded-md">
+                            <h1 className="text-xl font-semibold">No Students Found</h1>
+                            <p className="text-gray-500 mt-2">
+                                No students are currently assigned to your account.
+                            </p>
+                        </div>
+                    </div>
+                ) : (
+                    students.map((student) => (
+                        <Suspense key={student.id} fallback={<StudentScheduleSkeleton />}>
+                            <StudentSchedule student={student} />
+                        </Suspense>
+                    ))
+                )}
             </div>
 
-            {/* RIGHT */}
-            <div className="w-full xl:w-1/3 flex flex-col gap-8">
-                <Announcements />
+            {/* RIGHT - Announcements */}
+            <div className="w-full xl:w-1/3 flex flex-col gap-4">
+                <Suspense fallback={<AnnouncementsSkeleton />}>
+                    {hasAnnouncementError ? (
+                        <div className="bg-white p-4 rounded-md">
+                            <h1 className="text-xl font-semibold text-red-500">
+                                Error Loading Announcements
+                            </h1>
+                            <p className="text-gray-600 mt-2 text-sm">
+                                {announcementsResult.error || 'Unable to load announcements.'}
+                            </p>
+                        </div>
+                    ) : (
+                        <Announcements initialAnnouncements={announcements} />
+                    )}
+                </Suspense>
             </div>
         </div>
     );

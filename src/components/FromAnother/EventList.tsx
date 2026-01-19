@@ -1,75 +1,86 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { fetchEventsByDateAction } from "@/actions/admin";
+import type { Events } from "@/types/schemas";
+import { Skeleton, Box, Typography } from "@mui/material";
+import EventIcon from "@mui/icons-material/Event";
 
-interface EventItem {
-  id: number | string;
-  title: string;
-  description: string;
-  startTime: string;
-}
+const EventList = () => {
+  const [events, setEvents] = useState<Events[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const dateParam = searchParams.get('date');
 
-const EventList = ({ dateParam }: { dateParam: string | undefined }) => {
-  const [events, setEvents] = useState<EventItem[]>([]);
-
+  // Fetch events whenever date changes (or on mount)
   useEffect(() => {
-    const date = dateParam ? new Date(dateParam) : new Date();
-
-    const startOfDay = new Date(date.setHours(0, 0, 0, 0));
-    const endOfDay = new Date(date.setHours(23, 59, 59, 999));
-
     const fetchEvents = async () => {
-      try {
-        // const res = await fetch(
-        //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/events?start=${startOfDay.toISOString()}&end=${endOfDay.toISOString()}`,
-        //   { method: "GET", cache: "no-store" }
-        // );
-
-        // const res = { ok: false }; // temporary dummy
-
-        // if (res.ok) {
-        //   const data = await res.json();
-        //   setEvents(data);
-        // } else {
-          // DUMMY DATA
-          setEvents([
-            {
-              id: 1,
-              title: "Math Workshop",
-              description: "Algebra basics for Class 8",
-              startTime: new Date().setHours(10, 30, 0, 0).toString(),
-            },
-            {
-              id: 2,
-              title: "Science Fair",
-              description: "Student science project display",
-              startTime: new Date().setHours(13, 0, 0, 0).toString(),
-            },
-          ]);
-        // }
-      } catch (error) {
-        console.error("Events Load Error:", error);
+      setIsLoading(true);
+      
+      // Use date from URL or default to today
+      const searchDate = dateParam ? new Date(dateParam) : new Date();
+      const result = await fetchEventsByDateAction(searchDate);
+      
+      if (result.success) {
+        setEvents(result.data);
+      } else {
+        console.error('Failed to fetch events:', result.error);
+        setEvents([]);
       }
+      
+      setIsLoading(false);
     };
 
     fetchEvents();
   }, [dateParam]);
 
+  const formatDate = (dateString: string) => {
+    const eventDate = new Date(dateString);
+    return eventDate.getHours().toString().padStart(2, '0') + ':' + 
+           eventDate.getMinutes().toString().padStart(2, '0');
+  };
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <Box display="flex" flexDirection="column" gap={2}>
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} variant="rounded" height={80} />
+        ))}
+      </Box>
+    );
+  }
+
+  // Empty state
+  if (events.length === 0) {
+    return (
+      <Box 
+        display="flex" 
+        flexDirection="column" 
+        alignItems="center" 
+        py={4}
+        color="text.secondary"
+      >
+        <EventIcon sx={{ fontSize: 48, opacity: 0.3, mb: 1 }} />
+        <Typography variant="body2">
+          No events scheduled for this day
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <>
       {events.map((event) => (
         <div
-          className="p-5 rounded-md border-2 border-gray-100 border-t-4 odd:border-t-lamaSky even:border-t-lamaPurple"
+          className="p-3 rounded-md border-2 border-gray-100 border-t-4 odd:border-t-lamaSky even:border-t-lamaPurple"
           key={event.id}
         >
           <div className="flex items-center justify-between">
-            <h1 className="font-semibold text-gray-600">{event.title}</h1>
+            <h1 className="font-semibold text-gray-600 text-sm">{event.title}</h1>
             <span className="text-gray-300 text-xs">
-              {new Date(event.startTime).toLocaleTimeString("en-UK", {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })}
+              {formatDate(event.start_time)}
             </span>
           </div>
 

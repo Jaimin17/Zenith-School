@@ -43,7 +43,7 @@ export const LOGIN_API: ApiType = {
 
 // Get Profile API
 export const GET_PROFILE_DETAILS: ApiType = {
-  url: apiUrls.UER_PROFILE_ENDPOINT,
+  url: apiUrls.USER_PROFILE_ENDPOINT,
   method: "GET",
   withToken: true,
   isMultipart: false,

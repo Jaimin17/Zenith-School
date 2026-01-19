@@ -121,6 +121,11 @@ export interface ApiResponse<T = any> {
    * Response message from the API
    */
   message?: string
+
+  /**
+   * Total count of items (for paginated responses)
+   */
+  totalCount?: number
 }
 
 /**

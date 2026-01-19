@@ -4,7 +4,6 @@ import EventCalendar from "./EventCalendar";
 import EventList from "./EventList";
 
 const EventCalendarContainer = () => {
-
   return (
     <Box
       sx={{
@@ -32,9 +31,7 @@ const EventCalendarContainer = () => {
 
       {/* EVENT LIST */}
       <Box display="flex" flexDirection="column" gap={2}>
-
-        {/* <EventCalendarContainer searchParams={searchParams} /> */}
-        {/* <EventList dateParam={date} /> */}
+        <EventList />
       </Box>
     </Box>
   );

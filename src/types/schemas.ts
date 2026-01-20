@@ -26,6 +26,15 @@ export interface ClassReadonly extends ClassBase {
     grade: Grade,
 }
 
+export interface ClassListResponse {
+    data: ClassReadonly[],
+    total_count: number,
+    page: number,
+    total_pages: number,
+    has_next: boolean,
+    has_prev: boolean,
+}
+
 export interface Announcement {
     id: string,
     title: string,

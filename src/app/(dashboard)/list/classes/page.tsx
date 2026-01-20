@@ -2,128 +2,72 @@ import FormContainer from "@/components/FromAnother/FormContainer";
 import Pagination from "@/components/FromAnother/Pagination";
 import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
-import { ITEM_PER_PAGE } from "@/lib/settings";
 import Image from "next/image";
+import type { ClassReadonly } from "@/types/schemas";
+import { fetchClassesListAction } from "@/actions/admin";
+import { Suspense } from "react";
+import { requireAuth } from "@/lib/auth/serverAuth";
+import { Users } from "lucide-react";
 
-type ClassList = {
-  id: number;
-  name: string;
-  capacity: number;
-  supervisorId: string;
-  gradeId: number;
-  supervisor: {
-    id: string;
-    name: string;
-    surname: string;
-  };
-};
-
-// Static data for demonstration
-const STATIC_CLASSES: ClassList[] = [
-  {
-    id: 1,
-    name: "1A",
-    capacity: 30,
-    supervisorId: "teacher1",
-    gradeId: 1,
-    supervisor: { id: "teacher1", name: "John", surname: "Smith" },
-  },
-  {
-    id: 2,
-    name: "1B",
-    capacity: 28,
-    supervisorId: "teacher2",
-    gradeId: 1,
-    supervisor: { id: "teacher2", name: "Sarah", surname: "Johnson" },
-  },
-  {
-    id: 3,
-    name: "2A",
-    capacity: 32,
-    supervisorId: "teacher3",
-    gradeId: 2,
-    supervisor: { id: "teacher3", name: "Michael", surname: "Brown" },
-  },
-  {
-    id: 4,
-    name: "2B",
-    capacity: 30,
-    supervisorId: "teacher4",
-    gradeId: 2,
-    supervisor: { id: "teacher4", name: "Emily", surname: "Davis" },
-  },
-  {
-    id: 5,
-    name: "3A",
-    capacity: 35,
-    supervisorId: "teacher5",
-    gradeId: 3,
-    supervisor: { id: "teacher5", name: "David", surname: "Wilson" },
-  },
-  {
-    id: 6,
-    name: "3B",
-    capacity: 33,
-    supervisorId: "teacher6",
-    gradeId: 3,
-    supervisor: { id: "teacher6", name: "Jessica", surname: "Martinez" },
-  },
-  {
-    id: 7,
-    name: "4A",
-    capacity: 30,
-    supervisorId: "teacher7",
-    gradeId: 4,
-    supervisor: { id: "teacher7", name: "Robert", surname: "Anderson" },
-  },
-  {
-    id: 8,
-    name: "4B",
-    capacity: 29,
-    supervisorId: "teacher8",
-    gradeId: 4,
-    supervisor: { id: "teacher8", name: "Linda", surname: "Taylor" },
-  },
-  {
-    id: 9,
-    name: "5A",
-    capacity: 32,
-    supervisorId: "teacher9",
-    gradeId: 5,
-    supervisor: { id: "teacher9", name: "James", surname: "Thomas" },
-  },
-  {
-    id: 10,
-    name: "5B",
-    capacity: 31,
-    supervisorId: "teacher10",
-    gradeId: 5,
-    supervisor: { id: "teacher10", name: "Mary", surname: "Garcia" },
-  },
-  {
-    id: 11,
-    name: "6A",
-    capacity: 28,
-    supervisorId: "teacher11",
-    gradeId: 6,
-    supervisor: { id: "teacher11", name: "William", surname: "Rodriguez" },
-  },
-  {
-    id: 12,
-    name: "6B",
-    capacity: 30,
-    supervisorId: "teacher12",
-    gradeId: 6,
-    supervisor: { id: "teacher12", name: "Patricia", surname: "Miller" },
-  },
-];
+// Skeleton Component
+const TableSkeleton = () => (
+  <div className="animate-pulse">
+    <div className="space-y-3 mt-4">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div key={i} className="flex gap-4 p-4 border-b border-gray-200">
+          <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
+          <div className="flex-1 space-y-2">
+            <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+            <div className="h-3 bg-gray-200 rounded w-1/6"></div>
+          </div>
+          <div className="hidden md:block w-20 h-4 bg-gray-200 rounded"></div>
+          <div className="hidden md:block w-24 h-4 bg-gray-200 rounded"></div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 const ClassListPage = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  const role = "admin";
+  const params = await searchParams;
+
+  const auth = await requireAuth();
+
+  const role = auth.role;
+
+  const allowedRoles = ['admin', 'teacher'];
+  if (role && !allowedRoles.includes(role)) {
+    return (
+      <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+        <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
+          <h2 className="text-lg font-semibold text-red-700 mb-2">
+            Access Denied
+          </h2>
+          <p className="text-red-600 text-sm">
+            You do not have permission to view this page.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const page = params.page ? parseInt(params.page) : 1;
+  const search = params.search || undefined;
+
+  const result = await fetchClassesListAction(search, page);
+
+  const hasError = !result.success || !result.data;
+
+  if (hasError) {
+    console.error('Failed to fetch classes:', result.error);
+  }
+
+  const data: ClassReadonly[] = result.data?.data || [];
+  const count: number = result.totalCount || 0;
 
   const columns = [
     {
@@ -143,7 +87,7 @@ const ClassListPage = async ({
     {
       header: "Supervisor",
       accessor: "supervisor",
-      className: "hidden md:table-cell",
+      className: "hidden lg:table-cell",
     },
     ...(role === "admin"
       ? [
@@ -155,16 +99,39 @@ const ClassListPage = async ({
       : []),
   ];
 
-  const renderRow = (item: ClassList) => (
+  const renderRow = (item: ClassReadonly) => (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
     >
-      <td className="flex items-center gap-4 p-4">{item.name}</td>
-      <td className="hidden md:table-cell">{item.capacity}</td>
-      <td className="hidden md:table-cell">{item.name[0]}</td>
+      <td className="flex items-center gap-4 p-4">
+        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
+          <span className="text-sm font-bold text-indigo-600">{item.name.replace('Class', '')}</span>
+        </div>
+        <div className="flex flex-col">
+          <h3 className="font-semibold">{item.name}</h3>
+          <p className="text-xs text-gray-500">{item.capacity} students max</p>
+        </div>
+      </td>
       <td className="hidden md:table-cell">
-        {item.supervisor.name + " " + item.supervisor.surname}
+        <div className="flex items-center gap-2">
+          <Users className="w-4 h-4 text-gray-400" />
+          <span>{item.capacity}</span>
+        </div>
+      </td>
+      <td className="hidden md:table-cell">
+        <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-medium">
+          Grade {item.grade?.level || "-"}
+        </span>
+      </td>
+      <td className="hidden lg:table-cell">
+        {item.supervisor ? (
+          <span className="text-gray-700">
+            {item.supervisor.first_name} {item.supervisor.last_name}
+          </span>
+        ) : (
+          <span className="text-gray-400">-</span>
+        )}
       </td>
       <td>
         <div className="flex items-center gap-2">
@@ -179,41 +146,14 @@ const ClassListPage = async ({
     </tr>
   );
 
-  const { page, ...queryParams } = await searchParams;
-  const p = page ? parseInt(page) : 1;
-
-  // Filter data based on query params
-  let filteredData = STATIC_CLASSES;
-
-  if (queryParams.search) {
-    filteredData = filteredData.filter((classItem) =>
-      classItem.name.toLowerCase().includes(queryParams.search!.toLowerCase())
-    );
-  }
-
-  if (queryParams.supervisorId) {
-    filteredData = filteredData.filter(
-      (classItem) => classItem.supervisorId === queryParams.supervisorId
-    );
-  }
-
-  // Pagination logic
-  const count = filteredData.length;
-  const startIndex = ITEM_PER_PAGE * (p - 1);
-  const endIndex = startIndex + ITEM_PER_PAGE;
-  const data = filteredData.slice(startIndex, endIndex);
-
-  // TODO: Replace with actual API call
-  // const response = await fetch(
-  //   `/api/classes?page=${p}&search=${queryParams.search || ''}&supervisorId=${queryParams.supervisorId || ''}`
-  // );
-  // const { data, count } = await response.json();
-
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP */}
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Classes</h1>
+        <h1 className="hidden md:block text-lg font-semibold">
+          All Classes
+        </h1>
+
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
@@ -223,14 +163,44 @@ const ClassListPage = async ({
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && <FormContainer table="class" type="create" />}
+
+            {role === "admin" && (
+              <FormContainer table="class" type="create" />
+            )}
           </div>
         </div>
       </div>
-      {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+
+      {/* ERROR STATE */}
+      {hasError ? (
+        <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
+          <h2 className="text-lg font-semibold text-red-700 mb-2">
+            Error Loading Classes
+          </h2>
+          <p className="text-red-600 text-sm">
+            {result.error || 'Unable to load classes. Please try again later.'}
+          </p>
+        </div>
+      ) : data.length === 0 ? (
+        /* EMPTY STATE */
+        <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-md text-center">
+          <p className="text-gray-600">
+            {search 
+              ? `No classes found matching "${search}"` 
+              : 'No classes available'}
+          </p>
+        </div>
+      ) : (
+        /* LIST */
+        <Suspense fallback={<TableSkeleton />}>
+          <Table columns={columns} renderRow={renderRow} data={data} />
+        </Suspense>
+      )}
+
       {/* PAGINATION */}
-      <Pagination page={p} count={count} />
+      {!hasError && count > 0 && (
+        <Pagination page={page} count={count} />
+      )}
     </div>
   );
 };

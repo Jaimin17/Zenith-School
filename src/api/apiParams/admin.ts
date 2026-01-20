@@ -72,3 +72,12 @@ export const GET_TEACHER_API: ApiType = {
     showToast: false,
     isForm: false,
 }
+
+export const GET_CLASSES_API: ApiType = {
+    url: apiUrls.GET_CLASSES_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}

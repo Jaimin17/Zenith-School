@@ -20,4 +20,6 @@ export const apiUrls = {
     GET_STUDENT_PARENT_URL: "api/v1/student/getAll",
 
     GET_TEACHER_URL: "api/v1/teacher/getAll",
+
+    GET_CLASSES_URL: "api/v1/classes/getAll",
 }

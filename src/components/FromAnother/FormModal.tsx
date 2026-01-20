@@ -6,6 +6,7 @@ import {
   deleteStudent,
   deleteSubject,
   deleteTeacher,
+  deleteAnnouncement,
 } from "@/lib/actions";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -28,7 +29,7 @@ const deleteActionMap = {
   result: deleteSubject,
   attendance: deleteSubject,
   event: deleteSubject,
-  announcement: deleteSubject,
+  announcement: deleteAnnouncement,
 };
 
 const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
@@ -67,6 +68,14 @@ const ExamForm = dynamic(() => import("./forms/ExamForm"), {
   loading: () => (
     <div className="flex items-center justify-center p-8">
       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    </div>
+  ),
+});
+
+const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"), {
+  loading: () => (
+    <div className="flex items-center justify-center p-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
     </div>
   ),
 });
@@ -113,6 +122,14 @@ const forms: {
   ),
   exam: (setOpen, type, data, relatedData) => (
     <ExamForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  announcement: (setOpen, type, data, relatedData) => (
+    <AnnouncementForm
       type={type}
       data={data}
       setOpen={setOpen}
@@ -228,7 +245,7 @@ const FormModal = ({
         </div>
 
         {/* Warning Box */}
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3 mb-6">
           <div className="flex items-start gap-3">
             <div className="flex-shrink-0 w-5 h-5 rounded-full bg-red-100 flex items-center justify-center mt-0.5">
               <span className="text-red-600 text-xs font-bold">!</span>

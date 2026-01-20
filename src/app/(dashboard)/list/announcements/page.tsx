@@ -2,66 +2,70 @@ import FormContainer from "@/components/FromAnother/FormContainer";
 import Pagination from "@/components/FromAnother/Pagination";
 import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
-import { ITEM_PER_PAGE } from "@/lib/settings";
 import Image from "next/image";
+import type { Announcement } from "@/types/schemas";
+import { fetchAnnouncementsAction } from "@/actions/admin";
+import { Suspense } from "react";
+import { requireAuth } from "@/lib/auth/serverAuth";
 
-type AnnouncementList = {
-  id: number;
-  title: string;
-  date: Date;
-  classId: number | null;
-  class: {
-    id: number;
-    name: string;
-  } | null;
-};
-
-// Static data for demonstration
-const STATIC_ANNOUNCEMENTS: AnnouncementList[] = [
-  {
-    id: 1,
-    title: "Important: Exam Schedule Released",
-    date: new Date("2024-01-15"),
-    classId: 1,
-    class: { id: 1, name: "Class 10A" },
-  },
-  {
-    id: 2,
-    title: "Parent-Teacher Meeting - Next Week",
-    date: new Date("2024-01-18"),
-    classId: 2,
-    class: { id: 2, name: "Class 9B" },
-  },
-  {
-    id: 3,
-    title: "School Holiday - Republic Day",
-    date: new Date("2024-01-26"),
-    classId: null,
-    class: null,
-  },
-  {
-    id: 4,
-    title: "Science Fair Registration Open",
-    date: new Date("2024-01-20"),
-    classId: 3,
-    class: { id: 3, name: "Class 11C" },
-  },
-  {
-    id: 5,
-    title: "Sports Day Announcement",
-    date: new Date("2024-02-05"),
-    classId: null,
-    class: null,
-  },
-];
+// Skeleton Component
+const TableSkeleton = () => (
+  <div className="animate-pulse">
+    <div className="space-y-3 mt-4">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div key={i} className="flex gap-4 p-4 border-b border-gray-200">
+          <div className="flex-1 space-y-2">
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+          </div>
+          <div className="hidden md:block w-24 h-4 bg-gray-200 rounded"></div>
+          <div className="hidden md:block w-28 h-4 bg-gray-200 rounded"></div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 const AnnouncementListPage = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  const role = "admin";
-  const currentUserId = "admin1";
+  const params = await searchParams;
+
+  const auth = await requireAuth();
+
+  const role = auth.role;
+
+  const allowedRoles = ['admin', 'teacher'];
+  if (role && !allowedRoles.includes(role)) {
+    return (
+      <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+        <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
+          <h2 className="text-lg font-semibold text-red-700 mb-2">
+            Access Denied
+          </h2>
+          <p className="text-red-600 text-sm">
+            You do not have permission to view this page.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const page = params.page ? parseInt(params.page) : 1;
+  const search = params.search || undefined;
+
+  const result = await fetchAnnouncementsAction(search, page);
+
+  const hasError = !result.success || !result.data;
+
+  if (hasError) {
+    console.error('Failed to fetch announcements:', result.error);
+  }
+
+  const data: Announcement[] = result.data?.data || [];
+  const count: number = result.totalCount || 0;
 
   const columns = [
     {
@@ -87,15 +91,20 @@ const AnnouncementListPage = async ({
       : []),
   ];
 
-  const renderRow = (item: AnnouncementList) => (
+  const renderRow = (item: Announcement) => (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
     >
-      <td className="flex items-center gap-4 p-4">{item.title}</td>
-      <td>{item.class?.name || "-"}</td>
+      <td className="flex items-center gap-4 p-4">
+        <div className="flex flex-col">
+          <h3 className="font-semibold">{item.title}</h3>
+          <p className="text-xs text-gray-500 line-clamp-1">{item.description}</p>
+        </div>
+      </td>
+      <td>{item.related_class?.name || "All Classes"}</td>
       <td className="hidden md:table-cell">
-        {new Intl.DateTimeFormat("en-US").format(item.date)}
+        {new Intl.DateTimeFormat("en-US").format(new Date(item.announcement_date))}
       </td>
       <td>
         <div className="flex items-center gap-2">
@@ -109,30 +118,6 @@ const AnnouncementListPage = async ({
       </td>
     </tr>
   );
-
-  const { page, ...queryParams } = await searchParams;
-  const p = page ? parseInt(page) : 1;
-
-  // Filter data based on search query
-  let filteredData = STATIC_ANNOUNCEMENTS;
-
-  if (queryParams.search) {
-    filteredData = filteredData.filter((announcement) =>
-      announcement.title
-        .toLowerCase()
-        .includes(queryParams.search!.toLowerCase())
-    );
-  }
-
-  // Pagination logic
-  const count = filteredData.length;
-  const startIndex = ITEM_PER_PAGE * (p - 1);
-  const endIndex = startIndex + ITEM_PER_PAGE;
-  const data = filteredData.slice(startIndex, endIndex);
-
-  // TODO: Replace with actual API call
-  // const response = await fetch(`/api/announcements?page=${p}&search=${queryParams.search || ''}`);
-  // const { data, count } = await response.json();
 
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
@@ -156,10 +141,37 @@ const AnnouncementListPage = async ({
           </div>
         </div>
       </div>
-      {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+
+      {/* ERROR STATE */}
+      {hasError ? (
+        <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
+          <h2 className="text-lg font-semibold text-red-700 mb-2">
+            Error Loading Announcements
+          </h2>
+          <p className="text-red-600 text-sm">
+            {result.error || 'Unable to load announcements. Please try again later.'}
+          </p>
+        </div>
+      ) : data.length === 0 ? (
+        /* EMPTY STATE */
+        <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-md text-center">
+          <p className="text-gray-600">
+            {search 
+              ? `No announcements found matching "${search}"` 
+              : 'No announcements available'}
+          </p>
+        </div>
+      ) : (
+        /* LIST */
+        <Suspense fallback={<TableSkeleton />}>
+          <Table columns={columns} renderRow={renderRow} data={data} />
+        </Suspense>
+      )}
+
       {/* PAGINATION */}
-      <Pagination page={p} count={count} />
+      {!hasError && count > 0 && (
+        <Pagination page={page} count={count} />
+      )}
     </div>
   );
 };

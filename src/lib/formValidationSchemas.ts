@@ -64,3 +64,13 @@ export const examSchema = z.object({
 
 export type ExamSchema = z.infer<typeof examSchema>;
 
+export const announcementSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(1, "Title is required").max(200, "Title must be less than 200 characters"),
+  description: z.string().min(1, "Description is required"),
+  announcement_date: z.string().min(1, "Announcement date is required"),
+  class_id: z.string().optional(),
+});
+
+export type AnnouncementSchema = z.infer<typeof announcementSchema>;
+

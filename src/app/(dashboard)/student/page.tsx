@@ -3,6 +3,7 @@ import { fetchAnnouncementsAction, fetchLessonsWeeklyAction, fetchStudentClassAc
 import Announcements from "../../../components/FromAnother/Announcements";
 import BigCalendarContainer from "../../../components/FromAnother/BigCalendarContainer";
 import EventCalendarContainer from "@/components/FromAnother/EventCalendarContainer";
+import { AnnouncementListResponse } from "@/types/schemas";
 
 interface ClassBase {
     id: string;
@@ -63,7 +64,21 @@ async function ScheduleSection() {
 
 async function SidebarSection() {
     const announcementsResult = await fetchAnnouncementsAction();
-    const announcements = announcementsResult.success ? announcementsResult.data || [] : [];
+    const announcements: AnnouncementListResponse = announcementsResult.success ? announcementsResult.data || {
+        data: [],
+        total_count: 0,
+        page: 1,
+        total_pages: 1,
+        has_next: false,
+        has_prev: false,
+    } : {
+        data: [],
+        total_count: 0,
+        page: 1,
+        total_pages: 1,
+        has_next: false,
+        has_prev: false,
+    };
 
     return (
         <div className="w-full xl:w-1/3 flex flex-col gap-8">

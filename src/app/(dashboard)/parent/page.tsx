@@ -5,7 +5,7 @@ import {
 } from "@/actions/admin";
 import Announcements from "../../../components/FromAnother/Announcements";
 import BigCalendarContainer from "../../../components/FromAnother/BigCalendarContainer";
-import { Announcement, Student, Lesson } from "@/types/schemas";
+import { Announcement, Student, Lesson, AnnouncementListResponse } from "@/types/schemas";
 import { Suspense } from "react";
 
 // Skeleton Components
@@ -112,7 +112,14 @@ const ParentPage: React.FC = async () => {
     }
 
     const students: Student[] = studentResults.data || [];
-    const announcements: Announcement[] = announcementsResult.data || [];
+    const announcements: AnnouncementListResponse = announcementsResult.data || {
+        data: [],
+        total_count: 0,
+        page: 1,
+        total_pages: 1,
+        has_next: false,
+        has_prev: false,
+    };
 
     return (
         <div className="flex-1 p-4 flex gap-4 flex-col xl:flex-row">

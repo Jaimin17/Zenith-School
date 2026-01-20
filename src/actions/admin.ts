@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { api } from '@/api/api';
 import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_PARENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API } from '@/api/apiParams/admin';
-import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, Student, Teacher, TeacherWithRelations, TeacherListResponse } from '@/types/schemas';
+import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, Student, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse } from '@/types/schemas';
 import { getServerAuthTokens } from "@/utils/cookie";
 
 export async function fetchUserCountsAction(): Promise<{
@@ -51,9 +51,10 @@ export async function fetchUserCountsAction(): Promise<{
     }
 }
 
-export async function fetchAnnouncementsAction(searchTerm?: string): Promise<{
+export async function fetchAnnouncementsAction(searchTerm?: string, pageNo: number = 1): Promise<{
     success: boolean;
-    data: Announcement[] | null;
+    data: AnnouncementListResponse | null;
+    totalCount: number;
     error?: string;
 }> {
     try {
@@ -65,15 +66,21 @@ export async function fetchAnnouncementsAction(searchTerm?: string): Promise<{
             return {
                 success: false,
                 data: null,
+                totalCount: 0,
                 error: 'Unauthorized: No authentication token found'
             };
         }
 
         // Build params if search term provided
-        const params = searchTerm ? { search: searchTerm } : {};
+        const params = searchTerm ? { 
+                search: searchTerm,
+                page: pageNo
+            } : {
+                page: pageNo
+            };
 
         // Make API request with server token
-        const response = await api<Announcement[]>({
+        const response = await api<AnnouncementListResponse>({
             endpoint: ANNOUNCEMENT_API,
             params,
             serverToken: token.accessToken,
@@ -84,6 +91,7 @@ export async function fetchAnnouncementsAction(searchTerm?: string): Promise<{
             return {
                 success: false,
                 data: null,
+                totalCount: 0,
                 error: response.message || 'Failed to fetch announcements'
             };
         }
@@ -91,12 +99,14 @@ export async function fetchAnnouncementsAction(searchTerm?: string): Promise<{
         return {
             success: true,
             data: response.data,
+            totalCount: response.data.total_count || 0,
         };
     } catch (error) {
         console.error('Error in fetchAnnouncementsAction:', error);
         return {
             success: false,
             data: null,
+            totalCount: 0,
             error: 'An unexpected error occurred while fetching announcements'
         };
     }

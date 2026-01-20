@@ -3,6 +3,7 @@ import Announcements from "../../../components/FromAnother/Announcements";
 import BigCalendarContainer from "../../../components/FromAnother/BigCalendarContainer";
 import { fetchAnnouncementsAction, fetchLessonsWeeklyAction } from "@/actions/admin";
 import { Alert, Box } from "@mui/material";
+import { AnnouncementListResponse } from "@/types/schemas";
 
 const TeacherPage = async () => {
     // Fetch data in parallel on the server
@@ -23,7 +24,14 @@ const TeacherPage = async () => {
         console.error('Failed to fetch lessons:', lessonsResult.error);
     }
 
-    const announcements = announcementsResult.data || [];
+    const announcements: AnnouncementListResponse = announcementsResult.data || {
+        data: [],
+        total_count: 0,
+        page: 1,
+        total_pages: 1,
+        has_next: false,
+        has_prev: false,
+    };
     const lessons = lessonsResult.data || [];
 
     return (

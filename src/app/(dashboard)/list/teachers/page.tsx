@@ -4,7 +4,6 @@ import TableSearch from "../../../../components/FromAnother/TableSearch";
 import FormContainer from "../../../../components/FromAnother/FormContainer";
 import Image from "next/image";
 import Link from "next/link";
-import { ITEM_PER_PAGE } from "@/lib/settings";
 import type { TeacherWithRelations } from "@/types/schemas";
 import { fetchTeachersListAction } from "@/actions/admin";
 import { Suspense } from "react";

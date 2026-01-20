@@ -114,3 +114,22 @@ export async function deleteExam(formData: FormData): Promise<FormState> {
   return { success: true, error: false };
 }
 
+// Announcement actions
+export async function createAnnouncement(formData: FormData): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Creating announcement:", formData);
+  return { success: true, error: false };
+}
+
+export async function updateAnnouncement(formData: FormData): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Updating announcement:", formData);
+  return { success: true, error: false };
+}
+
+export async function deleteAnnouncement(formData: FormData): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Deleting announcement:", formData);
+  return { success: true, error: false };
+}
+

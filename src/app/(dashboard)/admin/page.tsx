@@ -9,6 +9,7 @@ import { Box } from "@mui/material";
 import type { StudentCount } from "../../../components/FromAnother/CountChartContainer";
 import type { UserStat } from "../../../components/FromAnother/UserCard";
 import { fetchUserCountsAction, fetchAnnouncementsAction } from "@/actions/admin";
+import { AnnouncementListResponse } from "@/types/schemas";
 
 const AdminPage = async () => {
   // Fetch data on server in parallel
@@ -49,7 +50,14 @@ const AdminPage = async () => {
     { sex: "FEMALE", count: usersCount.students.girls },
   ];
 
-  const announcements = announcementsResult.data || [];
+  const announcements: AnnouncementListResponse = announcementsResult.data || {
+    data: [],
+    total_count: 0,
+    page: 1,
+    total_pages: 1,
+    has_next: false,
+    has_prev: false,
+  };
 
   return (
     <div className="p-4 flex gap-4 flex-col md:flex-row">

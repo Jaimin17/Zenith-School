@@ -1,9 +1,8 @@
 "use client";
 
 import { Box, Typography, Skeleton } from "@mui/material";
-import { useAdmin } from "@/contexts/adminContext";
-import { useEffect, useState, useTransition } from "react";
-import type { Announcement } from "@/types/schemas";
+import { useState, useTransition } from "react";
+import type { Announcement, AnnouncementListResponse } from "@/types/schemas";
 import AnnouncementIcon from '@mui/icons-material/Campaign';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -16,18 +15,18 @@ const cardColors = [
 ];
 
 interface AnnouncementsProps {
-  initialAnnouncements: Announcement[];
+  initialAnnouncements: AnnouncementListResponse;
 }
 
 const Announcements = ({ initialAnnouncements }: AnnouncementsProps) => {
-    const [announcements, setAnnouncements] = useState<Announcement[]>(initialAnnouncements);
+    const [announcements, setAnnouncements] = useState<Announcement[]>(initialAnnouncements.data);
     const [isPending, startTransition] = useTransition();
 
     const handleRefresh = () => {
       startTransition(async () => {
           const result = await fetchAnnouncementsAction();
           if (result.success && result.data) {
-            setAnnouncements(result.data);
+            setAnnouncements(result.data.data);
           }
       });
   };

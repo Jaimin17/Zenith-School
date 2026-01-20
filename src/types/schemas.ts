@@ -35,6 +35,15 @@ export interface Announcement {
     related_class: ClassBase | null,
 }
 
+export interface AnnouncementListResponse {
+    data: Announcement[],
+    total_count: number,
+    page: number,
+    total_pages: number,
+    has_next: boolean,
+    has_prev: boolean,
+}
+
 export interface Events {
     id: string,
     title: string,

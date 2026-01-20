@@ -22,4 +22,6 @@ export const apiUrls = {
     GET_TEACHER_URL: "api/v1/teacher/getAll",
 
     GET_CLASSES_URL: "api/v1/classes/getAll",
+
+    GET_EVENTS_URL: "api/v1/events/getAll",
 }

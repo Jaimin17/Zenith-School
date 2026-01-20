@@ -74,3 +74,16 @@ export const announcementSchema = z.object({
 
 export type AnnouncementSchema = z.infer<typeof announcementSchema>;
 
+export const eventSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(1, "Event title is required").max(200, "Title must be less than 200 characters"),
+  description: z.string().min(1, "Description is required"),
+  start_date: z.string().min(1, "Start date is required"),
+  start_time: z.string().min(1, "Start time is required"),
+  end_date: z.string().min(1, "End date is required"),
+  end_time: z.string().min(1, "End time is required"),
+  class_id: z.string().optional(),
+});
+
+export type EventSchema = z.infer<typeof eventSchema>;
+

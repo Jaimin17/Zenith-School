@@ -133,3 +133,22 @@ export async function deleteAnnouncement(formData: FormData): Promise<FormState>
   return { success: true, error: false };
 }
 
+// Event actions
+export async function createEvent(formData: FormData): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Creating event:", formData);
+  return { success: true, error: false };
+}
+
+export async function updateEvent(formData: FormData): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Updating event:", formData);
+  return { success: true, error: false };
+}
+
+export async function deleteEvent(formData: FormData): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Deleting event:", formData);
+  return { success: true, error: false };
+}
+

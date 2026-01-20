@@ -7,6 +7,7 @@ import type { Announcement } from "@/types/schemas";
 import { fetchAnnouncementsAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
+import { Calendar } from "lucide-react";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -15,7 +16,7 @@ const TableSkeleton = () => (
       {[1, 2, 3, 4, 5].map((i) => (
         <div key={i} className="flex gap-4 p-4 border-b border-gray-200">
           <div className="flex-1 space-y-2">
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/3"></div>
             <div className="h-3 bg-gray-200 rounded w-1/4"></div>
           </div>
           <div className="hidden md:block w-24 h-4 bg-gray-200 rounded"></div>
@@ -69,12 +70,13 @@ const AnnouncementListPage = async ({
 
   const columns = [
     {
-      header: "Title",
+      header: "Announcement",
       accessor: "title",
     },
     {
       header: "Class",
       accessor: "class",
+      className: "hidden md:table-cell",
     },
     {
       header: "Date",
@@ -91,6 +93,14 @@ const AnnouncementListPage = async ({
       : []),
   ];
 
+  const formatDate = (dateStr: string) => {
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    }).format(new Date(dateStr));
+  };
+
   const renderRow = (item: Announcement) => (
     <tr
       key={item.id}
@@ -98,13 +108,20 @@ const AnnouncementListPage = async ({
     >
       <td className="flex items-center gap-4 p-4">
         <div className="flex flex-col">
-          <h3 className="font-semibold">{item.title}</h3>
+          <h3 className="font-semibold text-gray-900">{item.title}</h3>
           <p className="text-xs text-gray-500 line-clamp-1">{item.description}</p>
         </div>
       </td>
-      <td>{item.related_class?.name || "All Classes"}</td>
       <td className="hidden md:table-cell">
-        {new Intl.DateTimeFormat("en-US").format(new Date(item.announcement_date))}
+        <span className="text-gray-600">
+          {item.related_class?.name || "All Classes"}
+        </span>
+      </td>
+      <td className="hidden md:table-cell">
+        <div className="flex items-center gap-1.5 text-gray-600">
+          <Calendar className="w-3.5 h-3.5 text-gray-400" />
+          <span>{formatDate(item.announcement_date)}</span>
+        </div>
       </td>
       <td>
         <div className="flex items-center gap-2">
@@ -126,6 +143,7 @@ const AnnouncementListPage = async ({
         <h1 className="hidden md:block text-lg font-semibold">
           All Announcements
         </h1>
+
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
@@ -135,6 +153,7 @@ const AnnouncementListPage = async ({
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
+
             {role === "admin" && (
               <FormContainer table="announcement" type="create" />
             )}

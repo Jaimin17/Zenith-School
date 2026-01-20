@@ -28,6 +28,15 @@ export const EVENTS_API: ApiType = {
     isForm: true,
 }
 
+export const ALL_EVENTS_API: ApiType = {
+    url: apiUrls.GET_EVENTS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const LESSONS_WEEK_API: ApiType = {
     url: apiUrls.LESSONS_WEEK_URL,
     method: "GET",

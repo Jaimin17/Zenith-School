@@ -118,26 +118,26 @@ const TeacherListPage = async ({
           className="md:hidden xl:block w-10 h-10 rounded-full object-cover"
         />
         <div className="flex flex-col">
-          <h3 className="font-semibold">{item.first_name} {item.last_name}</h3>
+          <h3 className="font-semibold text-gray-900">{item.first_name} {item.last_name}</h3>
           <p className="text-xs text-gray-500">{item.email}</p>
         </div>
       </td>
 
-      <td className="hidden md:table-cell">{item.username}</td>
-      <td className="hidden md:table-cell">
+      <td className="hidden md:table-cell text-gray-600">{item.username}</td>
+      <td className="hidden md:table-cell text-gray-600">
         {item.subjects?.map((s) => s.name).join(", ") || "-"}
       </td>
-      <td className="hidden md:table-cell">
+      <td className="hidden md:table-cell text-gray-600">
         {item.classes?.map((c) => c.name).join(", ") || "-"}
       </td>
-      <td className="hidden lg:table-cell">{item.phone || "-"}</td>
-      <td className="hidden lg:table-cell">{item.address || "-"}</td>
+      <td className="hidden lg:table-cell text-gray-600">{item.phone || "-"}</td>
+      <td className="hidden lg:table-cell text-gray-600">{item.address || "-"}</td>
 
       <td>
         <div className="flex items-center gap-2">
           <Link href={`/list/teachers/${item.id}`}>
             <button 
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 text-white shadow-md shadow-sky-500/20 transition-all duration-200 hover:scale-105 active:scale-95"
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
               title="View Details"
             >
               <Eye className="w-4 h-4" />

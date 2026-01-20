@@ -7,6 +7,7 @@ import {
   deleteSubject,
   deleteTeacher,
   deleteAnnouncement,
+  deleteEvent,
 } from "@/lib/actions";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -28,7 +29,7 @@ const deleteActionMap = {
   assignment: deleteSubject,
   result: deleteSubject,
   attendance: deleteSubject,
-  event: deleteSubject,
+  event: deleteEvent,
   announcement: deleteAnnouncement,
 };
 
@@ -76,6 +77,14 @@ const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"), {
   loading: () => (
     <div className="flex items-center justify-center p-8">
       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+    </div>
+  ),
+});
+
+const EventForm = dynamic(() => import("./forms/EventForm"), {
+  loading: () => (
+    <div className="flex items-center justify-center p-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
     </div>
   ),
 });
@@ -130,6 +139,14 @@ const forms: {
   ),
   announcement: (setOpen, type, data, relatedData) => (
     <AnnouncementForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  event: (setOpen, type, data, relatedData) => (
+    <EventForm
       type={type}
       data={data}
       setOpen={setOpen}

@@ -1,3 +1,11 @@
+interface PaginationListReponse {
+    total_count: number,
+    page: number,
+    total_pages: number,
+    has_next: boolean,
+    has_prev: boolean,
+}
+
 export interface StudentCount {
     boys: number;
     girls: number;
@@ -26,13 +34,8 @@ export interface ClassReadonly extends ClassBase {
     grade: Grade,
 }
 
-export interface ClassListResponse {
-    data: ClassReadonly[],
-    total_count: number,
-    page: number,
-    total_pages: number,
-    has_next: boolean,
-    has_prev: boolean,
+export interface ClassListResponse extends PaginationListReponse {
+    data: ClassReadonly[]
 }
 
 export interface Announcement {
@@ -44,13 +47,8 @@ export interface Announcement {
     related_class: ClassBase | null,
 }
 
-export interface AnnouncementListResponse {
-    data: Announcement[],
-    total_count: number,
-    page: number,
-    total_pages: number,
-    has_next: boolean,
-    has_prev: boolean,
+export interface AnnouncementListResponse extends PaginationListReponse {
+    data: Announcement[]
 }
 
 export interface Events {
@@ -59,6 +57,14 @@ export interface Events {
     description: string,
     start_time: string,
     end_time: string,
+}
+
+export interface EventsWithRelations extends Events {
+    related_class: ClassBase,
+}
+
+export interface EventListResponse extends PaginationListReponse {
+    data: EventsWithRelations[],
 }
 
 export interface Teacher {
@@ -80,13 +86,8 @@ export interface TeacherWithRelations extends Teacher {
     classes: ClassBase[],
 }
 
-export interface TeacherListResponse {
-    data: TeacherWithRelations[],
-    total_count: number,
-    page: number,
-    total_pages: number,
-    has_next: boolean,
-    has_previous: boolean,
+export interface TeacherListResponse extends PaginationListReponse {
+    data: TeacherWithRelations[]
 }
 
 export interface Subject {

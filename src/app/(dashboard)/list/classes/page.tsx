@@ -105,33 +105,29 @@ const ClassListPage = async ({
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
     >
       <td className="flex items-center gap-4 p-4">
-        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
-          <span className="text-sm font-bold text-indigo-600">{item.name.replace('Class', '')}</span>
-        </div>
         <div className="flex flex-col">
-          <h3 className="font-semibold">{item.name}</h3>
+          <h3 className="font-semibold text-gray-900">{item.name}</h3>
           <p className="text-xs text-gray-500">{item.capacity} students max</p>
         </div>
       </td>
       <td className="hidden md:table-cell">
-        <div className="flex items-center gap-2">
-          <Users className="w-4 h-4 text-gray-400" />
+        <div className="flex items-center gap-1.5 text-gray-600">
+          <Users className="w-3.5 h-3.5 text-gray-400" />
           <span>{item.capacity}</span>
         </div>
       </td>
       <td className="hidden md:table-cell">
-        <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-medium">
+        <span className="text-gray-600">
           Grade {item.grade?.level || "-"}
         </span>
       </td>
       <td className="hidden lg:table-cell">
-        {item.supervisor ? (
-          <span className="text-gray-700">
-            {item.supervisor.first_name} {item.supervisor.last_name}
-          </span>
-        ) : (
-          <span className="text-gray-400">-</span>
-        )}
+        <span className="text-gray-600">
+          {item.supervisor 
+            ? `${item.supervisor.first_name} ${item.supervisor.last_name}`
+            : "-"
+          }
+        </span>
       </td>
       <td>
         <div className="flex items-center gap-2">

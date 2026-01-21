@@ -64,8 +64,8 @@ export const GET_STUDENT_CLASS_API: ApiType = {
     isForm: false,
 }
 
-export const GET_STUDENT_PARENT_API: ApiType = {
-    url: apiUrls.GET_STUDENT_PARENT_URL,
+export const GET_STUDENT_API: ApiType = {
+    url: apiUrls.GET_STUDENT_URL,
     method: "GET",  
     withToken: true,
     isMultipart: false,
@@ -82,6 +82,15 @@ export const GET_TEACHER_API: ApiType = {
     isForm: false,
 }
 
+export const GET_FULL_TEACHERS_API: ApiType = {
+    url: apiUrls.GET_ALL_TEACHERS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const GET_CLASSES_API: ApiType = {
     url: apiUrls.GET_CLASSES_URL,
     method: "GET",
@@ -91,8 +100,44 @@ export const GET_CLASSES_API: ApiType = {
     isForm: false,
 }
 
+export const GET_ALL_CLASSES_API: ApiType = {
+    url: apiUrls.GET_ALL_CLASSES_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const GET_EXAMS_API: ApiType = {
     url: apiUrls.GET_EXAMS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_CLASS_EXAMS_API: ApiType = {
+    url: apiUrls.GET_CLASS_EXAMS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_TEACHER_EXAMS_API: ApiType = {
+    url: apiUrls.GET_TEACHER_EXAMS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_SUBJECTS_API: ApiType = {
+    url: apiUrls.GET_SUBJECTS_URL,
     method: "GET",
     withToken: true,
     isMultipart: false,

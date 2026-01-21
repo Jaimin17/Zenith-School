@@ -100,13 +100,11 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
 
       // ---------------- EXAM ----------------
       case "exam": {
-        // If needed later, we can re-enable API logic
-        // keeping structure consistent with your original code.
-        // const examLessons = await fetchApi(
-        //   `/api/lessons?teacherId=${role === "teacher" ? currentUserId : ""}`,
-        //   [{ id: 10, name: "Math Class" }]
-        // );
-        // relatedData = { lessons: examLessons };
+        const examLessons = await fetchApi(
+          `/api/lessons?teacherId=${currentUserId}`,
+          [{ id: 10, name: "Math Class" }]
+        );
+        relatedData = { lessons: examLessons };
         break;
       }
 

@@ -130,7 +130,7 @@ const StudentForm = ({
         </div>
 
         {/* Photo Upload */}
-        <CldUploadWidget
+        {/* <CldUploadWidget
           uploadPreset="school"
           onSuccess={(result, { widget }) => {
             setImg(result.info);
@@ -153,7 +153,7 @@ const StudentForm = ({
               </div>
             );
           }}
-        </CldUploadWidget>
+        </CldUploadWidget> */}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <InputField

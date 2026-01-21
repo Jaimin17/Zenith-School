@@ -2,14 +2,14 @@ import FormContainer from "@/components/FromAnother/FormContainer";
 import Pagination from "@/components/FromAnother/Pagination";
 import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
-import Image from "next/image";
+import ExamFilters from "@/components/FromAnother/ExamFilters";
 import type { ExamsWithRelations } from "@/types/schemas";
-import { fetchExamListAction } from "@/actions/admin";
+import { fetchExamListAction, fetchTeachersListAction, fetchClassesListAction, fetchFullTeachersListAction, fetchAllClassesAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { Calendar, Clock, BookOpen } from "lucide-react";
 
-
+// Skeleton Component
 const TableSkeleton = () => (
   <div className="animate-pulse">
     <div className="space-y-3 mt-4">
@@ -59,7 +59,12 @@ const ExamListPage = async ({
   const classId = params.classId || undefined;
   const teacherId = params.teacherId || undefined;
 
-  const result = await fetchExamListAction(search, page, classId, teacherId);
+  // Fetch exams and filter data in parallel
+  const [result, teachersResult, classesResult] = await Promise.all([
+    fetchExamListAction(search, page, classId, teacherId),
+    fetchFullTeachersListAction(),
+    fetchAllClassesAction()
+  ]);
 
   const hasError = !result.success || !result.data;
 
@@ -69,6 +74,10 @@ const ExamListPage = async ({
 
   const data: ExamsWithRelations[] = result.data?.data || [];
   const count: number = result.totalCount || 0;
+
+  // Get filter options
+  const teachers = teachersResult.data || [];
+  const classes = classesResult.data || [];
 
   const columns = [
     {
@@ -122,8 +131,8 @@ const ExamListPage = async ({
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
     >
       <td className="flex items-center gap-4 p-4">
-        <div className="w-10 h-10 rounded-lg bg-lamaSkyLight flex items-center justify-center">
-          <BookOpen className="w-5 h-5 text-lamaSky" />
+        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+          <BookOpen className="w-5 h-5 text-gray-500" />
         </div>
         <div className="flex flex-col">
           <h3 className="font-semibold text-gray-900">
@@ -132,17 +141,13 @@ const ExamListPage = async ({
           <p className="text-xs text-gray-500">{item.title}</p>
         </div>
       </td>
-      <td className="hidden md:table-cell">
-        <span className="text-gray-600">
-          {item.lesson?.related_class?.name || "-"}
-        </span>
+      <td className="hidden md:table-cell text-gray-600">
+        {item.lesson?.related_class?.name || "-"}
       </td>
-      <td className="hidden md:table-cell">
-        <span className="text-gray-600">
-          {item.lesson?.teacher
-            ? `${item.lesson.teacher.first_name} ${item.lesson.teacher.last_name}`
-            : "-"}
-        </span>
+      <td className="hidden md:table-cell text-gray-600">
+        {item.lesson?.teacher
+          ? `${item.lesson.teacher.first_name} ${item.lesson.teacher.last_name}`
+          : "-"}
       </td>
       <td className="hidden lg:table-cell">
         <div className="flex flex-col gap-1">
@@ -169,7 +174,6 @@ const ExamListPage = async ({
     </tr>
   );
 
-  // Filter data based on query params
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP */}
@@ -179,13 +183,6 @@ const ExamListPage = async ({
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/filter.png" alt="" width={14} height={14} />
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/sort.png" alt="" width={14} height={14} />
-            </button>
-
             {(role === "admin" || role === "teacher") && (
               <FormContainer table="exam" type="create" />
             )}
@@ -193,9 +190,18 @@ const ExamListPage = async ({
         </div>
       </div>
 
+      {/* FILTERS */}
+      <ExamFilters
+        classes={classes}
+        teachers={teachers ? teachers : []}
+        currentClassId={classId}
+        currentTeacherId={teacherId}
+        currentSearch={search}
+      />
+
       {/* ERROR STATE */}
       {hasError ? (
-        <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
+        <div className="mt-4 p-6 bg-red-50 border border-red-200 rounded-md">
           <h2 className="text-lg font-semibold text-red-700 mb-2">
             Error Loading Exams
           </h2>
@@ -205,15 +211,19 @@ const ExamListPage = async ({
         </div>
       ) : data.length === 0 ? (
         /* EMPTY STATE */
-        <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-md text-center">
+        <div className="mt-4 p-6 bg-gray-50 border border-gray-200 rounded-md text-center">
           <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-3" />
           <p className="text-gray-600 font-medium mb-1">
             {search 
               ? `No exams found matching "${search}"` 
+              : classId || teacherId
+              ? 'No exams match the selected filters'
               : 'No exams scheduled'}
           </p>
           <p className="text-gray-500 text-sm">
-            {role === "admin" || role === "teacher" 
+            {classId || teacherId 
+              ? "Try adjusting your filters or clear them to see all exams"
+              : role === "admin" || role === "teacher" 
               ? "Create your first exam to get started" 
               : "Check back later for upcoming exams"}
           </p>
@@ -232,6 +242,5 @@ const ExamListPage = async ({
     </div>
   );
 };
-
 
 export default ExamListPage;

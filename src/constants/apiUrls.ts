@@ -17,13 +17,23 @@ export const apiUrls = {
 
     GET_STUDENT_CLASS_URL: "api/v1/classes/getStudentClass",
 
-    GET_STUDENT_PARENT_URL: "api/v1/student/getAll",
+    GET_STUDENT_URL: "api/v1/student/getAll",
 
     GET_TEACHER_URL: "api/v1/teacher/getAll",
 
+    GET_ALL_TEACHERS_URL: "api/v1/teacher/getFullList",
+
     GET_CLASSES_URL: "api/v1/classes/getAll",
+
+    GET_ALL_CLASSES_URL: "api/v1/classes/getFullList",
 
     GET_EVENTS_URL: "api/v1/events/getAll",
 
     GET_EXAMS_URL: "api/v1/exam/getAll",
+
+    GET_CLASS_EXAMS_URL: "api/v1/exam/class",
+
+    GET_TEACHER_EXAMS_URL: "api/v1/exam/teacher",
+
+    GET_SUBJECTS_URL: "api/v1/subject/getAll",
 }

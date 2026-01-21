@@ -2,8 +2,8 @@
 
 import { cookies } from "next/headers";
 import { api } from '@/api/api';
-import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_PARENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API } from '@/api/apiParams/admin';
-import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, Student, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse } from '@/types/schemas';
+import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API } from '@/api/apiParams/admin';
+import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, Student, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse } from '@/types/schemas';
 import { getServerAuthTokens } from "@/utils/cookie";
 
 export async function fetchUserCountsAction(): Promise<{
@@ -382,9 +382,10 @@ export async function fetchStudentClassAction(): Promise<{
 }
 
 
-export async function fetchParentStudentsAction(searchTerm?: string): Promise<{
+export async function fetchStudentsAction(searchTerm?: string, pageNo: number = 1): Promise<{
     success: boolean;
-    data: Student[] | null;
+    data: StudentListResponse | null;
+    totalCount: number;
     error?: string;
 }> {
     try {
@@ -396,15 +397,16 @@ export async function fetchParentStudentsAction(searchTerm?: string): Promise<{
             return {
                 success: false,
                 data: null,
+                totalCount: 0,
                 error: 'Unauthorized: No authentication token found'
             };
         }
 
-        const params = searchTerm ? { search: searchTerm } : {};
+        const params = searchTerm ? { search: searchTerm, page: pageNo.toString() } : { page: pageNo.toString() };
 
         // Make API request with server token
-        const response = await api<Student[]>({
-            endpoint: GET_STUDENT_PARENT_API,
+        const response = await api<StudentListResponse>({
+            endpoint: GET_STUDENT_API,
             params,
             serverToken: token.accessToken,
             isServer: true,
@@ -414,6 +416,7 @@ export async function fetchParentStudentsAction(searchTerm?: string): Promise<{
             return {
                 success: false,
                 data: null,
+                totalCount: 0,
                 error: response.message || 'Failed to fetch student information'
             };
         }
@@ -421,12 +424,14 @@ export async function fetchParentStudentsAction(searchTerm?: string): Promise<{
         return {
             success: true,
             data: response.data,
+            totalCount: response.data.total_count || 0,
         };
     } catch (error) {
-        console.error('Error in fetchParentStudentsAction:', error);
+        console.error('Error in fetchStudentsAction:', error);
         return {
             success: false,
             data: null,
+            totalCount: 0,
             error: 'An unexpected error occurred while fetching student information'
         };
     }
@@ -499,6 +504,57 @@ export async function fetchTeachersListAction(searchTerm?: string, pageNo: numbe
 }
 
 
+export async function fetchFullTeachersListAction(): Promise<{
+    success: boolean;
+    data: Teacher[] | null;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        // Make API request with server token
+        const response = await api<Teacher[]>({
+            endpoint: GET_FULL_TEACHERS_API,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch teachers'
+            };
+        }
+
+        const teachersData = response.data;
+
+        return {
+            success: true,
+            data: teachersData
+        };
+    } catch (error) {
+        console.error('Error in fetchFullTeachersListAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching teacher information'
+        };
+    }
+}
+
+
+
 export async function fetchClassesListAction(searchTerm?: string, pageNo: number = 1): Promise<{
     success: boolean;
     data: ClassListResponse | null;
@@ -559,6 +615,52 @@ export async function fetchClassesListAction(searchTerm?: string, pageNo: number
     }
 }
 
+export async function fetchAllClassesAction(): Promise<{
+    success: boolean;
+    data: ClassBase[] | null;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        // Make API request with server token
+        const response = await api<ClassBase[]>({
+            endpoint: GET_ALL_CLASSES_API,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch all classes'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data
+        };
+    } catch (error) {
+        console.error('Error in fetchAllClassesAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching all classes'
+        };
+    }
+}
 
 
 export async function fetchExamListAction(
@@ -603,12 +705,69 @@ export async function fetchExamListAction(
         }
 
         // Make API request with server token
-        const response = await api<ExamListResponse>({
-            endpoint: GET_EXAMS_API,
-            params,
-            serverToken: token.accessToken,
-            isServer: true,
-        });
+        let response;
+
+        if (!classId && !teacherId) {
+            response = await api<ExamListResponse>({
+                endpoint: GET_EXAMS_API,
+                params,
+                serverToken: token.accessToken,
+                isServer: true,
+            });
+        } else if (classId && !teacherId) {
+            response = await api<ExamListResponse>({
+                endpoint: {
+                    ...GET_CLASS_EXAMS_API,
+                    url: `${GET_CLASS_EXAMS_API.url}/${classId}`,
+                },
+                params,
+                serverToken: token.accessToken,
+                isServer: true,
+            });
+        } else if (teacherId && !classId) {
+            response = await api<ExamListResponse>({
+                endpoint: {
+                    ...GET_TEACHER_EXAMS_API,
+                    url: `${GET_TEACHER_EXAMS_API.url}/${teacherId}`,
+                },
+                params,
+                serverToken: token.accessToken,
+                isServer: true,
+            });
+        } else {
+            params.delete('classId');
+            params.delete('teacherId');
+
+            // Both classId and teacherId provided - fetch by class then filter by teacher
+            response = await api<ExamListResponse>({
+                endpoint: {
+                    ...GET_CLASS_EXAMS_API,
+                    url: `${GET_CLASS_EXAMS_API.url}/${classId}`,
+                },
+                params,
+                serverToken: token.accessToken,
+                isServer: true,
+            });
+
+            if (!response.error && response.data) {
+                // Filter by teacherId on client side if both classId and teacherId are provided
+                const filteredExams = response.data.data.filter(exam => exam.lesson.teacher.id === teacherId);
+                
+                // Calculate proper pagination for filtered results
+                const pageSize = 10;
+                const totalFiltered = filteredExams.length;
+                const startIndex = (pageNo - 1) * pageSize;
+                const endIndex = startIndex + pageSize;
+                const paginatedExams = filteredExams.slice(startIndex, endIndex);
+
+                response.data.data = paginatedExams;
+                response.data.total_count = totalFiltered;
+                response.data.total_pages = Math.ceil(totalFiltered / pageSize);
+                response.data.page = pageNo;
+                response.data.has_next = endIndex < totalFiltered;
+                response.data.has_prev = pageNo > 1;
+            }
+        }
 
         if (response.error || !response.data) {
             return {
@@ -631,6 +790,66 @@ export async function fetchExamListAction(
             data: null,
             totalCount: 0,
             error: 'An unexpected error occurred while fetching exam information'
+        };
+    }
+}
+
+export async function fetchSubjectListAction(searchTerm?: string, pageNo: number = 1): Promise<{
+    success: boolean;
+    data: SubjectListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params = searchTerm ? { 
+            search: searchTerm,
+            page: pageNo.toString()
+         } : {
+            page: pageNo.toString()
+         };
+
+        // Make API request with server token
+        const response = await api<SubjectListResponse>({
+            endpoint: GET_SUBJECTS_API,
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: response.message || 'Failed to fetch subjects'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+            totalCount: response.data.total_count || 0,
+        };
+    } catch (error) {
+        console.error('Error in fetchSubjectListAction:', error);
+        return {
+            success: false,
+            data: null,
+            totalCount: 0,
+            error: 'An unexpected error occurred while fetching subject information'
         };
     }
 }

@@ -1,6 +1,6 @@
 import { 
     fetchAnnouncementsAction, 
-    fetchParentStudentsAction,
+    fetchStudentsAction,
     fetchLessonsForStudentsWeeklyAction 
 } from "@/actions/admin";
 import Announcements from "../../../components/FromAnother/Announcements";
@@ -96,7 +96,7 @@ const StudentSchedule = async ({ student }: { student: Student }) => {
 const ParentPage: React.FC = async () => {
     // Fetch students and announcements in parallel
     const [studentResults, announcementsResult] = await Promise.all([
-        fetchParentStudentsAction(),
+        fetchStudentsAction(),
         fetchAnnouncementsAction()
     ]);
 

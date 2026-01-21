@@ -110,6 +110,14 @@ export interface Subject {
     name: string,
 }
 
+export interface SubjectWithRelations extends Subject {
+    teachers: Teacher[],
+}
+
+export interface SubjectListResponse extends PaginationListResponse {
+    data: SubjectWithRelations[],
+}
+
 export interface Lesson {
     id: string,
     name: string,
@@ -146,4 +154,8 @@ export interface Student {
     parent: Parent | null,
     related_class: ClassBase,
     grade: Grade,
+}
+
+export interface StudentListResponse extends PaginationListResponse {
+    data: Student[]
 }

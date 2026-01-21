@@ -90,3 +90,12 @@ export const GET_CLASSES_API: ApiType = {
     showToast: false,
     isForm: false,
 }
+
+export const GET_EXAMS_API: ApiType = {
+    url: apiUrls.GET_EXAMS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}

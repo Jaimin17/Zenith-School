@@ -2,144 +2,83 @@ import FormContainer from "@/components/FromAnother/FormContainer";
 import Pagination from "@/components/FromAnother/Pagination";
 import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
-import { ITEM_PER_PAGE } from "@/lib/settings";
 import Image from "next/image";
+import type { ExamsWithRelations } from "@/types/schemas";
+import { fetchExamListAction } from "@/actions/admin";
+import { Suspense } from "react";
+import { requireAuth } from "@/lib/auth/serverAuth";
+import { Calendar, Clock, BookOpen } from "lucide-react";
 
-type ExamList = {
-  id: number;
-  title: string;
-  startTime: Date;
-  endTime: Date;
-  lessonId: number;
-  lesson: {
-    id: number;
-    subject: {
-      id: number;
-      name: string;
-    };
-    class: {
-      id: number;
-      name: string;
-    };
-    teacher: {
-      id: string;
-      name: string;
-      surname: string;
-    };
-  };
-};
 
-// Static data for demonstration
-const STATIC_EXAMS: ExamList[] = [
-  {
-    id: 1,
-    title: "Mid-term Mathematics Exam",
-    startTime: new Date("2024-02-10T09:00:00"),
-    endTime: new Date("2024-02-10T11:00:00"),
-    lessonId: 1,
-    lesson: {
-      id: 1,
-      subject: { id: 1, name: "Mathematics" },
-      class: { id: 1, name: "Class 10A" },
-      teacher: { id: "teacher1", name: "John", surname: "Smith" },
-    },
-  },
-  {
-    id: 2,
-    title: "Physics Final Exam",
-    startTime: new Date("2024-02-15T10:00:00"),
-    endTime: new Date("2024-02-15T12:00:00"),
-    lessonId: 2,
-    lesson: {
-      id: 2,
-      subject: { id: 2, name: "Physics" },
-      class: { id: 2, name: "Class 11B" },
-      teacher: { id: "teacher2", name: "Sarah", surname: "Johnson" },
-    },
-  },
-  {
-    id: 3,
-    title: "Chemistry Quiz",
-    startTime: new Date("2024-02-18T14:00:00"),
-    endTime: new Date("2024-02-18T15:00:00"),
-    lessonId: 3,
-    lesson: {
-      id: 3,
-      subject: { id: 3, name: "Chemistry" },
-      class: { id: 3, name: "Class 12C" },
-      teacher: { id: "teacher3", name: "Michael", surname: "Brown" },
-    },
-  },
-  {
-    id: 4,
-    title: "English Literature Exam",
-    startTime: new Date("2024-02-20T09:00:00"),
-    endTime: new Date("2024-02-20T11:30:00"),
-    lessonId: 4,
-    lesson: {
-      id: 4,
-      subject: { id: 4, name: "English" },
-      class: { id: 1, name: "Class 10A" },
-      teacher: { id: "teacher4", name: "Emily", surname: "Davis" },
-    },
-  },
-  {
-    id: 5,
-    title: "Biology Mid-term",
-    startTime: new Date("2024-02-22T10:00:00"),
-    endTime: new Date("2024-02-22T12:00:00"),
-    lessonId: 5,
-    lesson: {
-      id: 5,
-      subject: { id: 5, name: "Biology" },
-      class: { id: 4, name: "Class 9A" },
-      teacher: { id: "teacher5", name: "David", surname: "Wilson" },
-    },
-  },
-  {
-    id: 6,
-    title: "History Final Exam",
-    startTime: new Date("2024-02-25T13:00:00"),
-    endTime: new Date("2024-02-25T15:00:00"),
-    lessonId: 6,
-    lesson: {
-      id: 6,
-      subject: { id: 6, name: "History" },
-      class: { id: 2, name: "Class 11B" },
-      teacher: { id: "teacher6", name: "Jessica", surname: "Martinez" },
-    },
-  },
-  {
-    id: 7,
-    title: "Computer Science Practical",
-    startTime: new Date("2024-02-28T11:00:00"),
-    endTime: new Date("2024-02-28T13:00:00"),
-    lessonId: 7,
-    lesson: {
-      id: 7,
-      subject: { id: 7, name: "Computer Science" },
-      class: { id: 3, name: "Class 12C" },
-      teacher: { id: "teacher7", name: "Robert", surname: "Anderson" },
-    },
-  },
-];
+const TableSkeleton = () => (
+  <div className="animate-pulse">
+    <div className="space-y-3 mt-4">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div key={i} className="flex gap-4 p-4 border-b border-gray-200">
+          <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
+          <div className="flex-1 space-y-2">
+            <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+            <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+          </div>
+          <div className="hidden md:block w-24 h-4 bg-gray-200 rounded"></div>
+          <div className="hidden md:block w-32 h-4 bg-gray-200 rounded"></div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 const ExamListPage = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  const role = "admin";
-  const currentUserId = "admin1";
+  const params = await searchParams;
+
+  const auth = await requireAuth();
+  const role = auth.role;
+
+  const allowedRoles = ['admin', 'teacher'];
+  if (role && !allowedRoles.includes(role)) {
+    return (
+      <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+        <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
+          <h2 className="text-lg font-semibold text-red-700 mb-2">
+            Access Denied
+          </h2>
+          <p className="text-red-600 text-sm">
+            You do not have permission to view this page.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const page = params.page ? parseInt(params.page) : 1;
+  const search = params.search || undefined;
+  const classId = params.classId || undefined;
+  const teacherId = params.teacherId || undefined;
+
+  const result = await fetchExamListAction(search, page, classId, teacherId);
+
+  const hasError = !result.success || !result.data;
+
+  if (hasError) {
+    console.error('Failed to fetch exams:', result.error);
+  }
+
+  const data: ExamsWithRelations[] = result.data?.data || [];
+  const count: number = result.totalCount || 0;
 
   const columns = [
     {
-      header: "Subject Name",
-      accessor: "name",
+      header: "Subject",
+      accessor: "subject",
     },
     {
       header: "Class",
       accessor: "class",
+      className: "hidden md:table-cell",
     },
     {
       header: "Teacher",
@@ -149,7 +88,7 @@ const ExamListPage = async ({
     {
       header: "Date",
       accessor: "date",
-      className: "hidden md:table-cell",
+      className: "hidden lg:table-cell",
     },
     ...(role === "admin" || role === "teacher"
       ? [
@@ -161,18 +100,61 @@ const ExamListPage = async ({
       : []),
   ];
 
-  const renderRow = (item: ExamList) => (
+  const formatDate = (dateStr: string) => {
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    }).format(new Date(dateStr));
+  };
+
+  const formatTime = (dateStr: string) => {
+    return new Intl.DateTimeFormat("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    }).format(new Date(dateStr));
+  };
+
+  const renderRow = (item: ExamsWithRelations) => (
     <tr
       key={item.id}
-      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-[--color-lamaPurpleLight]"
+      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
     >
-      <td className="flex items-center gap-4 p-4">{item.lesson.subject.name}</td>
-      <td>{item.lesson.class.name}</td>
-      <td className="hidden md:table-cell">
-        {item.lesson.teacher.name + " " + item.lesson.teacher.surname}
+      <td className="flex items-center gap-4 p-4">
+        <div className="w-10 h-10 rounded-lg bg-lamaSkyLight flex items-center justify-center">
+          <BookOpen className="w-5 h-5 text-lamaSky" />
+        </div>
+        <div className="flex flex-col">
+          <h3 className="font-semibold text-gray-900">
+            {item.lesson?.subject?.name || "N/A"}
+          </h3>
+          <p className="text-xs text-gray-500">{item.title}</p>
+        </div>
       </td>
       <td className="hidden md:table-cell">
-        {new Intl.DateTimeFormat("en-US").format(item.startTime)}
+        <span className="text-gray-600">
+          {item.lesson?.related_class?.name || "-"}
+        </span>
+      </td>
+      <td className="hidden md:table-cell">
+        <span className="text-gray-600">
+          {item.lesson?.teacher
+            ? `${item.lesson.teacher.first_name} ${item.lesson.teacher.last_name}`
+            : "-"}
+        </span>
+      </td>
+      <td className="hidden lg:table-cell">
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-1.5 text-gray-600">
+            <Calendar className="w-3.5 h-3.5 text-gray-400" />
+            <span>{formatDate(item.start_time)}</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-gray-500 text-xs">
+            <Clock className="w-3 h-3 text-gray-400" />
+            <span>{formatTime(item.start_time)} - {formatTime(item.end_time)}</span>
+          </div>
+        </div>
       </td>
       <td>
         <div className="flex items-center gap-2">
@@ -187,70 +169,69 @@ const ExamListPage = async ({
     </tr>
   );
 
-  const { page, ...queryParams } = await searchParams;
-  const p = page ? parseInt(page) : 1;
-
   // Filter data based on query params
-  let filteredData = STATIC_EXAMS;
-
-  if (queryParams.search) {
-    filteredData = filteredData.filter((exam) =>
-      exam.lesson.subject.name
-        .toLowerCase()
-        .includes(queryParams.search!.toLowerCase())
-    );
-  }
-
-  if (queryParams.classId) {
-    filteredData = filteredData.filter(
-      (exam) => exam.lesson.class.id === parseInt(queryParams.classId!)
-    );
-  }
-
-  if (queryParams.teacherId) {
-    filteredData = filteredData.filter(
-      (exam) => exam.lesson.teacher.id === queryParams.teacherId
-    );
-  }
-
-  // Pagination logic
-  const count = filteredData.length;
-  const startIndex = ITEM_PER_PAGE * (p - 1);
-  const endIndex = startIndex + ITEM_PER_PAGE;
-  const data = filteredData.slice(startIndex, endIndex);
-
-  // TODO: Replace with actual API call
-  // const response = await fetch(
-  //   `/api/exams?page=${p}&search=${queryParams.search || ''}&classId=${queryParams.classId || ''}&teacherId=${queryParams.teacherId || ''}`
-  // );
-  // const { data, count } = await response.json();
-
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">All Exams</h1>
+
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-[--color-lamaYellow]">
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/filter.png" alt="" width={14} height={14} />
             </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-[--color-lamaYellow]">
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
+
             {(role === "admin" || role === "teacher") && (
               <FormContainer table="exam" type="create" />
             )}
           </div>
         </div>
       </div>
-      {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+
+      {/* ERROR STATE */}
+      {hasError ? (
+        <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
+          <h2 className="text-lg font-semibold text-red-700 mb-2">
+            Error Loading Exams
+          </h2>
+          <p className="text-red-600 text-sm">
+            {result.error || 'Unable to load exams. Please try again later.'}
+          </p>
+        </div>
+      ) : data.length === 0 ? (
+        /* EMPTY STATE */
+        <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-md text-center">
+          <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+          <p className="text-gray-600 font-medium mb-1">
+            {search 
+              ? `No exams found matching "${search}"` 
+              : 'No exams scheduled'}
+          </p>
+          <p className="text-gray-500 text-sm">
+            {role === "admin" || role === "teacher" 
+              ? "Create your first exam to get started" 
+              : "Check back later for upcoming exams"}
+          </p>
+        </div>
+      ) : (
+        /* LIST */
+        <Suspense fallback={<TableSkeleton />}>
+          <Table columns={columns} renderRow={renderRow} data={data} />
+        </Suspense>
+      )}
+
       {/* PAGINATION */}
-      <Pagination page={p} count={count} />
+      {!hasError && count > 0 && (
+        <Pagination page={page} count={count} />
+      )}
     </div>
   );
 };
+
 
 export default ExamListPage;

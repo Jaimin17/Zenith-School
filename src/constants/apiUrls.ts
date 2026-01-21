@@ -24,4 +24,6 @@ export const apiUrls = {
     GET_CLASSES_URL: "api/v1/classes/getAll",
 
     GET_EVENTS_URL: "api/v1/events/getAll",
+
+    GET_EXAMS_URL: "api/v1/exam/getAll",
 }

@@ -2,8 +2,8 @@
 
 import { cookies } from "next/headers";
 import { api } from '@/api/api';
-import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_PARENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API } from '@/api/apiParams/admin';
-import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, Student, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse } from '@/types/schemas';
+import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_PARENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API } from '@/api/apiParams/admin';
+import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, Student, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse } from '@/types/schemas';
 import { getServerAuthTokens } from "@/utils/cookie";
 
 export async function fetchUserCountsAction(): Promise<{
@@ -555,6 +555,82 @@ export async function fetchClassesListAction(searchTerm?: string, pageNo: number
             data: null,
             totalCount: 0,
             error: 'An unexpected error occurred while fetching class information'
+        };
+    }
+}
+
+
+
+export async function fetchExamListAction(
+    searchTerm?: string, 
+    pageNo: number = 1,
+    classId?: string,
+    teacherId?: string
+): Promise<{
+    success: boolean;
+    data: ExamListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        // Build query parameters
+        const params = new URLSearchParams();
+        params.append('page', pageNo.toString());
+        
+        if (searchTerm) {
+            params.append('search', searchTerm);
+        }
+        
+        if (classId) {
+            params.append('classId', classId);
+        }
+        
+        if (teacherId) {
+            params.append('teacherId', teacherId);
+        }
+
+        // Make API request with server token
+        const response = await api<ExamListResponse>({
+            endpoint: GET_EXAMS_API,
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: response.message || 'Failed to fetch exams'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+            totalCount: response.data.total_count || 0,
+        };
+    } catch (error) {
+        console.error('Error in fetchExamListAction:', error);
+        return {
+            success: false,
+            data: null,
+            totalCount: 0,
+            error: 'An unexpected error occurred while fetching exam information'
         };
     }
 }

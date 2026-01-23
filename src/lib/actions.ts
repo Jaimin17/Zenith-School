@@ -152,3 +152,40 @@ export async function deleteEvent(formData: FormData): Promise<FormState> {
   return { success: true, error: false };
 }
 
+// Assignment actions
+export async function createAssignment(formData: FormData): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Creating assignment:", formData);
+  return { success: true, error: false };
+}
+
+export async function updateAssignment(formData: FormData): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Updating assignment:", formData);
+  return { success: true, error: false };
+}
+
+export async function deleteAssignment(formData: FormData): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Deleting assignment:", formData);
+  return { success: true, error: false };
+}
+
+// Result actions
+export async function createResult(formData: FormData): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Creating result:", formData);
+  return { success: true, error: false };
+}
+
+export async function updateResult(formData: FormData): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Updating result:", formData);
+  return { success: true, error: false };
+}
+
+export async function deleteResult(formData: FormData): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Deleting result:", formData);
+  return { success: true, error: false };
+}

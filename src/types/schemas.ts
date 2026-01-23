@@ -51,6 +51,22 @@ export interface AnnouncementListResponse extends PaginationListResponse {
     data: Announcement[]
 }
 
+export interface AssignmentBase {
+    id: string,
+    title: string,
+    start_date: string,
+    due_date: string,
+    pdf_name: string | null,
+}
+
+export interface AssignmentWithRelations extends AssignmentBase {
+    lesson: Lesson,
+}
+
+export interface AssignmentListResponse extends PaginationListResponse {
+    data: AssignmentWithRelations[],
+}
+
 export interface Events {
     id: string,
     title: string,
@@ -139,7 +155,7 @@ export interface Parent {
     address: string,
 }
 
-export interface Student {
+export interface StudentBase {
     id: string,
     username: string,
     first_name: string,
@@ -151,6 +167,9 @@ export interface Student {
     blood_type: string | null,
     sex: string,
     dob: string | null,
+}
+
+export interface Student extends StudentBase {
     parent: Parent | null,
     related_class: ClassBase,
     grade: Grade,
@@ -158,4 +177,19 @@ export interface Student {
 
 export interface StudentListResponse extends PaginationListResponse {
     data: Student[]
+}
+
+export interface ResultBase {
+    id: string,
+    score: number
+}
+
+export interface ResultWithRelations extends ResultBase {
+    exam: ExamsWithRelations | null,
+    assignment: AssignmentWithRelations | null,
+    student: StudentBase,
+}
+
+export interface ResultListResponse extends PaginationListResponse {
+    data: ResultWithRelations[]
 }

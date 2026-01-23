@@ -19,6 +19,15 @@ export const ANNOUNCEMENT_API: ApiType = {
     isForm: true,
 }
 
+export const ASSIGNMENT_API: ApiType = {
+    url: apiUrls.ASSIGNMENT_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: true,
+}
+
 export const EVENTS_API: ApiType = {
     url: apiUrls.EVENTS_BY_DATE_URL,
     method: "GET",
@@ -120,6 +129,15 @@ export const GET_EXAMS_API: ApiType = {
 
 export const GET_CLASS_EXAMS_API: ApiType = {
     url: apiUrls.GET_CLASS_EXAMS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_RESULTS_API: ApiType = {
+    url: apiUrls.GET_RESULTS_URL,
     method: "GET",
     withToken: true,
     isMultipart: false,

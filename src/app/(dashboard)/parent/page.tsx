@@ -5,7 +5,7 @@ import {
 } from "@/actions/admin";
 import Announcements from "../../../components/FromAnother/Announcements";
 import BigCalendarContainer from "../../../components/FromAnother/BigCalendarContainer";
-import { Announcement, Student, Lesson, AnnouncementListResponse } from "@/types/schemas";
+import { Announcement, Student, Lesson, AnnouncementListResponse, StudentListResponse } from "@/types/schemas";
 import { Suspense } from "react";
 
 // Skeleton Components
@@ -111,7 +111,14 @@ const ParentPage: React.FC = async () => {
         console.error('Failed to fetch announcements:', announcementsResult.error);
     }
 
-    const students: Student[] = studentResults.data || [];
+    const students: StudentListResponse = studentResults.data || {
+        data: [],
+        total_count: 0,
+        page: 1,
+        total_pages: 1,
+        has_next: false,
+        has_prev: false,
+    };
     const announcements: AnnouncementListResponse = announcementsResult.data || {
         data: [],
         total_count: 0,
@@ -136,7 +143,7 @@ const ParentPage: React.FC = async () => {
                             </p>
                         </div>
                     </div>
-                ) : students.length === 0 ? (
+                ) : students.data.length === 0 ? (
                     <div className="w-full">
                         <div className="bg-white p-4 rounded-md">
                             <h1 className="text-xl font-semibold">No Students Found</h1>
@@ -146,7 +153,7 @@ const ParentPage: React.FC = async () => {
                         </div>
                     </div>
                 ) : (
-                    students.map((student) => (
+                    students.data.map((student) => (
                         <Suspense key={student.id} fallback={<StudentScheduleSkeleton />}>
                             <StudentSchedule student={student} />
                         </Suspense>

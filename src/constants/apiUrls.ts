@@ -9,6 +9,8 @@ export const apiUrls = {
 
     ANNOUNCEMENT_URL: "api/v1/announcements/getAll",
 
+    ASSIGNMENT_URL: "api/v1/assignments/getAll",
+
     EVENTS_BY_DATE_URL: "api/v1/events/getAllByDate",
 
     LESSONS_WEEK_URL: "api/v1/lesson/getAllOfCurrentWeek",
@@ -33,7 +35,9 @@ export const apiUrls = {
 
     GET_CLASS_EXAMS_URL: "api/v1/exam/class",
 
-    GET_TEACHER_EXAMS_URL: "api/v1/exam/teacher",
-
+    GET_RESULTS_URL: "api/v1/results/getAll",
+    
     GET_SUBJECTS_URL: "api/v1/subject/getAll",
+
+    GET_TEACHER_EXAMS_URL: "api/v1/exam/teacher",
 }

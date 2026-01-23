@@ -134,6 +134,44 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
         break;
       }
 
+      // ---------------- ASSIGNMENT ----------------
+      case "assignment": {
+        const assignmentLessons = await fetchApi("/api/lessons", [
+          { id: "l1", name: "Math - Class 10A" },
+          { id: "l2", name: "Science - Class 9B" },
+          { id: "l3", name: "English - Class 11C" },
+          { id: "l4", name: "Physics - Class 8A" },
+          { id: "l5", name: "Chemistry - Class 12B" },
+        ]);
+        relatedData = { lessons: assignmentLessons };
+        break;
+      }
+
+      // ---------------- RESULT ----------------
+      case "result": {
+        const resultStudents = await fetchApi("/api/students", [
+          { id: "s1", first_name: "John", last_name: "Smith" },
+          { id: "s2", first_name: "Emily", last_name: "Johnson" },
+          { id: "s3", first_name: "Michael", last_name: "Brown" },
+        ]);
+        const resultExams = await fetchApi("/api/exams", [
+          { id: "e1", title: "Math Midterm" },
+          { id: "e2", title: "Science Final" },
+          { id: "e3", title: "English Quiz" },
+        ]);
+        const resultAssignments = await fetchApi("/api/assignments", [
+          { id: "a1", title: "Math Homework 1" },
+          { id: "a2", title: "Science Project" },
+          { id: "a3", title: "English Essay" },
+        ]);
+        relatedData = { 
+          students: resultStudents, 
+          exams: resultExams, 
+          assignments: resultAssignments 
+        };
+        break;
+      }
+
       default:
         break;
     }

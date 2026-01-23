@@ -8,6 +8,8 @@ import {
   deleteTeacher,
   deleteAnnouncement,
   deleteEvent,
+  deleteAssignment,
+  deleteResult,
 } from "@/lib/actions";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -26,8 +28,8 @@ const deleteActionMap = {
   exam: deleteExam,
   parent: deleteSubject,
   lesson: deleteSubject,
-  assignment: deleteSubject,
-  result: deleteSubject,
+  assignment: deleteAssignment,
+  result: deleteResult,
   attendance: deleteSubject,
   event: deleteEvent,
   announcement: deleteAnnouncement,
@@ -82,6 +84,22 @@ const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"), {
 });
 
 const EventForm = dynamic(() => import("./forms/EventForm"), {
+  loading: () => (
+    <div className="flex items-center justify-center p-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
+    </div>
+  ),
+});
+
+const AssignmentForm = dynamic(() => import("./forms/AssignmentForm"), {
+  loading: () => (
+    <div className="flex items-center justify-center p-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
+    </div>
+  ),
+});
+
+const ResultForm = dynamic(() => import("./forms/ResultForm"), {
   loading: () => (
     <div className="flex items-center justify-center p-8">
       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
@@ -147,6 +165,22 @@ const forms: {
   ),
   event: (setOpen, type, data, relatedData) => (
     <EventForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  assignment: (setOpen, type, data, relatedData) => (
+    <AssignmentForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  result: (setOpen, type, data, relatedData) => (
+    <ResultForm
       type={type}
       data={data}
       setOpen={setOpen}

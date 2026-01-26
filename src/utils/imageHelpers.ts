@@ -64,3 +64,16 @@ export function getStudentImageUrl(imagePath: string | null | undefined): string
 
     return getImageUrl(imagePath, "students")
 }
+
+/**
+ * Gets parent profile image URL
+ */
+export function getParentImageUrl(imagePath: string | null | undefined): string {
+    if (!imagePath) return '/noAvatar.png'
+
+    if (!imagePath.includes('/') && !imagePath.includes('\\')) {
+        return `${BACKEND_URL}/uploads/images/parents/${imagePath}`
+    }
+
+    return getImageUrl(imagePath, "parents")
+}

@@ -19,6 +19,13 @@ const typeColorMap: Record<UserStat["name"], string> = {
 const UserCard = ({ stat }: { stat: UserStat }) => {
   const baseColor = typeColorMap[stat.name];
 
+  let currentYear: number = new Date().getFullYear();
+  const currentMonth: number = new Date().getMonth() + 1; // Months are zero-based
+
+  if(currentMonth < 6) {
+    currentYear = currentYear - 1;
+  }
+
   return (
     <Box
       sx={{
@@ -33,7 +40,7 @@ const UserCard = ({ stat }: { stat: UserStat }) => {
       {/* Top Row */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Chip
-          label="2024 / 25"
+          label={`${currentYear} / ${(currentYear + 1).toString().slice(-2)}`}
           size="small"
           sx={{
             fontSize: 10,

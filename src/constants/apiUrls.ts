@@ -35,6 +35,8 @@ export const apiUrls = {
 
     GET_CLASS_EXAMS_URL: "api/v1/exam/class",
 
+    GET_PARENTS_URL: "api/v1/parent/getAll",
+
     GET_RESULTS_URL: "api/v1/results/getAll",
     
     GET_SUBJECTS_URL: "api/v1/subject/getAll",

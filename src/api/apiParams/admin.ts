@@ -136,6 +136,15 @@ export const GET_CLASS_EXAMS_API: ApiType = {
     isForm: false,
 }
 
+export const GET_PARENTS_API: ApiType = {
+    url: apiUrls.GET_PARENTS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const GET_RESULTS_API: ApiType = {
     url: apiUrls.GET_RESULTS_URL,
     method: "GET",

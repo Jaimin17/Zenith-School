@@ -2,8 +2,8 @@
 
 import { cookies } from "next/headers";
 import { api } from '@/api/api';
-import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API } from '@/api/apiParams/admin';
-import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, Student, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse } from '@/types/schemas';
+import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API } from '@/api/apiParams/admin';
+import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, Student, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse } from '@/types/schemas';
 import { getServerAuthTokens } from "@/utils/cookie";
 
 export async function fetchUserCountsAction(): Promise<{
@@ -395,7 +395,16 @@ export async function fetchLessonsForStudentsWeeklyAction(studentId: string): Pr
     }
 }
 
-export async function fetchResultsAction(searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchResultsAction(
+    searchTerm?: string, 
+    pageNo: number = 1,
+    filters?: {
+        classId?: string;
+        examId?: string;
+        assignmentId?: string;
+        type?: string;
+    }
+): Promise<{
     success: boolean;
     data: ResultListResponse | null;
     totalCount: number;
@@ -416,12 +425,12 @@ export async function fetchResultsAction(searchTerm?: string, pageNo: number = 1
         }
 
         // Build params if search term provided
-        const params = searchTerm ? { 
-                search: searchTerm,
-                page: pageNo
-            } : {
-                page: pageNo
-            };
+        const params: any = { page: pageNo };
+        if (searchTerm) params.search = searchTerm;
+        if (filters?.classId) params.class_id = filters.classId;
+        if (filters?.examId) params.exam_id = filters.examId;
+        if (filters?.assignmentId) params.assignment_id = filters.assignmentId;
+        if (filters?.type) params.type = filters.type;
 
         // Make API request with server token
         const response = await api<ResultListResponse>({
@@ -439,8 +448,6 @@ export async function fetchResultsAction(searchTerm?: string, pageNo: number = 1
                 error: response.message || 'Failed to fetch results'
             };
         }
-
-        console.log('Fetched results response:', response);
 
         return {
             success: true,
@@ -557,6 +564,61 @@ export async function fetchStudentsAction(searchTerm?: string, pageNo: number = 
             data: null,
             totalCount: 0,
             error: 'An unexpected error occurred while fetching student information'
+        };
+    }
+}
+
+export async function fetchParentsAction(searchTerm?: string, pageNo: number = 1): Promise<{
+    success: boolean;
+    data: ParentListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params = searchTerm ? { search: searchTerm, page: pageNo.toString() } : { page: pageNo.toString() };
+
+        // Make API request with server token
+        const response = await api<ParentListResponse>({
+            endpoint: GET_PARENTS_API,
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: response.message || 'Failed to fetch parent information'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+            totalCount: response.data.total_count || 0,
+        };
+    } catch (error) {
+        console.error('Error in fetchParentsAction:', error);
+        return {
+            success: false,
+            data: null,
+            totalCount: 0,
+            error: 'An unexpected error occurred while fetching parent information'
         };
     }
 }

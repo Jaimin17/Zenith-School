@@ -105,7 +105,12 @@ const ResultsPage = async ({
 
   // Fetch results and filter data in parallel
   const [result, classesResult, examsResult, assignmentsResult] = await Promise.all([
-    fetchResultsAction(search, page),
+    fetchResultsAction(search, page, {
+      classId,
+      examId,
+      assignmentId,
+      type: filterType
+    }),
     fetchAllClassesAction(),
     fetchExamListAction(undefined, 1),
     fetchAssignmentsAction(undefined, 1),
@@ -128,40 +133,6 @@ const ResultsPage = async ({
 
   // Check if any filters are active
   const hasActiveFilters = classId || examId || assignmentId || filterType;
-
-  // Apply client-side filters
-  if (data.length > 0 && hasActiveFilters) {
-    // Filter by class (through exam or assignment's lesson's related_class)
-    if (classId) {
-      data = data.filter(item => {
-        const examClassId = item.exam?.lesson?.related_class?.id;
-        const assignmentClassId = item.assignment?.lesson?.related_class?.id;
-        return examClassId === classId || assignmentClassId === classId;
-      });
-    }
-
-    // Filter by type
-    if (filterType) {
-      if (filterType === "exam") {
-        data = data.filter(item => item.exam !== null);
-      } else if (filterType === "assignment") {
-        data = data.filter(item => item.assignment !== null);
-      }
-    }
-
-    // Filter by exam
-    if (examId) {
-      data = data.filter(item => item.exam?.id === examId);
-    }
-
-    // Filter by assignment
-    if (assignmentId) {
-      data = data.filter(item => item.assignment?.id === assignmentId);
-    }
-
-    // When filtering client-side, use filtered data length
-    count = data.length;
-  }
 
   const columns = [
     { header: "Student", accessor: "student" },

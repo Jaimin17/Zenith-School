@@ -155,6 +155,14 @@ export interface Parent {
     address: string,
 }
 
+export interface ParentWithRelations extends Parent {
+    students: StudentBase[],
+}
+
+export interface ParentListResponse extends PaginationListResponse {
+    data: ParentWithRelations[]
+}
+
 export interface StudentBase {
     id: string,
     username: string,

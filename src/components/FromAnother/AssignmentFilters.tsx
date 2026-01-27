@@ -14,6 +14,7 @@ interface AssignmentFiltersProps {
   currentStatus?: string;
   currentDate?: string;
   currentSearch?: string;
+  teacherId?: string;
 }
 
 const AssignmentFilters = ({
@@ -24,6 +25,7 @@ const AssignmentFilters = ({
   currentStatus,
   currentDate,
   currentSearch,
+  teacherId,
 }: AssignmentFiltersProps) => {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -41,9 +43,10 @@ const AssignmentFilters = ({
     const params = new URLSearchParams();
     if (currentSearch) params.set("search", currentSearch);
     if (newSubjectId) params.set("subjectId", newSubjectId);
-    if (newTeacherId) params.set("teacherId", newTeacherId);
+    if (newTeacherId) params.set("filterTeacherId", newTeacherId);
     if (newStatus) params.set("status", newStatus);
     if (newDate) params.set("date", newDate);
+    if (teacherId) params.set("teacherId", teacherId);
     const queryString = params.toString();
     return queryString ? `/list/assignments?${queryString}` : "/list/assignments";
   };
@@ -92,7 +95,7 @@ const AssignmentFilters = ({
         <div className="flex items-center gap-2">
           {hasActiveFilters && (
             <Link
-              href="/list/assignments"
+              href={teacherId ? `/list/assignments?teacherId=${teacherId}` : "/list/assignments"}
               onClick={(e) => e.stopPropagation()}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
             >
@@ -136,6 +139,7 @@ const AssignmentFilters = ({
             </div>
 
             {/* Teacher Filter */}
+            {teacherId == null && 
             <div className="space-y-1.5">
               <label className="flex items-center gap-2 text-xs font-medium text-gray-600">
                 <Users className="w-3.5 h-3.5" />
@@ -159,6 +163,7 @@ const AssignmentFilters = ({
                 </div>
               </div>
             </div>
+          }
 
             {/* Status Filter */}
             <div className="space-y-1.5">

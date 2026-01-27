@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { api } from '@/api/api';
-import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API } from '@/api/apiParams/admin';
+import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API } from '@/api/apiParams/admin';
 import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, Student, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, LessonListResponse } from '@/types/schemas';
 import { getServerAuthTokens } from "@/utils/cookie";
 
@@ -112,7 +112,7 @@ export async function fetchAnnouncementsAction(searchTerm?: string, pageNo: numb
     }
 }
 
-export async function fetchAnnouncementsOfTeacherAction(teacherId: string, pageNo: number = 1): Promise<{
+export async function fetchAnnouncementsOfTeacherAction(teacherId: string, searchTerm?: string, pageNo: number = 1): Promise<{
     success: boolean;
     data: AnnouncementListResponse | null;
     totalCount: number;
@@ -133,9 +133,12 @@ export async function fetchAnnouncementsOfTeacherAction(teacherId: string, pageN
         }
 
         // Build params if search term provided
-        const params = {
-                page: pageNo
-            };
+        const params = searchTerm ? { 
+            search: searchTerm,
+            page: pageNo
+        } : {
+            page: pageNo
+        };
 
         // Make API request with server token
         const response = await api<AnnouncementListResponse>({
@@ -174,7 +177,14 @@ export async function fetchAnnouncementsOfTeacherAction(teacherId: string, pageN
 }
 
 
-export async function fetchAssignmentsAction(searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchAssignmentsAction(
+    searchTerm?: string, 
+    pageNo: number = 1,
+    subjectId?: string,
+    teacherId?: string,
+    status?: string,
+    dueDate?: string
+): Promise<{
     success: boolean;
     data: AssignmentListResponse | null;
     totalCount: number;
@@ -194,13 +204,30 @@ export async function fetchAssignmentsAction(searchTerm?: string, pageNo: number
             };
         }
 
-        // Build params if search term provided
-        const params = searchTerm ? { 
-                search: searchTerm,
-                page: pageNo
-            } : {
-                page: pageNo
-            };
+        // Build params object with all filters
+        const params: Record<string, string | number> = {
+            page: pageNo
+        };
+
+        if (searchTerm) {
+            params.search = searchTerm;
+        }
+
+        if (subjectId) {
+            params.subject_id = subjectId;
+        }
+
+        if (teacherId) {
+            params.teacher_id = teacherId;
+        }
+
+        if (status) {
+            params.status = status;
+        }
+
+        if (dueDate) {
+            params.due_date = dueDate;
+        }
 
         // Make API request with server token
         const response = await api<AssignmentListResponse>({
@@ -235,6 +262,90 @@ export async function fetchAssignmentsAction(searchTerm?: string, pageNo: number
     }
 }
 
+export async function fetchAssignmentsOfTeacherAction(
+    teacherId: string, 
+    searchTerm?: string, 
+    pageNo: number = 1,
+    subjectId?: string,
+    status?: string,
+    dueDate?: string
+): Promise<{
+    success: boolean;
+    data: AssignmentListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore)
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params: Record<string, string | number> = {
+            page: pageNo
+        };
+
+        if (searchTerm) {
+            params.search = searchTerm;
+        }
+
+        if (subjectId) {
+            params.subject_id = subjectId;
+        }
+
+        if (status) {
+            params.status = status;
+        }
+
+        if (dueDate) {
+            params.due_date = dueDate;
+        }
+
+        console.log('Fetching assignments for teacher:', teacherId, 'with params:', params);
+
+        // Make API request with server token
+        const response = await api<AssignmentListResponse>({
+            endpoint: {
+                ...ASSIGNMENTS_OF_TEACHER_API,
+                url: `${ASSIGNMENTS_OF_TEACHER_API.url}/${teacherId}`,
+            },
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: response.message || 'Failed to fetch assignments'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+            totalCount: response.data.total_count || 0,
+        };
+    } catch (error) {
+        console.error('Error in fetchAssignmentsOfTeacherAction:', error);
+        return {
+            success: false,
+            data: null,
+            totalCount: 0,
+            error: 'An unexpected error occurred while fetching assignments'
+        };
+    }
+}
 
 export async function fetchEventsByDateAction(searchDate?: Date): Promise<{
     success: boolean;

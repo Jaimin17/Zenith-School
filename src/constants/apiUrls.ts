@@ -13,6 +13,8 @@ export const apiUrls = {
 
     GET_ASSIGNMENT_URL: "api/v1/assignments/getAll",
 
+    GET_ASSIGNMENTS_OF_TEACHER_URL: "api/v1/assignments/teacher",
+
     GET_EVENTS_BY_DATE_URL: "api/v1/events/getAllByDate",
 
     GET_LESSONS_WEEK_URL: "api/v1/lesson/getAllOfCurrentWeek",

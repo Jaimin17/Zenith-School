@@ -37,6 +37,15 @@ export const ASSIGNMENT_API: ApiType = {
     isForm: true,
 }
 
+export const ASSIGNMENTS_OF_TEACHER_API: ApiType = {
+    url: apiUrls.GET_ASSIGNMENTS_OF_TEACHER_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const EVENTS_API: ApiType = {
     url: apiUrls.GET_EVENTS_BY_DATE_URL,
     method: "GET",

@@ -4,7 +4,7 @@ import TableSearch from "@/components/FromAnother/TableSearch";
 import FormContainer from "@/components/FromAnother/FormContainer";
 import AssignmentFilters from "@/components/FromAnother/AssignmentFilters";
 import type { AssignmentWithRelations } from "@/types/schemas";
-import { fetchAssignmentsAction, fetchTeachersListAction, fetchSubjectListAction } from "@/actions/admin";
+import { fetchAssignmentsAction, fetchTeachersListAction, fetchSubjectListAction, fetchAnnouncementsOfTeacherAction, fetchAssignmentsOfTeacherAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { FileText, Calendar, BookOpen, User, Clock } from "lucide-react";
@@ -104,16 +104,24 @@ const AssignmentsPage = async ({
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
   const subjectId = params.subjectId || undefined;
-  const teacherId = params.teacherId || undefined;
+  const filterTeacherId = params.filterTeacherId || undefined;
   const status = params.status || undefined;
   const filterDate = params.date || undefined;
+  const teacherId = params.teacherId || undefined;
 
   // Fetch assignments, teachers, and subjects in parallel
-  const [result, teachersResult, subjectsResult] = await Promise.all([
-    fetchAssignmentsAction(search, page),
+  const [teachersResult, subjectsResult] = await Promise.all([
     fetchTeachersListAction(undefined, 1),
     fetchSubjectListAction(undefined, 1),
   ]);
+
+  let result;
+
+  if (teacherId) {
+    result = await fetchAssignmentsOfTeacherAction(teacherId, search, page, subjectId, status, filterDate);
+  } else {
+    result = await fetchAssignmentsAction(search, page, subjectId, filterTeacherId, status, filterDate);
+  }
 
   const hasError = !result.success || !result.data;
 
@@ -128,48 +136,8 @@ const AssignmentsPage = async ({
   const teachers = teachersResult.data || [];
   const subjects = subjectsResult.data?.data || [];
 
-  // Helper function to determine assignment status
-  const getAssignmentStatus = (startDate: string, dueDate: string): string => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const start = new Date(startDate);
-    const due = new Date(dueDate);
-
-    if (due < today) return "overdue";
-    if (start > today) return "upcoming";
-    return "active";
-  };
-
-  // Apply client-side filters (since API may not support all filters)
-  if (data.length > 0) {
-    // Filter by subject
-    if (subjectId) {
-      data = data.filter(item => item.lesson?.subject?.id === subjectId);
-    }
-
-    // Filter by teacher
-    if (teacherId) {
-      data = data.filter(item => item.lesson?.teacher?.id === teacherId);
-    }
-
-    // Filter by status
-    if (status) {
-      data = data.filter(item => getAssignmentStatus(item.start_date, item.due_date) === status);
-    }
-
-    // Filter by due date
-    if (filterDate) {
-      data = data.filter(item => {
-        const dueDate = item.due_date?.split("T")[0];
-        return dueDate === filterDate;
-      });
-    }
-
-    count = data.length;
-  }
-
   // Check if any filters are active
-  const hasActiveFilters = subjectId || teacherId || status || filterDate;
+  const hasActiveFilters = subjectId || filterTeacherId || status || filterDate;
 
   const columns = [
     { header: "Assignment", accessor: "assignment" },
@@ -202,12 +170,10 @@ const AssignmentsPage = async ({
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
     >
       <td className="flex items-center gap-4 p-4">
-        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-          isOverdue(item.due_date) ? "bg-red-100" : "bg-gray-100"
-        }`}>
-          <FileText className={`w-5 h-5 ${
-            isOverdue(item.due_date) ? "text-red-500" : "text-gray-500"
-          }`} />
+        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isOverdue(item.due_date) ? "bg-red-100" : "bg-gray-100"
+          }`}>
+          <FileText className={`w-5 h-5 ${isOverdue(item.due_date) ? "text-red-500" : "text-gray-500"
+            }`} />
         </div>
         <div className="flex flex-col">
           <h3 className="font-semibold text-gray-900">{item.title}</h3>
@@ -245,12 +211,10 @@ const AssignmentsPage = async ({
       </td>
 
       <td className="hidden lg:table-cell">
-        <div className={`flex items-center gap-1.5 ${
-          isOverdue(item.due_date) ? "text-red-600" : "text-gray-600"
-        }`}>
-          <Clock className={`w-3.5 h-3.5 ${
-            isOverdue(item.due_date) ? "text-red-400" : "text-gray-400"
-          }`} />
+        <div className={`flex items-center gap-1.5 ${isOverdue(item.due_date) ? "text-red-600" : "text-gray-600"
+          }`}>
+          <Clock className={`w-3.5 h-3.5 ${isOverdue(item.due_date) ? "text-red-400" : "text-gray-400"
+            }`} />
           <span>{formatDate(item.due_date)}</span>
         </div>
       </td>
@@ -295,10 +259,11 @@ const AssignmentsPage = async ({
         subjects={subjects}
         teachers={teachers}
         currentSubjectId={subjectId}
-        currentTeacherId={teacherId}
+        currentTeacherId={filterTeacherId}
         currentStatus={status}
         currentDate={filterDate}
         currentSearch={search}
+        teacherId={teacherId}
       />
 
       {/* ERROR STATE */}

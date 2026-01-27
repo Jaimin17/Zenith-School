@@ -1,209 +1,193 @@
-import FormContainer from "@/components/FromAnother/FormContainer";
 import Pagination from "@/components/FromAnother/Pagination";
 import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
-import { ITEM_PER_PAGE } from "@/lib/settings";
-import Image from "next/image";
+import FormContainer from "@/components/FromAnother/FormContainer";
+import type { Lesson } from "@/types/schemas";
+import { fetchLessonsAction, fetchLessonsForTeacherAction } from "@/actions/admin";
+import { Suspense } from "react";
+import { requireAuth } from "@/lib/auth/serverAuth";
+import { BookOpen, Clock, Users, User } from "lucide-react";
 
-type LessonList = {
-  id: number;
-  name: string;
-  day: string;
-  startTime: Date;
-  endTime: Date;
-  subjectId: number;
-  classId: number;
-  teacherId: string;
-  subject: {
-    id: number;
-    name: string;
-  };
-  class: {
-    id: number;
-    name: string;
-  };
-  teacher: {
-    id: string;
-    name: string;
-    surname: string;
-  };
+// Helper function to format time
+const formatTime = (timeString: string): string => {
+  if (!timeString) return "-";
+  try {
+    // Handle time string format (HH:MM:SS or HH:MM)
+    const [hours, minutes] = timeString.split(':');
+    const hour = parseInt(hours, 10);
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12;
+    return `${displayHour}:${minutes} ${period}`;
+  } catch {
+    return timeString;
+  }
 };
 
-// Static data for demonstration
-const STATIC_LESSONS: LessonList[] = [
-  {
-    id: 1,
-    name: "Mathematics - Algebra",
-    day: "MONDAY",
-    startTime: new Date("2024-01-01T09:00:00"),
-    endTime: new Date("2024-01-01T10:00:00"),
-    subjectId: 1,
-    classId: 1,
-    teacherId: "teacher1",
-    subject: { id: 1, name: "Mathematics" },
-    class: { id: 1, name: "Class 10A" },
-    teacher: { id: "teacher1", name: "John", surname: "Smith" },
-  },
-  {
-    id: 2,
-    name: "Physics - Mechanics",
-    day: "TUESDAY",
-    startTime: new Date("2024-01-01T10:00:00"),
-    endTime: new Date("2024-01-01T11:00:00"),
-    subjectId: 2,
-    classId: 2,
-    teacherId: "teacher2",
-    subject: { id: 2, name: "Physics" },
-    class: { id: 2, name: "Class 11B" },
-    teacher: { id: "teacher2", name: "Sarah", surname: "Johnson" },
-  },
-  {
-    id: 3,
-    name: "Chemistry - Organic",
-    day: "WEDNESDAY",
-    startTime: new Date("2024-01-01T11:00:00"),
-    endTime: new Date("2024-01-01T12:00:00"),
-    subjectId: 3,
-    classId: 3,
-    teacherId: "teacher3",
-    subject: { id: 3, name: "Chemistry" },
-    class: { id: 3, name: "Class 12C" },
-    teacher: { id: "teacher3", name: "Michael", surname: "Brown" },
-  },
-  {
-    id: 4,
-    name: "English - Literature",
-    day: "MONDAY",
-    startTime: new Date("2024-01-01T13:00:00"),
-    endTime: new Date("2024-01-01T14:00:00"),
-    subjectId: 4,
-    classId: 1,
-    teacherId: "teacher4",
-    subject: { id: 4, name: "English" },
-    class: { id: 1, name: "Class 10A" },
-    teacher: { id: "teacher4", name: "Emily", surname: "Davis" },
-  },
-  {
-    id: 5,
-    name: "Biology - Genetics",
-    day: "THURSDAY",
-    startTime: new Date("2024-01-01T09:00:00"),
-    endTime: new Date("2024-01-01T10:00:00"),
-    subjectId: 5,
-    classId: 4,
-    teacherId: "teacher5",
-    subject: { id: 5, name: "Biology" },
-    class: { id: 4, name: "Class 9A" },
-    teacher: { id: "teacher5", name: "David", surname: "Wilson" },
-  },
-  {
-    id: 6,
-    name: "History - World Wars",
-    day: "FRIDAY",
-    startTime: new Date("2024-01-01T14:00:00"),
-    endTime: new Date("2024-01-01T15:00:00"),
-    subjectId: 6,
-    classId: 2,
-    teacherId: "teacher6",
-    subject: { id: 6, name: "History" },
-    class: { id: 2, name: "Class 11B" },
-    teacher: { id: "teacher6", name: "Jessica", surname: "Martinez" },
-  },
-  {
-    id: 7,
-    name: "Computer Science - Programming",
-    day: "TUESDAY",
-    startTime: new Date("2024-01-01T15:00:00"),
-    endTime: new Date("2024-01-01T16:00:00"),
-    subjectId: 7,
-    classId: 3,
-    teacherId: "teacher7",
-    subject: { id: 7, name: "Computer Science" },
-    class: { id: 3, name: "Class 12C" },
-    teacher: { id: "teacher7", name: "Robert", surname: "Anderson" },
-  },
-  {
-    id: 8,
-    name: "Mathematics - Geometry",
-    day: "WEDNESDAY",
-    startTime: new Date("2024-01-01T10:00:00"),
-    endTime: new Date("2024-01-01T11:00:00"),
-    subjectId: 1,
-    classId: 4,
-    teacherId: "teacher1",
-    subject: { id: 1, name: "Mathematics" },
-    class: { id: 4, name: "Class 9A" },
-    teacher: { id: "teacher1", name: "John", surname: "Smith" },
-  },
-  {
-    id: 9,
-    name: "English - Grammar",
-    day: "THURSDAY",
-    startTime: new Date("2024-01-01T11:00:00"),
-    endTime: new Date("2024-01-01T12:00:00"),
-    subjectId: 4,
-    classId: 2,
-    teacherId: "teacher4",
-    subject: { id: 4, name: "English" },
-    class: { id: 2, name: "Class 11B" },
-    teacher: { id: "teacher4", name: "Emily", surname: "Davis" },
-  },
-  {
-    id: 10,
-    name: "Physics - Electricity",
-    day: "FRIDAY",
-    startTime: new Date("2024-01-01T09:00:00"),
-    endTime: new Date("2024-01-01T10:00:00"),
-    subjectId: 2,
-    classId: 1,
-    teacherId: "teacher2",
-    subject: { id: 2, name: "Physics" },
-    class: { id: 1, name: "Class 10A" },
-    teacher: { id: "teacher2", name: "Sarah", surname: "Johnson" },
-  },
-];
+// Day badge colors
+const getDayColor = (day: string): string => {
+  const colors: Record<string, string> = {
+    'MONDAY': 'bg-blue-100 text-blue-700',
+    'TUESDAY': 'bg-purple-100 text-purple-700',
+    'WEDNESDAY': 'bg-green-100 text-green-700',
+    'THURSDAY': 'bg-amber-100 text-amber-700',
+    'FRIDAY': 'bg-pink-100 text-pink-700',
+    'SATURDAY': 'bg-cyan-100 text-cyan-700',
+    'SUNDAY': 'bg-red-100 text-red-700',
+  };
+  return colors[day?.toUpperCase()] || 'bg-gray-100 text-gray-700';
+};
+
+// Skeleton Component
+const TableSkeleton = () => (
+  <div className="animate-pulse">
+    <div className="space-y-3 mt-4">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <div key={i} className="flex gap-4 p-4 border-b border-gray-200">
+          <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
+          <div className="flex-1 space-y-2">
+            <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+            <div className="h-3 bg-gray-200 rounded w-1/3"></div>
+          </div>
+          <div className="hidden md:block w-20 h-4 bg-gray-200 rounded"></div>
+          <div className="hidden md:block w-32 h-4 bg-gray-200 rounded"></div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 const LessonListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
-  const role = "admin";
+  const params = await searchParams;
+
+  const auth = await requireAuth();
+  const role = auth.role;
+
+  const allowedRoles = ['admin', 'teacher'];
+  if (role && !allowedRoles.includes(role)) {
+    return (
+      <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+        <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
+          <h2 className="text-lg font-semibold text-red-700 mb-2">
+            Access Denied
+          </h2>
+          <p className="text-red-600 text-sm">
+            You do not have permission to view this page.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const page = params.page ? parseInt(params.page) : 1;
+  const search = params.search || undefined;
+  const teacherId = params.teacherId || undefined;
+
+  let result;
+
+  if(teacherId){
+    result = await fetchLessonsForTeacherAction(teacherId, search, page);
+  } else {
+    result = await fetchLessonsAction(search, page);
+  }
+
+  const hasError = !result.success || !result.data;
+
+  if (hasError) {
+    console.error('Failed to fetch lessons:', result.error);
+  }
+
+  const data: Lesson[] = result.data?.data || [];
+  const count: number = result.totalCount || 0;
 
   const columns = [
+    { header: "Lesson", accessor: "lesson" },
     {
-      header: "Subject Name",
-      accessor: "name",
+      header: "Day",
+      accessor: "day",
+      className: "hidden sm:table-cell",
+    },
+    {
+      header: "Time",
+      accessor: "time",
+      className: "hidden md:table-cell",
     },
     {
       header: "Class",
       accessor: "class",
+      className: "hidden md:table-cell",
     },
     {
       header: "Teacher",
       accessor: "teacher",
-      className: "hidden md:table-cell",
+      className: "hidden lg:table-cell",
     },
     ...(role === "admin"
-      ? [
-          {
-            header: "Actions",
-            accessor: "action",
-          },
-        ]
+      ? [{ header: "Actions", accessor: "action" }]
       : []),
   ];
 
-  const renderRow = (item: LessonList) => (
+  const renderRow = (item: Lesson) => (
     <tr
       key={item.id}
-      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
+      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-purple-50 transition-colors"
     >
-      <td className="flex items-center gap-4 p-4">{item.subject.name}</td>
-      <td>{item.class.name}</td>
-      <td className="hidden md:table-cell">
-        {item.teacher.name + " " + item.teacher.surname}
+      {/* Lesson Info */}
+      <td className="p-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
+            <BookOpen className="w-5 h-5 text-purple-600" />
+          </div>
+          <div className="flex flex-col min-w-0">
+            <h3 className="font-semibold text-gray-900 truncate">
+              {item.name || item.subject?.name || "Unnamed Lesson"}
+            </h3>
+            <p className="text-xs text-gray-500 truncate">
+              {item.subject?.name || "-"}
+            </p>
+          </div>
+        </div>
       </td>
+
+      {/* Day */}
+      <td className="hidden sm:table-cell">
+        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${getDayColor(item.day)}`}>
+          {item.day ? item.day.charAt(0) + item.day.slice(1).toLowerCase() : "-"}
+        </span>
+      </td>
+
+      {/* Time */}
+      <td className="hidden md:table-cell">
+        <div className="flex items-center gap-1.5 text-gray-600">
+          <Clock className="w-3.5 h-3.5 text-gray-400" />
+          <span className="text-xs">
+            {formatTime(item.start_time)} - {formatTime(item.end_time)}
+          </span>
+        </div>
+      </td>
+
+      {/* Class */}
+      <td className="hidden md:table-cell">
+        <div className="flex items-center gap-1.5 text-gray-600">
+          <Users className="w-3.5 h-3.5 text-gray-400" />
+          <span>{item.related_class?.name || "-"}</span>
+        </div>
+      </td>
+
+      {/* Teacher */}
+      <td className="hidden lg:table-cell">
+        <div className="flex items-center gap-1.5 text-gray-600">
+          <User className="w-3.5 h-3.5 text-gray-400" />
+          <span className="truncate max-w-[150px]">
+            {item.teacher ? `${item.teacher.first_name} ${item.teacher.last_name}` : "-"}
+          </span>
+        </div>
+      </td>
+
+      {/* Actions */}
       <td>
         <div className="flex items-center gap-2">
           {role === "admin" && (
@@ -217,68 +201,60 @@ const LessonListPage = async ({
     </tr>
   );
 
-  const { page, ...queryParams } = await searchParams;
-  const p = page ? parseInt(page) : 1;
-
-  // Filter data based on query params
-  let filteredData = STATIC_LESSONS;
-
-  if (queryParams.search) {
-    const searchLower = queryParams.search.toLowerCase();
-    filteredData = filteredData.filter(
-      (lesson) =>
-        lesson.subject.name.toLowerCase().includes(searchLower) ||
-        lesson.teacher.name.toLowerCase().includes(searchLower) ||
-        lesson.teacher.surname.toLowerCase().includes(searchLower)
-    );
-  }
-
-  if (queryParams.classId) {
-    filteredData = filteredData.filter(
-      (lesson) => lesson.classId === parseInt(queryParams.classId!)
-    );
-  }
-
-  if (queryParams.teacherId) {
-    filteredData = filteredData.filter(
-      (lesson) => lesson.teacherId === queryParams.teacherId
-    );
-  }
-
-  // Pagination logic
-  const count = filteredData.length;
-  const startIndex = ITEM_PER_PAGE * (p - 1);
-  const endIndex = startIndex + ITEM_PER_PAGE;
-  const data = filteredData.slice(startIndex, endIndex);
-
-  // TODO: Replace with actual API call
-  // const response = await fetch(
-  //   `/api/lessons?page=${p}&search=${queryParams.search || ''}&classId=${queryParams.classId || ''}&teacherId=${queryParams.teacherId || ''}`
-  // );
-  // const { data, count } = await response.json();
-
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP */}
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Lessons</h1>
+        <h1 className="hidden md:block text-lg font-semibold">
+          All Lessons
+        </h1>
+
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/filter.png" alt="" width={14} height={14} />
-            </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
-              <Image src="/sort.png" alt="" width={14} height={14} />
-            </button>
-            {role === "admin" && <FormContainer table="lesson" type="create" />}
+            {role === "admin" && (
+              <FormContainer table="lesson" type="create" />
+            )}
           </div>
         </div>
       </div>
-      {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={data} />
+
+      {/* ERROR STATE */}
+      {hasError ? (
+        <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
+          <h2 className="text-lg font-semibold text-red-700 mb-2">
+            Error Loading Lessons
+          </h2>
+          <p className="text-red-600 text-sm">
+            {result.error || 'Unable to load lessons. Please try again later.'}
+          </p>
+        </div>
+      ) : data.length === 0 ? (
+        /* EMPTY STATE */
+        <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-md text-center">
+          <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+          <p className="text-gray-600 font-medium mb-1">
+            {search 
+              ? `No lessons found matching "${search}"` 
+              : 'No lessons available'}
+          </p>
+          <p className="text-gray-500 text-sm">
+            {role === "admin" 
+              ? "Create your first lesson to get started" 
+              : "Check back later for scheduled lessons"}
+          </p>
+        </div>
+      ) : (
+        /* LIST */
+        <Suspense fallback={<TableSkeleton />}>
+          <Table columns={columns} renderRow={renderRow} data={data} />
+        </Suspense>
+      )}
+
       {/* PAGINATION */}
-      <Pagination page={p} count={count} />
+      {!hasError && count > 0 && (
+        <Pagination page={page} count={count} />
+      )}
     </div>
   );
 };

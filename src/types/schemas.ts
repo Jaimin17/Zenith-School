@@ -115,6 +115,7 @@ export interface Teacher {
 export interface TeacherWithRelations extends Teacher {
     subjects: Subject[],
     classes: ClassBase[],
+    lessons: LessonBase[],
 }
 
 export interface TeacherListResponse extends PaginationListResponse {
@@ -134,15 +135,22 @@ export interface SubjectListResponse extends PaginationListResponse {
     data: SubjectWithRelations[],
 }
 
-export interface Lesson {
+export interface LessonBase {
     id: string,
     name: string,
     day: string,
     start_time: string,
     end_time: string,
+}
+
+export interface Lesson extends LessonBase {
     subject: Subject,
     related_class: ClassBase,
     teacher: Teacher,
+}
+
+export interface LessonListResponse extends PaginationListResponse {
+    data: Lesson[],
 }
 
 export interface Parent {

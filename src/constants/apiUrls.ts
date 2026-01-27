@@ -5,21 +5,33 @@ export const apiUrls = {
 
     LOGOUT_URL: "api/v1/auth/logout",
 
-    USER_COUNT_URL: "api/v1/admin/allUsersCount",
+    GET_USER_COUNT_URL: "api/v1/admin/allUsersCount",
 
-    ANNOUNCEMENT_URL: "api/v1/announcements/getAll",
+    GET_ANNOUNCEMENT_URL: "api/v1/announcements/getAll",
 
-    ASSIGNMENT_URL: "api/v1/assignments/getAll",
+    GET_ANNOUNCEMENT_TEACHER_URL: "api/v1/announcements/teacher",
 
-    EVENTS_BY_DATE_URL: "api/v1/events/getAllByDate",
+    GET_ASSIGNMENT_URL: "api/v1/assignments/getAll",
 
-    LESSONS_WEEK_URL: "api/v1/lesson/getAllOfCurrentWeek",
+    GET_EVENTS_BY_DATE_URL: "api/v1/events/getAllByDate",
 
-    LESSONS_FOR_PARENT_STUDENT_WEEK_URL: "api/v1/lesson/getLessonForStudent",   
+    GET_LESSONS_WEEK_URL: "api/v1/lesson/getAllOfCurrentWeek",
+
+    GET_LESSONS_FOR_PARENT_STUDENT_WEEK_URL: "api/v1/lesson/getLessonForStudent",   
+
+    GET_LESSONS_TEACHER_WEEK_URL: "api/v1/lesson/teacher/weekly",
+
+    GET_LESSONS_FOR_TEACHER_URL: "api/v1/lesson/teacher",
+
+    GET_LESSONS_URL: "api/v1/lesson/getAll",
 
     GET_STUDENT_CLASS_URL: "api/v1/classes/getStudentClass",
 
     GET_STUDENT_URL: "api/v1/student/getAll",
+
+    GET_STUDENTS_OF_TEACHER_URL: "api/v1/student/byTeacher",
+
+    GET_TEACHER_BY_ID_URL: "api/v1/teacher/get",
 
     GET_TEACHER_URL: "api/v1/teacher/getAll",
 
@@ -32,6 +44,8 @@ export const apiUrls = {
     GET_EVENTS_URL: "api/v1/events/getAll",
 
     GET_EXAMS_URL: "api/v1/exam/getAll",
+
+    GET_EXAMS_TEACHER_URL: "api/v1/exam/teacher",
 
     GET_CLASS_EXAMS_URL: "api/v1/exam/class",
 

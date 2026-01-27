@@ -5,7 +5,7 @@ import FormContainer from "@/components/FromAnother/FormContainer";
 import Image from "next/image";
 import Link from "next/link";
 import type { Student } from "@/types/schemas";
-import { fetchStudentsAction } from "@/actions/admin";
+import { fetchStudentsAction, fetchStudentsOfTeacherAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { getStudentImageUrl } from "@/utils/imageHelpers";
@@ -58,8 +58,16 @@ const StudentListPage = async ({
 
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
+  const teacherId = params.teacherId || undefined;
 
-  const result = await fetchStudentsAction(search, page);
+  let result;
+
+  if(teacherId){
+    result = await fetchStudentsOfTeacherAction(teacherId, search, page);
+  } else {
+    result = await fetchStudentsAction(search, page);
+  }
+
 
   const hasError = !result.success || !result.data;
 

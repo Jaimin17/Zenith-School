@@ -32,7 +32,7 @@ const ExamFilters = ({
     const params = new URLSearchParams();
     if (currentSearch) params.set("search", currentSearch);
     if (newClassId) params.set("classId", newClassId);
-    if (newTeacherId) params.set("teacherId", newTeacherId);
+    if (newTeacherId) params.set("filterTeacherId", newTeacherId);
     const queryString = params.toString();
     return queryString ? `/list/exams?${queryString}` : "/list/exams";
   };

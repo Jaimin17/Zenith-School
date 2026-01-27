@@ -6,7 +6,7 @@ import type { Announcement, AnnouncementListResponse } from "@/types/schemas";
 import AnnouncementIcon from '@mui/icons-material/Campaign';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { fetchAnnouncementsAction } from "@/actions/admin";
+import { fetchAnnouncementsAction, fetchAnnouncementsOfTeacherAction } from "@/actions/admin";
 
 const cardColors = [
   "rgba(56, 189, 248, 0.15)",   // sky light
@@ -16,15 +16,26 @@ const cardColors = [
 
 interface AnnouncementsProps {
   initialAnnouncements: AnnouncementListResponse;
+  userId?: string;
+  role?: string;
 }
 
-const Announcements = ({ initialAnnouncements }: AnnouncementsProps) => {
+const Announcements = ({ initialAnnouncements, userId, role }: AnnouncementsProps) => {
     const [announcements, setAnnouncements] = useState<Announcement[]>(initialAnnouncements.data);
     const [isPending, startTransition] = useTransition();
 
     const handleRefresh = () => {
       startTransition(async () => {
-          const result = await fetchAnnouncementsAction();
+          let result;
+          
+          // Fetch based on role and userId
+          if (userId && role === 'teacher') {
+            result = await fetchAnnouncementsOfTeacherAction(userId);
+          } else {
+            // For admin, student, parent or when no specific filter
+            result = await fetchAnnouncementsAction();
+          }
+          
           if (result.success && result.data) {
             setAnnouncements(result.data.data);
           }

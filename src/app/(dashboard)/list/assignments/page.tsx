@@ -78,7 +78,7 @@ const getStatusBadge = (startDate: string, dueDate: string) => {
 const AssignmentsPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
   const params = await searchParams;
 

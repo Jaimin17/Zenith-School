@@ -31,7 +31,7 @@ const TableSkeleton = () => (
 const ClassListPage = async ({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
   const params = await searchParams;
 

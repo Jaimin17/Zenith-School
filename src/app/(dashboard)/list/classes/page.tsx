@@ -57,8 +57,9 @@ const ClassListPage = async ({
 
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
+  const supervisorId = params.supervisorId || undefined;
 
-  const result = await fetchClassesListAction(search, page);
+  const result = await fetchClassesListAction(search, supervisorId, page);
 
   const hasError = !result.success || !result.data;
 

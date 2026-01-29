@@ -2,8 +2,8 @@
 
 import { cookies } from "next/headers";
 import { api } from '@/api/api';
-import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API } from '@/api/apiParams/admin';
-import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, Student, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, LessonListResponse } from '@/types/schemas';
+import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API, GET_SUPERVISORS_CLASSES_API, GET_STUDENT_BY_ID_API, ATTENDANCE_BY_STUDENT_ID_API, ANNOUNCEMENT_STUDENT_API } from '@/api/apiParams/admin';
+import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, StudentWithRelations, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, LessonListResponse, Attendance } from '@/types/schemas';
 import { getServerAuthTokens } from "@/utils/cookie";
 
 export async function fetchUserCountsAction(): Promise<{
@@ -167,6 +167,70 @@ export async function fetchAnnouncementsOfTeacherAction(teacherId: string, searc
         };
     } catch (error) {
         console.error('Error in fetchAnnouncementsOfTeacherAction:', error);
+        return {
+            success: false,
+            data: null,
+            totalCount: 0,
+            error: 'An unexpected error occurred while fetching announcements'
+        };
+    }
+}
+
+export async function fetchAnnouncementsOfStudentAction(studentId: string, searchTerm?: string, pageNo: number = 1): Promise<{
+    success: boolean;
+    data: AnnouncementListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore)
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        // Build params if search term provided
+        const params = searchTerm ? { 
+            search: searchTerm,
+            page: pageNo
+        } : {
+            page: pageNo
+        };
+
+        // Make API request with server token
+        const response = await api<AnnouncementListResponse>({
+            endpoint: {
+                ...ANNOUNCEMENT_STUDENT_API,
+                url: `${ANNOUNCEMENT_STUDENT_API.url}/${studentId}`,
+            },
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: response.message || 'Failed to fetch announcements'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+            totalCount: response.data.total_count || 0,
+        };
+    } catch (error) {
+        console.error('Error in fetchAnnouncementsOfStudentAction:', error);
         return {
             success: false,
             data: null,
@@ -343,6 +407,57 @@ export async function fetchAssignmentsOfTeacherAction(
             data: null,
             totalCount: 0,
             error: 'An unexpected error occurred while fetching assignments'
+        };
+    }
+}
+
+export async function fetchAttendanceByStudentIdAction(id: string): Promise<{
+    success: boolean;
+    data: Attendance[] | null;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        // Make API request with server token
+        const response = await api<Attendance[]>({
+            endpoint: {
+                ...ATTENDANCE_BY_STUDENT_ID_API,
+                url: `${ATTENDANCE_BY_STUDENT_ID_API.url}/${id}`,
+            },
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch attendance'
+            };
+        }
+
+        const attendanceDetails = response.data;
+        return {
+            success: true,
+            data: attendanceDetails,
+        };
+    } catch (error) {
+        console.error('Error in fetchAttendanceByStudentIdAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching attendance information'
         };
     }
 }
@@ -906,6 +1021,57 @@ export async function fetchStudentsAction(searchTerm?: string, pageNo: number = 
     }
 }
 
+export async function fetchStudentByIdAction(id: string): Promise<{
+    success: boolean;
+    data: StudentWithRelations | null;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        // Make API request with server token
+        const response = await api<StudentWithRelations>({
+            endpoint: {
+                ...GET_STUDENT_BY_ID_API,
+                url: `${GET_STUDENT_BY_ID_API.url}/${id}`,
+            },
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch student'
+            };
+        }
+
+        const studentDetails = response.data;
+        return {
+            success: true,
+            data: studentDetails,
+        };
+    } catch (error) {
+        console.error('Error in fetchStudentByIdAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching student information'
+        };
+    }
+}
+
 export async function fetchStudentsOfTeacherAction(teacherId: string, searchTerm?: string, pageNo: number = 1): Promise<{
     success: boolean;
     data: StudentListResponse | null;
@@ -1189,7 +1355,7 @@ export async function fetchFullTeachersListAction(): Promise<{
 
 
 
-export async function fetchClassesListAction(searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchClassesListAction(searchTerm?: string, supervisorId?: string, pageNo: number = 1): Promise<{
     success: boolean;
     data: ClassListResponse | null;
     totalCount: number;
@@ -1216,13 +1382,28 @@ export async function fetchClassesListAction(searchTerm?: string, pageNo: number
             page: pageNo.toString()
          };
 
+        let response;
+        
+        if (!supervisorId) {
+
         // Make API request with server token
-        const response = await api<ClassListResponse>({
-            endpoint: GET_CLASSES_API,
-            params,
-            serverToken: token.accessToken,
-            isServer: true,
-        });
+            response = await api<ClassListResponse>({
+                endpoint: GET_CLASSES_API,
+                params,
+                serverToken: token.accessToken,
+                isServer: true,
+            });
+        } else {
+            response = await api<ClassListResponse>({
+                endpoint: {
+                    ...GET_SUPERVISORS_CLASSES_API,
+                    url: `${GET_SUPERVISORS_CLASSES_API.url}/${supervisorId}`,
+                },
+                params,
+                serverToken: token.accessToken,
+                isServer: true,
+            });
+        }
 
         if (response.error || !response.data) {
             return {

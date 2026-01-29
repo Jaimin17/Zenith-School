@@ -4,7 +4,7 @@ import TableSearch from "@/components/FromAnother/TableSearch";
 import FormContainer from "@/components/FromAnother/FormContainer";
 import Image from "next/image";
 import Link from "next/link";
-import type { Student } from "@/types/schemas";
+import type { StudentWithRelations } from "@/types/schemas";
 import { fetchStudentsAction, fetchStudentsOfTeacherAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
@@ -75,7 +75,7 @@ const StudentListPage = async ({
     console.error('Failed to fetch students:', result.error);
   }
 
-  const data: Student[] = result.data?.data || [];
+  const data: StudentWithRelations[] = result.data?.data || [];
   const count: number = result.totalCount || 0;
 
   const columns = [
@@ -110,7 +110,7 @@ const StudentListPage = async ({
       : []),
   ];
 
-  const renderRow = (item: Student) => (
+  const renderRow = (item: StudentWithRelations) => (
     <tr
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"

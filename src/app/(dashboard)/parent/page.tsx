@@ -5,7 +5,7 @@ import {
 } from "@/actions/admin";
 import Announcements from "../../../components/FromAnother/Announcements";
 import BigCalendarContainer from "../../../components/FromAnother/BigCalendarContainer";
-import { Announcement, Student, Lesson, AnnouncementListResponse, StudentListResponse } from "@/types/schemas";
+import { Announcement, StudentWithRelations, Lesson, AnnouncementListResponse, StudentListResponse } from "@/types/schemas";
 import { Suspense } from "react";
 
 // Skeleton Components
@@ -42,7 +42,7 @@ const StudentScheduleSkeleton = () => (
 );
 
 // Student Schedule Component with Error Boundary
-const StudentSchedule = async ({ student }: { student: Student }) => {
+const StudentSchedule = async ({ student }: { student: StudentWithRelations }) => {
     if (!student.related_class) {
         return (
             <div className="w-full">

@@ -17,13 +17,13 @@ export function adjustScheduleToCurrentWeek(
 
   // Map day names to day numbers (0 = Sunday, 1 = Monday, etc.)
   const dayNameToNumber: { [key: string]: number } = {
-    'sunday': 1,
-    'monday': 2,
-    'tuesday': 3,
-    'wednesday': 4,
-    'thursday': 5,
-    'friday': 6,
-    'saturday': 7,
+    'monday': 1,
+    'tuesday': 2,
+    'wednesday': 3,
+    'thursday': 4,
+    'friday': 5,
+    'saturday': 6,
+    'sunday': 7,
   };
 
   return schedule?.map((item) => {

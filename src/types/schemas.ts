@@ -67,6 +67,12 @@ export interface AssignmentListResponse extends PaginationListResponse {
     data: AssignmentWithRelations[],
 }
 
+export interface Attendance {
+    id: string,
+    date: string,
+    present: boolean,
+}
+
 export interface Events {
     id: string,
     title: string,
@@ -185,14 +191,14 @@ export interface StudentBase {
     dob: string | null,
 }
 
-export interface Student extends StudentBase {
+export interface StudentWithRelations extends StudentBase {
     parent: Parent | null,
     related_class: ClassBase,
     grade: Grade,
 }
 
 export interface StudentListResponse extends PaginationListResponse {
-    data: Student[]
+    data: StudentWithRelations[]
 }
 
 export interface ResultBase {

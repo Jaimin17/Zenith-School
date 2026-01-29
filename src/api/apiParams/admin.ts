@@ -28,6 +28,15 @@ export const ANNOUNCEMENT_TEACHER_API: ApiType = {
     isForm: false,
 }
 
+export const ANNOUNCEMENT_STUDENT_API: ApiType = {
+    url: apiUrls.GET_ANNOUNCEMENT_FOR_STUDENT_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const ASSIGNMENT_API: ApiType = {
     url: apiUrls.GET_ASSIGNMENT_URL,
     method: "GET",
@@ -39,6 +48,15 @@ export const ASSIGNMENT_API: ApiType = {
 
 export const ASSIGNMENTS_OF_TEACHER_API: ApiType = {
     url: apiUrls.GET_ASSIGNMENTS_OF_TEACHER_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const ATTENDANCE_BY_STUDENT_ID_API: ApiType = {
+    url: apiUrls.GET_ATTENDANCE_BY_STUDENT_ID_URL,
     method: "GET",
     withToken: true,
     isMultipart: false,
@@ -127,6 +145,15 @@ export const GET_STUDENT_API: ApiType = {
     isForm: true,
 }
 
+export const GET_STUDENT_BY_ID_API: ApiType = {
+    url: apiUrls.GET_STUDENT_BY_ID_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const GET_TEACHERS_STUDENT_API: ApiType = {
     url: apiUrls.GET_STUDENTS_OF_TEACHER_URL,
     method: "GET",
@@ -174,6 +201,15 @@ export const GET_CLASSES_API: ApiType = {
 
 export const GET_ALL_CLASSES_API: ApiType = {
     url: apiUrls.GET_ALL_CLASSES_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_SUPERVISORS_CLASSES_API: ApiType = {
+    url: apiUrls.GET_SUPERVISORS_CLASSES_URL,
     method: "GET",
     withToken: true,
     isMultipart: false,

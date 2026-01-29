@@ -11,9 +11,13 @@ export const apiUrls = {
 
     GET_ANNOUNCEMENT_TEACHER_URL: "api/v1/announcements/teacher",
 
+    GET_ANNOUNCEMENT_FOR_STUDENT_URL: "api/v1/announcements/student",
+
     GET_ASSIGNMENT_URL: "api/v1/assignments/getAll",
 
     GET_ASSIGNMENTS_OF_TEACHER_URL: "api/v1/assignments/teacher",
+
+    GET_ATTENDANCE_BY_STUDENT_ID_URL: "api/v1/attendance/getAttendanceOfStudent",
 
     GET_EVENTS_BY_DATE_URL: "api/v1/events/getAllByDate",
 
@@ -33,6 +37,8 @@ export const apiUrls = {
 
     GET_STUDENTS_OF_TEACHER_URL: "api/v1/student/byTeacher",
 
+    GET_STUDENT_BY_ID_URL: "api/v1/student/get",
+
     GET_TEACHER_BY_ID_URL: "api/v1/teacher/get",
 
     GET_TEACHER_URL: "api/v1/teacher/getAll",
@@ -42,6 +48,8 @@ export const apiUrls = {
     GET_CLASSES_URL: "api/v1/classes/getAll",
 
     GET_ALL_CLASSES_URL: "api/v1/classes/getFullList",
+
+    GET_SUPERVISORS_CLASSES_URL: "api/v1/classes",
 
     GET_EVENTS_URL: "api/v1/events/getAll",
 

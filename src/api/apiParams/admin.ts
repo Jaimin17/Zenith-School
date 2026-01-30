@@ -127,6 +127,15 @@ export const LESSONS_FOR_TEACHER_API: ApiType = {
     isForm: false,
 }
 
+export const LESSONS_FOR_CLASS_API: ApiType = {
+    url: apiUrls.GET_LESSONS_FOR_CLASS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const GET_STUDENT_CLASS_API: ApiType = {
     url: apiUrls.GET_STUDENT_CLASS_URL,
     method: "GET",
@@ -190,6 +199,15 @@ export const GET_FULL_TEACHERS_API: ApiType = {
     isForm: false,
 }
 
+export const GET_TEACHERS_OF_CLASS_API: ApiType = {
+    url: apiUrls.GET_TEACHERS_OF_CLASS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const GET_CLASSES_API: ApiType = {
     url: apiUrls.GET_CLASSES_URL,
     method: "GET",
@@ -228,6 +246,15 @@ export const GET_EXAMS_API: ApiType = {
 
 export const GET_EXAMS_TEACHER_API: ApiType = {
     url: apiUrls.GET_EXAMS_TEACHER_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_EXAMS_CLASS_API: ApiType = {
+    url: apiUrls.GET_EXAMS_CLASS_URL,
     method: "GET",
     withToken: true,
     isMultipart: false,

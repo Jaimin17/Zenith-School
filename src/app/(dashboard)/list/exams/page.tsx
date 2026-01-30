@@ -4,7 +4,7 @@ import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
 import ExamFilters from "@/components/FromAnother/ExamFilters";
 import type { ExamsWithRelations } from "@/types/schemas";
-import { fetchExamListAction, fetchTeachersListAction, fetchClassesListAction, fetchFullTeachersListAction, fetchAllClassesAction, fetchExamsOfTeacherListAction } from "@/actions/admin";
+import { fetchExamListAction, fetchTeachersListAction, fetchClassesListAction, fetchFullTeachersListAction, fetchAllClassesAction, fetchExamsOfTeacherListAction, fetchExamsOfClassListAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { Calendar, Clock, BookOpen } from "lucide-react";
@@ -56,9 +56,10 @@ const ExamListPage = async ({
 
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
-  const classId = params.classId || undefined;
+  const filterClassId = params.filterClassId || undefined;
   const filterTeacherId = params.filterTeacherId || undefined;
   const teacherId = params.teacherId || undefined;
+  const classId = params.classId || undefined;
 
   // Fetch exams and filter data in parallel
   const [teachersResult, classesResult] = await Promise.all([
@@ -70,8 +71,10 @@ const ExamListPage = async ({
 
   if(teacherId){
     result = await fetchExamsOfTeacherListAction(teacherId, search, page);
+  } else if (classId) {
+    result = await fetchExamsOfClassListAction(classId, search, page);
   } else {
-    result = await fetchExamListAction(search, page, classId, filterTeacherId);
+    result = await fetchExamListAction(search, page, filterClassId, filterTeacherId);
   }
 
   const hasError = !result.success || !result.data;
@@ -199,10 +202,10 @@ const ExamListPage = async ({
       </div>
 
       {/* FILTERS */}
-      {!teacherId && <ExamFilters
+      {(!teacherId && !classId) && <ExamFilters
         classes={classes}
         teachers={teachers ? teachers : []}
-        currentClassId={classId}
+        currentClassId={filterClassId}
         currentTeacherId={filterTeacherId}
         currentSearch={search}
       />}
@@ -224,12 +227,12 @@ const ExamListPage = async ({
           <p className="text-gray-600 font-medium mb-1">
             {search 
               ? `No exams found matching "${search}"` 
-              : classId || filterTeacherId
+              : filterClassId || filterTeacherId
               ? 'No exams match the selected filters'
               : 'No exams scheduled'}
           </p>
           <p className="text-gray-500 text-sm">
-            {classId || filterTeacherId 
+            {filterClassId || filterTeacherId 
               ? "Try adjusting your filters or clear them to see all exams"
               : role === "admin" || role === "teacher" 
               ? "Create your first exam to get started" 

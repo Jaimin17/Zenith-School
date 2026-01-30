@@ -3,7 +3,7 @@ import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
 import FormContainer from "@/components/FromAnother/FormContainer";
 import type { Lesson } from "@/types/schemas";
-import { fetchLessonsAction, fetchLessonsForTeacherAction } from "@/actions/admin";
+import { fetchLessonsAction, fetchLessonsForClassAction, fetchLessonsForTeacherAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { BookOpen, Clock, Users, User } from "lucide-react";
@@ -85,11 +85,14 @@ const LessonListPage = async ({
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
   const teacherId = params.teacherId || undefined;
+  const classId = params.classId || undefined;
 
   let result;
 
   if(teacherId){
     result = await fetchLessonsForTeacherAction(teacherId, search, page);
+  } else if (classId) {
+    result = await fetchLessonsForClassAction(classId, search, page);
   } else {
     result = await fetchLessonsAction(search, page);
   }

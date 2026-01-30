@@ -29,6 +29,8 @@ export const apiUrls = {
 
     GET_LESSONS_FOR_TEACHER_URL: "api/v1/lesson/teacher",
 
+    GET_LESSONS_FOR_CLASS_URL: "api/v1/lesson/class",
+
     GET_LESSONS_URL: "api/v1/lesson/getAll",
 
     GET_STUDENT_CLASS_URL: "api/v1/classes/getStudentClass",
@@ -45,6 +47,8 @@ export const apiUrls = {
 
     GET_ALL_TEACHERS_URL: "api/v1/teacher/getFullList",
 
+    GET_TEACHERS_OF_CLASS_URL: "api/v1/teacher",
+
     GET_CLASSES_URL: "api/v1/classes/getAll",
 
     GET_ALL_CLASSES_URL: "api/v1/classes/getFullList",
@@ -56,6 +60,8 @@ export const apiUrls = {
     GET_EXAMS_URL: "api/v1/exam/getAll",
 
     GET_EXAMS_TEACHER_URL: "api/v1/exam/teacher",
+
+    GET_EXAMS_CLASS_URL: "api/v1/exam/class",
 
     GET_CLASS_EXAMS_URL: "api/v1/exam/class",
 

@@ -5,7 +5,7 @@ import FormContainer from "../../../../components/FromAnother/FormContainer";
 import Image from "next/image";
 import Link from "next/link";
 import type { TeacherWithRelations } from "@/types/schemas";
-import { fetchTeachersListAction } from "@/actions/admin";
+import { fetchTeachersListAction, fetchTeachersOfClassesListAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { getTeacherImageUrl } from "@/utils/imageHelpers";
@@ -60,8 +60,15 @@ const TeacherListPage = async ({
 
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
+  const classId = params.classId || undefined;
 
-  const result = await fetchTeachersListAction(search, page);
+  let result = await fetchTeachersListAction(search, page);
+
+  if (classId) {
+    result = await fetchTeachersOfClassesListAction(classId, search, page);
+  } else {
+    result = await fetchTeachersListAction(search, page);
+  }
 
   const hasError = !result.success || !result.data;
 

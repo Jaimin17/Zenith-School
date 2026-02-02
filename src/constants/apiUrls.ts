@@ -19,6 +19,8 @@ export const apiUrls = {
 
     GET_ASSIGNMENTS_OF_CLASS_URL: "api/v1/assignments/class",
 
+    GET_ASSIGNMENTS_OF_STUDENT_URL: "api/v1/assignments/student",
+
     GET_ATTENDANCE_BY_STUDENT_ID_URL: "api/v1/attendance/getAttendanceOfStudent",
 
     GET_EVENTS_BY_DATE_URL: "api/v1/events/getAllByDate",
@@ -64,6 +66,8 @@ export const apiUrls = {
     GET_EXAMS_TEACHER_URL: "api/v1/exam/teacher",
 
     GET_EXAMS_CLASS_URL: "api/v1/exam/class",
+
+    GET_EXAMS_OF_STUDENT_URL: "api/v1/exam/student",
 
     GET_CLASS_EXAMS_URL: "api/v1/exam/class",
 

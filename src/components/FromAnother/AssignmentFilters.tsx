@@ -16,6 +16,7 @@ interface AssignmentFiltersProps {
   currentSearch?: string;
   teacherId?: string;
   classId?: string;
+  studentId?: string;
 }
 
 const AssignmentFilters = ({
@@ -28,6 +29,7 @@ const AssignmentFilters = ({
   currentSearch,
   teacherId,
   classId,
+  studentId,
 }: AssignmentFiltersProps) => {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -50,6 +52,7 @@ const AssignmentFilters = ({
     if (newDate) params.set("date", newDate);
     if (teacherId) params.set("teacherId", teacherId);
     if (classId) params.set("classId", classId);
+    if (studentId) params.set("studentId", studentId);
     const queryString = params.toString();
     return queryString ? `/list/assignments?${queryString}` : "/list/assignments";
   };
@@ -83,6 +86,9 @@ const AssignmentFilters = ({
     cleanLink = cleanLink.concat(`classId=${classId}`);
   }
 
+  if (studentId) {
+    cleanLink = cleanLink.concat(`studentId=${studentId}`);
+  }
 
   return (
     <div className="mt-4">

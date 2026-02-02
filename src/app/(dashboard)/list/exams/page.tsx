@@ -4,7 +4,7 @@ import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
 import ExamFilters from "@/components/FromAnother/ExamFilters";
 import type { ExamsWithRelations } from "@/types/schemas";
-import { fetchExamListAction, fetchTeachersListAction, fetchClassesListAction, fetchFullTeachersListAction, fetchAllClassesAction, fetchExamsOfTeacherListAction, fetchExamsOfClassListAction } from "@/actions/admin";
+import { fetchExamListAction, fetchTeachersListAction, fetchClassesListAction, fetchFullTeachersListAction, fetchAllClassesAction, fetchExamsOfTeacherListAction, fetchExamsOfClassListAction, fetchExamsOfStudentListAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { Calendar, Clock, BookOpen } from "lucide-react";
@@ -60,12 +60,21 @@ const ExamListPage = async ({
   const filterTeacherId = params.filterTeacherId || undefined;
   const teacherId = params.teacherId || undefined;
   const classId = params.classId || undefined;
+  const studentId = params.studentId || undefined;
 
+  let teachers: any[] = [];
+  let classes: any[] = [];
   // Fetch exams and filter data in parallel
-  const [teachersResult, classesResult] = await Promise.all([
-    fetchFullTeachersListAction(),
-    fetchAllClassesAction()
-  ]);
+  if (!teacherId && !classId && !studentId){
+    const [teachersResult, classesResult] = await Promise.all([
+      fetchFullTeachersListAction(),
+      fetchAllClassesAction()
+    ]);
+
+      // Get filter options
+    teachers = teachersResult.data || [];
+    classes = classesResult.data || [];
+  }
 
   let result;
 
@@ -73,6 +82,8 @@ const ExamListPage = async ({
     result = await fetchExamsOfTeacherListAction(teacherId, search, page);
   } else if (classId) {
     result = await fetchExamsOfClassListAction(classId, search, page);
+  } else if (studentId) {
+    result = await fetchExamsOfStudentListAction(studentId, search, page);
   } else {
     result = await fetchExamListAction(search, page, filterClassId, filterTeacherId);
   }
@@ -85,10 +96,6 @@ const ExamListPage = async ({
 
   const data: ExamsWithRelations[] = result.data?.data || [];
   const count: number = result.totalCount || 0;
-
-  // Get filter options
-  const teachers = teachersResult.data || [];
-  const classes = classesResult.data || [];
 
   const columns = [
     {
@@ -202,8 +209,8 @@ const ExamListPage = async ({
       </div>
 
       {/* FILTERS */}
-      {(!teacherId && !classId) && <ExamFilters
-        classes={classes}
+      {(!teacherId && !classId && !studentId) && <ExamFilters
+        classes={classes ? classes : []}
         teachers={teachers ? teachers : []}
         currentClassId={filterClassId}
         currentTeacherId={filterTeacherId}

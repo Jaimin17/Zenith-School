@@ -46,7 +46,7 @@ const SingleParentPage = async ({
   return (
     <div className="flex-1 p-4 flex flex-col gap-4 xl:flex-row">
       {/* LEFT */}
-      <div className="w-full xl:w-2/3">
+      <div className="w-full xl:w-3/4">
         {/* TOP */}
         <div className="flex flex-col lg:flex-row gap-4">
           {/* USER INFO CARD */}
@@ -175,7 +175,7 @@ const SingleParentPage = async ({
                   href={`/list/students/${student.id}`}
                   className="group relative overflow-hidden bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-200 hover:border-emerald-300 hover:shadow-lg transition-all duration-300"
                 >
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-100/50 to-transparent rounded-bl-full" />
+                  <div className="absolute top-0 right-0 w-20 h-20" />
                   <div className="p-4 flex items-center gap-4">
                     <div className="relative">
                       <Image
@@ -232,16 +232,16 @@ const SingleParentPage = async ({
         </div>
       </div>
       {/* RIGHT */}
-      <div className="w-full xl:w-1/3 flex flex-col gap-4">
+      <div className="w-full xl:w-1/4 flex flex-col gap-4">
         <div className="bg-gradient-to-br from-slate-50 to-gray-100 p-5 rounded-xl border border-gray-200 shadow-sm">
           <h1 className="text-lg font-semibold text-gray-800">Shortcuts</h1>
-          <div className="mt-4 grid grid-cols-3 gap-3 text-xs font-medium">
+          <div className="mt-4 grid grid-cols-2 gap-3 text-xs font-medium">
             {parent.students && parent.students.length > 0 ? (
               <>
                 {parent.students.map((student) => (
                   <Link
                     key={student.id}
-                    className="px-4 py-2.5 rounded-lg bg-sky-100 text-sky-700 hover:bg-sky-200 transition-colors text-center"
+                    className="px-4 py-1 rounded-lg bg-sky-100 text-sky-700 hover:bg-sky-200 transition-colors text-center"
                     href={`/list/students/${student.id}`}
                   >
                     {student.first_name}&apos;s Profile
@@ -250,7 +250,7 @@ const SingleParentPage = async ({
                 {parent.students.map((student) => (
                   <Link
                     key={`results-${student.id}`}
-                    className="px-4 py-2.5 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors text-center"
+                    className="px-4 py-1 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors text-center"
                     href={`/list/results?studentId=${student.id}`}
                   >
                     {student.first_name}&apos;s Results
@@ -259,7 +259,7 @@ const SingleParentPage = async ({
                 {parent.students.map((student) => (
                   <Link
                     key={`exams-${student.id}`}
-                    className="px-4 py-2.5 rounded-lg bg-pink-100 text-pink-700 hover:bg-pink-200 transition-colors text-center"
+                    className="px-4 py-1 rounded-lg bg-pink-100 text-pink-700 hover:bg-pink-200 transition-colors text-center"
                     href={`/list/exams?studentId=${student.id}`}
                   >
                     {student.first_name}&apos;s Exams
@@ -268,7 +268,7 @@ const SingleParentPage = async ({
                 {parent.students.map((student) => (
                   <Link
                     key={`assignments-${student.id}`}
-                    className="px-4 py-2.5 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors text-center"
+                    className="px-4 py-1 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors text-center"
                     href={`/list/assignments?studentId=${student.id}`}
                   >
                     {student.first_name}&apos;s Tasks

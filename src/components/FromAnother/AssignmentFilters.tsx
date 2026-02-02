@@ -15,6 +15,7 @@ interface AssignmentFiltersProps {
   currentDate?: string;
   currentSearch?: string;
   teacherId?: string;
+  classId?: string;
 }
 
 const AssignmentFilters = ({
@@ -26,6 +27,7 @@ const AssignmentFilters = ({
   currentDate,
   currentSearch,
   teacherId,
+  classId,
 }: AssignmentFiltersProps) => {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -47,6 +49,7 @@ const AssignmentFilters = ({
     if (newStatus) params.set("status", newStatus);
     if (newDate) params.set("date", newDate);
     if (teacherId) params.set("teacherId", teacherId);
+    if (classId) params.set("classId", classId);
     const queryString = params.toString();
     return queryString ? `/list/assignments?${queryString}` : "/list/assignments";
   };
@@ -70,6 +73,16 @@ const AssignmentFilters = ({
     const newDate = e.target.value || undefined;
     router.push(buildFilterUrl(currentSubjectId, currentTeacherId, currentStatus, newDate));
   };
+
+  let cleanLink = "/list/assignments?";
+  if (teacherId) {
+    cleanLink = cleanLink.concat(`teacherId=${teacherId}`);
+  }
+
+  if (classId) {
+    cleanLink = cleanLink.concat(`classId=${classId}`);
+  }
+
 
   return (
     <div className="mt-4">
@@ -95,7 +108,7 @@ const AssignmentFilters = ({
         <div className="flex items-center gap-2">
           {hasActiveFilters && (
             <Link
-              href={teacherId ? `/list/assignments?teacherId=${teacherId}` : "/list/assignments"}
+              href={cleanLink}
               onClick={(e) => e.stopPropagation()}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
             >

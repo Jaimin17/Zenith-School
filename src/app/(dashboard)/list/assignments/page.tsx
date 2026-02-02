@@ -4,7 +4,7 @@ import TableSearch from "@/components/FromAnother/TableSearch";
 import FormContainer from "@/components/FromAnother/FormContainer";
 import AssignmentFilters from "@/components/FromAnother/AssignmentFilters";
 import type { AssignmentWithRelations } from "@/types/schemas";
-import { fetchAssignmentsAction, fetchTeachersListAction, fetchSubjectListAction, fetchAnnouncementsOfTeacherAction, fetchAssignmentsOfTeacherAction } from "@/actions/admin";
+import { fetchAssignmentsAction, fetchTeachersListAction, fetchSubjectListAction, fetchAnnouncementsOfTeacherAction, fetchAssignmentsOfTeacherAction, fetchAssignmentsOfClassAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { FileText, Calendar, BookOpen, User, Clock } from "lucide-react";
@@ -108,6 +108,7 @@ const AssignmentsPage = async ({
   const status = params.status || undefined;
   const filterDate = params.date || undefined;
   const teacherId = params.teacherId || undefined;
+  const classId = params.classId || undefined;
 
   // Fetch assignments, teachers, and subjects in parallel
   const [teachersResult, subjectsResult] = await Promise.all([
@@ -119,7 +120,10 @@ const AssignmentsPage = async ({
 
   if (teacherId) {
     result = await fetchAssignmentsOfTeacherAction(teacherId, search, page, subjectId, status, filterDate);
-  } else {
+  } else if (classId) {
+    result = await fetchAssignmentsOfClassAction(classId, search, page, subjectId, filterTeacherId, status, filterDate);
+  }
+   else {
     result = await fetchAssignmentsAction(search, page, subjectId, filterTeacherId, status, filterDate);
   }
 
@@ -264,6 +268,7 @@ const AssignmentsPage = async ({
         currentDate={filterDate}
         currentSearch={search}
         teacherId={teacherId}
+        classId={classId}
       />
 
       {/* ERROR STATE */}

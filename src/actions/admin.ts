@@ -2,8 +2,8 @@
 
 import { cookies } from "next/headers";
 import { api } from '@/api/api';
-import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API, GET_SUPERVISORS_CLASSES_API, GET_STUDENT_BY_ID_API, ATTENDANCE_BY_STUDENT_ID_API, ANNOUNCEMENT_STUDENT_API, LESSONS_FOR_CLASS_API, GET_TEACHERS_OF_CLASS_API, GET_EXAMS_CLASS_API } from '@/api/apiParams/admin';
-import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, StudentWithRelations, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, LessonListResponse, Attendance } from '@/types/schemas';
+import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_PARENT_BY_ID_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API, GET_SUPERVISORS_CLASSES_API, GET_STUDENT_BY_ID_API, ATTENDANCE_BY_STUDENT_ID_API, ANNOUNCEMENT_STUDENT_API, LESSONS_FOR_CLASS_API, GET_TEACHERS_OF_CLASS_API, GET_EXAMS_CLASS_API, ASSIGNMENTS_OF_CLASS_API, GET_STUDENT_RESULTS_API } from '@/api/apiParams/admin';
+import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, StudentWithRelations, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, ParentWithRelations, LessonListResponse, Attendance } from '@/types/schemas';
 import { getServerAuthTokens } from "@/utils/cookie";
 
 export async function fetchUserCountsAction(): Promise<{
@@ -402,6 +402,96 @@ export async function fetchAssignmentsOfTeacherAction(
         };
     } catch (error) {
         console.error('Error in fetchAssignmentsOfTeacherAction:', error);
+        return {
+            success: false,
+            data: null,
+            totalCount: 0,
+            error: 'An unexpected error occurred while fetching assignments'
+        };
+    }
+}
+
+export async function fetchAssignmentsOfClassAction(
+    classId: string, 
+    searchTerm?: string, 
+    pageNo: number = 1,
+    subjectId?: string,
+    filterTeacherId?: string,
+    status?: string,
+    dueDate?: string
+): Promise<{
+    success: boolean;
+    data: AssignmentListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore)
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params: Record<string, string | number> = {
+            page: pageNo
+        };
+
+        if (searchTerm) {
+            params.search = searchTerm;
+        }
+
+        if (subjectId) {
+            params.subject_id = subjectId;
+        }
+
+        if (status) {
+            params.status = status;
+        }
+
+        if (dueDate) {
+            params.due_date = dueDate;
+        }
+
+        if (filterTeacherId) {
+            params.teacher_id = filterTeacherId;
+        }
+
+        console.log('Fetching assignments for class:', classId, 'with params:', params);
+
+        // Make API request with server token
+        const response = await api<AssignmentListResponse>({
+            endpoint: {
+                ...ASSIGNMENTS_OF_CLASS_API,
+                url: `${ASSIGNMENTS_OF_CLASS_API.url}/${classId}`,
+            },
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: response.message || 'Failed to fetch assignments'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+            totalCount: response.data.total_count || 0,
+        };
+    } catch (error) {
+        console.error('Error in fetchAssignmentsOfClassAction:', error);
         return {
             success: false,
             data: null,
@@ -976,6 +1066,80 @@ export async function fetchResultsAction(
     }
 }
 
+export async function fetchResultsOfStudentAction(
+    searchTerm?: string, 
+    pageNo: number = 1,
+    studentId?: string,
+    filters?: {
+        classId?: string;
+        examId?: string;
+        assignmentId?: string;
+        type?: string;
+    }
+): Promise<{
+    success: boolean;
+    data: ResultListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore)
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        // Build params if search term provided
+        const params: any = { page: pageNo };
+        if (searchTerm) params.search = searchTerm;
+        if (filters?.classId) params.class_id = filters.classId;
+        if (filters?.examId) params.exam_id = filters.examId;
+        if (filters?.assignmentId) params.assignment_id = filters.assignmentId;
+        if (filters?.type) params.type = filters.type;
+
+        // Make API request with server token
+        const response = await api<ResultListResponse>({
+            endpoint: {
+                ...GET_STUDENT_RESULTS_API,
+                url: `${GET_STUDENT_RESULTS_API.url}/${studentId}`,
+            },
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: response.message || 'Failed to fetch results'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+            totalCount: response.data.total_count || 0,
+        };
+    } catch (error) {
+        console.error('Error in fetchResultsOfStudentAction:', error);
+        return {
+            success: false,
+            data: null,
+            totalCount: 0,
+            error: 'An unexpected error occurred while fetching results'
+        };
+    }
+}
+
 export async function fetchStudentClassAction(): Promise<{
     success: boolean;
     data: ClassReadonly | null;
@@ -1239,6 +1403,56 @@ export async function fetchParentsAction(searchTerm?: string, pageNo: number = 1
             success: false,
             data: null,
             totalCount: 0,
+            error: 'An unexpected error occurred while fetching parent information'
+        };
+    }
+}
+
+export async function fetchParentByIdAction(id: string): Promise<{
+    success: boolean;
+    data: ParentWithRelations | null;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        // Make API request with server token
+        const response = await api<ParentWithRelations>({
+            endpoint: {
+                ...GET_PARENT_BY_ID_API,
+                url: `${GET_PARENT_BY_ID_API.url}/${id}`,
+            },
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch parent'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+        };
+    } catch (error) {
+        console.error('Error in fetchParentByIdAction:', error);
+        return {
+            success: false,
+            data: null,
             error: 'An unexpected error occurred while fetching parent information'
         };
     }

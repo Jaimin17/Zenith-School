@@ -15,6 +15,7 @@ interface ResultFiltersProps {
   currentAssignmentId?: string;
   currentType?: string;
   currentSearch?: string;
+  studentId?: string;
 }
 
 const ResultFilters = ({
@@ -26,6 +27,7 @@ const ResultFilters = ({
   currentAssignmentId,
   currentType,
   currentSearch,
+  studentId,
 }: ResultFiltersProps) => {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -46,6 +48,7 @@ const ResultFilters = ({
     if (newExamId) params.set("examId", newExamId);
     if (newAssignmentId) params.set("assignmentId", newAssignmentId);
     if (newType) params.set("type", newType);
+    if (studentId) params.set("studentId", studentId);
     const queryString = params.toString();
     return queryString ? `/list/results?${queryString}` : "/list/results";
   };
@@ -94,7 +97,7 @@ const ResultFilters = ({
         <div className="flex items-center gap-2">
           {hasActiveFilters && (
             <Link
-              href="/list/results"
+              href={studentId ? `/list/results?studentId=${studentId}` : "/list/results"}
               onClick={(e) => e.stopPropagation()}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
             >

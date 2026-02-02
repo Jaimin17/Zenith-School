@@ -55,6 +55,15 @@ export const ASSIGNMENTS_OF_TEACHER_API: ApiType = {
     isForm: false,
 }
 
+export const ASSIGNMENTS_OF_CLASS_API: ApiType = {
+    url: apiUrls.GET_ASSIGNMENTS_OF_CLASS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const ATTENDANCE_BY_STUDENT_ID_API: ApiType = {
     url: apiUrls.GET_ATTENDANCE_BY_STUDENT_ID_URL,
     method: "GET",
@@ -280,8 +289,26 @@ export const GET_PARENTS_API: ApiType = {
     isForm: false,
 }
 
+export const GET_PARENT_BY_ID_API: ApiType = {
+    url: apiUrls.GET_PARENT_BY_ID_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const GET_RESULTS_API: ApiType = {
     url: apiUrls.GET_RESULTS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_STUDENT_RESULTS_API: ApiType = {
+    url: apiUrls.GET_STUDENT_RESULTS_URL,
     method: "GET",
     withToken: true,
     isMultipart: false,

@@ -5,7 +5,7 @@ import FormContainer from "@/components/FromAnother/FormContainer";
 import ResultFilters from "@/components/FromAnother/ResultFilters";
 import Image from "next/image";
 import type { ResultWithRelations } from "@/types/schemas";
-import { fetchResultsAction, fetchClassesListAction, fetchExamListAction, fetchAssignmentsAction, fetchAllClassesAction } from "@/actions/admin";
+import { fetchResultsAction, fetchClassesListAction, fetchExamListAction, fetchAssignmentsAction, fetchAllClassesAction, fetchResultsOfStudentAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { getStudentImageUrl } from "@/utils/imageHelpers";
@@ -102,19 +102,32 @@ const ResultsPage = async ({
   const examId = params.examId || undefined;
   const assignmentId = params.assignmentId || undefined;
   const filterType = params.type || undefined;
+  const studentId = params.studentId || undefined;
 
   // Fetch results and filter data in parallel
-  const [result, classesResult, examsResult, assignmentsResult] = await Promise.all([
-    fetchResultsAction(search, page, {
-      classId,
-      examId,
-      assignmentId,
-      type: filterType
-    }),
+  const [classesResult, examsResult, assignmentsResult] = await Promise.all([
     fetchAllClassesAction(),
     fetchExamListAction(undefined, 1),
     fetchAssignmentsAction(undefined, 1),
   ]);
+
+  let result;
+
+  if (studentId) {
+    result = await fetchResultsOfStudentAction(search, page, studentId, {
+      classId,
+      examId,
+      assignmentId,
+      type: filterType
+    });
+  } else {
+    result = await fetchResultsAction(search, page, {
+      classId,
+      examId,
+      assignmentId,
+      type: filterType
+    });
+  }
 
   const hasError = !result.success || !result.data;
 
@@ -276,6 +289,7 @@ const ResultsPage = async ({
         currentAssignmentId={assignmentId}
         currentType={filterType}
         currentSearch={search}
+        studentId={studentId}
       />
 
       {/* ERROR STATE */}

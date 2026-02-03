@@ -23,6 +23,15 @@ export const apiUrls = {
 
     GET_ATTENDANCE_BY_STUDENT_ID_URL: "api/v1/attendance/getAttendanceOfStudent",
 
+    // Attendance Dashboard & Views
+    GET_ATTENDANCE_DASHBOARD_SUMMARY_URL: "api/v1/attendance/dashboard/summary",
+    GET_ATTENDANCE_DASHBOARD_CLASSES_URL: "api/v1/attendance/dashboard/classes",
+    GET_ATTENDANCE_TEACHER_CLASSES_URL: "api/v1/attendance/teacher/classes",
+    GET_ATTENDANCE_CLASS_DETAIL_URL: "api/v1/attendance/class",
+    GET_ATTENDANCE_STUDENT_MONTHLY_URL: "api/v1/attendance/student",
+    GET_ATTENDANCE_STUDENT_CALENDAR_URL: "api/v1/attendance/student",
+    GET_ATTENDANCE_PARENT_CHILDREN_URL: "api/v1/attendance/parent/children",
+
     GET_EVENTS_BY_DATE_URL: "api/v1/events/getAllByDate",
 
     GET_LESSONS_WEEK_URL: "api/v1/lesson/getAllOfCurrentWeek",

@@ -2,8 +2,8 @@
 
 import { cookies } from "next/headers";
 import { api } from '@/api/api';
-import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_PARENT_BY_ID_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API, GET_SUPERVISORS_CLASSES_API, GET_STUDENT_BY_ID_API, ATTENDANCE_BY_STUDENT_ID_API, ANNOUNCEMENT_STUDENT_API, LESSONS_FOR_CLASS_API, GET_TEACHERS_OF_CLASS_API, GET_EXAMS_CLASS_API, ASSIGNMENTS_OF_CLASS_API, GET_STUDENT_RESULTS_API, GET_EXAMS_OF_STUDENT_API, ASSIGNMENTS_OF_STUDENT_API } from '@/api/apiParams/admin';
-import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, StudentWithRelations, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, ParentWithRelations, LessonListResponse, Attendance } from '@/types/schemas';
+import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_PARENT_BY_ID_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API, GET_SUPERVISORS_CLASSES_API, GET_STUDENT_BY_ID_API, ATTENDANCE_BY_STUDENT_ID_API, ANNOUNCEMENT_STUDENT_API, LESSONS_FOR_CLASS_API, GET_TEACHERS_OF_CLASS_API, GET_EXAMS_CLASS_API, ASSIGNMENTS_OF_CLASS_API, GET_STUDENT_RESULTS_API, GET_EXAMS_OF_STUDENT_API, ASSIGNMENTS_OF_STUDENT_API, ATTENDANCE_DASHBOARD_SUMMARY_API, ATTENDANCE_DASHBOARD_CLASSES_API, ATTENDANCE_TEACHER_CLASSES_API, ATTENDANCE_CLASS_DETAIL_API, ATTENDANCE_STUDENT_MONTHLY_API, ATTENDANCE_STUDENT_CALENDAR_API, ATTENDANCE_PARENT_CHILDREN_API } from '@/api/apiParams/admin';
+import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, StudentWithRelations, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, ParentWithRelations, LessonListResponse, Attendance, AttendanceDashboardSummary, ClasswiseAttendanceResponse, TeacherClassesAttendanceResponse, ClassAttendanceDetailResponse, StudentMonthlyAttendance, CalendarHeatmapResponse, ParentChildrenAttendanceResponse } from '@/types/schemas';
 import { getServerAuthTokens } from "@/utils/cookie";
 
 export async function fetchUserCountsAction(): Promise<{
@@ -2285,6 +2285,359 @@ export async function fetchSubjectListAction(searchTerm?: string, pageNo: number
             data: null,
             totalCount: 0,
             error: 'An unexpected error occurred while fetching subject information'
+        };
+    }
+}
+
+// ==================== ATTENDANCE ACTIONS ====================
+
+export async function fetchAttendanceDashboardSummaryAction(date?: string): Promise<{
+    success: boolean;
+    data: AttendanceDashboardSummary | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params = date ? { date } : {};
+
+        const response = await api<AttendanceDashboardSummary>({
+            endpoint: ATTENDANCE_DASHBOARD_SUMMARY_API,
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch attendance dashboard summary'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+        };
+    } catch (error) {
+        console.error('Error in fetchAttendanceDashboardSummaryAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching attendance summary'
+        };
+    }
+}
+
+export async function fetchAttendanceDashboardClassesAction(date?: string): Promise<{
+    success: boolean;
+    data: ClasswiseAttendanceResponse | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params = date ? { date } : {};
+
+        const response = await api<ClasswiseAttendanceResponse>({
+            endpoint: ATTENDANCE_DASHBOARD_CLASSES_API,
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch class-wise attendance'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+        };
+    } catch (error) {
+        console.error('Error in fetchAttendanceDashboardClassesAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching class-wise attendance'
+        };
+    }
+}
+
+export async function fetchTeacherClassesAttendanceAction(teacherId: string, date?: string): Promise<{
+    success: boolean;
+    data: TeacherClassesAttendanceResponse | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params = date ? { date } : {};
+
+        const response = await api<TeacherClassesAttendanceResponse>({
+            endpoint: ATTENDANCE_TEACHER_CLASSES_API,
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch teacher classes attendance'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+        };
+    } catch (error) {
+        console.error('Error in fetchTeacherClassesAttendanceAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching teacher attendance'
+        };
+    }
+}
+
+export async function fetchClassAttendanceDetailAction(classId: string, date?: string): Promise<{
+    success: boolean;
+    data: ClassAttendanceDetailResponse | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params = date ? { date } : {};
+
+        const response = await api<ClassAttendanceDetailResponse>({
+            endpoint: {
+                ...ATTENDANCE_CLASS_DETAIL_API,
+                url: `${ATTENDANCE_CLASS_DETAIL_API.url}/${classId}`,
+            },
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch class attendance details'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+        };
+    } catch (error) {
+        console.error('Error in fetchClassAttendanceDetailAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching class attendance details'
+        };
+    }
+}
+
+export async function fetchStudentMonthlyAttendanceAction(studentId: string, month?: number, year?: number): Promise<{
+    success: boolean;
+    data: StudentMonthlyAttendance | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params: Record<string, string> = {};
+        if (month) params.month = month.toString();
+        if (year) params.year = year.toString();
+
+        const response = await api<StudentMonthlyAttendance>({
+            endpoint: {
+                ...ATTENDANCE_STUDENT_MONTHLY_API,
+                url: `${ATTENDANCE_STUDENT_MONTHLY_API.url}/${studentId}/monthly`,
+            },
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch student monthly attendance'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+        };
+    } catch (error) {
+        console.error('Error in fetchStudentMonthlyAttendanceAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching student attendance'
+        };
+    }
+}
+
+export async function fetchStudentCalendarAttendanceAction(studentId: string, month?: number, year?: number): Promise<{
+    success: boolean;
+    data: CalendarHeatmapResponse | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params: Record<string, string> = {};
+        if (month) params.month = month.toString();
+        if (year) params.year = year.toString();
+
+        const response = await api<CalendarHeatmapResponse>({
+            endpoint: {
+                ...ATTENDANCE_STUDENT_CALENDAR_API,
+                url: `${ATTENDANCE_STUDENT_CALENDAR_API.url}/${studentId}/calendar`,
+            },
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch student calendar attendance'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+        };
+    } catch (error) {
+        console.error('Error in fetchStudentCalendarAttendanceAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching student calendar'
+        };
+    }
+}
+
+export async function fetchParentChildrenAttendanceAction(month?: number, year?: number): Promise<{
+    success: boolean;
+    data: ParentChildrenAttendanceResponse | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params: Record<string, string> = {};
+        if (month) params.month = month.toString();
+        if (year) params.year = year.toString();
+
+        const response = await api<ParentChildrenAttendanceResponse>({
+            endpoint: ATTENDANCE_PARENT_CHILDREN_API,
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch children attendance'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+        };
+    } catch (error) {
+        console.error('Error in fetchParentChildrenAttendanceAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching children attendance'
         };
     }
 }

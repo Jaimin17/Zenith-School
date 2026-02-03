@@ -235,48 +235,45 @@ const SingleParentPage = async ({
       <div className="w-full xl:w-1/4 flex flex-col gap-4">
         <div className="bg-gradient-to-br from-slate-50 to-gray-100 p-5 rounded-xl border border-gray-200 shadow-sm">
           <h1 className="text-lg font-semibold text-gray-800">Shortcuts</h1>
-          <div className="mt-4 grid grid-cols-2 gap-3 text-xs font-medium">
+          <div className="mt-4 flex flex-col gap-4 text-xs font-medium">
             {parent.students && parent.students.length > 0 ? (
               <>
                 {parent.students.map((student) => (
-                  <Link
-                    key={student.id}
-                    className="px-4 py-1 rounded-lg bg-sky-100 text-sky-700 hover:bg-sky-200 transition-colors text-center"
-                    href={`/list/students/${student.id}`}
-                  >
-                    {student.first_name}&apos;s Profile
-                  </Link>
-                ))}
-                {parent.students.map((student) => (
-                  <Link
-                    key={`results-${student.id}`}
-                    className="px-4 py-1 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors text-center"
-                    href={`/list/results?studentId=${student.id}`}
-                  >
-                    {student.first_name}&apos;s Results
-                  </Link>
-                ))}
-                {parent.students.map((student) => (
-                  <Link
-                    key={`exams-${student.id}`}
-                    className="px-4 py-1 rounded-lg bg-pink-100 text-pink-700 hover:bg-pink-200 transition-colors text-center"
-                    href={`/list/exams?studentId=${student.id}`}
-                  >
-                    {student.first_name}&apos;s Exams
-                  </Link>
-                ))}
-                {parent.students.map((student) => (
-                  <Link
-                    key={`assignments-${student.id}`}
-                    className="px-4 py-1 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors text-center"
-                    href={`/list/assignments?studentId=${student.id}`}
-                  >
-                    {student.first_name}&apos;s Tasks
-                  </Link>
+                  <div key={student.id} className="space-y-2">
+                    <h3 className="text-sm font-semibold text-gray-700 border-b border-gray-200 pb-1">
+                      {student.first_name}&apos;s Links
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link
+                        className="px-3 py-2.5 rounded-lg bg-sky-100 text-sky-700 hover:bg-sky-200 transition-colors text-center"
+                        href={`/list/students/${student.id}`}
+                      >
+                        Profile
+                      </Link>
+                      <Link
+                        className="px-3 py-2.5 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors text-center"
+                        href={`/list/results?studentId=${student.id}`}
+                      >
+                        Results
+                      </Link>
+                      <Link
+                        className="px-3 py-2.5 rounded-lg bg-pink-100 text-pink-700 hover:bg-pink-200 transition-colors text-center"
+                        href={`/list/exams?studentId=${student.id}`}
+                      >
+                        Exams
+                      </Link>
+                      <Link
+                        className="px-3 py-2.5 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors text-center"
+                        href={`/list/assignments?studentId=${student.id}`}
+                      >
+                        Assignments
+                      </Link>
+                    </div>
+                  </div>
                 ))}
               </>
             ) : (
-              <p className="col-span-3 text-gray-500 text-center py-4">No children to show shortcuts for</p>
+              <p className="text-gray-500 text-center py-4">No children to show shortcuts for</p>
             )}
           </div>
         </div>

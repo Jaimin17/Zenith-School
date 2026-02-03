@@ -73,6 +73,138 @@ export interface Attendance {
     present: boolean,
 }
 
+// Attendance Dashboard Types
+export interface AttendanceDashboardSummary {
+    date: string;
+    total_classes: number;
+    classes_with_attendance: number;
+    pending_classes: number;
+    total_students: number;
+    present_count: number;
+    absent_count: number;
+    attendance_rate: number;
+}
+
+export interface ClassAttendanceSummary {
+    class_id: string;
+    class_name: string;
+    grade_level: number | null;
+    total_students: number;
+    present_count: number;
+    absent_count: number;
+    not_marked_count: number;
+    attendance_rate: number;
+    has_attendance: boolean;
+}
+
+export interface ClasswiseAttendanceResponse {
+    date: string;
+    classes: ClassAttendanceSummary[];
+    total_classes: number;
+}
+
+export interface StudentAttendanceRecord {
+    id: string;
+    date: string;
+    present: boolean;
+    lesson_id: string;
+    lesson_name: string;
+    subject_name: string | null;
+}
+
+export interface StudentMonthlyAttendance {
+    student_id: string;
+    student_name: string;
+    month: number;
+    year: number;
+    total_days: number;
+    present_days: number;
+    absent_days: number;
+    attendance_rate: number;
+    records: StudentAttendanceRecord[];
+}
+
+export interface CalendarDayData {
+    date: string;
+    present_count: number;
+    absent_count: number;
+    total_records: number;
+    attendance_rate: number;
+}
+
+export interface CalendarHeatmapResponse {
+    student_id: string | null;
+    student_name: string | null;
+    month: number;
+    year: number;
+    days: CalendarDayData[];
+    monthly_summary: {
+        total_days: number;
+        present_days: number;
+        absent_days: number;
+        attendance_rate: number;
+    };
+}
+
+export interface ClassStudentAttendance {
+    student_id: string;
+    student_name: string;
+    username: string;
+    attendance_id: string | null;
+    present: boolean | null;
+    marked_at: string | null;
+}
+
+export interface ClassAttendanceDetailResponse {
+    class_id: string;
+    class_name: string;
+    date: string;
+    lesson_id: string | null;
+    lesson_name: string | null;
+    total_students: number;
+    present_count: number;
+    absent_count: number;
+    not_marked_count: number;
+    students: ClassStudentAttendance[];
+}
+
+export interface TeacherClassSummary {
+    class_id: string;
+    class_name: string;
+    lesson_id: string;
+    lesson_name: string;
+    subject_name: string | null;
+    day: string;
+    total_students: number;
+    attendance_marked: boolean;
+    present_count: number;
+    absent_count: number;
+}
+
+export interface TeacherClassesAttendanceResponse {
+    date: string;
+    teacher_id: string;
+    classes: TeacherClassSummary[];
+}
+
+export interface ChildAttendanceSummary {
+    student_id: string;
+    student_name: string;
+    month: number;
+    year: number;
+    total_days: number;
+    present_days: number;
+    absent_days: number;
+    attendance_rate: number;
+}
+
+export interface ParentChildrenAttendanceResponse {
+    parent_id: string;
+    month: number;
+    year: number;
+    children: ChildAttendanceSummary[];
+}
+
 export interface Events {
     id: string,
     title: string,

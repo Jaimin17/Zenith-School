@@ -82,6 +82,70 @@ export const ATTENDANCE_BY_STUDENT_ID_API: ApiType = {
     isForm: false,
 }
 
+// Attendance Dashboard APIs
+export const ATTENDANCE_DASHBOARD_SUMMARY_API: ApiType = {
+    url: apiUrls.GET_ATTENDANCE_DASHBOARD_SUMMARY_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const ATTENDANCE_DASHBOARD_CLASSES_API: ApiType = {
+    url: apiUrls.GET_ATTENDANCE_DASHBOARD_CLASSES_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const ATTENDANCE_TEACHER_CLASSES_API: ApiType = {
+    url: apiUrls.GET_ATTENDANCE_TEACHER_CLASSES_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const ATTENDANCE_CLASS_DETAIL_API: ApiType = {
+    url: apiUrls.GET_ATTENDANCE_CLASS_DETAIL_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const ATTENDANCE_STUDENT_MONTHLY_API: ApiType = {
+    url: apiUrls.GET_ATTENDANCE_STUDENT_MONTHLY_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const ATTENDANCE_STUDENT_CALENDAR_API: ApiType = {
+    url: apiUrls.GET_ATTENDANCE_STUDENT_CALENDAR_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const ATTENDANCE_PARENT_CHILDREN_API: ApiType = {
+    url: apiUrls.GET_ATTENDANCE_PARENT_CHILDREN_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const EVENTS_API: ApiType = {
     url: apiUrls.GET_EVENTS_BY_DATE_URL,
     method: "GET",

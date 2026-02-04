@@ -19,7 +19,7 @@ import AttendanceDatePicker from "./AttendanceDatePicker";
 
 interface TeacherAttendanceViewProps {
   selectedDate: string;
-  teacherData: TeacherClassesAttendanceResponse | null;
+  teacherData: TeacherClassSummary[] | null;
   hasError: boolean;
   errorMessage?: string;
 }
@@ -76,8 +76,8 @@ const TeacherAttendanceView = ({
     );
   }
 
-  const markedClasses = teacherData?.classes?.filter(c => c.attendance_marked) || [];
-  const pendingClasses = teacherData?.classes?.filter(c => !c.attendance_marked) || [];
+  const markedClasses = teacherData?.filter(c => c.attendance_marked) || [];
+  const pendingClasses = teacherData?.filter(c => !c.attendance_marked) || [];
 
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
@@ -127,7 +127,7 @@ const TeacherAttendanceView = ({
             </div>
             <div>
               <p className="text-blue-600 text-sm font-medium">Total Classes</p>
-              <h3 className="text-2xl font-bold text-blue-700">{teacherData?.classes?.length || 0}</h3>
+              <h3 className="text-2xl font-bold text-blue-700">{teacherData?.length || 0}</h3>
             </div>
           </div>
         </div>
@@ -251,7 +251,7 @@ const TeacherAttendanceView = ({
       )}
 
       {/* Empty State */}
-      {(!teacherData?.classes || teacherData.classes.length === 0) && (
+      {(!teacherData || teacherData.length === 0) && (
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <BookOpen className="w-8 h-8 text-gray-400" />

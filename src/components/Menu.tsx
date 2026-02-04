@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 type UserRole = "admin" | "teacher" | "student" | "parent";
@@ -104,12 +105,12 @@ const menuItems: MenuSection[] = [
         href: "/list/events",
         visible: ["admin", "teacher", "student", "parent"],
       },
-      {
-        icon: "/message.png",
-        label: "Messages",
-        href: "/list/messages",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
+      // {
+      //   icon: "/message.png",
+      //   label: "Messages",
+      //   href: "/list/messages",
+      //   visible: ["admin", "teacher", "student", "parent"],
+      // },
       {
         icon: "/announcement.png",
         label: "Announcements",
@@ -152,11 +153,17 @@ const homeRouteMap: Record<UserRole, string> = {
 
 const Menu: React.FC = () => {
   const { role } = useAuth();
+  const pathname = usePathname();
 
   const homeHref =
     role && homeRouteMap[role as UserRole]
       ? homeRouteMap[role as UserRole]
       : "/";
+
+  const isActive = (itemLabel: string, itemHref: string): boolean => {
+    const href = itemLabel === "Home" ? homeHref : itemHref;
+    return pathname === href || pathname.startsWith(href + "/");
+  };
 
   return (
     <Box mt={2} fontSize="14px">
@@ -176,6 +183,7 @@ const Menu: React.FC = () => {
               if (!item.visible.includes(role as UserRole)) return null;
 
               const href = item.label === "Home" ? homeHref : item.href;
+              const active = isActive(item.label, item.href);
 
               return (
                 <ListItem key={item.label} disablePadding>
@@ -186,12 +194,15 @@ const Menu: React.FC = () => {
                       borderRadius: "8px",
                       px: 2,
                       py: 1,
+                      backgroundColor: active ? "rgba(0, 150, 255, 0.2)" : "transparent",
+                      color: active ? "#0096FF" : "gray",
                       "&:hover": {
-                        backgroundColor: "rgba(0, 150, 255, 0.1)",
+                        backgroundColor: active ? "rgba(0, 150, 255, 0.2)" : "rgba(0, 150, 255, 0.1)",
                       },
+                      transition: "all 0.2s ease",
                     }}
                   >
-                    <ListItemIcon sx={{ minWidth: 32 }}>
+                    <ListItemIcon sx={{ minWidth: 32, color: "inherit" }}>
                       <Image
                         src={item.icon}
                         alt={item.label}
@@ -204,7 +215,7 @@ const Menu: React.FC = () => {
                       primary={item.label}
                       sx={{
                         display: { xs: "none", lg: "block" },
-                        color: "gray",
+                        color: "inherit",
                       }}
                     />
                   </ListItemButton>

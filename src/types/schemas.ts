@@ -205,6 +205,84 @@ export interface ParentChildrenAttendanceResponse {
     children: ChildAttendanceSummary[];
 }
 
+// Attendance Taking Types
+export interface LessonForDateItem {
+    lesson_id: string;
+    lesson_name: string;
+    class_id: string;
+    class_name: string;
+    subject_id: string | null;
+    subject_name: string | null;
+    teacher_id: string | null;
+    teacher_name: string | null;
+    start_time: string;
+    end_time: string;
+    day: string;
+    attendance_status: 'not_taken' | 'partial' | 'complete';
+    students_count: number;
+    present_count: number;
+    absent_count: number;
+}
+
+export interface LessonsForDateResponse {
+    date: string;
+    day_of_week: string;
+    total_lessons: number;
+    lessons: LessonForDateItem[];
+}
+
+export interface StudentRosterItem {
+    student_id: string;
+    student_name: string;
+    username: string;
+    img: string | null;
+    attendance_id: string | null;
+    present: boolean | null;
+}
+
+export interface LessonRosterResponse {
+    lesson_id: string;
+    lesson_name: string;
+    class_id: string;
+    class_name: string;
+    subject_name: string | null;
+    target_date: string;
+    total_students: number;
+    attendance_exists: boolean;
+    marked_count: number;
+    students: StudentRosterItem[];
+}
+
+export interface AttendanceRecord {
+    student_id: string;
+    present: boolean;
+}
+
+export interface AttendanceTakeRequest {
+    lesson_id: string;
+    attendance_date: string;
+    records: AttendanceRecord[];
+    overwrite_existing: boolean;
+}
+
+export interface AttendanceTakeResponse {
+    message: string;
+    lesson_id: string;
+    attendance_date: string;
+    total_students: number;
+    created_count: number;
+    updated_count: number;
+    present_count: number;
+    absent_count: number;
+}
+
+export interface AttendanceCheckResponse {
+    lesson_id: string;
+    attendance_date: string;
+    exists: boolean;
+    record_count: number;
+}
+
 export interface Events {
     id: string,
     title: string,

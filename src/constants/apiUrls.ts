@@ -32,6 +32,12 @@ export const apiUrls = {
     GET_ATTENDANCE_STUDENT_CALENDAR_URL: "api/v1/attendance/student",
     GET_ATTENDANCE_PARENT_CHILDREN_URL: "api/v1/attendance/parent/children",
 
+    // Attendance Taking URLs
+    GET_ATTENDANCE_TAKE_LESSONS_URL: "api/v1/attendance/take/lessons",
+    GET_ATTENDANCE_TAKE_ROSTER_URL: "api/v1/attendance/take/roster",
+    GET_ATTENDANCE_TAKE_CHECK_URL: "api/v1/attendance/take/check",
+    POST_ATTENDANCE_TAKE_URL: "api/v1/attendance/take",
+
     GET_EVENTS_BY_DATE_URL: "api/v1/events/getAllByDate",
 
     GET_LESSONS_WEEK_URL: "api/v1/lesson/getAllOfCurrentWeek",

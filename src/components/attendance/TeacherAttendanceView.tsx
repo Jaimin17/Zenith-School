@@ -11,7 +11,8 @@ import {
   ChevronRight,
   Users,
   BookOpen,
-  AlertCircle
+  AlertCircle,
+  ClipboardCheck
 } from "lucide-react";
 import type { TeacherClassesAttendanceResponse, TeacherClassSummary } from "@/types/schemas";
 import AttendanceDatePicker from "./AttendanceDatePicker";
@@ -87,22 +88,33 @@ const TeacherAttendanceView = ({
           <p className="text-gray-500 text-sm mt-1">Mark and manage attendance for your classes</p>
         </div>
         
-        {/* Date Picker */}
-        <div className="relative">
-          <button
-            onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+        <div className="flex items-center gap-3">
+          {/* Take Attendance Button */}
+          <Link
+            href={`/list/attendance/take?date=${selectedDate}`}
+            className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm font-medium"
           >
-            <Calendar className="w-5 h-5 text-gray-500" />
-            <span className="font-medium text-gray-700">{formatDate(selectedDate)}</span>
-          </button>
-          {isDatePickerOpen && (
-            <AttendanceDatePicker
-              selectedDate={selectedDate}
-              onDateChange={handleDateChange}
-              onClose={() => setIsDatePickerOpen(false)}
-            />
-          )}
+            <ClipboardCheck className="w-5 h-5" />
+            <span>Take Attendance</span>
+          </Link>
+
+          {/* Date Picker */}
+          <div className="relative">
+            <button
+              onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+              className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+            >
+              <Calendar className="w-5 h-5 text-gray-500" />
+              <span className="font-medium text-gray-700">{formatDate(selectedDate)}</span>
+            </button>
+            {isDatePickerOpen && (
+              <AttendanceDatePicker
+                selectedDate={selectedDate}
+                onDateChange={handleDateChange}
+                onClose={() => setIsDatePickerOpen(false)}
+              />
+            )}
+          </div>
         </div>
       </div>
 

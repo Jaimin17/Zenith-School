@@ -146,6 +146,43 @@ export const ATTENDANCE_PARENT_CHILDREN_API: ApiType = {
     isForm: false,
 }
 
+// Attendance Taking APIs
+export const ATTENDANCE_TAKE_LESSONS_API: ApiType = {
+    url: apiUrls.GET_ATTENDANCE_TAKE_LESSONS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const ATTENDANCE_TAKE_ROSTER_API: ApiType = {
+    url: apiUrls.GET_ATTENDANCE_TAKE_ROSTER_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const ATTENDANCE_TAKE_CHECK_API: ApiType = {
+    url: apiUrls.GET_ATTENDANCE_TAKE_CHECK_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const ATTENDANCE_TAKE_SUBMIT_API: ApiType = {
+    url: apiUrls.POST_ATTENDANCE_TAKE_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
 export const EVENTS_API: ApiType = {
     url: apiUrls.GET_EVENTS_BY_DATE_URL,
     method: "GET",

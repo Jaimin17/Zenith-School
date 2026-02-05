@@ -1,4 +1,5 @@
 import FormModal from "./FormModal";
+import { fetchSubjectListAction } from "@/actions/admin";
 
 export type FormContainerProps = {
   table:
@@ -25,16 +26,9 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
   const role = "admin";
   const currentUserId = "admin1";
 
-  // Fetch helper
+  // Fetch helper for placeholder data (to be replaced with actual API calls)
   async function fetchApi(endpoint: string, fallback: any[]) {
     try {
-      // const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${endpoint}`, {
-      //   cache: "no-store",
-      // });
-
-      // const res = {}
-
-      // if (res.ok) return res.json();
       return fallback;
     } catch {
       return fallback;
@@ -70,10 +64,11 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
 
       // ---------------- TEACHER ----------------
       case "teacher": {
-        const teacherSubjects = await fetchApi("/api/subjects", [
-          { id: 1, name: "Math" },
-          { id: 2, name: "Science" },
-        ]);
+        // Fetch subjects from the API
+        const subjectsResponse = await fetchSubjectListAction();
+        const teacherSubjects = subjectsResponse.success && subjectsResponse.data
+          ? subjectsResponse.data
+          : [];
 
         relatedData = { subjects: teacherSubjects };
         break;

@@ -452,3 +452,30 @@ export const GET_SUBJECTS_API: ApiType = {
     showToast: false,
     isForm: false,
 }
+
+export const GET_FULL_LIST_SUBJECTS_API: ApiType = {
+    url: apiUrls.GET_FULL_LIST_SUBJECTS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const SAVE_TEACHER_API: ApiType = {
+    url: apiUrls.SAVE_TEACHER_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_TEACHER_API: ApiType = {
+    url: apiUrls.UPDATE_TEACHER_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}

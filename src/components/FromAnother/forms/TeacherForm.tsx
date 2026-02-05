@@ -4,13 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState, useRef, useTransition } from "react";
 import { teacherSchema, TeacherSchema } from "@/lib/formValidationSchemas";
 import { useActionState } from "react";
 import { createTeacher, updateTeacher } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { CldUploadWidget } from "next-cloudinary";
+import { getTeacherImageUrl } from "@/utils/imageHelpers";
 
 const TeacherForm = ({
   type,
@@ -31,37 +31,52 @@ const TeacherForm = ({
     resolver: zodResolver(teacherSchema),
   });
 
-  const [img, setImg] = useState<any>();
+  const [img, setImg] = useState<File | null>(null);
+  const [imgPreview, setImgPreview] = useState<string | null>(data?.img ? getTeacherImageUrl(data?.img) || null : null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isPending, startTransition] = useTransition();
 
   const [state, formAction] = useActionState(
-    async (prevState: any, formData: FormData) => {
-      const data = Object.fromEntries(formData);
-      return type === "create" ? await createTeacher({ ...data, img: img?.secure_url }) : await updateTeacher({ ...data, img: img?.secure_url });
+    async (prevState: any, formDataObj: Record<string, any>) => {
+      return type === "create" 
+        ? await createTeacher({ ...formDataObj, img }) 
+        : await updateTeacher({ ...formDataObj, img });
     },
     {
       success: false,
       error: false,
+      message: "",
     }
   );
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-    const formData = new FormData();
-    Object.entries({ ...data, img: img?.secure_url }).forEach(([key, value]) => {
-      formData.append(key, value as string);
+  const onSubmit = handleSubmit((formData) => {
+    console.log("Form data:", formData);
+    startTransition(() => {
+      formAction(formData);
     });
-    formAction(formData);
   });
 
   const router = useRouter();
 
   useEffect(() => {
     if (state.success) {
-      toast(`Teacher has been ${type === "create" ? "created" : "updated"}!`);
+      toast.success(`Teacher has been ${type === "create" ? "created" : "updated"}!`);
       setOpen(false);
       router.refresh();
     }
   }, [state, router, type, setOpen]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImg(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImgPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const { subjects } = relatedData;
 
@@ -94,14 +109,16 @@ const TeacherForm = ({
             register={register}
             error={errors?.email}
           />
-          <InputField
-            label="Password"
-            name="password"
-            type="password"
-            defaultValue={data?.password}
-            register={register}
+          {type == "create" && (
+            <InputField
+              label="Password"
+              name="password"
+              type="password"
+              defaultValue={data?.password}
+              register={register}
             error={errors?.password}
           />
+          )}
         </div>
       </div>
 
@@ -120,17 +137,17 @@ const TeacherForm = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <InputField
             label="First Name"
-            name="name"
-            defaultValue={data?.name}
+            name="first_name"
+            defaultValue={data?.first_name}
             register={register}
-            error={errors.name}
+            error={errors.first_name}
           />
           <InputField
             label="Last Name"
-            name="surname"
-            defaultValue={data?.surname}
+            name="last_name"
+            defaultValue={data?.last_name}
             register={register}
-            error={errors.surname}
+            error={errors.last_name}
           />
           <InputField
             label="Phone"
@@ -146,19 +163,36 @@ const TeacherForm = ({
             register={register}
             error={errors.address}
           />
+          <div className="flex flex-col gap-2 w-full">
+            <label className="text-sm font-medium text-gray-700">Blood Type</label>
+            <select
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+              {...register("blood_type")}
+              defaultValue={data?.blood_type || ""}
+            >
+              <option value="">Select Blood Type</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+            {errors.blood_type?.message && (
+              <p className="text-xs text-red-500 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+                {errors.blood_type.message.toString()}
+              </p>
+            )}
+          </div>
           <InputField
-            label="Blood Type"
-            name="bloodType"
-            defaultValue={data?.bloodType}
+            label="Date of Birth"
+            name="dob"
+            defaultValue={data?.dob ? new Date(data.dob).toISOString().split("T")[0] : ""}
             register={register}
-            error={errors.bloodType}
-          />
-          <InputField
-            label="Birthday"
-            name="birthday"
-            defaultValue={data?.birthday.toISOString().split("T")[0]}
-            register={register}
-            error={errors.birthday}
+            error={errors.dob}
             type="date"
           />
           {data && (
@@ -176,10 +210,10 @@ const TeacherForm = ({
             <select
               className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white"
               {...register("sex")}
-              defaultValue={data?.sex}
+              defaultValue={data?.sex?.toLowerCase() || "male"}
             >
-              <option value="MALE">Male</option>
-              <option value="FEMALE">Female</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
             </select>
             {errors.sex?.message && (
               <p className="text-xs text-red-500 flex items-center gap-1">
@@ -194,9 +228,9 @@ const TeacherForm = ({
               multiple
               className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white min-h-[100px]"
               {...register("subjects")}
-              defaultValue={data?.subjects}
+              defaultValue={data?.subjects?.map((s: any) => s.id || s) || []}
             >
-              {subjects.map((subject: { id: number; name: string }) => (
+              {subjects.map((subject: { id: string; name: string }) => (
                 <option value={subject.id} key={subject.id}>
                   {subject.name}
                 </option>
@@ -210,25 +244,41 @@ const TeacherForm = ({
               </p>
             )}
           </div>
-          {/* <CldUploadWidget
-            uploadPreset="school"
-            onSuccess={(result, { widget }) => {
-              setImg(result.info);
-              widget.close();
-            }}
-          >
-            {({ open }) => {
-              return (
-                <div
-                  className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer"
-                  onClick={() => open()}
-                >
-                  <Image src="/upload.png" alt="" width={28} height={28} />
-                  <span>Upload a photo</span>
+          
+          {/* Image Upload */}
+          <div className="flex flex-col gap-2 w-full">
+            <label className="text-sm font-medium text-gray-700">Profile Photo</label>
+            <div className="flex items-center gap-4">
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                accept="image/*"
+                className="hidden"
+              />
+              <div
+                className="flex items-center gap-2 cursor-pointer px-4 py-3 border border-gray-300 rounded-xl text-sm bg-gray-50 hover:bg-white transition-all duration-200"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span className="text-gray-600">
+                  {img ? img.name : "Upload a photo"}
+                </span>
+              </div>
+              {imgPreview && (
+                <div className="relative w-12 h-12">
+                  <Image
+                    src={imgPreview}
+                    alt="Preview"
+                    fill
+                    className="object-cover rounded-lg"
+                  />
                 </div>
-              );
-            }}
-          </CldUploadWidget> */}
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -238,7 +288,9 @@ const TeacherForm = ({
           <div className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
             <span className="text-red-600 text-xs font-bold">!</span>
           </div>
-          <span className="text-sm text-red-600">Something went wrong! Please try again.</span>
+          <span className="text-sm text-red-600">
+            {state.message || "Something went wrong! Please try again."}
+          </span>
         </div>
       )}
 
@@ -246,9 +298,18 @@ const TeacherForm = ({
       <div className="flex justify-end pt-4 border-t border-gray-100">
         <button 
           type="submit"
-          className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/30 flex items-center gap-2"
+          disabled={isPending}
+          className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/30 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {type === "create" ? (
+          {isPending ? (
+            <>
+              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              {type === "create" ? "Creating..." : "Updating..."}
+            </>
+          ) : type === "create" ? (
             <>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

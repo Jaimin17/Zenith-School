@@ -1,15 +1,21 @@
 "use server";
 
+import { api } from "@/api/api";
+import { SAVE_TEACHER_API, UPDATE_TEACHER_API } from "@/api/apiParams/admin";
+import { cookies } from "next/headers";
+import { ACCESS_TOKEN } from "@/constants/appConstants";
+
 type FormState = {
   success: boolean;
   error: boolean;
+  message?: string;
 };
 
-type FormData = Record<string, any>;
+type FormDataType = Record<string, any>;
 
 async function handleFormAction(
-  action: (formData: FormData) => Promise<FormState>,
-  formData: FormData
+  action: (formData: FormDataType) => Promise<FormState>,
+  formData: FormDataType
 ): Promise<FormState> {
   try {
     return await action(formData);
@@ -20,38 +26,130 @@ async function handleFormAction(
 }
 
 // Student actions
-export async function createStudent(formData: FormData): Promise<FormState> {
+export async function createStudent(formData: FormDataType): Promise<FormState> {
   // TODO: Implement actual API call
   console.log("Creating student:", formData);
   return { success: true, error: false };
 }
 
-export async function updateStudent(formData: FormData): Promise<FormState> {
+export async function updateStudent(formData: FormDataType): Promise<FormState> {
   // TODO: Implement actual API call
   console.log("Updating student:", formData);
   return { success: true, error: false };
 }
 
-export async function deleteStudent(formData: FormData): Promise<FormState> {
+export async function deleteStudent(formData: FormDataType): Promise<FormState> {
   // TODO: Implement actual API call
   console.log("Deleting student:", formData);
   return { success: true, error: false };
 }
 
 // Teacher actions
-export async function createTeacher(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Creating teacher:", formData);
-  return { success: true, error: false };
+export async function createTeacher(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+    
+    // Map form fields to API expected fields
+    apiFormData.append("username", formData.username || "");
+    apiFormData.append("first_name", formData.first_name || "");
+    apiFormData.append("last_name", formData.last_name || "");
+    apiFormData.append("email", formData.email || "");
+    apiFormData.append("phone", formData.phone || "");
+    apiFormData.append("address", formData.address || "");
+    apiFormData.append("blood_type", formData.blood_type || "");
+    apiFormData.append("sex", formData.sex || "");
+    apiFormData.append("dob", formData.dob || "");
+    apiFormData.append("password", formData.password || "");
+    
+    // Convert subjects array to comma-separated string
+    const subjects = Array.isArray(formData.subjects) 
+      ? formData.subjects.join(",") 
+      : formData.subjects || "";
+    apiFormData.append("subjects", subjects);
+
+    // Handle image if provided
+    if (formData.img && formData.img instanceof File) {
+      apiFormData.append("img", formData.img);
+    }
+
+    const response = await api({
+      endpoint: SAVE_TEACHER_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { 
+        success: false, 
+        error: true, 
+        message: response.message || "Failed to create teacher" 
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating teacher:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
-export async function updateTeacher(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Updating teacher:", formData);
-  return { success: true, error: false };
+export async function updateTeacher(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+    
+    // Include ID for update
+    apiFormData.append("id", formData.id || "");
+    apiFormData.append("username", formData.username || "");
+    apiFormData.append("first_name", formData.first_name || "");
+    apiFormData.append("last_name", formData.last_name || "");
+    apiFormData.append("email", formData.email || "");
+    apiFormData.append("phone", formData.phone || "");
+    apiFormData.append("address", formData.address || "");
+    apiFormData.append("blood_type", formData.blood_type || "");
+    apiFormData.append("sex", formData.sex || "");
+    apiFormData.append("dob", formData.dob || "");
+    
+    // Convert subjects array to comma-separated string
+    const subjects = Array.isArray(formData.subjects) 
+      ? formData.subjects.join(",") 
+      : formData.subjects || "";
+    apiFormData.append("subjects", subjects);
+
+    // Handle image if provided
+    if (formData.img && formData.img instanceof File) {
+      apiFormData.append("img", formData.img);
+    }
+
+    const response = await api({
+      endpoint: UPDATE_TEACHER_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { 
+        success: false, 
+        error: true, 
+        message: response.message || "Failed to update teacher" 
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating teacher:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
-export async function deleteTeacher(formData: FormData): Promise<FormState> {
+export async function deleteTeacher(formData: FormDataType): Promise<FormState> {
   // TODO: Implement actual API call
   console.log("Deleting teacher:", formData);
   return { success: true, error: false };

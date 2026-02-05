@@ -96,5 +96,11 @@ export const apiUrls = {
     
     GET_SUBJECTS_URL: "api/v1/subject/getAll",
 
+    GET_FULL_LIST_SUBJECTS_URL: "api/v1/subject/getFullList",
+
     GET_TEACHER_EXAMS_URL: "api/v1/exam/teacher",
+
+    SAVE_TEACHER_URL: "api/v1/teacher/save",
+
+    UPDATE_TEACHER_URL: "api/v1/teacher/update",
 }

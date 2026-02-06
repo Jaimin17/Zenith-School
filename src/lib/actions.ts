@@ -1,7 +1,7 @@
 "use server";
 
 import { api } from "@/api/api";
-import { SAVE_TEACHER_API, UPDATE_TEACHER_API } from "@/api/apiParams/admin";
+import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API } from "@/api/apiParams/admin";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN } from "@/constants/appConstants";
 
@@ -27,15 +27,101 @@ async function handleFormAction(
 
 // Student actions
 export async function createStudent(formData: FormDataType): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Creating student:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+    
+    // Map form fields to API expected fields
+    apiFormData.append("username", formData.username || "");
+    apiFormData.append("first_name", formData.first_name || "");
+    apiFormData.append("last_name", formData.last_name || "");
+    apiFormData.append("email", formData.email || "");
+    apiFormData.append("password", formData.password || "");
+    apiFormData.append("phone", formData.phone || "");
+    apiFormData.append("address", formData.address || "");
+    apiFormData.append("blood_type", formData.blood_type || "");
+    apiFormData.append("sex", formData.sex || "");
+    apiFormData.append("dob", formData.dob || "");
+    apiFormData.append("parent_id", formData.parent_id || "");
+    apiFormData.append("class_id", formData.class_id || "");
+    apiFormData.append("grade_id", formData.grade_id || "");
+
+    // Handle image if provided
+    if (formData.img && formData.img instanceof File) {
+      apiFormData.append("img", formData.img);
+    }
+
+    const response = await api({
+      endpoint: SAVE_STUDENT_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { 
+        success: false, 
+        error: true, 
+        message: response.message || "Failed to create student" 
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating student:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
 export async function updateStudent(formData: FormDataType): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Updating student:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+    
+    // Include ID for update
+    apiFormData.append("id", formData.id || "");
+    apiFormData.append("username", formData.username || "");
+    apiFormData.append("first_name", formData.first_name || "");
+    apiFormData.append("last_name", formData.last_name || "");
+    apiFormData.append("email", formData.email || "");
+    apiFormData.append("phone", formData.phone || "");
+    apiFormData.append("address", formData.address || "");
+    apiFormData.append("blood_type", formData.blood_type || "");
+    apiFormData.append("sex", formData.sex || "");
+    apiFormData.append("dob", formData.dob || "");
+    apiFormData.append("parent_id", formData.parent_id || "");
+    apiFormData.append("class_id", formData.class_id || "");
+    apiFormData.append("grade_id", formData.grade_id || "");
+
+    // Handle image if provided
+    if (formData.img && formData.img instanceof File) {
+      apiFormData.append("img", formData.img);
+    }
+
+    const response = await api({
+      endpoint: UPDATE_STUDENT_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { 
+        success: false, 
+        error: true, 
+        message: response.message || "Failed to update student" 
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating student:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
 export async function deleteStudent(formData: FormDataType): Promise<FormState> {

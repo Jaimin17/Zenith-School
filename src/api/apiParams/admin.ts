@@ -408,6 +408,15 @@ export const GET_PARENTS_API: ApiType = {
     isForm: false,
 }
 
+export const GET_ALL_PARENTS_API: ApiType = {
+    url: apiUrls.GET_ALL_PARENTS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const GET_PARENT_BY_ID_API: ApiType = {
     url: apiUrls.GET_PARENT_BY_ID_URL,
     method: "GET",
@@ -473,6 +482,24 @@ export const SAVE_TEACHER_API: ApiType = {
 
 export const UPDATE_TEACHER_API: ApiType = {
     url: apiUrls.UPDATE_TEACHER_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const SAVE_STUDENT_API: ApiType = {
+    url: apiUrls.SAVE_STUDENT_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_STUDENT_API: ApiType = {
+    url: apiUrls.UPDATE_STUDENT_URL,
     method: "PUT",
     withToken: true,
     isMultipart: true,

@@ -88,6 +88,8 @@ export const apiUrls = {
 
     GET_PARENTS_URL: "api/v1/parent/getAll",
 
+    GET_ALL_PARENTS_URL: "api/v1/parent/getFullList",
+
     GET_PARENT_BY_ID_URL: "api/v1/parent/getById",
 
     GET_RESULTS_URL: "api/v1/results/getAll",
@@ -103,4 +105,8 @@ export const apiUrls = {
     SAVE_TEACHER_URL: "api/v1/teacher/save",
 
     UPDATE_TEACHER_URL: "api/v1/teacher/update",
+
+    SAVE_STUDENT_URL: "api/v1/student/save",
+
+    UPDATE_STUDENT_URL: "api/v1/student/update",
 }

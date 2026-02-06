@@ -1,5 +1,6 @@
+import { ParentWithRelations } from "@/types/schemas";
 import FormModal from "./FormModal";
-import { fetchSubjectListAction } from "@/actions/admin";
+import { fetchSubjectListAction, fetchAllClassesAction, fetchParentsAction, fetchAllParentsListAction } from "@/actions/admin";
 
 export type FormContainerProps = {
   table:
@@ -76,20 +77,42 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
 
       // ---------------- STUDENT ----------------
       case "student": {
-        const studentGrades = await fetchApi("/api/grades", [
-          { id: 1, level: "7" },
-          { id: 2, level: "8" },
-        ]);
+        // Fetch classes from the API
+        const classesResponse = await fetchAllClassesAction();
+        const studentClasses = classesResponse.success && classesResponse.data
+          ? classesResponse.data
+          : [];
 
-        const studentClasses = await fetchApi("/api/classes", [
-          {
-            id: 1,
-            name: "8A",
-            _count: { students: 28 },
-          },
-        ]);
+        // Extract unique grades from classes
+        const gradesMap = new Map<string, { id: string; level: number; name: string }>();
+        studentClasses.forEach((cls: any) => {
+          if (cls.grade && cls.grade.id && !gradesMap.has(cls.grade.id)) {
+            gradesMap.set(cls.grade.id, {
+              id: cls.grade.id,
+              level: cls.grade.level,
+              name: `Grade ${cls.grade.level}`,
+            });
+          }
+        });
+        const studentGrades = Array.from(gradesMap.values());
 
-        relatedData = { classes: studentClasses, grades: studentGrades };
+        // Add grade_id to each class for filtering
+        const classesWithGradeId = studentClasses.map((cls: any) => ({
+          ...cls,
+          grade_id: cls.grade?.id,
+        }));
+
+        // Fetch parents from the API
+        const parentsResponse = await fetchAllParentsListAction();
+        const parentsList: ParentWithRelations[] = parentsResponse.success && parentsResponse.data
+          ? parentsResponse.data
+          : [];
+
+        relatedData = { 
+          classes: classesWithGradeId, 
+          grades: studentGrades,
+          parents: parentsList,
+        };
         break;
       }
 

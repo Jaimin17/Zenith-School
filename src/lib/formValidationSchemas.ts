@@ -1,20 +1,22 @@
 import { z } from "zod";
 
 export const studentSchema = z.object({
-  id: z.number().optional(),
+  id: z.string().optional(),
   username: z.string().min(3, "Username must be at least 3 characters"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters").optional(),
-  name: z.string().min(1, "First name is required"),
-  surname: z.string().min(1, "Last name is required"),
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  first_name: z.string().min(1, "First name is required"),
+  last_name: z.string().min(1, "Last name is required"),
+  phone: z.string().regex(/^[6-9]\d{9}$/, "Invalid Indian phone number. Must be 10 digits starting with 6-9."),
   address: z.string().min(1, "Address is required"),
-  bloodType: z.string().min(1, "Blood type is required"),
-  birthday: z.string().or(z.date()),
-  sex: z.enum(["MALE", "FEMALE"]),
-  gradeId: z.number(),
-  classId: z.number(),
-  parentId: z.number().optional(),
+  blood_type: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
+    errorMap: () => ({ message: "Please select a valid blood group" }),
+  }),
+  dob: z.string().or(z.date()),
+  sex: z.enum(["male", "female"]),
+  grade_id: z.string().min(1, "Grade is required"),
+  class_id: z.string().min(1, "Class is required"),
+  parent_id: z.string().min(1, "Parent is required"),
 });
 
 export type StudentSchema = z.infer<typeof studentSchema>;

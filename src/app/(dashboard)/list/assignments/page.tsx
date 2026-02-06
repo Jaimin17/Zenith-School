@@ -4,7 +4,7 @@ import TableSearch from "@/components/FromAnother/TableSearch";
 import FormContainer from "@/components/FromAnother/FormContainer";
 import AssignmentFilters from "@/components/FromAnother/AssignmentFilters";
 import type { AssignmentWithRelations } from "@/types/schemas";
-import { fetchAssignmentsAction, fetchTeachersListAction, fetchSubjectListAction, fetchAnnouncementsOfTeacherAction, fetchAssignmentsOfTeacherAction, fetchAssignmentsOfClassAction, fetchAssignmentsOfStudentAction } from "@/actions/admin";
+import { fetchAssignmentsAction, fetchTeachersListAction, fetchSubjectFullListAction, fetchAnnouncementsOfTeacherAction, fetchAssignmentsOfTeacherAction, fetchAssignmentsOfClassAction, fetchAssignmentsOfStudentAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { FileText, Calendar, BookOpen, User, Clock } from "lucide-react";
@@ -114,7 +114,7 @@ const AssignmentsPage = async ({
   // Fetch assignments, teachers, and subjects in parallel
   const [teachersResult, subjectsResult] = await Promise.all([
     fetchTeachersListAction(undefined, 1),
-    fetchSubjectListAction(undefined, 1),
+    fetchSubjectFullListAction(),
   ]);
 
   let result;
@@ -140,7 +140,7 @@ const AssignmentsPage = async ({
 
   // Get teachers and subjects for filters
   const teachers = teachersResult.data || [];
-  const subjects = subjectsResult.data?.data || [];
+  const subjects = subjectsResult.data || [];
 
   // Check if any filters are active
   const hasActiveFilters = subjectId || filterTeacherId || status || filterDate;

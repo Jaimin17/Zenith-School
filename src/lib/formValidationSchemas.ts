@@ -110,3 +110,16 @@ export const resultSchema = z.object({
 });
 
 export type ResultSchema = z.infer<typeof resultSchema>;
+
+export const parentSchema = z.object({
+  id: z.string().optional(),
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters").optional(),
+  first_name: z.string().min(1, "First name is required"),
+  last_name: z.string().min(1, "Last name is required"),
+  phone: z.string().regex(/^[6-9]\d{9}$/, "Invalid Indian phone number. Must be 10 digits starting with 6-9."),
+  address: z.string().min(10, "Address must be at least 10 characters"),
+});
+
+export type ParentSchema = z.infer<typeof parentSchema>;

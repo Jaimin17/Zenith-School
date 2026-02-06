@@ -4,7 +4,7 @@ import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
 import SubjectFilters from "@/components/FromAnother/SubjectFilters";
 import type { SubjectWithRelations } from "@/types/schemas";
-import { fetchFullTeachersListAction, fetchSubjectListAction, fetchTeachersListAction } from "@/actions/admin";
+import { fetchFullTeachersListAction, fetchSubjectFullListAction, fetchSubjectListAction, fetchTeachersListAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { BookOpen, Users } from "lucide-react";

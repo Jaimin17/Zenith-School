@@ -1,7 +1,7 @@
 "use server";
 
 import { api } from "@/api/api";
-import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API } from "@/api/apiParams/admin";
+import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API } from "@/api/apiParams/admin";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN } from "@/constants/appConstants";
 
@@ -238,6 +238,89 @@ export async function updateTeacher(formData: FormDataType): Promise<FormState> 
 export async function deleteTeacher(formData: FormDataType): Promise<FormState> {
   // TODO: Implement actual API call
   console.log("Deleting teacher:", formData);
+  return { success: true, error: false };
+}
+
+// Parent actions
+export async function createParent(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+    
+    // Map form fields to API expected fields
+    apiFormData.append("username", formData.username || "");
+    apiFormData.append("first_name", formData.first_name || "");
+    apiFormData.append("last_name", formData.last_name || "");
+    apiFormData.append("email", formData.email || "");
+    apiFormData.append("password", formData.password || "");
+    apiFormData.append("phone", formData.phone || "");
+    apiFormData.append("address", formData.address || "");
+
+    const response = await api({
+      endpoint: SAVE_PARENT_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { 
+        success: false, 
+        error: true, 
+        message: response.message || "Failed to create parent" 
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating parent:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function updateParent(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+    
+    // Include ID for update
+    apiFormData.append("id", formData.id || "");
+    apiFormData.append("username", formData.username || "");
+    apiFormData.append("first_name", formData.first_name || "");
+    apiFormData.append("last_name", formData.last_name || "");
+    apiFormData.append("email", formData.email || "");
+    apiFormData.append("phone", formData.phone || "");
+    apiFormData.append("address", formData.address || "");
+
+    const response = await api({
+      endpoint: UPDATE_PARENT_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { 
+        success: false, 
+        error: true, 
+        message: response.message || "Failed to update parent" 
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating parent:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function deleteParent(formData: FormDataType): Promise<FormState> {
+  // TODO: Implement actual API call
+  console.log("Deleting parent:", formData);
   return { success: true, error: false };
 }
 

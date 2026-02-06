@@ -1,6 +1,6 @@
 import { ParentWithRelations } from "@/types/schemas";
 import FormModal from "./FormModal";
-import { fetchSubjectListAction, fetchAllClassesAction, fetchParentsAction, fetchAllParentsListAction } from "@/actions/admin";
+import { fetchSubjectFullListAction, fetchAllClassesAction, fetchParentsAction, fetchAllParentsListAction } from "@/actions/admin";
 
 export type FormContainerProps = {
   table:
@@ -66,7 +66,7 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
       // ---------------- TEACHER ----------------
       case "teacher": {
         // Fetch subjects from the API
-        const subjectsResponse = await fetchSubjectListAction();
+        const subjectsResponse = await fetchSubjectFullListAction();
         const teacherSubjects = subjectsResponse.success && subjectsResponse.data
           ? subjectsResponse.data
           : [];
@@ -113,6 +113,13 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
           grades: studentGrades,
           parents: parentsList,
         };
+        break;
+      }
+
+      // ---------------- PARENT ----------------
+      case "parent": {
+        // No related data needed for parent form
+        relatedData = {};
         break;
       }
 

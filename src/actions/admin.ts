@@ -2281,7 +2281,7 @@ export async function fetchExamsOfStudentListAction(studentId: string, searchTer
     }
 }
 
-export async function fetchSubjectListAction(searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchSubjectFullListAction(): Promise<{
     success: boolean;
     data: Subject[] | null;
     totalCount: number;
@@ -2321,6 +2321,64 @@ export async function fetchSubjectListAction(searchTerm?: string, pageNo: number
             success: true,
             data: response.data,
             totalCount: response.data.length,
+        };
+    } catch (error) {
+        console.error('Error in fetchSubjectFullListAction:', error);
+        return {
+            success: false,
+            data: null,
+            totalCount: 0,
+            error: 'An unexpected error occurred while fetching subject information'
+        };
+    }
+}
+
+export async function fetchSubjectListAction(searchTerm?: string, pageNo: number = 1): Promise<{
+    success: boolean;
+    data: SubjectListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params = {
+            search: searchTerm || '',
+            page: pageNo.toString(),
+        }
+
+        // Make API request with server token
+        const response = await api<SubjectListResponse>({
+            endpoint: GET_SUBJECTS_API,
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: response.message || 'Failed to fetch subjects'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+            totalCount: response.data.total_count || 0,
         };
     } catch (error) {
         console.error('Error in fetchSubjectListAction:', error);

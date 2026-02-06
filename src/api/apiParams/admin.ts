@@ -506,3 +506,21 @@ export const UPDATE_STUDENT_API: ApiType = {
     showToast: true,
     isForm: false,
 }
+
+export const SAVE_PARENT_API: ApiType = {
+    url: apiUrls.SAVE_PARENT_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_PARENT_API: ApiType = {
+    url: apiUrls.UPDATE_PARENT_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}

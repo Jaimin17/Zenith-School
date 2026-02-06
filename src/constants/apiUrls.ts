@@ -109,4 +109,8 @@ export const apiUrls = {
     SAVE_STUDENT_URL: "api/v1/student/save",
 
     UPDATE_STUDENT_URL: "api/v1/student/update",
+
+    SAVE_PARENT_URL: "api/v1/parent/save",
+
+    UPDATE_PARENT_URL: "api/v1/parent/update",
 }

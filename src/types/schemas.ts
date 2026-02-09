@@ -54,6 +54,7 @@ export interface AnnouncementListResponse extends PaginationListResponse {
 export interface AssignmentBase {
     id: string,
     title: string,
+    description: string,
     start_date: string,
     due_date: string,
     pdf_name: string | null,

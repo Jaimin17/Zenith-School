@@ -93,9 +93,10 @@ export type EventSchema = z.infer<typeof eventSchema>;
 
 export const assignmentSchema = z.object({
   id: z.string().optional(),
-  title: z.string().min(1, "Assignment title is required").max(200, "Title must be less than 200 characters"),
+  title: z.string().min(2, "Assignment title must be at least 2 characters").max(200, "Title must be less than 200 characters"),
+  description: z.string().min(2, "Description must be at least 2 characters"),
   start_date: z.string().min(1, "Start date is required"),
-  due_date: z.string().min(1, "Due date is required"),
+  end_date: z.string().min(1, "End date is required"),
   lesson_id: z.string().min(1, "Lesson is required"),
 });
 

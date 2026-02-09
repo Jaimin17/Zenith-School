@@ -219,7 +219,16 @@ export const GET_LESSONS_API: ApiType = {
     isForm: false,
 }
 
-export const LESSONS_FOR_PARENT_STUDENT_WEEK_URL: ApiType = {
+export const GET_LESSONS_FULL_LIST_API: ApiType = {
+    url: apiUrls.GET_LESSONS_FULL_LIST_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const LESSONS_FOR_PARENT_STUDENT_WEEK_API: ApiType = {
     url: apiUrls.GET_LESSONS_FOR_PARENT_STUDENT_WEEK_URL,
     method: "GET",
     withToken: true,
@@ -602,6 +611,33 @@ export const UPDATE_EXAM_API: ApiType = {
     method: "PUT",
     withToken: true,
     isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const SAVE_ASSIGNMENT_API: ApiType = {
+    url: apiUrls.SAVE_ASSIGNMENT_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_ASSIGNMENT_API: ApiType = {
+    url: apiUrls.UPDATE_ASSIGNMENT_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const DELETE_ASSIGNMENT_API: ApiType = {
+    url: apiUrls.DELETE_ASSIGNMENT_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
     showToast: true,
     isForm: false,
 }

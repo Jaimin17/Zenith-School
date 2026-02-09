@@ -52,6 +52,8 @@ export const apiUrls = {
 
     GET_LESSONS_URL: "api/v1/lesson/getAll",
 
+    GET_LESSONS_FULL_LIST_URL: "api/v1/lesson/getFullList",
+
     GET_STUDENT_CLASS_URL: "api/v1/classes/getStudentClass",
 
     GET_STUDENT_URL: "api/v1/student/getAll",
@@ -131,4 +133,10 @@ export const apiUrls = {
     SAVE_EXAM_URL: "api/v1/exam/save",
 
     UPDATE_EXAM_URL: "api/v1/exam/update",
+
+    SAVE_ASSIGNMENT_URL: "api/v1/assignments/save",
+
+    UPDATE_ASSIGNMENT_URL: "api/v1/assignments/update",
+
+    DELETE_ASSIGNMENT_URL: "api/v1/assignments/delete",
 }

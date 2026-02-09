@@ -7,7 +7,8 @@ import type { AssignmentWithRelations } from "@/types/schemas";
 import { fetchAssignmentsAction, fetchTeachersListAction, fetchSubjectFullListAction, fetchAnnouncementsOfTeacherAction, fetchAssignmentsOfTeacherAction, fetchAssignmentsOfClassAction, fetchAssignmentsOfStudentAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
-import { FileText, Calendar, BookOpen, User, Clock } from "lucide-react";
+import { FileText, Calendar, BookOpen, User, Clock, ExternalLink } from "lucide-react";
+import { getAssignmentPdfUrl } from "@/utils/imageHelpers";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -184,10 +185,16 @@ const AssignmentsPage = async ({
         <div className="flex flex-col">
           <h3 className="font-semibold text-gray-900">{item.title}</h3>
           {item.pdf_name && (
-            <p className="text-xs text-gray-500 flex items-center gap-1">
+            <a
+              href={getAssignmentPdfUrl(item.pdf_name)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 hover:underline"
+            >
               <FileText className="w-3 h-3" />
-              {item.pdf_name}
-            </p>
+              View PDF
+              <ExternalLink className="w-2.5 h-2.5" />
+            </a>
           )}
         </div>
       </td>

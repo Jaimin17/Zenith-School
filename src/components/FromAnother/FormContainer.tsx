@@ -1,6 +1,6 @@
 import { ParentWithRelations } from "@/types/schemas";
 import FormModal from "./FormModal";
-import { fetchSubjectFullListAction, fetchAllClassesAction, fetchParentsAction, fetchAllParentsListAction, fetchFullTeachersListAction, fetchFullGradeListAction, fetchLessonsAction } from "@/actions/admin";
+import { fetchSubjectFullListAction, fetchAllClassesAction, fetchParentsAction, fetchAllParentsListAction, fetchFullTeachersListAction, fetchFullGradeListAction, fetchLessonsAction, fetchLessonsFullListAction } from "@/actions/admin";
 
 export type FormContainerProps = {
   table:
@@ -159,6 +159,16 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
           ? lessonsResponse.data.data
           : [];
         relatedData = { lessons: examLessons };
+        break;
+      }
+
+      // ---------------- ASSIGNMENT ----------------
+      case "assignment": {
+        const lessonsResponse = await fetchLessonsFullListAction();
+        const assignmentLessons = lessonsResponse.success && lessonsResponse.data
+          ? lessonsResponse.data
+          : [];
+        relatedData = { lessons: assignmentLessons };
         break;
       }
 

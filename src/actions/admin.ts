@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { api } from '@/api/api';
-import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_URL, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_PARENT_BY_ID_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API, GET_SUPERVISORS_CLASSES_API, GET_STUDENT_BY_ID_API, ATTENDANCE_BY_STUDENT_ID_API, ANNOUNCEMENT_STUDENT_API, LESSONS_FOR_CLASS_API, GET_TEACHERS_OF_CLASS_API, GET_EXAMS_CLASS_API, ASSIGNMENTS_OF_CLASS_API, GET_STUDENT_RESULTS_API, GET_EXAMS_OF_STUDENT_API, ASSIGNMENTS_OF_STUDENT_API, ATTENDANCE_DASHBOARD_SUMMARY_API, ATTENDANCE_DASHBOARD_CLASSES_API, ATTENDANCE_TEACHER_CLASSES_API, ATTENDANCE_CLASS_DETAIL_API, ATTENDANCE_STUDENT_MONTHLY_API, ATTENDANCE_STUDENT_CALENDAR_API, ATTENDANCE_PARENT_CHILDREN_API, ATTENDANCE_TAKE_LESSONS_API, ATTENDANCE_TAKE_ROSTER_API, ATTENDANCE_TAKE_CHECK_API, ATTENDANCE_TAKE_SUBMIT_API, GET_FULL_LIST_SUBJECTS_API, GET_ALL_PARENTS_API, GET_GRADE_LIST_API } from '@/api/apiParams/admin';
+import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_API, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_PARENT_BY_ID_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API, GET_SUPERVISORS_CLASSES_API, GET_STUDENT_BY_ID_API, ATTENDANCE_BY_STUDENT_ID_API, ANNOUNCEMENT_STUDENT_API, LESSONS_FOR_CLASS_API, GET_TEACHERS_OF_CLASS_API, GET_EXAMS_CLASS_API, ASSIGNMENTS_OF_CLASS_API, GET_STUDENT_RESULTS_API, GET_EXAMS_OF_STUDENT_API, ASSIGNMENTS_OF_STUDENT_API, ATTENDANCE_DASHBOARD_SUMMARY_API, ATTENDANCE_DASHBOARD_CLASSES_API, ATTENDANCE_TEACHER_CLASSES_API, ATTENDANCE_CLASS_DETAIL_API, ATTENDANCE_STUDENT_MONTHLY_API, ATTENDANCE_STUDENT_CALENDAR_API, ATTENDANCE_PARENT_CHILDREN_API, ATTENDANCE_TAKE_LESSONS_API, ATTENDANCE_TAKE_ROSTER_API, ATTENDANCE_TAKE_CHECK_API, ATTENDANCE_TAKE_SUBMIT_API, GET_FULL_LIST_SUBJECTS_API, GET_ALL_PARENTS_API, GET_GRADE_LIST_API, GET_LESSONS_FULL_LIST_API } from '@/api/apiParams/admin';
 import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, StudentWithRelations, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, ParentWithRelations, LessonListResponse, Attendance, AttendanceDashboardSummary, ClasswiseAttendanceResponse, TeacherClassesAttendanceResponse, ClassAttendanceDetailResponse, StudentMonthlyAttendance, CalendarHeatmapResponse, ParentChildrenAttendanceResponse, LessonsForDateResponse, LessonRosterResponse, AttendanceTakeRequest, AttendanceTakeResponse, AttendanceCheckResponse, TeacherClassSummary, Subject, Grade, SubjectWithRelations } from '@/types/schemas';
 import { getServerAuthTokens } from "@/utils/cookie";
 
@@ -868,6 +868,53 @@ export async function fetchLessonsAction(searchTerm?: string, pageNo: number = 1
     }
 }
 
+export async function fetchLessonsFullListAction(): Promise<{
+    success: boolean;
+    data: Lesson[] | [];
+    error?: string;
+}> {
+    try {
+        // Get auth token from cookies
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: [],
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        // Make API request with server token
+        const response = await api<Lesson[]>({
+            endpoint: GET_LESSONS_FULL_LIST_API,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: [],
+                error: response.message || 'Failed to fetch events'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+        };
+    } catch (error) {
+        console.error('Error in fetchLessonsFullListAction:', error);
+        return {
+            success: false,
+            data: [],
+            error: 'An unexpected error occurred while fetching lessons'
+        };
+    }
+}
+
 export async function fetchLessonsForStudentsWeeklyAction(studentId: string): Promise<{
     success: boolean;
     data: Lesson[] | [];
@@ -889,8 +936,8 @@ export async function fetchLessonsForStudentsWeeklyAction(studentId: string): Pr
         // Make API request with server token
         const response = await api<Lesson[]>({
             endpoint: {
-                ...LESSONS_FOR_PARENT_STUDENT_WEEK_URL,
-                url: `${LESSONS_FOR_PARENT_STUDENT_WEEK_URL.url}/${studentId}`,
+                ...LESSONS_FOR_PARENT_STUDENT_WEEK_API,
+                url: `${LESSONS_FOR_PARENT_STUDENT_WEEK_API.url}/${studentId}`,
             },
             serverToken: token.accessToken,
             isServer: true,

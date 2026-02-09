@@ -77,3 +77,34 @@ export function getParentImageUrl(imagePath: string | null | undefined): string 
 
     return getImageUrl(imagePath, "parents")
 }
+
+/**
+ * Gets assignment PDF URL
+ */
+export function getAssignmentPdfUrl(pdfName: string | null | undefined): string {
+    if (!pdfName) return ''
+
+    // If already a URL (starts with http/https), return as-is
+    if (pdfName.startsWith('http://') || pdfName.startsWith('https://')) {
+        return pdfName
+    }
+
+    // If it's just a filename
+    if (!pdfName.includes('/') && !pdfName.includes('\\')) {
+        return `${BACKEND_URL}/uploads/pdfs/assignments/${pdfName}`
+    }
+
+    // Handle "uploads/pdfs/assignments/filename.pdf" format
+    if (pdfName.startsWith('uploads/')) {
+        return `${BACKEND_URL}/${pdfName}`
+    }
+
+    // Extract just the filename if it's a full Windows path
+    let filename = pdfName
+    if (pdfName.includes('\\') || pdfName.includes(':/')) {
+        const parts = pdfName.split(/[/\\]/)
+        filename = parts[parts.length - 1]
+    }
+
+    return `${BACKEND_URL}/uploads/pdfs/assignments/${filename}`
+}

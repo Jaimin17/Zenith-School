@@ -327,6 +327,15 @@ export const GET_TEACHERS_OF_CLASS_API: ApiType = {
     isForm: false,
 }
 
+export const GET_GRADE_LIST_API: ApiType = {
+    url: apiUrls.GET_GRADE_LIST_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const GET_CLASSES_API: ApiType = {
     url: apiUrls.GET_CLASSES_URL,
     method: "GET",
@@ -518,6 +527,78 @@ export const SAVE_PARENT_API: ApiType = {
 
 export const UPDATE_PARENT_API: ApiType = {
     url: apiUrls.UPDATE_PARENT_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const SAVE_SUBJECT_API: ApiType = {
+    url: apiUrls.SAVE_SUBJECT_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false
+}
+
+export const UPDATE_SUBJECT_API: ApiType = {
+    url: apiUrls.UPDATE_SUBJECT_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const SAVE_CLASS_API: ApiType = {
+    url: apiUrls.SAVE_CLASS_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false
+}
+
+export const UPDATE_CLASS_API: ApiType = {
+    url: apiUrls.UPDATE_CLASS_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const SAVE_LESSON_API: ApiType = {
+    url: apiUrls.SAVE_LESSON_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_LESSON_API: ApiType = {
+    url: apiUrls.UPDATE_LESSON_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const SAVE_EXAM_API: ApiType = {
+    url: apiUrls.SAVE_EXAM_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_EXAM_API: ApiType = {
+    url: apiUrls.UPDATE_EXAM_URL,
     method: "PUT",
     withToken: true,
     isMultipart: true,

@@ -68,6 +68,8 @@ export const apiUrls = {
 
     GET_TEACHERS_OF_CLASS_URL: "api/v1/teacher",
 
+    GET_GRADE_LIST_URL: "api/v1/grade/getAll",
+
     GET_CLASSES_URL: "api/v1/classes/getAll",
 
     GET_ALL_CLASSES_URL: "api/v1/classes/getFullList",
@@ -113,4 +115,20 @@ export const apiUrls = {
     SAVE_PARENT_URL: "api/v1/parent/save",
 
     UPDATE_PARENT_URL: "api/v1/parent/update",
+
+    SAVE_SUBJECT_URL: "api/v1/subject/save",
+
+    UPDATE_SUBJECT_URL: "api/v1/subject/update",
+
+    SAVE_CLASS_URL: "api/v1/classes/save",
+
+    UPDATE_CLASS_URL: "api/v1/classes/update",
+
+    SAVE_LESSON_URL: "api/v1/lesson/save",
+
+    UPDATE_LESSON_URL: "api/v1/lesson/update",
+
+    SAVE_EXAM_URL: "api/v1/exam/save",
+
+    UPDATE_EXAM_URL: "api/v1/exam/update",
 }

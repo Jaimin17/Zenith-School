@@ -1,6 +1,6 @@
 import { ParentWithRelations } from "@/types/schemas";
 import FormModal from "./FormModal";
-import { fetchSubjectFullListAction, fetchAllClassesAction, fetchParentsAction, fetchAllParentsListAction } from "@/actions/admin";
+import { fetchSubjectFullListAction, fetchAllClassesAction, fetchParentsAction, fetchAllParentsListAction, fetchFullTeachersListAction, fetchFullGradeListAction, fetchLessonsAction } from "@/actions/admin";
 
 export type FormContainerProps = {
   table:
@@ -40,24 +40,30 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
     switch (table) {
       // ---------------- SUBJECT ----------------
       case "subject": {
-        const subjectTeachers = await fetchApi("/api/teachers", [
-          { id: "t1", name: "John", surname: "Doe" },
-          { id: "t2", name: "Emma", surname: "Stone" },
-        ]);
+        const teachersResponse = await fetchFullTeachersListAction();
+        const subjectTeachers = teachersResponse.success && 
+        teachersResponse.data ? teachersResponse.data : []
         relatedData = { teachers: subjectTeachers };
         break;
       }
 
       // ---------------- CLASS ----------------
       case "class": {
-        const classGrades = await fetchApi("/api/grades", [
-          { id: 1, level: "8" },
-          { id: 2, level: "9" },
-        ]);
+        const [teacherListResponse, gradeListResponse] = await Promise.all([fetchFullTeachersListAction(), fetchFullGradeListAction()])
 
-        const classTeachers = await fetchApi("/api/teachers", [
-          { id: "t1", name: "John", surname: "Doe" },
-        ]);
+        if (!teacherListResponse.success || !teacherListResponse.data) {
+          console.error('Failed to fetch teacher list:', teacherListResponse.error);
+        }
+
+        if (!gradeListResponse.success || !gradeListResponse.data) {
+          console.error('Failed to fetch grade list:', gradeListResponse.error);
+        }
+
+        const classTeachers = teacherListResponse.success && 
+        teacherListResponse.data ? teacherListResponse.data : []
+
+        const classGrades = gradeListResponse.success && 
+        gradeListResponse.data ? gradeListResponse.data : []
 
         relatedData = { teachers: classTeachers, grades: classGrades };
         break;
@@ -116,6 +122,29 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
         break;
       }
 
+      // ---------------- LESSON ----------------
+      case "lesson": {
+        const [lessonSubjectsResponse, lessonClassesResponse, lessonTeachersResponse] = await Promise.all([
+          fetchSubjectFullListAction(),
+          fetchAllClassesAction(),
+          fetchFullTeachersListAction(),
+        ]);
+
+        const lessonSubjects = lessonSubjectsResponse.success && lessonSubjectsResponse.data
+          ? lessonSubjectsResponse.data : [];
+        const lessonClasses = lessonClassesResponse.success && lessonClassesResponse.data
+          ? lessonClassesResponse.data : [];
+        const lessonTeachers = lessonTeachersResponse.success && lessonTeachersResponse.data
+          ? lessonTeachersResponse.data : [];
+
+        relatedData = {
+          subjects: lessonSubjects,
+          classes: lessonClasses,
+          teachers: lessonTeachers,
+        };
+        break;
+      }
+
       // ---------------- PARENT ----------------
       case "parent": {
         // No related data needed for parent form
@@ -125,10 +154,10 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
 
       // ---------------- EXAM ----------------
       case "exam": {
-        const examLessons = await fetchApi(
-          `/api/lessons?teacherId=${currentUserId}`,
-          [{ id: 10, name: "Math Class" }]
-        );
+        const lessonsResponse = await fetchLessonsAction();
+        const examLessons = lessonsResponse.success && lessonsResponse.data
+          ? lessonsResponse.data.data
+          : [];
         relatedData = { lessons: examLessons };
         break;
       }

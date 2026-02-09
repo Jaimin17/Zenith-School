@@ -41,29 +41,29 @@ export const teacherSchema = z.object({
 export type TeacherSchema = z.infer<typeof teacherSchema>;
 
 export const subjectSchema = z.object({
-  id: z.number().optional(),
+  id: z.string().optional(),
   name: z.string().min(1, "Subject name is required"),
-  teachers: z.array(z.number()).optional(),
+  teachers: z.array(z.string()).min(1, "At least one teacher must be selected"),
 });
 
 export type SubjectSchema = z.infer<typeof subjectSchema>;
 
 export const classSchema = z.object({
-  id: z.number().optional(),
+  id: z.string().optional(),
   name: z.string().min(1, "Class name is required"),
-  capacity: z.number().min(1, "Capacity must be at least 1"),
-  supervisorId: z.number(),
-  gradeId: z.number(),
+  capacity: z.string().min(1, "Capacity must be at least 1"),
+  supervisorId: z.string(),
+  gradeId: z.string(),
 });
 
 export type ClassSchema = z.infer<typeof classSchema>;
 
 export const examSchema = z.object({
-  id: z.number().optional(),
-  title: z.string().min(1, "Exam title is required"),
-  startTime: z.string().or(z.date()),
-  endTime: z.string().or(z.date()),
-  lessonId: z.number(),
+  id: z.string().optional(),
+  title: z.string().min(2, "Exam title must be at least 2 characters"),
+  start_time: z.string().min(1, "Start time is required"),
+  end_time: z.string().min(1, "End time is required"),
+  lesson_id: z.string().min(1, "Lesson is required"),
 });
 
 export type ExamSchema = z.infer<typeof examSchema>;
@@ -123,3 +123,18 @@ export const parentSchema = z.object({
 });
 
 export type ParentSchema = z.infer<typeof parentSchema>;
+
+export const lessonSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(3, "Lesson name must be at least 3 characters"),
+  day: z.enum(["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"], {
+    errorMap: () => ({ message: "Please select a valid day" }),
+  }),
+  start_time: z.string().min(1, "Start time is required"),
+  end_time: z.string().min(1, "End time is required"),
+  subject_id: z.string().min(1, "Subject is required"),
+  class_id: z.string().min(1, "Class is required"),
+  teacher_id: z.string().min(1, "Teacher is required"),
+});
+
+export type LessonSchema = z.infer<typeof lessonSchema>;

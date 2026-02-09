@@ -11,6 +11,7 @@ import {
   deleteAssignment,
   deleteResult,
   deleteParent,
+  deleteLesson,
 } from "@/lib/actions";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -28,7 +29,7 @@ const deleteActionMap = {
   student: deleteStudent,
   exam: deleteExam,
   parent: deleteParent,
-  lesson: deleteSubject,
+  lesson: deleteLesson,
   assignment: deleteAssignment,
   result: deleteResult,
   attendance: deleteSubject,
@@ -116,6 +117,14 @@ const ParentForm = dynamic(() => import("./forms/ParentForm"), {
   ),
 });
 
+const LessonForm = dynamic(() => import("./forms/LessonForm"), {
+  loading: () => (
+    <div className="flex items-center justify-center p-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+    </div>
+  ),
+});
+
 const forms: {
   [key: string]: (
     setOpen: Dispatch<SetStateAction<boolean>>,
@@ -198,6 +207,14 @@ const forms: {
   ),
   parent: (setOpen, type, data, relatedData) => (
     <ParentForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  lesson: (setOpen, type, data, relatedData) => (
+    <LessonForm
       type={type}
       data={data}
       setOpen={setOpen}

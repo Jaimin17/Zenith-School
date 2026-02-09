@@ -31,7 +31,7 @@ const BigCalendar = ({
       style={{ height: "98%" }}
       onView={handleOnChangeView}
       min={new Date(0, 0, 0, 7, 0, 0)}  // 7:00 AM
-      max={new Date(0, 0, 0, 12, 0, 0)} // 12:00 PM
+      max={new Date(0, 0, 0, 18, 0, 0)} // 6:00 PM
     />
   );
 };

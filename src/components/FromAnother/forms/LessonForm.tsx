@@ -1,16 +1,25 @@
-﻿"use client";
+"use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
-import { Dispatch, SetStateAction, useEffect, useTransition } from "react";
-import { examSchema, ExamSchema } from "@/lib/formValidationSchemas";
+import { Dispatch, SetStateAction, useEffect, useMemo, useTransition } from "react";
+import { lessonSchema, LessonSchema } from "@/lib/formValidationSchemas";
 import { useActionState } from "react";
-import { createExam, updateExam } from "@/lib/actions";
+import { createLesson, updateLesson } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-const ExamForm = ({
+const VALID_DAYS = [
+  "MONDAY",
+  "TUESDAY",
+  "WEDNESDAY",
+  "THURSDAY",
+  "FRIDAY",
+  "SATURDAY",
+] as const;
+
+const LessonForm = ({
   type,
   data,
   setOpen,
@@ -24,18 +33,22 @@ const ExamForm = ({
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm<ExamSchema>({
-    resolver: zodResolver(examSchema),
+  } = useForm<LessonSchema>({
+    resolver: zodResolver(lessonSchema),
   });
+
+  const selectedSubjectId = watch("subject_id");
+  const selectedTeacherId = watch("teacher_id");
 
   const [isPending, startTransition] = useTransition();
 
   const [state, formAction] = useActionState(
     async (prevState: any, formDataObj: Record<string, any>) => {
       return type === "create"
-        ? await createExam(formDataObj)
-        : await updateExam(formDataObj);
+        ? await createLesson(formDataObj)
+        : await updateLesson(formDataObj);
     },
     {
       success: false,
@@ -45,19 +58,9 @@ const ExamForm = ({
   );
 
   const onSubmit = handleSubmit((formData) => {
-    // Convert datetime-local values (local time) to ISO strings (UTC) for the backend
-    const submissionData = {
-      ...formData,
-      start_time: formData.start_time
-        ? new Date(formData.start_time).toISOString()
-        : "",
-      end_time: formData.end_time
-        ? new Date(formData.end_time).toISOString()
-        : "",
-    };
-    console.log("Exam form data:", submissionData);
+    console.log("Lesson form data:", formData);
     startTransition(() => {
-      formAction(submissionData);
+      formAction(formData);
     });
   });
 
@@ -66,32 +69,34 @@ const ExamForm = ({
   useEffect(() => {
     if (state.success) {
       toast.success(
-        `Exam has been ${type === "create" ? "created" : "updated"}!`
+        `Lesson has been ${type === "create" ? "created" : "updated"}!`
       );
       setOpen(false);
       router.refresh();
     }
   }, [state, router, type, setOpen]);
 
-  const { lessons = [] } = relatedData || {};
+  const { subjects = [], classes = [], teachers = [] } = relatedData || {};
 
-  // Format datetime for datetime-local input (must use local time, not UTC)
-  const formatDateTime = (dateTimeStr: string | undefined) => {
-    if (!dateTimeStr) return "";
-    try {
-      const date = new Date(dateTimeStr);
-      if (isNaN(date.getTime())) return dateTimeStr;
-      const pad = (n: number) => String(n).padStart(2, "0");
-      const year = date.getFullYear();
-      const month = pad(date.getMonth() + 1);
-      const day = pad(date.getDate());
-      const hours = pad(date.getHours());
-      const minutes = pad(date.getMinutes());
-      return `${year}-${month}-${day}T${hours}:${minutes}`;
-    } catch {
-      return dateTimeStr;
-    }
-  };
+  // Filter teachers based on selected subject
+  const filteredTeachers = useMemo(() => {
+    if (!selectedSubjectId) return teachers;
+    // Find the selected subject and get its teachers
+    const selectedSubject = subjects.find((s: any) => s.id === selectedSubjectId);
+    if (!selectedSubject?.teachers?.length) return teachers;
+    const teacherIds = new Set(selectedSubject.teachers.map((t: any) => t.id));
+    return teachers.filter((t: any) => teacherIds.has(t.id));
+  }, [selectedSubjectId, subjects, teachers]);
+
+  // Filter subjects based on selected teacher
+  const filteredSubjects = useMemo(() => {
+    if (!selectedTeacherId) return subjects;
+    // Find the selected teacher and get their subjects
+    const selectedTeacher = teachers.find((t: any) => t.id === selectedTeacherId);
+    if (!selectedTeacher?.subjects?.length) return subjects;
+    const subjectIds = new Set(selectedTeacher.subjects.map((s: any) => s.id));
+    return subjects.filter((s: any) => subjectIds.has(s.id));
+  }, [selectedTeacherId, teachers, subjects]);
 
   // Count total validation errors
   const errorCount = Object.keys(errors).length;
@@ -124,15 +129,22 @@ const ExamForm = ({
                 {errorCount === 1 ? "error" : "errors"} before submitting
               </h4>
               <ul className="text-xs text-red-600 space-y-1">
-                {errors.title && <li>* Title: {errors.title.message}</li>}
+                {errors.name && <li>• Name: {errors.name.message}</li>}
+                {errors.day && <li>• Day: {errors.day.message}</li>}
                 {errors.start_time && (
-                  <li>* Start Time: {errors.start_time.message}</li>
+                  <li>• Start Time: {errors.start_time.message}</li>
                 )}
                 {errors.end_time && (
-                  <li>* End Time: {errors.end_time.message}</li>
+                  <li>• End Time: {errors.end_time.message}</li>
                 )}
-                {errors.lesson_id && (
-                  <li>* Lesson: {errors.lesson_id.message}</li>
+                {errors.subject_id && (
+                  <li>• Subject: {errors.subject_id.message}</li>
+                )}
+                {errors.class_id && (
+                  <li>• Class: {errors.class_id.message}</li>
+                )}
+                {errors.teacher_id && (
+                  <li>• Teacher: {errors.teacher_id.message}</li>
                 )}
               </ul>
             </div>
@@ -171,7 +183,7 @@ const ExamForm = ({
         </div>
       )}
 
-      {/* Exam Details Section */}
+      {/* Lesson Details Section */}
       <div className="space-y-4">
         <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
           <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
@@ -185,22 +197,43 @@ const ExamForm = ({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
               />
             </svg>
           </div>
           <span className="text-sm font-semibold text-gray-700">
-            Exam Details
+            Lesson Details
           </span>
         </div>
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <InputField
-            label="Exam Title"
-            name="title"
-            defaultValue={data?.title}
+            label="Lesson Name"
+            name="name"
+            defaultValue={data?.name}
             register={register}
-            error={errors?.title}
+            error={errors?.name}
           />
+          <div className="flex flex-col gap-2 w-full">
+            <label className="text-sm font-medium text-gray-700">Day</label>
+            <select
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+              {...register("day")}
+              defaultValue={data?.day?.toUpperCase() || ""}
+            >
+              <option value="">Select Day</option>
+              {VALID_DAYS.map((day) => (
+                <option key={day} value={day}>
+                  {day.charAt(0) + day.slice(1).toLowerCase()}
+                </option>
+              ))}
+            </select>
+            {errors.day?.message && (
+              <p className="text-xs text-red-500 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+                {errors.day.message.toString()}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -226,25 +259,25 @@ const ExamForm = ({
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <InputField
-            label="Start Date & Time"
+            label="Start Time"
             name="start_time"
-            type="datetime-local"
-            defaultValue={formatDateTime(data?.start_time)}
+            type="time"
+            defaultValue={data?.start_time || ""}
             register={register}
             error={errors?.start_time}
           />
           <InputField
-            label="End Date & Time"
+            label="End Time"
             name="end_time"
-            type="datetime-local"
-            defaultValue={formatDateTime(data?.end_time)}
+            type="time"
+            defaultValue={data?.end_time || ""}
             register={register}
             error={errors?.end_time}
           />
         </div>
       </div>
 
-      {/* Lesson Section */}
+      {/* Assignment Section */}
       <div className="space-y-4">
         <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
           <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
@@ -258,42 +291,94 @@ const ExamForm = ({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
               />
             </svg>
           </div>
-          <span className="text-sm font-semibold text-gray-700">Lesson</span>
+          <span className="text-sm font-semibold text-gray-700">
+            Subject, Class & Teacher
+          </span>
         </div>
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Subject Select */}
           <div className="flex flex-col gap-2 w-full">
-            <label className="text-sm font-medium text-gray-700">Lesson</label>
+            <label className="text-sm font-medium text-gray-700">
+              Subject
+            </label>
             <select
               className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white"
-              {...register("lesson_id")}
-              defaultValue={data?.lesson?.id || ""}
+              {...register("subject_id")}
+              defaultValue={data?.subject?.id || ""}
             >
-              <option value="">Select Lesson</option>
-              {lessons.map(
-                (lesson: {
-                  id: string;
-                  name: string;
-                  subject?: { name: string };
-                  related_class?: { name: string };
-                }) => (
-                  <option value={lesson.id} key={lesson.id}>
-                    {lesson.name}
-                    {lesson.subject ? ` - ${lesson.subject.name}` : ""}
-                    {lesson.related_class
-                      ? ` (${lesson.related_class.name})`
-                      : ""}
+              <option value="">Select Subject</option>
+              {filteredSubjects.map(
+                (subject: { id: string; name: string }) => (
+                  <option value={subject.id} key={subject.id}>
+                    {subject.name}
                   </option>
                 )
               )}
             </select>
-            {errors.lesson_id?.message && (
+            {errors.subject_id?.message && (
               <p className="text-xs text-red-500 flex items-center gap-1">
                 <span className="w-1 h-1 bg-red-500 rounded-full"></span>
-                {errors.lesson_id.message.toString()}
+                {errors.subject_id.message.toString()}
+              </p>
+            )}
+          </div>
+
+          {/* Class Select */}
+          <div className="flex flex-col gap-2 w-full">
+            <label className="text-sm font-medium text-gray-700">Class</label>
+            <select
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+              {...register("class_id")}
+              defaultValue={data?.related_class?.id || ""}
+            >
+              <option value="">Select Class</option>
+              {classes.map(
+                (cls: { id: string; name: string }) => (
+                  <option value={cls.id} key={cls.id}>
+                    {cls.name}
+                  </option>
+                )
+              )}
+            </select>
+            {errors.class_id?.message && (
+              <p className="text-xs text-red-500 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+                {errors.class_id.message.toString()}
+              </p>
+            )}
+          </div>
+
+          {/* Teacher Select */}
+          <div className="flex flex-col gap-2 w-full">
+            <label className="text-sm font-medium text-gray-700">
+              Teacher
+            </label>
+            <select
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+              {...register("teacher_id")}
+              defaultValue={data?.teacher?.id || ""}
+            >
+              <option value="">Select Teacher</option>
+              {filteredTeachers.map(
+                (teacher: {
+                  id: string;
+                  first_name: string;
+                  last_name: string;
+                }) => (
+                  <option value={teacher.id} key={teacher.id}>
+                    {teacher.first_name} {teacher.last_name}
+                  </option>
+                )
+              )}
+            </select>
+            {errors.teacher_id?.message && (
+              <p className="text-xs text-red-500 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+                {errors.teacher_id.message.toString()}
               </p>
             )}
           </div>
@@ -357,7 +442,7 @@ const ExamForm = ({
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              Create Exam
+              Create Lesson
             </>
           ) : (
             <>
@@ -374,7 +459,7 @@ const ExamForm = ({
                   d="M5 13l4 4L19 7"
                 />
               </svg>
-              Update Exam
+              Update Lesson
             </>
           )}
         </button>
@@ -383,4 +468,4 @@ const ExamForm = ({
   );
 };
 
-export default ExamForm;
+export default LessonForm;

@@ -1,7 +1,7 @@
 "use server";
 
 import { api } from "@/api/api";
-import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API } from "@/api/apiParams/admin";
+import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API } from "@/api/apiParams/admin";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN } from "@/constants/appConstants";
 
@@ -325,16 +325,79 @@ export async function deleteParent(formData: FormDataType): Promise<FormState> {
 }
 
 // Subject actions
-export async function createSubject(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Creating subject:", formData);
-  return { success: true, error: false };
+export async function createSubject(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+    
+    // Map form fields to API expected fields
+    apiFormData.append("name", formData.name || "");
+
+    const teachers = Array.isArray(formData.teachers) 
+      ? formData.teachers.join(",") 
+      : formData.teachers || "";
+    apiFormData.append("teachers", teachers);
+
+    const response = await api({
+      endpoint: SAVE_SUBJECT_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { 
+        success: false, 
+        error: true, 
+        message: response.message || "Failed to create subject" 
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating subject:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
-export async function updateSubject(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Updating subject:", formData);
-  return { success: true, error: false };
+export async function updateSubject(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+    
+    // Include ID for update
+    apiFormData.append("id", formData.id || "");
+    apiFormData.append("name", formData.name || "");
+
+    const teachers = Array.isArray(formData.teachers) 
+      ? formData.teachers.join(",") 
+      : formData.teachers || "";
+    apiFormData.append("teachers", teachers);
+
+    const response = await api({
+      endpoint: UPDATE_SUBJECT_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { 
+        success: false, 
+        error: true, 
+        message: response.message || "Failed to update subject" 
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating subject:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
 export async function deleteSubject(formData: FormData): Promise<FormState> {
@@ -344,16 +407,75 @@ export async function deleteSubject(formData: FormData): Promise<FormState> {
 }
 
 // Class actions
-export async function createClass(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Creating class:", formData);
-  return { success: true, error: false };
+export async function createClass(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+    
+    // Map form fields to API expected fields
+    apiFormData.append("name", formData.name || "");
+    apiFormData.append("capacity", formData.capacity || 0);
+    apiFormData.append("supervisorId", formData.supervisorId || "");
+    apiFormData.append("gradeId", formData.gradeId || "");
+
+    const response = await api({
+      endpoint: SAVE_CLASS_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { 
+        success: false, 
+        error: true, 
+        message: response.message || "Failed to create class" 
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating class:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
-export async function updateClass(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Updating class:", formData);
-  return { success: true, error: false };
+export async function updateClass(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+    
+    // Include ID for update
+    apiFormData.append("id", formData.id || "");
+    apiFormData.append("name", formData.name || "");
+    apiFormData.append("capacity", formData.capacity || 0);
+    apiFormData.append("supervisorId", formData.supervisorId || "");
+    apiFormData.append("gradeId", formData.gradeId || "");
+
+    const response = await api({
+      endpoint: UPDATE_CLASS_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { 
+        success: false, 
+        error: true, 
+        message: response.message || "Failed to update class" 
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating class:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
 export async function deleteClass(formData: FormData): Promise<FormState> {
@@ -362,17 +484,156 @@ export async function deleteClass(formData: FormData): Promise<FormState> {
   return { success: true, error: false };
 }
 
-// Exam actions
-export async function createExam(formData: FormData): Promise<FormState> {
+// Lesson actions
+export async function createLesson(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    apiFormData.append("name", formData.name || "");
+    apiFormData.append("day", formData.day || "");
+    apiFormData.append("start_time", formData.start_time || "");
+    apiFormData.append("end_time", formData.end_time || "");
+    apiFormData.append("subject_id", formData.subject_id || "");
+    apiFormData.append("class_id", formData.class_id || "");
+    apiFormData.append("teacher_id", formData.teacher_id || "");
+
+    const response = await api({
+      endpoint: SAVE_LESSON_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to create lesson",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating lesson:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function updateLesson(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    apiFormData.append("id", formData.id || "");
+    apiFormData.append("name", formData.name || "");
+    apiFormData.append("day", formData.day || "");
+    apiFormData.append("start_time", formData.start_time || "");
+    apiFormData.append("end_time", formData.end_time || "");
+    apiFormData.append("subject_id", formData.subject_id || "");
+    apiFormData.append("class_id", formData.class_id || "");
+    apiFormData.append("teacher_id", formData.teacher_id || "");
+
+    const response = await api({
+      endpoint: UPDATE_LESSON_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to update lesson",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating lesson:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function deleteLesson(formData: FormData): Promise<FormState> {
   // TODO: Implement actual API call
-  console.log("Creating exam:", formData);
+  console.log("Deleting lesson:", formData);
   return { success: true, error: false };
 }
 
-export async function updateExam(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Updating exam:", formData);
-  return { success: true, error: false };
+// Exam actions
+export async function createExam(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    apiFormData.append("title", formData.title || "");
+    apiFormData.append("start_time", formData.start_time || "");
+    apiFormData.append("end_time", formData.end_time || "");
+    apiFormData.append("lesson_id", formData.lesson_id || "");
+
+    const response = await api({
+      endpoint: SAVE_EXAM_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to create exam",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating exam:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function updateExam(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    apiFormData.append("id", formData.id || "");
+    apiFormData.append("title", formData.title || "");
+    apiFormData.append("start_time", formData.start_time || "");
+    apiFormData.append("end_time", formData.end_time || "");
+    apiFormData.append("lesson_id", formData.lesson_id || "");
+
+    const response = await api({
+      endpoint: UPDATE_EXAM_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to update exam",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating exam:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
 export async function deleteExam(formData: FormData): Promise<FormState> {

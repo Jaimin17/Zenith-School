@@ -64,6 +64,15 @@ export const ASSIGNMENTS_OF_CLASS_API: ApiType = {
     isForm: false,
 }
 
+export const ASSIGNMENTS_OF_CLASS_FULL_LIST_API: ApiType = {
+    url: apiUrls.GET_ASSIGNMENTS_OF_CLASS_FULL_LIST_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const ASSIGNMENTS_OF_STUDENT_API: ApiType = {
     url: apiUrls.GET_ASSIGNMENTS_OF_STUDENT_URL,
     method: "GET",
@@ -291,6 +300,15 @@ export const GET_STUDENT_BY_ID_API: ApiType = {
     isForm: false,
 }
 
+export const GET_STUDENTS_OF_CLASS_API: ApiType = {
+    url: apiUrls.GET_STUDENTS_OF_CLASS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const GET_TEACHERS_STUDENT_API: ApiType = {
     url: apiUrls.GET_STUDENTS_OF_TEACHER_URL,
     method: "GET",
@@ -410,6 +428,15 @@ export const GET_EXAMS_OF_STUDENT_API: ApiType = {
 
 export const GET_CLASS_EXAMS_API: ApiType = {
     url: apiUrls.GET_CLASS_EXAMS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_EXAMS_OF_CLASS_FULL_LIST_API: ApiType = {
+    url: apiUrls.GET_EXAMS_OF_CLASS_FULL_LIST_URL,
     method: "GET",
     withToken: true,
     isMultipart: false,
@@ -638,6 +665,24 @@ export const DELETE_ASSIGNMENT_API: ApiType = {
     method: "DELETE",
     withToken: true,
     isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const SAVE_RESULT_API: ApiType = {
+    url: apiUrls.SAVE_RESULT_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_RESULT_API: ApiType = {
+    url: apiUrls.UPDATE_RESULT_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
     showToast: true,
     isForm: false,
 }

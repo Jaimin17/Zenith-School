@@ -184,17 +184,18 @@ const AssignmentsPage = async ({
         </div>
         <div className="flex flex-col">
           <h3 className="font-semibold text-gray-900">{item.title}</h3>
-          {item.pdf_name && (
+          {item.pdf_name ? (
             <a
               href={getAssignmentPdfUrl(item.pdf_name)}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 hover:underline"
+              className="text-xs text-gray-500 hover:text-blue-600 inline-flex items-center gap-1 transition-colors w-fit"
             >
-              <FileText className="w-3 h-3" />
-              View PDF
-              <ExternalLink className="w-2.5 h-2.5" />
+              <FileText className="w-3 h-3 flex-shrink-0" />
+              <span className="hover:underline truncate max-w-[200px]">{item.pdf_name}</span>
             </a>
+          ) : (
+            <span className="text-xs text-gray-400">No attachment</span>
           )}
         </div>
       </td>

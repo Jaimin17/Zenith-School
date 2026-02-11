@@ -1,7 +1,7 @@
 "use server";
 
 import { api } from "@/api/api";
-import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API } from "@/api/apiParams/admin";
+import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API } from "@/api/apiParams/admin";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN } from "@/constants/appConstants";
 
@@ -769,16 +769,85 @@ export async function deleteAssignment(formData: FormData): Promise<FormState> {
 }
 
 // Result actions
-export async function createResult(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Creating result:", formData);
-  return { success: true, error: false };
+export async function createResult(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    apiFormData.append("score", formData.score?.toString() || "");
+    apiFormData.append("student_id", formData.student_id || "");
+    
+    // Only include exam_id or assignment_id, not both
+    if (formData.exam_id && formData.exam_id !== "") {
+      apiFormData.append("exam_id", formData.exam_id);
+    }
+    if (formData.assignment_id && formData.assignment_id !== "") {
+      apiFormData.append("assignment_id", formData.assignment_id);
+    }
+
+    const response = await api({
+      endpoint: SAVE_RESULT_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to create result",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating result:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
-export async function updateResult(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Updating result:", formData);
-  return { success: true, error: false };
+export async function updateResult(formData: FormDataType): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    apiFormData.append("id", formData.id || "");
+    apiFormData.append("score", formData.score?.toString() || "");
+    apiFormData.append("student_id", formData.student_id || "");
+    
+    // Only include exam_id or assignment_id, not both
+    if (formData.exam_id && formData.exam_id !== "") {
+      apiFormData.append("exam_id", formData.exam_id);
+    }
+    if (formData.assignment_id && formData.assignment_id !== "") {
+      apiFormData.append("assignment_id", formData.assignment_id);
+    }
+
+    const response = await api({
+      endpoint: UPDATE_RESULT_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to update result",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating result:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
 export async function deleteResult(formData: FormData): Promise<FormState> {

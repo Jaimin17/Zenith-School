@@ -212,26 +212,17 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
       }
 
       // ---------------- RESULT ----------------
+      // ---------------- RESULT ----------------
+      // Students, exams, and assignments are fetched client-side based on selected class
       case "result": {
-        const resultStudents = await fetchApi("/api/students", [
-          { id: "s1", first_name: "John", last_name: "Smith" },
-          { id: "s2", first_name: "Emily", last_name: "Johnson" },
-          { id: "s3", first_name: "Michael", last_name: "Brown" },
-        ]);
-        const resultExams = await fetchApi("/api/exams", [
-          { id: "e1", title: "Math Midterm" },
-          { id: "e2", title: "Science Final" },
-          { id: "e3", title: "English Quiz" },
-        ]);
-        const resultAssignments = await fetchApi("/api/assignments", [
-          { id: "a1", title: "Math Homework 1" },
-          { id: "a2", title: "Science Project" },
-          { id: "a3", title: "English Essay" },
-        ]);
+        const classesResponse = await fetchAllClassesAction();
+
+        const resultClasses = classesResponse.success && classesResponse.data
+          ? classesResponse.data || []
+          : [];
+
         relatedData = { 
-          students: resultStudents, 
-          exams: resultExams, 
-          assignments: resultAssignments 
+          classes: resultClasses
         };
         break;
       }

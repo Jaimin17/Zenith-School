@@ -58,6 +58,8 @@ export const apiUrls = {
 
     GET_STUDENT_URL: "api/v1/student/getAll",
 
+    GET_STUDENTS_OF_CLASS_URL: "api/v1/students/getStudentsOfClass",
+
     GET_STUDENTS_OF_TEACHER_URL: "api/v1/student/byTeacher",
 
     GET_STUDENT_BY_ID_URL: "api/v1/student/get",
@@ -89,6 +91,8 @@ export const apiUrls = {
     GET_EXAMS_OF_STUDENT_URL: "api/v1/exam/student",
 
     GET_CLASS_EXAMS_URL: "api/v1/exam/class",
+
+    GET_EXAMS_OF_CLASS_FULL_LIST_URL: "api/v1/exam/allOfClass",
 
     GET_PARENTS_URL: "api/v1/parent/getAll",
 
@@ -139,4 +143,10 @@ export const apiUrls = {
     UPDATE_ASSIGNMENT_URL: "api/v1/assignments/update",
 
     DELETE_ASSIGNMENT_URL: "api/v1/assignments/delete",
+
+    GET_ASSIGNMENTS_OF_CLASS_FULL_LIST_URL: "api/v1/assignments/allOfClass",
+
+    SAVE_RESULT_URL: "api/v1/results/save",
+
+    UPDATE_RESULT_URL: "api/v1/results/update",
 }

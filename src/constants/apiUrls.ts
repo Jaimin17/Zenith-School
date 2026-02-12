@@ -58,7 +58,7 @@ export const apiUrls = {
 
     GET_STUDENT_URL: "api/v1/student/getAll",
 
-    GET_STUDENTS_OF_CLASS_URL: "api/v1/students/getStudentsOfClass",
+    GET_STUDENTS_OF_CLASS_URL: "api/v1/student/getStudentsOfClass",
 
     GET_STUDENTS_OF_TEACHER_URL: "api/v1/student/byTeacher",
 
@@ -81,6 +81,10 @@ export const apiUrls = {
     GET_SUPERVISORS_CLASSES_URL: "api/v1/classes",
 
     GET_EVENTS_URL: "api/v1/events/getAll",
+
+    SAVE_EVENT_URL: "api/v1/events/save",
+
+    UPDATE_EVENT_URL: "api/v1/events/update",
 
     GET_EXAMS_URL: "api/v1/exam/getAll",
 

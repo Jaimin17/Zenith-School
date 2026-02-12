@@ -8,7 +8,7 @@ import { useActionState } from "react";
 import { createEvent, updateEvent } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Calendar, Clock, FileText, Users } from "lucide-react";
+import { Calendar, Clock, FileText, Users, Loader2 } from "lucide-react";
 
 const EventForm = ({
   type,
@@ -21,6 +21,8 @@ const EventForm = ({
   setOpen: Dispatch<SetStateAction<boolean>>;
   relatedData?: any;
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const {
     register,
     handleSubmit,
@@ -32,13 +34,17 @@ const EventForm = ({
 
   const [state, formAction] = useActionState(
     async (prevState: any, formData: FormData) => {
-      return type === "create"
+      setIsSubmitting(true);
+      const result = type === "create"
         ? await createEvent(formData)
         : await updateEvent(formData);
+      setIsSubmitting(false);
+      return result;
     },
     {
       success: false,
       error: false,
+      message: "",
     }
   );
 
@@ -61,6 +67,8 @@ const EventForm = ({
       );
       setOpen(false);
       router.refresh();
+    } else if (state.error && state.message) {
+      toast.error(state.message);
     }
   }, [state, router, type, setOpen]);
 
@@ -287,7 +295,7 @@ const EventForm = ({
       {state.error && (
         <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
           <p className="text-sm text-red-600">
-            Something went wrong. Please try again.
+            {state.message || "Something went wrong. Please try again."}
           </p>
         </div>
       )}
@@ -297,16 +305,27 @@ const EventForm = ({
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors duration-150"
+          disabled={isSubmitting}
+          className="px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors duration-150 disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-5 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors duration-150 flex items-center gap-2"
+          disabled={isSubmitting}
+          className="px-5 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors duration-150 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <Calendar className="w-4 h-4" />
-          {type === "create" ? "Create Event" : "Update Event"}
+          {isSubmitting ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              {type === "create" ? "Creating..." : "Updating..."}
+            </>
+          ) : (
+            <>
+              <Calendar className="w-4 h-4" />
+              {type === "create" ? "Create Event" : "Update Event"}
+            </>
+          )}
         </button>
       </div>
     </form>

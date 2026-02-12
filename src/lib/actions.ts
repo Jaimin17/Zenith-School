@@ -1,7 +1,7 @@
 "use server";
 
 import { api } from "@/api/api";
-import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API } from "@/api/apiParams/admin";
+import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API, SAVE_EVENT_API, UPDATE_EVENT_API } from "@/api/apiParams/admin";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN } from "@/constants/appConstants";
 
@@ -663,15 +663,107 @@ export async function deleteAnnouncement(formData: FormData): Promise<FormState>
 
 // Event actions
 export async function createEvent(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Creating event:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const start_date = formData.get("start_date") as string;
+    const start_time_field = formData.get("start_time") as string;
+    const end_date = formData.get("end_date") as string;
+    const end_time_field = formData.get("end_time") as string;
+    const class_id = formData.get("class_id") as string;
+
+    // Combine date and time into ISO datetime format
+    const start_time = `${start_date}T${start_time_field}:00`;
+    const end_time = `${end_date}T${end_time_field}:00`;
+
+    apiFormData.append("title", title || "");
+    apiFormData.append("description", description || "");
+    apiFormData.append("start_time", start_time);
+    apiFormData.append("end_time", end_time);
+    
+    // Only append class_id if it has a value
+    if (class_id && class_id.trim() !== "") {
+      apiFormData.append("class_id", class_id);
+    }
+
+    const response = await api({
+      endpoint: SAVE_EVENT_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to create event",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating event:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
 export async function updateEvent(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Updating event:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    const id = formData.get("id") as string;
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const start_date = formData.get("start_date") as string;
+    const start_time_field = formData.get("start_time") as string;
+    const end_date = formData.get("end_date") as string;
+    const end_time_field = formData.get("end_time") as string;
+    const class_id = formData.get("class_id") as string;
+
+    // Combine date and time into ISO datetime format
+    const start_time = `${start_date}T${start_time_field}:00`;
+    const end_time = `${end_date}T${end_time_field}:00`;
+
+    apiFormData.append("id", id || "");
+    apiFormData.append("title", title || "");
+    apiFormData.append("description", description || "");
+    apiFormData.append("start_time", start_time);
+    apiFormData.append("end_time", end_time);
+    
+    // Only append class_id if it has a value
+    if (class_id && class_id.trim() !== "") {
+      apiFormData.append("class_id", class_id);
+    }
+
+    const response = await api({
+      endpoint: UPDATE_EVENT_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to update event",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating event:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
 export async function deleteEvent(formData: FormData): Promise<FormState> {

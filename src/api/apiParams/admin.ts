@@ -210,6 +210,24 @@ export const ALL_EVENTS_API: ApiType = {
     isForm: false,
 }
 
+export const SAVE_EVENT_API: ApiType = {
+    url: apiUrls.SAVE_EVENT_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: false,
+    isForm: false,
+}
+
+export const UPDATE_EVENT_API: ApiType = {
+    url: apiUrls.UPDATE_EVENT_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: false,
+    isForm: false,
+}
+
 export const LESSONS_WEEK_API: ApiType = {
     url: apiUrls.GET_LESSONS_WEEK_URL,
     method: "GET",

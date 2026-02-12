@@ -68,3 +68,11 @@ export const LOGOUT_API: ApiType = {
   isMultipart: false,
   showToast: true
 }
+
+export const GET_LIST_OF_STUDENTS_OF_CLASS_API: ApiType = {
+  url: apiUrls.GET_STUDENT_CLASS_URL,
+  method: 'GET',
+  withToken: true,
+  isMultipart: false,
+  showToast: false
+}

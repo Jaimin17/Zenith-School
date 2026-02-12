@@ -9,6 +9,7 @@ import { createResult, updateResult } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Award, User, FileText, ClipboardList, GraduationCap, Loader2 } from "lucide-react";
+import { useAdmin } from "@/contexts/adminContext";
 
 const ResultForm = ({
   type,
@@ -35,10 +36,12 @@ const ResultForm = ({
   const [resultType, setResultType] = useState<"exam" | "assignment">(
     data?.exam ? "exam" : data?.assignment ? "assignment" : "exam"
   );
+
+  console.log("ResultForm initialized with data:", data);
   
   // State for class-based filtering
   const [selectedClassId, setSelectedClassId] = useState<string>(
-    data?.student?.class?.id || data?.student?.class_id || ""
+    data?.exam ? data?.exam?.lesson?.related_class?.id || "" : data?.assignment ? data?.assignment?.lesson?.related_class?.id || "" : ""
   );
   const [filteredStudents, setFilteredStudents] = useState<any[]>([]);
   const [filteredExams, setFilteredExams] = useState<any[]>([]);
@@ -46,6 +49,9 @@ const ResultForm = ({
   const [isLoadingStudents, setIsLoadingStudents] = useState(false);
   const [isLoadingExams, setIsLoadingExams] = useState(false);
   const [isLoadingAssignments, setIsLoadingAssignments] = useState(false);
+
+  // Use admin context for fetching class-based data
+  const { fetchStudentsOfClass, fetchExamsOfClass, fetchAssignmentsOfClass } = useAdmin();
 
   const [state, formAction] = useActionState(
     async (prevState: any, formDataObj: Record<string, any>) => {
@@ -102,21 +108,22 @@ const ResultForm = ({
         setFilteredStudents([]);
         setFilteredExams([]);
         setFilteredAssignments([]);
-        setValue("student_id", "");
-        setValue("exam_id", "");
-        setValue("assignment_id", "");
+        if (type === "create") {
+          setValue("student_id", "");
+          setValue("exam_id", "");
+          setValue("assignment_id", "");
+        }
         return;
       }
 
-      // Fetch students
+      // Fetch students using context
       setIsLoadingStudents(true);
       try {
-        const response = await fetch(`/api/student/getStudentsOfClass/${selectedClassId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setFilteredStudents(data.students || []);
-        } else {
-          setFilteredStudents([]);
+        const students = await fetchStudentsOfClass(selectedClassId);
+        setFilteredStudents(students || []);
+        // Set the student value for update mode after data is loaded
+        if (type === "update" && data?.student?.id) {
+          setValue("student_id", data.student.id);
         }
       } catch (error) {
         console.error("Error fetching students:", error);
@@ -125,15 +132,14 @@ const ResultForm = ({
         setIsLoadingStudents(false);
       }
 
-      // Fetch exams
+      // Fetch exams using context
       setIsLoadingExams(true);
       try {
-        const response = await fetch(`/api/exam/allOfClass/${selectedClassId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setFilteredExams(data.exams || []);
-        } else {
-          setFilteredExams([]);
+        const exams = await fetchExamsOfClass(selectedClassId);
+        setFilteredExams(exams || []);
+        // Set the exam value for update mode after data is loaded
+        if (type === "update" && data?.exam?.id) {
+          setValue("exam_id", data.exam.id);
         }
       } catch (error) {
         console.error("Error fetching exams:", error);
@@ -142,15 +148,14 @@ const ResultForm = ({
         setIsLoadingExams(false);
       }
 
-      // Fetch assignments
+      // Fetch assignments using context
       setIsLoadingAssignments(true);
       try {
-        const response = await fetch(`/api/assignment/allOfClass/${selectedClassId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setFilteredAssignments(data.assignments || []);
-        } else {
-          setFilteredAssignments([]);
+        const assignments = await fetchAssignmentsOfClass(selectedClassId);
+        setFilteredAssignments(assignments || []);
+        // Set the assignment value for update mode after data is loaded
+        if (type === "update" && data?.assignment?.id) {
+          setValue("assignment_id", data.assignment.id);
         }
       } catch (error) {
         console.error("Error fetching assignments:", error);
@@ -161,24 +166,14 @@ const ResultForm = ({
     };
 
     fetchClassData();
-  }, [selectedClassId, setValue]);
-
-  // Set initial data for update mode
-  useEffect(() => {
-    if (type === "update") {
-      if (data?.student) {
-        setFilteredStudents([data.student]);
-      }
-      if (data?.exam) {
-        setFilteredExams([data.exam]);
-      }
-      if (data?.assignment) {
-        setFilteredAssignments([data.assignment]);
-      }
-    }
-  }, [type, data]);
+  }, [selectedClassId, fetchStudentsOfClass, fetchExamsOfClass, fetchAssignmentsOfClass, type, data, setValue]);
 
   const classes = relatedData?.classes || [];
+
+  // Watch form values for controlled selects
+  const watchedStudentId = watch("student_id");
+  const watchedExamId = watch("exam_id");
+  const watchedAssignmentId = watch("assignment_id");
 
   // Count total validation errors
   const errorCount = Object.keys(errors).length;
@@ -278,10 +273,12 @@ const ResultForm = ({
         <select
           value={selectedClassId}
           onChange={(e) => {
+            if (type === "update") return; // Prevent changes in update mode
             setSelectedClassId(e.target.value);
             setValue("student_id", ""); // Reset student when class changes
           }}
-          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm bg-white"
+          disabled={type === "update"}
+          className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm bg-white disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
         >
           <option value="">Select a class first</option>
           {classes.map((cls: any) => (
@@ -290,7 +287,9 @@ const ResultForm = ({
             </option>
           ))}
         </select>
-        <p className="text-xs text-gray-500">Select a class to load its students</p>
+        {type === "create" && (
+          <p className="text-xs text-gray-500">Select a class to load its students</p>
+        )}
       </div>
 
       {/* Student Field */}
@@ -302,9 +301,9 @@ const ResultForm = ({
         <div className="relative">
           <select
             {...register("student_id")}
-            defaultValue={data?.student?.id || data?.student_id || ""}
-            disabled={!selectedClassId || isLoadingStudents}
-            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm bg-white disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed"
+            value={watchedStudentId || ""}
+            disabled={type === "update" || !selectedClassId || isLoadingStudents}
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm bg-white disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
           >
             <option value="">
               {!selectedClassId 
@@ -338,24 +337,26 @@ const ResultForm = ({
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={() => setResultType("exam")}
+            onClick={() => type === "create" && setResultType("exam")}
+            disabled={type === "update"}
             className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${
               resultType === "exam"
                 ? "bg-gray-900 text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
+            } ${type === "update" ? "cursor-not-allowed opacity-70" : ""}`}
           >
             <ClipboardList className="w-4 h-4" />
             Exam
           </button>
           <button
             type="button"
-            onClick={() => setResultType("assignment")}
+            onClick={() => type === "create" && setResultType("assignment")}
+            disabled={type === "update"}
             className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2 ${
               resultType === "assignment"
                 ? "bg-gray-900 text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
+            } ${type === "update" ? "cursor-not-allowed opacity-70" : ""}`}
           >
             <FileText className="w-4 h-4" />
             Assignment
@@ -373,9 +374,9 @@ const ResultForm = ({
           <div className="relative">
             <select
               {...register("exam_id")}
-              defaultValue={data?.exam?.id || data?.exam_id || ""}
-              disabled={!selectedClassId || isLoadingExams}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm bg-white disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed"
+              value={watchedExamId || ""}
+              disabled={type === "update" || !selectedClassId || isLoadingExams}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm bg-white disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
             >
               <option value="">
                 {!selectedClassId 
@@ -411,9 +412,9 @@ const ResultForm = ({
           <div className="relative">
             <select
               {...register("assignment_id")}
-              defaultValue={data?.assignment?.id || data?.assignment_id || ""}
-              disabled={!selectedClassId || isLoadingAssignments}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm bg-white disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed"
+              value={watchedAssignmentId || ""}
+              disabled={type === "update" || !selectedClassId || isLoadingAssignments}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm bg-white disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
             >
               <option value="">
                 {!selectedClassId 

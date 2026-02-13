@@ -174,13 +174,11 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
 
       // ---------------- ANNOUNCEMENT ----------------
       case "announcement": {
-        const announcementClasses = await fetchApi("/api/classes", [
-          { id: "c1", name: "Class 10A" },
-          { id: "c2", name: "Class 9B" },
-          { id: "c3", name: "Class 11C" },
-          { id: "c4", name: "Class 8A" },
-          { id: "c5", name: "Class 12B" },
-        ]);
+        // Fetch classes from the API
+        const classesResponse = await fetchAllClassesAction();
+        const announcementClasses = classesResponse.success && classesResponse.data
+          ? classesResponse.data
+          : [];
         relatedData = { classes: announcementClasses };
         break;
       }

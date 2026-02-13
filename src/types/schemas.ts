@@ -426,3 +426,46 @@ export interface ResultWithRelations extends ResultBase {
 export interface ResultListResponse extends PaginationListResponse {
     data: ResultWithRelations[]
 }
+
+// User Profile Types
+export interface AdminProfile {
+    id: string;
+    username: string;
+    role: 'admin';
+}
+
+export interface UserProfileBase {
+    id: string;
+    username: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string | null;
+    address: string;
+    created_at: string;
+}
+
+export interface ParentProfile extends UserProfileBase {
+    role: 'parent';
+}
+
+export interface TeacherProfile extends UserProfileBase {
+    img: string | null;
+    blood_type: string;
+    sex: string;
+    dob: string;
+    role: 'teacher';
+}
+
+export interface StudentProfile extends UserProfileBase {
+    img: string | null;
+    blood_type: string;
+    sex: string;
+    dob: string;
+    parent_id: string | null;
+    class_id: string | null;
+    grade_id: string | null;
+    role: 'student';
+}
+
+export type UserProfile = AdminProfile | ParentProfile | TeacherProfile | StudentProfile;

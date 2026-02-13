@@ -13,6 +13,10 @@ export const apiUrls = {
 
     GET_ANNOUNCEMENT_FOR_STUDENT_URL: "api/v1/announcements/student",
 
+    SAVE_ANNOUNCEMENT_URL: "api/v1/announcements/save",
+
+    UPDATE_ANNOUNCEMENT_URL: "api/v1/announcements/update",
+
     GET_ASSIGNMENT_URL: "api/v1/assignments/getAll",
 
     GET_ASSIGNMENTS_OF_TEACHER_URL: "api/v1/assignments/teacher",

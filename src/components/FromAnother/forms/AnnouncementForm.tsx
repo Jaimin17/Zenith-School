@@ -9,7 +9,8 @@ import { useActionState } from "react";
 import { createAnnouncement, updateAnnouncement } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { FileText, X, Paperclip } from "lucide-react";
+import { FileText, X, Paperclip, Loader2, ExternalLink } from "lucide-react";
+import { getAnnouncementPdfUrl } from "@/utils/imageHelpers";
 
 const AnnouncementForm = ({
   type,
@@ -22,6 +23,8 @@ const AnnouncementForm = ({
   setOpen: Dispatch<SetStateAction<boolean>>;
   relatedData?: any;
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const {
     register,
     handleSubmit,
@@ -37,18 +40,17 @@ const AnnouncementForm = ({
 
   const [state, formAction] = useActionState(
     async (prevState: any, formData: FormData) => {
-      const formDataObj = Object.fromEntries(formData);
-      // Add PDF file if exists
-      if (pdfFile) {
-        formData.append('attachment', pdfFile);
-      }
-      return type === "create" 
+      setIsSubmitting(true);
+      const result = type === "create" 
         ? await createAnnouncement(formData) 
         : await updateAnnouncement(formData);
+      setIsSubmitting(false);
+      return result;
     },
     {
       success: false,
       error: false,
+      message: "",
     }
   );
 
@@ -72,6 +74,8 @@ const AnnouncementForm = ({
       toast.success(`Announcement has been ${type === "create" ? "created" : "updated"}!`);
       setOpen(false);
       router.refresh();
+    } else if (state.error && state.message) {
+      toast.error(state.message);
     }
   }, [state, router, type, setOpen]);
 
@@ -129,7 +133,21 @@ const AnnouncementForm = ({
   const classes = relatedData?.classes || [];
 
   // Get today's date in YYYY-MM-DD format for default value
-  const today = new Date().toISOString().split('T')[0];
+  const now = new Date();
+  const today = now.toISOString().split('T')[0];
+
+  // Check if the announcement date is in the past (for update mode)
+  const isDateInPast = (): boolean => {
+    if (type !== "update" || !data?.announcement_date) return false;
+    const announcementDate = new Date(data.announcement_date);
+    // Set time to start of day for accurate comparison
+    announcementDate.setHours(0, 0, 0, 0);
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    return announcementDate < todayStart;
+  };
+
+  const isPastDate = isDateInPast();
 
   return (
     <form className="flex flex-col gap-5" onSubmit={onSubmit}>
@@ -179,18 +197,24 @@ const AnnouncementForm = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Announcement Date */}
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
             Date <span className="text-red-400">*</span>
+            {isPastDate && (
+              <span className="text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full font-normal">
+                Past date - locked
+              </span>
+            )}
           </label>
           <input
             type="date"
             {...register("announcement_date")}
             defaultValue={data?.announcement_date?.split('T')[0] || today}
+            disabled={isPastDate}
             className={`w-full px-3.5 py-2.5 border rounded-lg text-sm transition-colors duration-150 bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 outline-none ${
               errors.announcement_date 
                 ? "border-red-400 focus:ring-red-400 focus:border-red-400" 
                 : "border-gray-200 hover:border-gray-300"
-            }`}
+            } ${isPastDate ? "bg-gray-100 cursor-not-allowed opacity-60" : ""}`}
           />
           {errors.announcement_date?.message && (
             <p className="text-xs text-red-500 mt-1">{errors.announcement_date.message.toString()}</p>
@@ -267,12 +291,24 @@ const AnnouncementForm = ({
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-700 truncate">
-                {pdfPreview}
+                {pdfFile ? pdfFile.name : (pdfPreview?.split('/').pop() || pdfPreview?.split('\\').pop() || 'PDF Document')}
               </p>
               <p className="text-xs text-gray-400">
                 {pdfFile ? formatFileSize(pdfFile.size) : 'PDF Document'}
               </p>
             </div>
+            {/* View link for existing attachments (not new uploads) */}
+            {!pdfFile && data?.attachment && (
+              <a
+                href={getAnnouncementPdfUrl(data.attachment)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 text-blue-500 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors"
+                title="View PDF"
+              >
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
             <button
               type="button"
               onClick={removePdf}
@@ -287,7 +323,7 @@ const AnnouncementForm = ({
       {/* Error Message */}
       {state.error && (
         <div className="bg-red-50 border border-red-100 rounded-lg px-4 py-3 flex items-center gap-2">
-          <span className="text-sm text-red-600">Something went wrong. Please try again.</span>
+          <span className="text-sm text-red-600">{state.message || "Something went wrong. Please try again."}</span>
         </div>
       )}
 
@@ -296,15 +332,24 @@ const AnnouncementForm = ({
         <button 
           type="button"
           onClick={() => setOpen(false)}
-          className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+          disabled={isSubmitting}
+          className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
         >
           Cancel
         </button>
         <button 
           type="submit"
-          className="px-5 py-2 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-lg transition-colors"
+          disabled={isSubmitting}
+          className="px-5 py-2 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {type === "create" ? "Create Announcement" : "Save Changes"}
+          {isSubmitting ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              {type === "create" ? "Creating..." : "Saving..."}
+            </>
+          ) : (
+            type === "create" ? "Create Announcement" : "Save Changes"
+          )}
         </button>
       </div>
     </form>

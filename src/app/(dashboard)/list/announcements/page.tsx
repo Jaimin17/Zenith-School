@@ -7,7 +7,8 @@ import type { Announcement } from "@/types/schemas";
 import { fetchAnnouncementsAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
-import { Calendar } from "lucide-react";
+import { Calendar, FileText } from "lucide-react";
+import { getAnnouncementPdfUrl } from "@/utils/imageHelpers";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -110,6 +111,17 @@ const AnnouncementListPage = async ({
         <div className="flex flex-col">
           <h3 className="font-semibold text-gray-900">{item.title}</h3>
           <p className="text-xs text-gray-500 line-clamp-1">{item.description}</p>
+          {item.attachment ? (
+            <a
+              href={getAnnouncementPdfUrl(item.attachment)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-blue-600 hover:text-blue-800 inline-flex items-center gap-1 transition-colors w-fit mt-1"
+            >
+              <FileText className="w-3 h-3 flex-shrink-0" />
+              <span className="hover:underline">View Attachment</span>
+            </a>
+          ) : null}
         </div>
       </td>
       <td className="hidden md:table-cell">

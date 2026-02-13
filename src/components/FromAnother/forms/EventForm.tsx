@@ -78,6 +78,26 @@ const EventForm = ({
   const now = new Date();
   const today = now.toISOString().split("T")[0];
   const currentTime = now.toTimeString().slice(0, 5);
+
+  // Check if the event dates are in the past (for update mode)
+  const isEventInPast = (): boolean => {
+    if (type !== "update" || !data) return false;
+    
+    const eventStartTime = data.start_time ? new Date(data.start_time) : null;
+    const eventEndTime = data.end_time ? new Date(data.end_time) : null;
+    
+    // Check if both dates are in the past
+    if (eventStartTime && eventEndTime) {
+      return eventStartTime < now && eventEndTime < now;
+    }
+    // If only one date exists, check that one
+    if (eventStartTime) return eventStartTime < now;
+    if (eventEndTime) return eventEndTime < now;
+    
+    return false;
+  };
+
+  const isPastEvent = isEventInPast();
   
   // Default end time (1 hour later)
   const endTime = new Date(now.getTime() + 60 * 60 * 1000)
@@ -169,6 +189,11 @@ const EventForm = ({
           <span className="text-sm font-medium text-gray-700">
             Date & Time
           </span>
+          {isPastEvent && (
+            <span className="text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
+              Past event - dates locked
+            </span>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -181,11 +206,12 @@ const EventForm = ({
               type="date"
               {...register("start_date")}
               defaultValue={getDateFromDateTime(data?.start_time)}
+              disabled={isPastEvent}
               className={`w-full px-3.5 py-2.5 border rounded-lg text-sm transition-colors duration-150 bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 outline-none ${
                 errors.start_date
                   ? "border-red-400 focus:ring-red-400 focus:border-red-400"
                   : "border-gray-200 hover:border-gray-300"
-              }`}
+              } ${isPastEvent ? "bg-gray-100 cursor-not-allowed opacity-60" : ""}`}
             />
             {errors.start_date?.message && (
               <p className="text-xs text-red-500 mt-1">
@@ -203,11 +229,12 @@ const EventForm = ({
               type="time"
               {...register("start_time")}
               defaultValue={getTimeFromDateTime(data?.start_time, currentTime)}
+              disabled={isPastEvent}
               className={`w-full px-3.5 py-2.5 border rounded-lg text-sm transition-colors duration-150 bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 outline-none ${
                 errors.start_time
                   ? "border-red-400 focus:ring-red-400 focus:border-red-400"
                   : "border-gray-200 hover:border-gray-300"
-              }`}
+              } ${isPastEvent ? "bg-gray-100 cursor-not-allowed opacity-60" : ""}`}
             />
             {errors.start_time?.message && (
               <p className="text-xs text-red-500 mt-1">
@@ -225,11 +252,12 @@ const EventForm = ({
               type="date"
               {...register("end_date")}
               defaultValue={getDateFromDateTime(data?.end_time)}
+              disabled={isPastEvent}
               className={`w-full px-3.5 py-2.5 border rounded-lg text-sm transition-colors duration-150 bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 outline-none ${
                 errors.end_date
                   ? "border-red-400 focus:ring-red-400 focus:border-red-400"
                   : "border-gray-200 hover:border-gray-300"
-              }`}
+              } ${isPastEvent ? "bg-gray-100 cursor-not-allowed opacity-60" : ""}`}
             />
             {errors.end_date?.message && (
               <p className="text-xs text-red-500 mt-1">
@@ -247,11 +275,12 @@ const EventForm = ({
               type="time"
               {...register("end_time")}
               defaultValue={getTimeFromDateTime(data?.end_time, endTime)}
+              disabled={isPastEvent}
               className={`w-full px-3.5 py-2.5 border rounded-lg text-sm transition-colors duration-150 bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 outline-none ${
                 errors.end_time
                   ? "border-red-400 focus:ring-red-400 focus:border-red-400"
                   : "border-gray-200 hover:border-gray-300"
-              }`}
+              } ${isPastEvent ? "bg-gray-100 cursor-not-allowed opacity-60" : ""}`}
             />
             {errors.end_time?.message && (
               <p className="text-xs text-red-500 mt-1">
@@ -273,11 +302,12 @@ const EventForm = ({
         <select
           {...register("class_id")}
           defaultValue={data?.related_class?.id || ""}
+          disabled={isPastEvent}
           className={`w-full px-3.5 py-2.5 border rounded-lg text-sm transition-colors duration-150 bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 outline-none appearance-none cursor-pointer ${
             errors.class_id
               ? "border-red-400 focus:ring-red-400 focus:border-red-400"
               : "border-gray-200 hover:border-gray-300"
-          }`}
+          } ${isPastEvent ? "bg-gray-100 cursor-not-allowed opacity-60" : ""}`}
         >
           <option value="">All Classes (School-wide)</option>
           {classes.map((cls: any) => (
@@ -287,7 +317,9 @@ const EventForm = ({
           ))}
         </select>
         <p className="text-xs text-gray-500">
-          Leave empty to make this a school-wide event
+          {isPastEvent 
+            ? "Target class cannot be changed for past events" 
+            : "Leave empty to make this a school-wide event"}
         </p>
       </div>
 

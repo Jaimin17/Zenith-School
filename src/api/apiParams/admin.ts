@@ -37,6 +37,24 @@ export const ANNOUNCEMENT_STUDENT_API: ApiType = {
     isForm: false,
 }
 
+export const SAVE_ANNOUNCEMENT_API: ApiType = {
+    url: apiUrls.SAVE_ANNOUNCEMENT_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: false,
+    isForm: false,
+}
+
+export const UPDATE_ANNOUNCEMENT_API: ApiType = {
+    url: apiUrls.UPDATE_ANNOUNCEMENT_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: false,
+    isForm: false,
+}
+
 export const ASSIGNMENT_API: ApiType = {
     url: apiUrls.GET_ASSIGNMENT_URL,
     method: "GET",

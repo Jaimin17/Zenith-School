@@ -152,7 +152,7 @@ const homeRouteMap: Record<UserRole, string> = {
 };
 
 const Menu: React.FC = () => {
-  const { role } = useAuth();
+  const { role, logout, loading } = useAuth();
   const pathname = usePathname();
 
   const homeHref =
@@ -163,6 +163,14 @@ const Menu: React.FC = () => {
   const isActive = (itemLabel: string, itemHref: string): boolean => {
     const href = itemLabel === "Home" ? homeHref : itemHref;
     return pathname === href || pathname.startsWith(href + "/");
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
@@ -184,6 +192,46 @@ const Menu: React.FC = () => {
 
               const href = item.label === "Home" ? homeHref : item.href;
               const active = isActive(item.label, item.href);
+
+              // Handle logout differently
+              if (item.label === "Logout") {
+                return (
+                  <ListItem key={item.label} disablePadding>
+                    <ListItemButton
+                      onClick={handleLogout}
+                      disabled={loading}
+                      sx={{
+                        borderRadius: "8px",
+                        px: 2,
+                        py: 1,
+                        backgroundColor: "transparent",
+                        color: "gray",
+                        "&:hover": {
+                          backgroundColor: "rgba(0, 150, 255, 0.1)",
+                        },
+                        transition: "all 0.2s ease",
+                      }}
+                    >
+                      <ListItemIcon sx={{ minWidth: 32, color: "inherit" }}>
+                        <Image
+                          src={item.icon}
+                          alt={item.label}
+                          width={20}
+                          height={20}
+                        />
+                      </ListItemIcon>
+
+                      <ListItemText
+                        primary={loading ? "Logging out..." : item.label}
+                        sx={{
+                          display: { xs: "none", lg: "block" },
+                          color: "inherit",
+                        }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                );
+              }
 
               return (
                 <ListItem key={item.label} disablePadding>

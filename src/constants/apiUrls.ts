@@ -5,6 +5,10 @@ export const apiUrls = {
 
     LOGOUT_URL: "api/v1/auth/logout",
 
+    UPDATE_PROFILE_URL: "api/v1/auth/updateProfile",
+
+    CHANGE_PASSWORD_URL: "api/v1/auth/changePassword",
+
     GET_USER_COUNT_URL: "api/v1/admin/allUsersCount",
 
     GET_ANNOUNCEMENT_URL: "api/v1/announcements/getAll",
@@ -121,6 +125,8 @@ export const apiUrls = {
     SAVE_TEACHER_URL: "api/v1/teacher/save",
 
     UPDATE_TEACHER_URL: "api/v1/teacher/update",
+
+    DELETE_TEACHER_URL: "api/v1/teacher/delete",
 
     SAVE_STUDENT_URL: "api/v1/student/save",
 

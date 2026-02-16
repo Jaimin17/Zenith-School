@@ -80,7 +80,7 @@ const ResultsPage = async ({
   const auth = await requireAuth();
   const role = auth.role;
 
-  const allowedRoles = ["admin", "teacher"];
+  const allowedRoles = ["admin", "teacher", "student", "parent"];
   if (role && !allowedRoles.includes(role)) {
     return (
       <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">

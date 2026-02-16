@@ -69,6 +69,24 @@ export const LOGOUT_API: ApiType = {
   showToast: true
 }
 
+// Update Profile API
+export const UPDATE_PROFILE_API: ApiType = {
+  url: apiUrls.UPDATE_PROFILE_URL,
+  method: 'PUT',
+  withToken: true,
+  isMultipart: true,
+  showToast: false
+}
+
+// Change Password API
+export const CHANGE_PASSWORD_API: ApiType = {
+  url: apiUrls.CHANGE_PASSWORD_URL,
+  method: 'POST',
+  withToken: true,
+  isMultipart: false,
+  showToast: false
+}
+
 export const GET_LIST_OF_STUDENTS_OF_CLASS_API: ApiType = {
   url: apiUrls.GET_STUDENT_CLASS_URL,
   method: 'GET',

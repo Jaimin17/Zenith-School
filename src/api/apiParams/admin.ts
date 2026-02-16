@@ -10,6 +10,15 @@ export const USER_COUNT_API: ApiType = {
     isForm: false,
 }
 
+export const GET_CURRENT_USER_DETAILS_API: ApiType = {
+    url: apiUrls.USER_PROFILE_ENDPOINT,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const ANNOUNCEMENT_API: ApiType = {
     url: apiUrls.GET_ANNOUNCEMENT_URL,
     method: "GET",
@@ -566,6 +575,15 @@ export const UPDATE_TEACHER_API: ApiType = {
     method: "PUT",
     withToken: true,
     isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const DELETE_TEACHER_API: ApiType = {
+    url: apiUrls.DELETE_TEACHER_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
     showToast: true,
     isForm: false,
 }

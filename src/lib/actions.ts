@@ -236,9 +236,73 @@ export async function updateTeacher(formData: FormDataType): Promise<FormState> 
 }
 
 export async function deleteTeacher(formData: FormDataType): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Deleting teacher:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    if (!token) {
+      return {
+        success: false,
+        error: true,
+        message: "Unauthorized: No authentication token found",
+      };
+    }
+
+    // Extract ID from FormData object properly
+    const teacherId = formData instanceof FormData 
+      ? formData.get("id") 
+      : formData.id;
+
+    if (!teacherId) {
+      return {
+        success: false,
+        error: true,
+        message: "Teacher ID is required",
+      };
+    }
+
+    console.log("Initiating delete with ID:", teacherId);
+
+    // Import the DELETE_TEACHER_API
+    const { DELETE_TEACHER_API } = await import("@/api/apiParams/admin");
+    const { api } = await import("@/api/api");
+
+    // For DELETE requests, pass the ID as a query parameter
+    const deleteApiWithId = {
+      ...DELETE_TEACHER_API,
+      url: `${DELETE_TEACHER_API.url}?id=${teacherId}`, // Append ID as query parameter
+    };
+
+    const response = await api({
+      endpoint: deleteApiWithId,
+      payloadData: null,
+      serverToken: token,
+      isServer: true,
+    });
+
+    console.log("Delete action result:", response);
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete teacher",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.message || "Teacher deleted successfully",
+    };
+  } catch (error) {
+    console.error("Error deleting teacher:", error);
+    return {
+      success: false,
+      error: true,
+      message: "An unexpected error occurred while deleting teacher",
+    };
+  }
 }
 
 // Parent actions

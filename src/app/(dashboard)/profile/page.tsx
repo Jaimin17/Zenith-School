@@ -101,40 +101,47 @@ const ProfilePage = async () => {
       {/* Header Card */}
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         {/* Banner */}
-        <div className="h-32 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600" />
+        <div className="h-40 bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-500 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full -mr-40 -mt-40"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full -ml-24 -mb-24"></div>
+          </div>
+        </div>
         
         {/* Profile Info */}
-        <div className="px-6 pb-6">
-          <div className="flex flex-col md:flex-row md:items-end gap-4 -mt-16">
-            {/* Avatar */}
-            <div className="relative">
-              <div className="w-32 h-32 rounded-xl border-4 border-white shadow-lg overflow-hidden bg-white">
+        <div className="px-6 pt-8 pb-8">
+          <div className="flex flex-col md:flex-row md:items-center gap-6">
+            {/* Avatar - Positioned to overlap banner */}
+            <div className="relative flex-shrink-0 -mt-28">
+              <div className="w-40 h-40 rounded-2xl border-6 border-white shadow-xl overflow-hidden bg-white ring-2 ring-blue-100">
                 <Image
                   src={getProfileImage()}
                   alt="Profile"
-                  width={128}
-                  height={128}
+                  width={160}
+                  height={160}
                   className="w-full h-full object-cover"
                 />
               </div>
             </div>
             
-            {/* Name and Role */}
-            <div className="flex-1 pb-2">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                <h1 className="text-2xl font-bold text-gray-900">
+            {/* Name, Username and Role */}
+            <div className="flex-1">
+              <div className="space-y-2">
+                <h1 className="text-4xl font-bold text-gray-900">
                   {isAdmin 
                     ? (profile as AdminProfile).username 
                     : `${baseProfile.first_name} ${baseProfile.last_name}`}
                 </h1>
-                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium w-fit ${getRoleBadgeStyle()}`}>
+                {!isAdmin && (
+                  <p className="text-gray-500 text-base">@{baseProfile.username}</p>
+                )}
+              </div>
+              <div className="mt-3">
+                <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold ${getRoleBadgeStyle()}`}>
                   {getRoleIcon()}
                   {role ? role.charAt(0).toUpperCase() + role.slice(1) : 'Admin'}
                 </span>
               </div>
-              {!isAdmin && (
-                <p className="text-gray-500 mt-1">@{baseProfile.username}</p>
-              )}
             </div>
           </div>
         </div>

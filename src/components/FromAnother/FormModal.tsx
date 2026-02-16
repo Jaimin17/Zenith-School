@@ -16,7 +16,7 @@ import {
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState, useTransition } from "react";
 import { useActionState } from "react";
 import { toast } from "sonner";
 import { FormContainerProps } from "./FormContainer";
@@ -231,7 +231,7 @@ const FormModal = ({
   relatedData,
 }: FormContainerProps & { relatedData?: any }) => {
   const [open, setOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+
 
   // Button styles based on type
   const getButtonStyles = () => {
@@ -278,11 +278,11 @@ const FormModal = ({
   }, [open]);
 
   const DeleteConfirmation = () => {
+    const [isPending, startTransition] = useTransition();
     const [state, formAction] = useActionState(
       async (prevState: any, formData: FormData) => {
-        setIsDeleting(true);
+        console.log("Delete action result:", formData);
         const result = await deleteActionMap[table](formData);
-        setIsDeleting(false);
         return result;
       },
       {
@@ -300,7 +300,7 @@ const FormModal = ({
         router.refresh();
       }
       if (state.error) {
-        toast.error("Failed to delete. Please try again.");
+        toast.error(state.message || "Failed to delete. Please try again.");
       }
     }, [state, router]);
 
@@ -352,21 +352,22 @@ const FormModal = ({
               type="button"
               onClick={() => setOpen(false)}
               className="px-6 py-3 text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200 hover:shadow-md min-w-[120px]"
-              disabled={isDeleting}
+              disabled={isPending}
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={() => {
-                const formData = new FormData();
+                let formData = new FormData();
                 formData.append("id", String(id));
-                formAction(formData);
+                console.log("Initiating delete with ID:", id);
+                startTransition(() => formAction(formData));
               }}
-              disabled={isDeleting}
+              disabled={isPending}
               className="px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-w-[140px]"
             >
-              {isDeleting ? (
+              {isPending ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   <span>Deleting...</span>

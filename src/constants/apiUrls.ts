@@ -132,21 +132,31 @@ export const apiUrls = {
 
     UPDATE_STUDENT_URL: "api/v1/student/update",
 
+    DELETE_STUDENT_URL: "api/v1/student/delete",
+
     SAVE_PARENT_URL: "api/v1/parent/save",
 
     UPDATE_PARENT_URL: "api/v1/parent/update",
+
+    DELETE_PARENT_URL: "api/v1/parent/delete",
 
     SAVE_SUBJECT_URL: "api/v1/subject/save",
 
     UPDATE_SUBJECT_URL: "api/v1/subject/update",
 
+    DELETE_SUBJECT_URL: "api/v1/subject/delete",
+
     SAVE_CLASS_URL: "api/v1/classes/save",
 
     UPDATE_CLASS_URL: "api/v1/classes/update",
 
+    DELETE_CLASS_URL: "api/v1/classes/delete",
+
     SAVE_LESSON_URL: "api/v1/lesson/save",
 
     UPDATE_LESSON_URL: "api/v1/lesson/update",
+
+    DELETE_LESSON_URL: "api/v1/lesson/delete",
 
     SAVE_EXAM_URL: "api/v1/exam/save",
 

@@ -281,21 +281,24 @@ const FormModal = ({
     const [isPending, startTransition] = useTransition();
     const [state, formAction] = useActionState(
       async (prevState: any, formData: FormData) => {
-        console.log("Delete action result:", formData);
+        console.log("Delete action starting with formData:", formData.get("id"));
         const result = await deleteActionMap[table](formData);
+        console.log("Delete action completed with result:", result);
         return result;
       },
       {
         success: false,
         error: false,
+        message: "",
       }
     );
 
     const router = useRouter();
 
     useEffect(() => {
+      console.log("Delete state changed:", state);
       if (state.success) {
-        toast.success(`${table.charAt(0).toUpperCase() + table.slice(1)} deleted successfully`);
+        toast.success(state.message || `${table.charAt(0).toUpperCase() + table.slice(1)} deleted successfully`);
         setOpen(false);
         router.refresh();
       }

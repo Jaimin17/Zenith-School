@@ -1,7 +1,7 @@
 "use server";
 
 import { api } from "@/api/api";
-import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API, SAVE_EVENT_API, UPDATE_EVENT_API, SAVE_ANNOUNCEMENT_API, UPDATE_ANNOUNCEMENT_API } from "@/api/apiParams/admin";
+import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, DELETE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API, SAVE_EVENT_API, UPDATE_EVENT_API, SAVE_ANNOUNCEMENT_API, UPDATE_ANNOUNCEMENT_API, DELETE_STUDENT_API, DELETE_PARENT_API, DELETE_SUBJECT_API, DELETE_CLASS_API } from "@/api/apiParams/admin";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN } from "@/constants/appConstants";
 
@@ -125,9 +125,69 @@ export async function updateStudent(formData: FormDataType): Promise<FormState> 
 }
 
 export async function deleteStudent(formData: FormDataType): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Deleting student:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    if (!token) {
+      return {
+        success: false,
+        error: true,
+        message: "Unauthorized: No authentication token found",
+      };
+    }
+
+    // Extract ID from FormData object properly
+    const studentId = formData instanceof FormData 
+      ? formData.get("id") 
+      : formData.id;
+
+    if (!studentId) {
+      return {
+        success: false,
+        error: true,
+        message: "Student ID is required",
+      };
+    }
+
+    console.log("Initiating student delete with ID:", studentId);
+
+    // For DELETE requests, pass the ID as a query parameter
+    const deleteApiWithId = {
+      ...DELETE_STUDENT_API,
+      url: `${DELETE_STUDENT_API.url}?id=${studentId}`,
+    };
+
+    const response = await api({
+      endpoint: deleteApiWithId,
+      payloadData: null,
+      serverToken: token,
+      isServer: true,
+    });
+
+    console.log("Delete student result:", response);
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete student",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.message || "Student deleted successfully",
+    };
+  } catch (error) {
+    console.error("Error deleting student:", error);
+    return {
+      success: false,
+      error: true,
+      message: "An unexpected error occurred while deleting student",
+    };
+  }
 }
 
 // Teacher actions
@@ -383,9 +443,69 @@ export async function updateParent(formData: FormDataType): Promise<FormState> {
 }
 
 export async function deleteParent(formData: FormDataType): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Deleting parent:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    if (!token) {
+      return {
+        success: false,
+        error: true,
+        message: "Unauthorized: No authentication token found",
+      };
+    }
+
+    // Extract ID from FormData object properly
+    const parentId = formData instanceof FormData 
+      ? formData.get("id") 
+      : formData.id;
+
+    if (!parentId) {
+      return {
+        success: false,
+        error: true,
+        message: "Parent ID is required",
+      };
+    }
+
+    console.log("Initiating parent delete with ID:", parentId);
+
+    // For DELETE requests, pass the ID as a query parameter
+    const deleteApiWithId = {
+      ...DELETE_PARENT_API,
+      url: `${DELETE_PARENT_API.url}?id=${parentId}`,
+    };
+
+    const response = await api({
+      endpoint: deleteApiWithId,
+      payloadData: null,
+      serverToken: token,
+      isServer: true,
+    });
+
+    console.log("Delete parent result:", response);
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete parent",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.message || "Parent deleted successfully",
+    };
+  } catch (error) {
+    console.error("Error deleting parent:", error);
+    return {
+      success: false,
+      error: true,
+      message: "An unexpected error occurred while deleting parent",
+    };
+  }
 }
 
 // Subject actions
@@ -465,9 +585,69 @@ export async function updateSubject(formData: FormDataType): Promise<FormState> 
 }
 
 export async function deleteSubject(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Deleting subject:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    if (!token) {
+      return {
+        success: false,
+        error: true,
+        message: "Unauthorized: No authentication token found",
+      };
+    }
+
+    // Extract ID from FormData object properly
+    const subjectId = formData instanceof FormData 
+      ? formData.get("id") 
+      : (formData as any).id;
+
+    if (!subjectId) {
+      return {
+        success: false,
+        error: true,
+        message: "Subject ID is required",
+      };
+    }
+
+    console.log("Initiating subject delete with ID:", subjectId);
+
+    // For DELETE requests, pass the ID as a query parameter
+    const deleteApiWithId = {
+      ...DELETE_SUBJECT_API,
+      url: `${DELETE_SUBJECT_API.url}?id=${subjectId}`,
+    };
+
+    const response = await api({
+      endpoint: deleteApiWithId,
+      payloadData: null,
+      serverToken: token,
+      isServer: true,
+    });
+
+    console.log("Delete subject result:", response);
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete subject",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.message || "Subject deleted successfully",
+    };
+  } catch (error) {
+    console.error("Error deleting subject:", error);
+    return {
+      success: false,
+      error: true,
+      message: "An unexpected error occurred while deleting subject",
+    };
+  }
 }
 
 // Class actions
@@ -543,9 +723,91 @@ export async function updateClass(formData: FormDataType): Promise<FormState> {
 }
 
 export async function deleteClass(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Deleting class:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    if (!token) {
+      return {
+        success: false,
+        error: true,
+        message: "Unauthorized: No authentication token found",
+      };
+    }
+
+    // Extract ID from FormData object properly
+    const classId = formData instanceof FormData 
+      ? formData.get("id") 
+      : (formData as any).id;
+
+    if (!classId) {
+      return {
+        success: false,
+        error: true,
+        message: "Class ID is required",
+      };
+    }
+
+    console.log("Initiating class delete with ID:", classId);
+
+    // For DELETE requests, pass the ID as a query parameter
+    const deleteApiWithId = {
+      ...DELETE_CLASS_API,
+      url: `${DELETE_CLASS_API.url}?id=${classId}`,
+    };
+
+    const response = await api({
+      endpoint: deleteApiWithId,
+      payloadData: null,
+      serverToken: token,
+      isServer: true,
+    });
+
+    console.log("Delete class result:", response);
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete class",
+      };
+    }
+
+    // Check if deletion was blocked due to enrolled students
+    const data = response.data;
+    if (data && data.students_affected > 0 && data.message?.includes("cannot be deleted")) {
+      return {
+        success: false,
+        error: true,
+        message: data.message || "Class cannot be deleted while students are enrolled. Please reassign or remove students first.",
+      };
+    }
+
+    // Build detailed success message
+    let successMessage = data?.message || "Class deleted successfully";
+    if (data && (data.lessons_affected > 0 || data.events_affected > 0 || data.announcements_affected > 0)) {
+      const parts = [];
+      if (data.lessons_affected > 0) parts.push(`${data.lessons_affected} lesson(s)`);
+      if (data.events_affected > 0) parts.push(`${data.events_affected} event(s)`);
+      if (data.announcements_affected > 0) parts.push(`${data.announcements_affected} announcement(s)`);
+      if (parts.length > 0) {
+        successMessage = `Class deleted successfully. Also removed: ${parts.join(", ")}.`;
+      }
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: successMessage,
+    };
+  } catch (error) {
+    console.error("Error deleting class:", error);
+    return {
+      success: false,
+      error: true,
+      message: "An unexpected error occurred while deleting class",
+    };
+  }
 }
 
 // Lesson actions
@@ -625,9 +887,82 @@ export async function updateLesson(formData: FormDataType): Promise<FormState> {
 }
 
 export async function deleteLesson(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Deleting lesson:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    if (!token) {
+      return {
+        success: false,
+        error: true,
+        message: "Unauthorized: No authentication token found",
+      };
+    }
+
+    // Extract ID from FormData object properly
+    const lessonId = formData instanceof FormData 
+      ? formData.get("id") 
+      : (formData as any).id;
+
+    if (!lessonId) {
+      return {
+        success: false,
+        error: true,
+        message: "Lesson ID is required",
+      };
+    }
+
+    console.log("Initiating lesson delete with ID:", lessonId);
+
+    // For DELETE requests, pass the ID as a query parameter
+    const deleteApiWithId = {
+      ...DELETE_LESSON_API,
+      url: `${DELETE_LESSON_API.url}?id=${lessonId}`,
+    };
+
+    const response = await api({
+      endpoint: deleteApiWithId,
+      payloadData: null,
+      serverToken: token,
+      isServer: true,
+    });
+
+    console.log("Delete lesson result:", response);
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete lesson",
+      };
+    }
+
+    // Build detailed success message based on affected records
+    const data = response.data;
+    let successMessage = data?.message || "Lesson deleted successfully";
+    if (data && (data.exam_affected > 0 || data.assignment_affected > 0 || data.attendance_affected > 0)) {
+      const parts = [];
+      if (data.exam_affected > 0) parts.push(`${data.exam_affected} exam(s)`);
+      if (data.assignment_affected > 0) parts.push(`${data.assignment_affected} assignment(s)`);
+      if (data.attendance_affected > 0) parts.push(`${data.attendance_affected} attendance record(s)`);
+      if (parts.length > 0) {
+        successMessage = `Lesson deleted successfully. Also removed: ${parts.join(", ")}.`;
+      }
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: successMessage,
+    };
+  } catch (error) {
+    console.error("Error deleting lesson:", error);
+    return {
+      success: false,
+      error: true,
+      message: "An unexpected error occurred while deleting lesson",
+    };
+  }
 }
 
 // Exam actions

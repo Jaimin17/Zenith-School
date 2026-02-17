@@ -606,6 +606,15 @@ export const UPDATE_STUDENT_API: ApiType = {
     isForm: false,
 }
 
+export const DELETE_STUDENT_API: ApiType = {
+    url: apiUrls.DELETE_STUDENT_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
 export const SAVE_PARENT_API: ApiType = {
     url: apiUrls.SAVE_PARENT_URL,
     method: "POST",
@@ -620,6 +629,15 @@ export const UPDATE_PARENT_API: ApiType = {
     method: "PUT",
     withToken: true,
     isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const DELETE_PARENT_API: ApiType = {
+    url: apiUrls.DELETE_PARENT_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
     showToast: true,
     isForm: false,
 }
@@ -642,6 +660,15 @@ export const UPDATE_SUBJECT_API: ApiType = {
     isForm: false,
 }
 
+export const DELETE_SUBJECT_API: ApiType = {
+    url: apiUrls.DELETE_SUBJECT_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
 export const SAVE_CLASS_API: ApiType = {
     url: apiUrls.SAVE_CLASS_URL,
     method: "POST",
@@ -660,6 +687,15 @@ export const UPDATE_CLASS_API: ApiType = {
     isForm: false,
 }
 
+export const DELETE_CLASS_API: ApiType = {
+    url: apiUrls.DELETE_CLASS_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
 export const SAVE_LESSON_API: ApiType = {
     url: apiUrls.SAVE_LESSON_URL,
     method: "POST",
@@ -674,6 +710,15 @@ export const UPDATE_LESSON_API: ApiType = {
     method: "PUT",
     withToken: true,
     isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const DELETE_LESSON_API: ApiType = {
+    url: apiUrls.DELETE_LESSON_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
     showToast: true,
     isForm: false,
 }

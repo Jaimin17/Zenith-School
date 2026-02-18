@@ -21,6 +21,8 @@ export const apiUrls = {
 
     UPDATE_ANNOUNCEMENT_URL: "api/v1/announcements/update",
 
+    DELETE_ANNOUNCEMENT_URL: "api/v1/announcements/delete",
+
     GET_ASSIGNMENT_URL: "api/v1/assignments/getAll",
 
     GET_ASSIGNMENTS_OF_TEACHER_URL: "api/v1/assignments/teacher",
@@ -94,6 +96,8 @@ export const apiUrls = {
 
     UPDATE_EVENT_URL: "api/v1/events/update",
 
+    DELETE_EVENT_URL: "api/v1/events/delete",
+
     GET_EXAMS_URL: "api/v1/exam/getAll",
 
     GET_EXAMS_TEACHER_URL: "api/v1/exam/teacher",
@@ -162,6 +166,8 @@ export const apiUrls = {
 
     UPDATE_EXAM_URL: "api/v1/exam/update",
 
+    DELETE_EXAM_URL: "api/v1/exam/delete",
+
     SAVE_ASSIGNMENT_URL: "api/v1/assignments/save",
 
     UPDATE_ASSIGNMENT_URL: "api/v1/assignments/update",
@@ -173,4 +179,6 @@ export const apiUrls = {
     SAVE_RESULT_URL: "api/v1/results/save",
 
     UPDATE_RESULT_URL: "api/v1/results/update",
+
+    DELETE_RESULT_URL: "api/v1/results/delete",
 }

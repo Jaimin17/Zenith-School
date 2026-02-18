@@ -229,9 +229,9 @@ const FormModal = ({
   data,
   id,
   relatedData,
+  disabled,
 }: FormContainerProps & { relatedData?: any }) => {
   const [open, setOpen] = useState(false);
-
 
   // Button styles based on type
   const getButtonStyles = () => {
@@ -408,9 +408,10 @@ const FormModal = ({
     <>
       {/* Trigger Button */}
       <button
-        className={`${type === "create" ? "w-9 h-9" : "w-8 h-8"} flex items-center justify-center rounded-full ${getButtonStyles()} transition-all duration-200 hover:scale-105 active:scale-95`}
+        className={`${type === "create" ? "w-9 h-9" : "w-8 h-8"} flex items-center justify-center rounded-full ${getButtonStyles()} transition-all duration-200 ${disabled ? "opacity-50 cursor-not-allowed" : "hover:scale-105 active:scale-95"}`}
         onClick={() => setOpen(true)}
         title={`${type.charAt(0).toUpperCase() + type.slice(1)} ${table}`}
+        disabled={disabled}
       >
         {getButtonIcon()}
       </button>

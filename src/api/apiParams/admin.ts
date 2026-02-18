@@ -64,6 +64,15 @@ export const UPDATE_ANNOUNCEMENT_API: ApiType = {
     isForm: false,
 }
 
+export const DELETE_ANNOUNCEMENT_API: ApiType = {
+    url: apiUrls.DELETE_ANNOUNCEMENT_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
 export const ASSIGNMENT_API: ApiType = {
     url: apiUrls.GET_ASSIGNMENT_URL,
     method: "GET",
@@ -252,6 +261,15 @@ export const UPDATE_EVENT_API: ApiType = {
     withToken: true,
     isMultipart: true,
     showToast: false,
+    isForm: false,
+}
+
+export const DELETE_EVENT_API: ApiType = {
+    url: apiUrls.DELETE_EVENT_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
     isForm: false,
 }
 
@@ -741,6 +759,15 @@ export const UPDATE_EXAM_API: ApiType = {
     isForm: false,
 }
 
+export const DELETE_EXAM_API: ApiType = {
+    url: apiUrls.DELETE_EXAM_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
 export const SAVE_ASSIGNMENT_API: ApiType = {
     url: apiUrls.SAVE_ASSIGNMENT_URL,
     method: "POST",
@@ -782,6 +809,15 @@ export const UPDATE_RESULT_API: ApiType = {
     method: "PUT",
     withToken: true,
     isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const DELETE_RESULT_API: ApiType = {
+    url: apiUrls.DELETE_RESULT_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
     showToast: true,
     isForm: false,
 }

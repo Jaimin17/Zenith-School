@@ -147,8 +147,8 @@ const EventListPage = async ({
         <div className="flex items-center gap-2">
           {role === "admin" && (
             <>
-              <FormContainer table="event" type="update" data={item} />
-              <FormContainer table="event" type="delete" id={item.id} />
+              <FormContainer table="event" type="update" data={item} disabled={new Date(item.start_time) < new Date()} />
+              <FormContainer table="event" type="delete" id={item.id} disabled={new Date(item.start_time) < new Date()} />
             </>
           )}
         </div>

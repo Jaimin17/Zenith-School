@@ -241,8 +241,8 @@ const AssignmentsPage = async ({
         <div className="flex items-center gap-2">
           {role === "admin" && (
             <>
-              <FormContainer table="assignment" type="update" data={item} />
-              <FormContainer table="assignment" type="delete" id={item.id} />
+              <FormContainer table="assignment" type="update" data={item} disabled={isOverdue(item.due_date)} />
+              <FormContainer table="assignment" type="delete" id={item.id} disabled={isOverdue(item.due_date)} />
             </>
           )}
         </div>

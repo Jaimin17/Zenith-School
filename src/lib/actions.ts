@@ -1,7 +1,7 @@
 "use server";
 
 import { api } from "@/api/api";
-import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, DELETE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API, SAVE_EVENT_API, UPDATE_EVENT_API, SAVE_ANNOUNCEMENT_API, UPDATE_ANNOUNCEMENT_API, DELETE_STUDENT_API, DELETE_PARENT_API, DELETE_SUBJECT_API, DELETE_CLASS_API } from "@/api/apiParams/admin";
+import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, DELETE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, DELETE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, DELETE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API, SAVE_EVENT_API, UPDATE_EVENT_API, SAVE_ANNOUNCEMENT_API, UPDATE_ANNOUNCEMENT_API, DELETE_STUDENT_API, DELETE_PARENT_API, DELETE_SUBJECT_API, DELETE_CLASS_API, DELETE_RESULT_API, DELETE_EVENT_API, DELETE_ANNOUNCEMENT_API } from "@/api/apiParams/admin";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN } from "@/constants/appConstants";
 
@@ -1036,9 +1036,69 @@ export async function updateExam(formData: FormDataType): Promise<FormState> {
 }
 
 export async function deleteExam(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Deleting exam:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    if (!token) {
+      return {
+        success: false,
+        error: true,
+        message: "Unauthorized: No authentication token found",
+      };
+    }
+
+    // Extract ID from FormData object properly
+    const examId = formData instanceof FormData 
+      ? formData.get("id") 
+      : (formData as any).id;
+
+    if (!examId) {
+      return {
+        success: false,
+        error: true,
+        message: "Exam ID is required",
+      };
+    }
+
+    console.log("Initiating exam delete with ID:", examId);
+
+    // For DELETE requests, pass the ID as a query parameter
+    const deleteApiWithId = {
+      ...DELETE_EXAM_API,
+      url: `${DELETE_EXAM_API.url}?id=${examId}`,
+    };
+
+    const response = await api({
+      endpoint: deleteApiWithId,
+      payloadData: null,
+      serverToken: token,
+      isServer: true,
+    });
+
+    console.log("Delete exam result:", response);
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete exam",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Exam deleted successfully",
+    };
+  } catch (error) {
+    console.error("Error deleting exam:", error);
+    return {
+      success: false,
+      error: true,
+      message: "An unexpected error occurred while deleting exam",
+    };
+  }
 }
 
 // Announcement actions
@@ -1143,9 +1203,41 @@ export async function updateAnnouncement(formData: FormData): Promise<FormState>
 }
 
 export async function deleteAnnouncement(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Deleting announcement:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const id = formData.get("id") as string;
+    console.log("Deleting announcement with ID:", id);
+
+    const response = await api({
+      endpoint: {
+        ...DELETE_ANNOUNCEMENT_API,
+        url: `${DELETE_ANNOUNCEMENT_API.url}?id=${id}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    console.log("Delete announcement response:", response);
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete announcement",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Announcement deleted successfully",
+    };
+  } catch (error) {
+    console.error("Delete announcement error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
 // Event actions
@@ -1254,9 +1346,41 @@ export async function updateEvent(formData: FormData): Promise<FormState> {
 }
 
 export async function deleteEvent(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Deleting event:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const id = formData.get("id") as string;
+    console.log("Deleting event with ID:", id);
+
+    const response = await api({
+      endpoint: {
+        ...DELETE_EVENT_API,
+        url: `${DELETE_EVENT_API.url}?id=${id}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    console.log("Delete event response:", response);
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete event",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Event deleted successfully",
+    };
+  } catch (error) {
+    console.error("Delete event error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
 // Assignment actions
@@ -1342,9 +1466,41 @@ export async function updateAssignment(formData: FormDataType): Promise<FormStat
 }
 
 export async function deleteAssignment(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Deleting assignment:", formData);
-  return { success: true, error: false };
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const id = formData.get("id") as string;
+    console.log("Deleting assignment with ID:", id);
+
+    const response = await api({
+      endpoint: {
+        ...DELETE_ASSIGNMENT_API,
+        url: `${DELETE_ASSIGNMENT_API.url}?id=${id}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    console.log("Delete assignment response:", response);
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete assignment",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Assignment deleted successfully",
+    };
+  } catch (error) {
+    console.error("Delete assignment error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }
 
 // Result actions
@@ -1430,7 +1586,39 @@ export async function updateResult(formData: FormDataType): Promise<FormState> {
 }
 
 export async function deleteResult(formData: FormData): Promise<FormState> {
-  // TODO: Implement actual API call
-  console.log("Deleting result:", formData);
-  return { success: true, error: false };
+    try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const id = formData.get("id") as string;
+    console.log("Deleting result with ID:", id);
+
+    const response = await api({
+      endpoint: {
+        ...DELETE_RESULT_API,
+        url: `${DELETE_RESULT_API.url}?id=${id}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    console.log("Delete result response:", response);
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete result",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Result deleted successfully",
+    };
+  } catch (error) {
+    console.error("Delete result error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
 }

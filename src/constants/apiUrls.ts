@@ -7,6 +7,8 @@ export const apiUrls = {
 
     UPDATE_PROFILE_URL: "api/v1/auth/updateProfile",
 
+    UPDATE_PROFILE_IMAGE_URL: "api/v1/auth/updateProfilePicture",
+
     CHANGE_PASSWORD_URL: "api/v1/auth/changePassword",
 
     GET_USER_COUNT_URL: "api/v1/admin/allUsersCount",

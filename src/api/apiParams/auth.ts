@@ -74,8 +74,16 @@ export const UPDATE_PROFILE_API: ApiType = {
   url: apiUrls.UPDATE_PROFILE_URL,
   method: 'PUT',
   withToken: true,
-  isMultipart: true,
+  isForm: true,
   showToast: false
+}
+
+export const UPDATE_PROFILE_PICTURE_API: ApiType = {
+  url: apiUrls.UPDATE_PROFILE_IMAGE_URL,
+  method: 'POST',
+  withToken: true,
+  showToast: false,
+  isForm: true,
 }
 
 // Change Password API
@@ -83,7 +91,7 @@ export const CHANGE_PASSWORD_API: ApiType = {
   url: apiUrls.CHANGE_PASSWORD_URL,
   method: 'POST',
   withToken: true,
-  isMultipart: false,
+  isForm: true,
   showToast: false
 }
 

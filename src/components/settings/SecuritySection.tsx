@@ -5,6 +5,8 @@ import { Lock, Eye, EyeOff, Loader, LogIn } from "lucide-react";
 import { api } from "@/api/api";
 import { CHANGE_PASSWORD_API } from "@/api/apiParams/auth";
 import { toast } from "sonner";
+import { ChangeUserPasswordRequest } from "@/types/schemas";
+import { changeUserPassword } from "@/actions/admin";
 
 interface PasswordStrength {
   score: number;
@@ -77,24 +79,25 @@ const SecuritySection = () => {
       return;
     }
 
+    const payloadData: ChangeUserPasswordRequest = {
+      old_password: currentPassword,
+      new_password: newPassword,
+      confirm_password: confirmPassword,
+    }
+
+    console.log("Changing password with payload:", payloadData);
+
     setLoading(true);
     try {
-      const response = await api({
-        endpoint: CHANGE_PASSWORD_API,
-        payloadData: {
-          old_password: currentPassword,
-          new_password: newPassword,
-          confirm_password: confirmPassword,
-        },
-      });
+      const response = await changeUserPassword(payloadData); 
 
       if (!response.error && response.data) {
-        toast.success(response.message || "Password changed successfully");
+        toast.success(response.data || "Password changed successfully");
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
       } else {
-        toast.error(response.message || "Failed to change password");
+        toast.error(response.data || "Failed to change password");
       }
     } catch (error) {
       console.error("Error changing password:", error);
@@ -228,7 +231,9 @@ const SecuritySection = () => {
         <button
           onClick={handleChangePassword}
           disabled={loading || !currentPassword || !newPassword || !confirmPassword}
-          className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 transition-colors flex items-center gap-2"
+          className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 transition-colors flex items-center gap-2" style={{
+            marginTop: 15,
+          }}
         >
           {loading && <Loader className="w-4 h-4 animate-spin" />}
           {loading ? "Updating..." : "Update Password"}

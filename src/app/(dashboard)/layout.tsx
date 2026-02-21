@@ -5,6 +5,7 @@ import AuthGuard from "../../hocs/AuthGuard";
 import Image from "next/image";
 import Link from "next/link";
 import { JSX, ReactNode } from "react";
+import { Toaster } from "sonner";
 
 interface DashboardLayoutProps {
     children: ReactNode;
@@ -14,6 +15,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     return (
         <AuthGuard>
             <AdminProvider>
+                <Toaster position="top-right" richColors />
                 <div className="h-screen flex">
                     {/* LEFT */}
                     <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4 overflow-y-auto">

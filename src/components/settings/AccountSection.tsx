@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useAuth } from "@/contexts/authContext";
-import { fetchUserProfileAction } from "@/actions/admin";
+import { fetchUserProfileAction, updateProfileDetails, updateProfilePictureDetails } from "@/actions/admin";
 import { getTeacherImageUrl, getStudentImageUrl } from "@/utils/imageHelpers";
 import { api } from "@/api/api";
 import { UPDATE_PROFILE_API } from "@/api/apiParams/auth";
@@ -61,19 +61,18 @@ const AccountSection = () => {
   const handleSaveProfile = async () => {
     setLoading(true);
     try {
-      const response = await api({
-        endpoint: UPDATE_PROFILE_API,
-        payloadData: formData,
-      });
+      const response = await updateProfileDetails(formData);
+
+      console.log("Update profile response:", response);
 
       if (!response.error && response.data) {
-        toast.success(response.message || "Profile updated successfully");
+        toast.success(response.data || "Profile updated successfully");
         const result = await fetchUserProfileAction();
         if (result.success && result.data) {
           setProfile(result.data);
         }
       } else {
-        toast.error(response.message || "Failed to update profile");
+        toast.error(response.data || "Failed to update profile");
       }
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -102,25 +101,26 @@ const AccountSection = () => {
     setUploading(true);
     try {
       const uploadFormData = new FormData();
-      uploadFormData.append("img", file);
+      uploadFormData.append("file", file); // Backend expects 'file' as the field name
 
-      const response = await api({
-        endpoint: UPDATE_PROFILE_API,
-        payloadData: uploadFormData,
-      });
+      const response = await updateProfilePictureDetails(uploadFormData);
 
       if (!response.error && response.data) {
-        toast.success(response.message || "Profile picture updated successfully");
+        toast.success(response.data || "Profile picture updated successfully");
         const result = await fetchUserProfileAction();
         if (result.success && result.data) {
           setProfile(result.data);
         }
       } else {
-        toast.error(response.message || "Failed to update profile picture");
+        toast.error(response.error ? response.error : (response.data || "Failed to update profile picture"));
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error uploading profile picture:", error);
-      toast.error("An error occurred while uploading profile picture");
+      if (error?.response?.data?.detail) {
+        toast.error(error.response.data.detail);
+      } else {
+        toast.error("An error occurred while uploading profile picture");
+      }
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
@@ -311,7 +311,9 @@ const AccountSection = () => {
           <button
             onClick={handleSaveProfile}
             disabled={loading}
-            className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 transition-colors flex items-center gap-2"
+            className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 transition-colors flex items-center gap-2" style={{
+              marginTop: 15
+            }}
           >
             {loading && <Loader className="w-4 h-4 animate-spin" />}
             {loading ? "Saving..." : "Save Changes"}

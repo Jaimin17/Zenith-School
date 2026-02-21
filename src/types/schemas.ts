@@ -6,6 +6,20 @@ interface PaginationListResponse {
     has_prev: boolean,
 }
 
+export interface ChangeUserPasswordRequest {
+    old_password: string,
+    new_password: string,
+    confirm_password: string
+}
+
+export interface UpdateProfileRequest {
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone: string,
+    address: string,
+}
+
 export interface StudentCount {
     boys: number;
     girls: number;

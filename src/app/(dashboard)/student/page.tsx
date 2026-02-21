@@ -12,7 +12,7 @@ interface ClassBase {
 
 // Loading components
 const CalendarSkeleton = () => (
-    <div className="h-full bg-white p-4 rounded-md animate-pulse">
+    <div className="h-full bg-white p-4 rounded-md">
         <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
         <div className="h-96 bg-gray-100 rounded"></div>
     </div>
@@ -20,10 +20,10 @@ const CalendarSkeleton = () => (
 
 const SidebarSkeleton = () => (
     <div className="w-full xl:w-1/3 flex flex-col gap-8">
-        <div className="bg-white p-4 rounded-md animate-pulse">
+        <div className="bg-white p-4 rounded-md">
             <div className="h-64 bg-gray-100 rounded"></div>
         </div>
-        <div className="bg-white p-4 rounded-md animate-pulse">
+        <div className="bg-white p-4 rounded-md">
             <div className="h-32 bg-gray-100 rounded"></div>
         </div>
     </div>

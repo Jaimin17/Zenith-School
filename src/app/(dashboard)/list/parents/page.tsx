@@ -13,7 +13,7 @@ import { Eye, UserCircle, Users } from "lucide-react";
 
 // Skeleton Component
 const TableSkeleton = () => (
-  <div className="animate-pulse">
+  <div>
     <div className="space-y-3 mt-4">
       {[1, 2, 3, 4, 5].map((i) => (
         <div key={i} className="flex gap-4 p-4 border-b border-gray-200">

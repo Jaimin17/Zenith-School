@@ -142,57 +142,44 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           endpoint: LOGIN_API,
           payloadData: payload
         })
-        // Response structure
-        const res2 = {
-          data: {
-            access_token: '',
-            refresh_token: '',
-            role: '',
-            token_type: '',
-            user: {
-              id: '',
-              username: ''
-            }
 
-          },
-          error: '',
-          message: '',
-          status: ''
-        }
         if (response?.error) {
           return false
         }
 
-        const tokens = {
-          accessToken: response?.data?.access_token,
-          refreshToken: response?.data?.refresh_token
+        const d = response?.data
+        const accessToken = d?.access_token ?? d?.accessToken ?? d?.token
+        const refreshToken = d?.refresh_token ?? d?.refreshToken ?? ''
+
+        if (!accessToken) {
+          return false
         }
 
-
-        const userData = response?.data?.user
+        const userData = d?.user ?? { id: d?.user_id, username }
 
         if (userData) {
           setUser(userData)
-          setRole(response?.data?.role)
+          setRole(d?.role ?? null)
           createCookie('USER', JSON.stringify(userData), { path: '/' })
-          createCookie('ROLE', response?.data?.role, { path: '/' })
+          createCookie('ROLE', d?.role ?? '', { path: '/' })
         }
 
-        setAuthTokens(tokens.accessToken, tokens.refreshToken)
+        setAuthTokens(accessToken, refreshToken)
 
-        if (response.data?.role === USER_ROLES.ADMIN) {
+        const role = d?.role
+        if (role === USER_ROLES.ADMIN) {
           router.push('/admin')
-        } else if (response.data?.role === USER_ROLES.TEACHER) {
+        } else if (role === USER_ROLES.TEACHER) {
           router.push('/teacher')
-        } else if (response.data?.role === USER_ROLES.PARENT) {
+        } else if (role === USER_ROLES.PARENT) {
           router.push('/parent')
-        } else if (response.data?.role === USER_ROLES.STUDENT) {
+        } else if (role === USER_ROLES.STUDENT) {
           router.push('/student')
         } else {
           router.push('/')
         }
 
-        return userData ?? false
+        return userData ?? true
       } catch (error) {
         // Login failed
         return false

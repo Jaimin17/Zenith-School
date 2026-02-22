@@ -840,6 +840,12 @@ label {
 11. Header top css
 ======================*/
 
+/* Header wrapper: stacking and no overlap with content */
+.header {
+  position: relative;
+  z-index: 100;
+}
+
 .header-top {
   padding: 9px 0 10px 0;
   position: relative;
@@ -862,19 +868,23 @@ label {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .header-top-contact ul {
   display: flex;
   align-items: center;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 12px 20px;
 }
 
 .header-top-contact ul li{
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 6px;
   border-right: 1px solid rgba(255, 255, 255, .2);
-  padding-right: 20px;
+  padding-right: 16px;
 }
 
 .header-top-contact ul li:last-child{
@@ -885,11 +895,40 @@ label {
 .header-top-contact ul li a {
   color: var(--color-white);
   font-weight: 400;
+  white-space: nowrap;
 }
 
 .header-top-contact ul li a i{
   color: var(--theme-color2);
   margin-right: 5px;
+  flex-shrink: 0;
+}
+
+/* Login button in top bar */
+.header-login-btn {
+  background: #1976d2 !important;
+  color: white !important;
+  padding: 6px 16px !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  transition: background 0.2s ease !important;
+}
+.header-login-btn:hover {
+  background: #1565c0 !important;
+  color: white !important;
+}
+
+.header-top-social {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.header-top-social .header-top-follow{
+  color: var(--color-white);
+  font-weight: 500;
+  margin-right: 2px;
 }
 
 .header-top-social span{
@@ -905,32 +944,116 @@ label {
   font-size: 16px;
   background: var(--theme-color);
   text-align: center;
-  margin-left: 5px;
   border-radius: 50px;
   transition: all .5s ease-in-out;
+  flex-shrink: 0;
 }
 
 .header-top-social a:hover {
   color: var(--theme-color2);
 }
 
-
+/* Tablet: tighter spacing */
 @media all and (max-width: 1199px) {
+  .header-top-wrap {
+    gap: 8px;
+  }
+
   .header-top-contact ul{
-    gap: 10px;
+    gap: 8px 14px;
+  }
+
+  .header-top-contact ul li {
+    padding-right: 12px;
+  }
+
+  .header-top-contact ul li a {
+    font-size: 0.9rem;
   }
 
   .header-top-social a{
-    width: 34px;
-    height: 34px;
-    line-height: 37px;
-    margin-left: 0;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    font-size: 14px;
   }
 }
 
-@media all and (max-width: 992px) {
+/* Small screens: stack top bar into two rows, single address line */
+@media all and (max-width: 991px) {
   .header-top {
+    display: block;
+    padding: 10px 0 12px 0;
+  }
+
+  .header-top::before {
+    width: 100%;
+    height: 50%;
+    top: 0;
+    bottom: auto;
+  }
+
+  .header-top-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .header-top-left {
+    order: 1;
+  }
+
+  .header-top-right {
+    order: 2;
+  }
+
+  .header-top-social {
+    justify-content: center;
+  }
+
+  .header-top-contact ul {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+  }
+
+  .header-top-contact ul li {
+    border-right: none;
+    padding-right: 0;
+    padding: 0 8px;
+    border-right: 1px solid rgba(255, 255, 255, .2);
+  }
+
+  .header-top-contact ul li:last-child {
+    border-right: none;
+  }
+
+  .header-top-contact ul li a {
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .header-top-phone a {
+    white-space: nowrap;
+  }
+}
+
+/* Extra small: hide address/email/phone text, keep icons + Login + social */
+@media all and (max-width: 576px) {
+  .header-top-contact ul {
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .header-top-addr,
+  .header-top-email,
+  .header-top-phone {
     display: none;
+  }
+
+  .header-top-login {
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -2230,11 +2353,12 @@ label {
 
 .feature-area {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
+/* Pull feature cards up into slider area but not under header (was -150px) */
 .fa-negative{
-  margin-top: -150px;
+  margin-top: -80px;
   margin-right: 20px;
 }
 
@@ -2298,12 +2422,20 @@ label {
 
 @media all and (max-width: 1199px) {
   .fa-negative {
-    margin-top: -50px;
+    margin-top: -40px;
     margin-left: 20px;
   }
 
   .feature-item.active::before{
     transform: scale(1);
+  }
+}
+
+@media all and (max-width: 576px) {
+  .fa-negative {
+    margin-top: -24px;
+    margin-right: 0;
+    margin-left: 0;
   }
 }
 

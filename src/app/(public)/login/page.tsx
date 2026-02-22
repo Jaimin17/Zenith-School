@@ -9,14 +9,9 @@ import {
   Button,
   Box,
   CircularProgress,
+  LinearProgress,
 } from "@mui/material";
 import { useAuth } from "@/contexts/authContext";
-
-const useMockRouter = () => ({
-  push: (path: string) => {
-    console.log(`Navigation requested to: ${path}. (Mocked navigation)`);
-  }
-});
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState<string>("");
@@ -25,23 +20,26 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { login } = useAuth();
 
-  const router = useMockRouter();
-
   const handleLogin = async (): Promise<void> => {
     setMsg("");
-    setLoading(true);
-
-    if (!username || !password) {
+    if (!username?.trim() || !password) {
       setMsg("Please enter both username and password.");
-      setLoading(false);
       return;
     }
 
-    await new Promise(resolve => setTimeout(resolve, 800));
+    setLoading(true);
 
-    await login(username, password);
+    // Let the loading UI paint before starting the API call
+    await new Promise((r) => setTimeout(r, 0));
 
-    setLoading(false);
+    try {
+      const success = await login(username.trim(), password);
+      if (!success) {
+        setMsg("Login failed. Check your username and password, or try again later.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const isSuccess = msg.includes("successful");
@@ -51,28 +49,69 @@ const LoginPage: React.FC = () => {
       <Container maxWidth="xs">
         <Paper
           elevation={12}
-          className="p-8 sm:p-10 rounded-2xl transition-shadow duration-300 hover:shadow-xl"
+          className="p-8 sm:p-10 rounded-2xl transition-shadow duration-300 hover:shadow-xl relative overflow-hidden"
           style={{
-            backgroundColor: '#ffffff',
-            border: '1px solid #e0e0e0',
+            backgroundColor: "#ffffff",
+            border: "1px solid #e0e0e0",
           }}
         >
+          {/* Top loading bar - visible as soon as loading starts */}
+          {loading && (
+            <LinearProgress
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 4,
+                "& .MuiLinearProgress-bar": {
+                  animationDuration: "1.5s",
+                },
+              }}
+            />
+          )}
+
+          {/* Overlay when logging in */}
+          {loading && (
+            <Box
+              sx={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                bgcolor: "rgba(255,255,255,0.92)",
+                zIndex: 10,
+                borderRadius: "inherit",
+              }}
+            >
+              <CircularProgress size={48} thickness={4} sx={{ mb: 2 }} />
+              <Typography variant="body1" fontWeight={600} color="text.secondary">
+                Logging you in...
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                Please wait
+              </Typography>
+            </Box>
+          )}
+
           <Typography
             variant="h4"
             component="h1"
             align="center"
             className="font-extrabold text-gray-800 mb-8"
-            style={{ color: '#1a202c' }}
+            style={{ color: "#1a202c" }}
           >
             Login
           </Typography>
 
-          <Box 
-            component="form" 
-            className="flex flex-col gap-6" 
-            onSubmit={(e: React.FormEvent) => { 
-              e.preventDefault(); 
-              handleLogin(); 
+          <Box
+            component="form"
+            className="flex flex-col gap-6"
+            onSubmit={(e: React.FormEvent) => {
+              e.preventDefault();
+              handleLogin();
             }}
           >
             <TextField
@@ -119,13 +158,13 @@ const LoginPage: React.FC = () => {
               disabled={loading}
               className="mt-2 py-3 rounded-xl font-bold transition-all duration-200"
               style={{
-                backgroundColor: loading ? '#90CAF9' : '#1976D2',
+                backgroundColor: loading ? "#90CAF9" : "#1976D2",
               }}
             >
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
-                'Log In'
+                "Log In"
               )}
             </Button>
           </Box>

@@ -151,7 +151,13 @@ const homeRouteMap: Record<UserRole, string> = {
   parent: "/parent",
 };
 
-const Menu: React.FC = () => {
+interface MenuProps {
+  onNavigate?: () => void;
+  /** When true, always show labels (e.g. in mobile drawer) */
+  showLabels?: boolean;
+}
+
+const Menu: React.FC<MenuProps> = ({ onNavigate, showLabels = false }) => {
   const { role, logout, loading } = useAuth();
   const pathname = usePathname();
 
@@ -162,7 +168,8 @@ const Menu: React.FC = () => {
 
   const isActive = (itemLabel: string, itemHref: string): boolean => {
     const href = itemLabel === "Home" ? homeHref : itemHref;
-    return pathname === href || pathname.startsWith(href + "/");
+    if (pathname === href) return true;
+    return pathname.startsWith(href + "/");
   };
 
   const handleLogout = async () => {
@@ -174,14 +181,22 @@ const Menu: React.FC = () => {
   };
 
   return (
-    <Box mt={2} fontSize="14px">
+    <Box sx={{ mt: 2, fontSize: "14px", flex: 1, overflowY: "auto", minHeight: 0 }}>
       {menuItems.map((section) => (
-        <Box key={section.title} display="flex" flexDirection="column" gap={1}>
+        <Box key={section.title} sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
           {/* SECTION TITLE */}
           <Typography
             variant="body2"
-            color="gray"
-            sx={{ display: { xs: "none", lg: "block" }, mt: 2, mb: 1 }}
+            sx={{
+              display: showLabels ? "block" : { xs: "none", lg: "block" },
+              mt: 2,
+              mb: 0.5,
+              px: 2,
+              fontWeight: 600,
+              color: "text.secondary",
+              letterSpacing: "0.08em",
+              fontSize: "0.7rem",
+            }}
           >
             {section.title}
           </Typography>
@@ -198,21 +213,24 @@ const Menu: React.FC = () => {
                 return (
                   <ListItem key={item.label} disablePadding>
                     <ListItemButton
-                      onClick={handleLogout}
+                      onClick={() => {
+                        onNavigate?.();
+                        handleLogout();
+                      }}
                       disabled={loading}
                       sx={{
-                        borderRadius: "8px",
+                        borderRadius: "10px",
                         px: 2,
-                        py: 1,
+                        py: 1.25,
                         backgroundColor: "transparent",
-                        color: "gray",
+                        color: "text.secondary",
                         "&:hover": {
-                          backgroundColor: "rgba(0, 150, 255, 0.1)",
+                          backgroundColor: "action.hover",
                         },
                         transition: "all 0.2s ease",
                       }}
                     >
-                      <ListItemIcon sx={{ minWidth: 32, color: "inherit" }}>
+                      <ListItemIcon sx={{ minWidth: 36, color: "inherit" }}>
                         <Image
                           src={item.icon}
                           alt={item.label}
@@ -224,8 +242,9 @@ const Menu: React.FC = () => {
                       <ListItemText
                         primary={loading ? "Logging out..." : item.label}
                         sx={{
-                          display: { xs: "none", lg: "block" },
+                          display: showLabels ? "block" : { xs: "none", lg: "block" },
                           color: "inherit",
+                          "& .MuiListItemText-primary": { fontWeight: 500 },
                         }}
                       />
                     </ListItemButton>
@@ -238,19 +257,21 @@ const Menu: React.FC = () => {
                   <ListItemButton
                     component={Link}
                     href={href}
+                    onClick={onNavigate}
                     sx={{
-                      borderRadius: "8px",
+                      borderRadius: "10px",
                       px: 2,
-                      py: 1,
-                      backgroundColor: active ? "rgba(0, 150, 255, 0.2)" : "transparent",
-                      color: active ? "#0096FF" : "gray",
+                      py: 1.25,
+                      backgroundColor: active ? "rgba(0, 150, 255, 0.12)" : "transparent",
+                      color: active ? "#0096FF" : "text.secondary",
                       "&:hover": {
-                        backgroundColor: active ? "rgba(0, 150, 255, 0.2)" : "rgba(0, 150, 255, 0.1)",
+                        backgroundColor: active ? "rgba(0, 150, 255, 0.18)" : "rgba(0, 150, 255, 0.08)",
+                        color: active ? "#0096FF" : "#0096FF",
                       },
                       transition: "all 0.2s ease",
                     }}
                   >
-                    <ListItemIcon sx={{ minWidth: 32, color: "inherit" }}>
+                    <ListItemIcon sx={{ minWidth: 36, color: "inherit" }}>
                       <Image
                         src={item.icon}
                         alt={item.label}
@@ -262,8 +283,9 @@ const Menu: React.FC = () => {
                     <ListItemText
                       primary={item.label}
                       sx={{
-                        display: { xs: "none", lg: "block" },
+                        display: showLabels ? "block" : { xs: "none", lg: "block" },
                         color: "inherit",
+                        "& .MuiListItemText-primary": { fontWeight: 500 },
                       }}
                     />
                   </ListItemButton>

@@ -61,36 +61,36 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <div className="header">
+      <div className="header" id="site-header">
         <div className="header-top">
           <div className="container">
             <div className="header-top-wrap">
               <div className="header-top-left">
                 <div className="header-top-social">
-                  <span>Follow Us: </span>
-                  <Link href="#"><i className="fab fa-facebook-f"></i></Link>
-                  <Link href="#"><i className="fab fa-instagram"></i></Link>
-                  <Link href="#"><i className="fab fa-youtube"></i></Link>
-                  <Link href="#"><i className="fab fa-whatsapp"></i></Link>
+                  <span className="header-top-follow">Follow Us: </span>
+                  <Link href="#" aria-label="Facebook"><i className="fab fa-facebook-f"></i></Link>
+                  <Link href="#" aria-label="Instagram"><i className="fab fa-instagram"></i></Link>
+                  <Link href="#" aria-label="YouTube"><i className="fab fa-youtube"></i></Link>
+                  <Link href="#" aria-label="WhatsApp"><i className="fab fa-whatsapp"></i></Link>
                 </div>
               </div>
 
               <div className="header-top-right">
                 <div className="header-top-contact">
                   <ul>
-                    <li>
+                    <li className="header-top-addr">
                       <Link href="#"><i className="far fa-location-dot"></i> 25/B Milford Road, New York</Link>
                     </li>
-                    <li>
+                    <li className="header-top-email">
                       <Link href="mailto:info@zenithschool.edu"><i className="far fa-envelopes"></i> info@zenithschool.edu</Link>
                     </li>
-                    <li>
+                    <li className="header-top-phone">
                       <Link href="tel:+21236547898"><i className="far fa-phone-volume"></i> +2 123 654 7898</Link>
                     </li>
-                    <li>
+                    <li className="header-top-login">
                       <Link
                         href="/login"
-                        className="bg-primary text-white px-4 py-1 rounded-md hover:bg-primary/90"
+                        className="header-login-btn"
                       >
                         Login
                       </Link>

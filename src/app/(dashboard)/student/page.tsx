@@ -5,6 +5,8 @@ import BigCalendarContainer from "../../../components/FromAnother/BigCalendarCon
 import EventCalendarContainer from "@/components/FromAnother/EventCalendarContainer";
 import { AnnouncementListResponse } from "@/types/schemas";
 
+export const dynamic = "force-dynamic";
+
 interface ClassBase {
     id: string;
     name: string;

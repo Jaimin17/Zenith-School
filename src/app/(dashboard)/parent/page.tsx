@@ -8,6 +8,8 @@ import BigCalendarContainer from "../../../components/FromAnother/BigCalendarCon
 import { Announcement, StudentWithRelations, Lesson, AnnouncementListResponse, StudentListResponse } from "@/types/schemas";
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 // Skeleton Components
 const BigCalendarSkeleton = () => (
     <div className="bg-white p-4 rounded-md animate-pulse">

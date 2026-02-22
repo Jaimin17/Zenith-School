@@ -11,6 +11,8 @@ import type { UserStat } from "../../../components/FromAnother/UserCard";
 import { fetchUserCountsAction, fetchAnnouncementsAction } from "@/actions/admin";
 import { AnnouncementListResponse } from "@/types/schemas";
 
+export const dynamic = "force-dynamic";
+
 const AdminPage = async () => {
   // Fetch data on server in parallel
   const [userCountsResult, announcementsResult] = await Promise.all([

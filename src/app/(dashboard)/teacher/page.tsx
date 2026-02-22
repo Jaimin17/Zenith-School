@@ -5,6 +5,8 @@ import { fetchAnnouncementsAction, fetchLessonsWeeklyAction } from "@/actions/ad
 import { Alert, Box } from "@mui/material";
 import { AnnouncementListResponse } from "@/types/schemas";
 
+export const dynamic = "force-dynamic";
+
 const TeacherPage = async () => {
     // Fetch data in parallel on the server
     const [announcementsResult, lessonsResult] = await Promise.all([

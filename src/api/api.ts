@@ -375,11 +375,22 @@ export const api = async <T = any>({
     const headers = createRequestHeaders(isMultipart, isForm, token)
     const requestUrl = buildRequestUrl(baseUrl, url, id, params)
 
+    // For form-urlencoded, send body as URLSearchParams so backend receives correct format
+    let requestData: any = method !== 'GET' && payloadData ? payloadData : undefined
+    if (requestData && isForm && typeof payloadData === 'object' && !(payloadData instanceof URLSearchParams)) {
+      requestData = new URLSearchParams(
+        Object.entries(payloadData).reduce((acc, [k, v]) => {
+          acc[k] = v != null ? String(v) : ''
+          return acc
+        }, {} as Record<string, string>)
+      )
+    }
+
     const requestConfig: AxiosRequestConfig = {
       method,
       headers,
       url: requestUrl,
-      data: method !== 'GET' && payloadData ? payloadData : undefined,
+      data: requestData,
       params: method === 'GET' ? payloadData : undefined,
       responseType,
       cancelToken: cancelToken ? cancelToken.token : undefined

@@ -1,6 +1,8 @@
 "use client";
 
 import { Box, Skeleton } from "@mui/material";
+import dynamic from "next/dynamic";
+const TerminalChatbot = dynamic(() => import("../../../components/chatbot/TerminalChatbot"), { ssr: false });
 
 export default function AdminLoading() {
   return (
@@ -38,6 +40,10 @@ export default function AdminLoading() {
               sx={{ borderRadius: 2 }}
             />
           </div>
+        </div>
+        {/* TERMINAL CHATBOT */}
+        <div className="w-full">
+          <TerminalChatbot />
         </div>
       </div>
       {/* RIGHT - Calendar + Announcements */}

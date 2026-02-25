@@ -1,5 +1,7 @@
 import React from "react";
 import Announcements from "../../../components/FromAnother/Announcements";
+import dynamic from "next/dynamic";
+const TerminalChatbot = dynamic(() => import("../../../components/chatbot/TerminalChatbot"));
 import AttendanceChartContainer from "../../../components/FromAnother/AttendanceChartContainer";
 import CountChartContainer from "../../../components/FromAnother/CountChartContainer";
 import EventCalendarContainer from "../../../components/FromAnother/EventCalendarContainer";
@@ -11,7 +13,7 @@ import type { UserStat } from "../../../components/FromAnother/UserCard";
 import { fetchUserCountsAction, fetchAnnouncementsAction } from "@/actions/admin";
 import { AnnouncementListResponse } from "@/types/schemas";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 const AdminPage = async () => {
   // Fetch data on server in parallel
@@ -81,6 +83,10 @@ const AdminPage = async () => {
           <div className="w-full lg:w-2/3 h-[450px]">
             <AttendanceChartContainer />
           </div>
+        </div>
+        {/* TERMINAL CHATBOT */}
+        <div className="w-full">
+          <TerminalChatbot />
         </div>
         {/* BOTTOM CHART */}
         {/* <div className="w-full h-[500px]">

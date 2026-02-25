@@ -152,7 +152,10 @@ const TeacherListPage = async ({
           </Link>
 
           {role === "admin" && (
-            <FormContainer table="teacher" type="delete" id={item.id} />
+            <>
+              <FormContainer table="teacher" type="update" data={item} />
+              <FormContainer table="teacher" type="delete" id={item.id} />
+            </>
           )}
         </div>
       </td>

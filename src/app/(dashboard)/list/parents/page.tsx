@@ -144,7 +144,10 @@ const ParentListPage = async ({
           </Link>
 
           {role === "admin" && (
-            <FormContainer table="parent" type="delete" id={item.id} />
+            <>
+              <FormContainer table="parent" type="update" data={item} />
+              <FormContainer table="parent" type="delete" id={item.id} />
+            </>
           )}
         </div>
       </td>

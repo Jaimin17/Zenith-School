@@ -19,6 +19,15 @@ export const GET_CURRENT_USER_DETAILS_API: ApiType = {
     isForm: false,
 }
 
+export const CHAT_BOT_API: ApiType = {
+    url: apiUrls.CHAT_BOT_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: true,
+}
+
 export const ANNOUNCEMENT_API: ApiType = {
     url: apiUrls.GET_ANNOUNCEMENT_URL,
     method: "GET",

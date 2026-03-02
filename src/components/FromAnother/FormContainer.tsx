@@ -15,7 +15,9 @@ export type FormContainerProps = {
   | "result"
   | "attendance"
   | "event"
-  | "announcement";
+  | "announcement"
+  | "banner"
+  | "photoGallery";
   type: "create" | "update" | "delete";
   data?: any;
   id?: number | string;
@@ -208,7 +210,19 @@ const FormContainer = async ({ table, type, data, id, disabled }: FormContainerP
         break;
       }
 
-      // ---------------- RESULT ----------------
+      // ---------------- BANNER ----------------
+      case "banner": {
+        // No related data needed for banner form
+        relatedData = {};
+        break;
+      }
+
+      // ---------------- PHOTO GALLERY ----------------
+      case "photoGallery": {
+        relatedData = {};
+        break;
+      }
+
       // ---------------- RESULT ----------------
       // Students, exams, and assignments are fetched client-side based on selected class
       case "result": {

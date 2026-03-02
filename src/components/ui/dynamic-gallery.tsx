@@ -52,7 +52,12 @@ const DynamicGallery: React.FC<DynamicGalleryProps> = ({ data }) => {
           {group.map((image, imgIndex) => (
             <div className="gallery-item" key={imgIndex}>
               <div className="gallery-img">
-                <img src={image} alt={`Gallery ${index}-${imgIndex}`} />
+                <img
+                  src={image}
+                  alt={`Gallery ${index}-${imgIndex}`}
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div className="gallery-content">
                 <a className="popup-img gallery-link" href={image}>

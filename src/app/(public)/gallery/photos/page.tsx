@@ -1,6 +1,6 @@
 import Banner from "@/components/Banner";
-import DynamicGallery from "@/components/ui/dynamic-gallery";
-import { BANNER_DATA, GALLERY_DATA } from "@/lib/data";
+import PublicPhotoGallery from "@/components/gallery/PublicPhotoGallery";
+import { BANNER_DATA } from "@/lib/data";
 
 export default function PhotoGalleryPage() {
   const bannerData = BANNER_DATA["photos-gallery"];
@@ -27,7 +27,7 @@ export default function PhotoGalleryPage() {
               </div>
             </div>
           </div>
-          <DynamicGallery data={GALLERY_DATA} />
+          <PublicPhotoGallery />
         </div>
       </div>
     </>

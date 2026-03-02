@@ -830,3 +830,111 @@ export const DELETE_RESULT_API: ApiType = {
     showToast: true,
     isForm: false,
 }
+
+export const BANNER_API: ApiType = {
+    url: apiUrls.GET_BANNER_URL,
+    method: "GET",
+    withToken: false,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const BANNER_BY_ID_API: ApiType = {
+    url: apiUrls.GET_BANNER_BY_ID_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const SAVE_BANNER_API: ApiType = {
+    url: apiUrls.SAVE_BANNER_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_BANNER_API: ApiType = {
+    url: apiUrls.UPDATE_BANNER_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const DELETE_BANNER_API: ApiType = {
+    url: apiUrls.DELETE_BANNER_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const TOGGLE_BANNER_ACTIVE_API: ApiType = {
+    url: apiUrls.TOGGLE_BANNER_ACTIVE_URL,
+    method: "PATCH",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const PHOTO_GALLERY_API: ApiType = {
+    url: apiUrls.GET_PHOTO_GALLERY_URL,
+    method: "GET",
+    withToken: false,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const PHOTO_GALLERY_BY_ID_API: ApiType = {
+    url: apiUrls.GET_PHOTO_GALLERY_BY_ID_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const SAVE_PHOTO_GALLERY_API: ApiType = {
+    url: apiUrls.SAVE_PHOTO_GALLERY_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_PHOTO_GALLERY_API: ApiType = {
+    url: apiUrls.UPDATE_PHOTO_GALLERY_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const DELETE_PHOTO_GALLERY_API: ApiType = {
+    url: apiUrls.DELETE_PHOTO_GALLERY_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const TOGGLE_PHOTO_GALLERY_ACTIVE_API: ApiType = {
+    url: apiUrls.TOGGLE_PHOTO_GALLERY_ACTIVE_URL,
+    method: "PATCH",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}

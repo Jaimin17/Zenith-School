@@ -94,11 +94,11 @@ export const BANNER_DATA: Record<string, BannerItem> = {
 };
 
 interface ContentWrittenData {
-  PRICIPLES_INTERVIEW: string;
+  PRINCIPLES_INTERVIEW: string;
 }
 
-export const CONTENT_WRITEN_DATA: ContentWrittenData = {
-  PRICIPLES_INTERVIEW:
+export const CONTENT_WRITTEN_DATA: ContentWrittenData = {
+  PRINCIPLES_INTERVIEW:
     "As the Principal of this esteemed institution, I feel a deep sense of pride and responsibility in shaping young minds. Our goal is not only to impart academic knowledge but to nurture values, confidence, and a spirit of curiosity in every student. I believe education is a shared journey between the school, the students, and their families—and together, we strive to create an environment where every child can thrive, dream big, and grow into a kind, capable individual ready to face the world.",
 };
 

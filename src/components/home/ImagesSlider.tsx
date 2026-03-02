@@ -1,12 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ImagesSlider from "../ui/images-slider";
+import { api } from "@/api/api";
+import { BANNER_API } from "@/api/apiParams/admin";
+import type { BannerListResponse } from "@/types/schemas";
+import { getBannerImageUrl } from "@/utils/imageHelpers";
 
 export const ImagesSliderDemo: React.FC = () => {
-  const images: string[] = [
-    "https://images.unsplash.com/photo-1464983308776-3c7215084895?q=80&w=2148&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1588072432733-2b6a4873b187?q=80&w=2344&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1567746455504-cb3213f8f5b8?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  ];
+  const [images, setImages] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const response = await api<BannerListResponse>({
+          endpoint: BANNER_API,
+          params: { page: 1 },
+          withoutToken: true,
+        });
+
+        if (!response.error && response.data?.data) {
+          const bannerImages = response.data.data
+            .filter((banner) => banner.img && banner.is_active)
+            .map((banner) => getBannerImageUrl(banner.img));
+          setImages(bannerImages);
+        }
+      } catch (error) {
+        console.error("Failed to fetch banners:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBanners();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="hero-section">
+        <div className="hero-slider" style={{ minHeight: "65vh", background: "#f3f4f6" }}>
+          <div className="flex items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (images.length === 0) {
+    return null;
+  }
 
   return <ImagesSlider images={images} />;
 };

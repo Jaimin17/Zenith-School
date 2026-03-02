@@ -139,3 +139,61 @@ export function getAnnouncementPdfUrl(pdfName: string | null | undefined): strin
 
     return `${BACKEND_URL}/uploads/pdfs/announcements/${filename}`
 }
+
+/**
+ * Gets banner image URL
+ */
+export function getBannerImageUrl(imagePath: string | null | undefined): string {
+    if (!imagePath) return '/noAvatar.png'
+
+    // If already a URL (starts with http/https), return as-is
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        return imagePath
+    }
+
+    // If it's just a filename
+    if (!imagePath.includes('/') && !imagePath.includes('\\')) {
+        return `${BACKEND_URL}/uploads/images/banners/${imagePath}`
+    }
+
+    // Handle "uploads/images/banners/filename.jpg" format
+    if (imagePath.startsWith('uploads/')) {
+        return `${BACKEND_URL}/${imagePath}`
+    }
+
+    // Extract just the filename if it's a full Windows path
+    let filename = imagePath
+    if (imagePath.includes('\\') || imagePath.includes(':/')) {
+        const parts = imagePath.split(/[/\\]/)
+        filename = parts[parts.length - 1]
+    }
+
+    return `${BACKEND_URL}/uploads/images/banners/${filename}`
+}
+
+/**
+ * Gets photo gallery image URL
+ */
+export function getPhotoGalleryImageUrl(imagePath: string | null | undefined): string {
+    if (!imagePath) return '/noAvatar.png'
+
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        return imagePath
+    }
+
+    if (!imagePath.includes('/') && !imagePath.includes('\\')) {
+        return `${BACKEND_URL}/uploads/images/photoGallery/${imagePath}`
+    }
+
+    if (imagePath.startsWith('uploads/')) {
+        return `${BACKEND_URL}/${imagePath}`
+    }
+
+    let filename = imagePath
+    if (imagePath.includes('\\') || imagePath.includes(':/')) {
+        const parts = imagePath.split(/[/\\]/)
+        filename = parts[parts.length - 1]
+    }
+
+    return `${BACKEND_URL}/uploads/images/photoGallery/${filename}`
+}

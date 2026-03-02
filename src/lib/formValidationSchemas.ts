@@ -139,3 +139,21 @@ export const lessonSchema = z.object({
 });
 
 export type LessonSchema = z.infer<typeof lessonSchema>;
+
+export const bannerSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(1, "Title is required").max(200, "Title must be less than 200 characters"),
+  description: z.string().min(1, "Description is required"),
+  is_active: z.boolean().optional(),
+});
+
+export type BannerSchema = z.infer<typeof bannerSchema>;
+
+export const photoGallerySchema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(1, "Title is required").max(200, "Title must be less than 200 characters"),
+  description: z.string().min(1, "Description is required"),
+  is_active: z.boolean().optional(),
+});
+
+export type PhotoGallerySchema = z.infer<typeof photoGallerySchema>;

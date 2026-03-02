@@ -483,3 +483,29 @@ export interface StudentProfile extends UserProfileBase {
 }
 
 export type UserProfile = AdminProfile | ParentProfile | TeacherProfile | StudentProfile;
+
+export interface Banner {
+    id: string;
+    title: string;
+    description: string;
+    img: string | null;
+    is_active: boolean;
+    created_at: string;
+}
+
+export interface BannerListResponse extends PaginationListResponse {
+    data: Banner[];
+}
+
+export interface PhotoGallery {
+    id: string;
+    title: string;
+    description: string;
+    img: string | null;
+    is_active: boolean;
+    created_at: string;
+}
+
+export interface PhotoGalleryListResponse extends PaginationListResponse {
+    data: PhotoGallery[];
+}

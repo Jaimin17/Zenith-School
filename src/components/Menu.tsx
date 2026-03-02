@@ -117,6 +117,18 @@ const menuItems: MenuSection[] = [
         href: "/list/announcements",
         visible: ["admin", "teacher", "student", "parent"],
       },
+      {
+        icon: "/announcement.png",
+        label: "Banners",
+        href: "/list/banners",
+        visible: ["admin"],
+      },
+      {
+        icon: "/announcement.png",
+        label: "Photo Gallery",
+        href: "/list/photo-gallery",
+        visible: ["admin"],
+      },
     ],
   },
   {

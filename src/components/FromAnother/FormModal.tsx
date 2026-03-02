@@ -12,6 +12,8 @@ import {
   deleteResult,
   deleteParent,
   deleteLesson,
+  deleteBanner,
+  deletePhotoGallery,
 } from "@/lib/actions";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -21,6 +23,7 @@ import { useActionState } from "react";
 import { toast } from "sonner";
 import { FormContainerProps } from "./FormContainer";
 import { X, Trash2, AlertTriangle, Plus, Pencil } from "lucide-react";
+import PhotoGalleryForm from "./forms/PhotoGalleryEntryForm";
 
 const deleteActionMap = {
   subject: deleteSubject,
@@ -35,6 +38,8 @@ const deleteActionMap = {
   attendance: deleteSubject,
   event: deleteEvent,
   announcement: deleteAnnouncement,
+  banner: deleteBanner,
+  photoGallery: deletePhotoGallery,
 };
 
 const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
@@ -121,6 +126,14 @@ const LessonForm = dynamic(() => import("./forms/LessonForm"), {
   loading: () => (
     <div className="flex items-center justify-center p-8">
       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+    </div>
+  ),
+});
+
+const BannerForm = dynamic(() => import("./forms/BannerForm"), {
+  loading: () => (
+    <div className="flex items-center justify-center p-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
     </div>
   ),
 });
@@ -215,6 +228,22 @@ const forms: {
   ),
   lesson: (setOpen, type, data, relatedData) => (
     <LessonForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  banner: (setOpen, type, data, relatedData) => (
+    <BannerForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  photoGallery: (setOpen, type, data, relatedData) => (
+    <PhotoGalleryForm
       type={type}
       data={data}
       setOpen={setOpen}

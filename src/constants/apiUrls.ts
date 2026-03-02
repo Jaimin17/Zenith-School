@@ -194,4 +194,28 @@ export const apiUrls = {
     UPDATE_RESULT_URL: "api/v1/results/update",
 
     DELETE_RESULT_URL: "api/v1/results/delete",
+
+    GET_BANNER_URL: "api/v1/banner/getAll",
+
+    GET_BANNER_BY_ID_URL: "api/v1/banner/get",
+
+    SAVE_BANNER_URL: "api/v1/banner/save",
+
+    UPDATE_BANNER_URL: "api/v1/banner/update",
+
+    DELETE_BANNER_URL: "api/v1/banner/delete",
+
+    TOGGLE_BANNER_ACTIVE_URL: "api/v1/banner/toggle-active",
+
+    GET_PHOTO_GALLERY_URL: "api/v1/photoGallery/getAll",
+
+    GET_PHOTO_GALLERY_BY_ID_URL: "api/v1/photoGallery/get",
+
+    SAVE_PHOTO_GALLERY_URL: "api/v1/photoGallery/save",
+
+    UPDATE_PHOTO_GALLERY_URL: "api/v1/photoGallery/update",
+
+    DELETE_PHOTO_GALLERY_URL: "api/v1/photoGallery/delete",
+
+    TOGGLE_PHOTO_GALLERY_ACTIVE_URL: "api/v1/photoGallery/toggle-active",
 }

@@ -11,7 +11,7 @@ interface NumberSpinnerProps {
 
 const NumberSpinner: React.FC<NumberSpinnerProps> = ({ trend = -1, value = 0 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "0px 0px -20% 0px" });
+  const isInView = useInView(ref, { once: true, amount: 0.6 });
 
   const [displayValue, setDisplayValue] = useState<number>(0);
 
@@ -22,7 +22,10 @@ const NumberSpinner: React.FC<NumberSpinnerProps> = ({ trend = -1, value = 0 }) 
   }, [isInView, value]);
 
   return (
-    <div ref={ref} className="counter">
+    <div
+      ref={ref}
+      className="counter-value block leading-none text-white text-[50px] font-semibold"
+    >
       <NumberFlow
         trend={trend}
         value={displayValue}

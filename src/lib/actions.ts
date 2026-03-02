@@ -1,7 +1,7 @@
 "use server";
 
 import { api } from "@/api/api";
-import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, DELETE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, DELETE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, DELETE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API, SAVE_EVENT_API, UPDATE_EVENT_API, SAVE_ANNOUNCEMENT_API, UPDATE_ANNOUNCEMENT_API, DELETE_STUDENT_API, DELETE_PARENT_API, DELETE_SUBJECT_API, DELETE_CLASS_API, DELETE_RESULT_API, DELETE_EVENT_API, DELETE_ANNOUNCEMENT_API } from "@/api/apiParams/admin";
+import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, DELETE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, DELETE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, DELETE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API, SAVE_EVENT_API, UPDATE_EVENT_API, SAVE_ANNOUNCEMENT_API, UPDATE_ANNOUNCEMENT_API, DELETE_STUDENT_API, DELETE_PARENT_API, DELETE_SUBJECT_API, DELETE_CLASS_API, DELETE_RESULT_API, DELETE_EVENT_API, DELETE_ANNOUNCEMENT_API, SAVE_BANNER_API, UPDATE_BANNER_API, DELETE_BANNER_API, TOGGLE_BANNER_ACTIVE_API, SAVE_PHOTO_GALLERY_API, UPDATE_PHOTO_GALLERY_API, DELETE_PHOTO_GALLERY_API, TOGGLE_PHOTO_GALLERY_ACTIVE_API } from "@/api/apiParams/admin";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN } from "@/constants/appConstants";
 
@@ -1619,6 +1619,316 @@ export async function deleteResult(formData: FormData): Promise<FormState> {
     };
   } catch (error) {
     console.error("Delete result error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+// Banner actions
+export async function createBanner(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const is_active = formData.get("is_active") as string;
+    const image = formData.get("image") as File | null;
+
+    apiFormData.append("title", title || "");
+    apiFormData.append("description", description || "");
+    apiFormData.append("is_active", is_active === "true" ? "true" : "false");
+
+    if (image && image instanceof File) {
+      apiFormData.append("image", image);
+    }
+
+    const response = await api({
+      endpoint: SAVE_BANNER_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to create banner",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating banner:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function updateBanner(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    const id = formData.get("id") as string;
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const is_active = formData.get("is_active") as string;
+    const image = formData.get("image") as File | null;
+
+    apiFormData.append("id", id || "");
+    apiFormData.append("title", title || "");
+    apiFormData.append("description", description || "");
+    apiFormData.append("is_active", is_active === "true" ? "true" : "false");
+
+    if (image && image instanceof File && image.size > 0) {
+      apiFormData.append("image", image);
+    }
+
+    const response = await api({
+      endpoint: UPDATE_BANNER_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to update banner",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating banner:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function deleteBanner(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const id = formData.get("id") as string;
+
+    const response = await api({
+      endpoint: {
+        ...DELETE_BANNER_API,
+        url: `${DELETE_BANNER_API.url}?id=${id}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete banner",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Banner deleted successfully",
+    };
+  } catch (error) {
+    console.error("Delete banner error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function toggleBannerActive(bannerId: string): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const response = await api({
+      endpoint: {
+        ...TOGGLE_BANNER_ACTIVE_API,
+        url: `${TOGGLE_BANNER_ACTIVE_API.url}?id=${bannerId}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to toggle banner status",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Banner status updated successfully",
+    };
+  } catch (error) {
+    console.error("Toggle banner active error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+// Photo Gallery actions
+export async function createPhotoGallery(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const is_active = formData.get("is_active") as string;
+    const image = formData.get("image") as File | null;
+
+    apiFormData.append("title", title || "");
+    apiFormData.append("description", description || "");
+    apiFormData.append("is_active", is_active === "true" ? "true" : "false");
+
+    if (image && image instanceof File) {
+      apiFormData.append("image", image);
+    }
+
+    const response = await api({
+      endpoint: SAVE_PHOTO_GALLERY_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to create photo",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating photo:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function updatePhotoGallery(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    const id = formData.get("id") as string;
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const is_active = formData.get("is_active") as string;
+    const image = formData.get("image") as File | null;
+
+    apiFormData.append("id", id || "");
+    apiFormData.append("title", title || "");
+    apiFormData.append("description", description || "");
+    apiFormData.append("is_active", is_active === "true" ? "true" : "false");
+
+    if (image && image instanceof File && image.size > 0) {
+      apiFormData.append("image", image);
+    }
+
+    const response = await api({
+      endpoint: UPDATE_PHOTO_GALLERY_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to update photo",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating photo:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function deletePhotoGallery(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const id = formData.get("id") as string;
+
+    const response = await api({
+      endpoint: {
+        ...DELETE_PHOTO_GALLERY_API,
+        url: `${DELETE_PHOTO_GALLERY_API.url}?id=${id}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete photo",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Photo deleted successfully",
+    };
+  } catch (error) {
+    console.error("Delete photo error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function togglePhotoGalleryActive(photoId: string): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const response = await api({
+      endpoint: {
+        ...TOGGLE_PHOTO_GALLERY_ACTIVE_API,
+        url: `${TOGGLE_PHOTO_GALLERY_ACTIVE_API.url}?id=${photoId}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to toggle photo status",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Photo status updated successfully",
+    };
+  } catch (error) {
+    console.error("Toggle photo active error:", error);
     return { success: false, error: true, message: "An unexpected error occurred" };
   }
 }

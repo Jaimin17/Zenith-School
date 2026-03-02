@@ -938,3 +938,66 @@ export const TOGGLE_PHOTO_GALLERY_ACTIVE_API: ApiType = {
     showToast: true,
     isForm: false,
 }
+
+export const TESTIMONIAL_API: ApiType = {
+    url: apiUrls.GET_TESTIMONIALS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const TESTIMONIAL_ACTIVE_API: ApiType = {
+    url: apiUrls.GET_TESTIMONIALS_ACTIVE_URL,
+    method: "GET",
+    withToken: false,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const TESTIMONIAL_BY_ID_API: ApiType = {
+    url: apiUrls.GET_TESTIMONIAL_BY_ID_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const SAVE_TESTIMONIAL_API: ApiType = {
+    url: apiUrls.SAVE_TESTIMONIAL_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_TESTIMONIAL_API: ApiType = {
+    url: apiUrls.UPDATE_TESTIMONIAL_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const DELETE_TESTIMONIAL_API: ApiType = {
+    url: apiUrls.DELETE_TESTIMONIAL_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const TOGGLE_TESTIMONIAL_ACTIVE_API: ApiType = {
+    url: apiUrls.TOGGLE_TESTIMONIAL_ACTIVE_URL,
+    method: "PATCH",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}

@@ -157,3 +157,18 @@ export const photoGallerySchema = z.object({
 });
 
 export type PhotoGallerySchema = z.infer<typeof photoGallerySchema>;
+
+export const testimonialSchema = z.object({
+  id: z.string().optional(),
+  description: z
+    .string()
+    .min(4, "Description must be at least 4 characters")
+    .max(1000, "Description must be less than 1000 characters"),
+  rating: z.coerce
+    .number({ message: "Rating is required" })
+    .min(0, "Rating must be between 0 and 5")
+    .max(5, "Rating must be between 0 and 5"),
+  is_active: z.boolean().optional(),
+});
+
+export type TestimonialSchema = z.infer<typeof testimonialSchema>;

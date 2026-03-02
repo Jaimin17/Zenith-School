@@ -1,7 +1,7 @@
 "use server";
 
 import { api } from "@/api/api";
-import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, DELETE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, DELETE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, DELETE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API, SAVE_EVENT_API, UPDATE_EVENT_API, SAVE_ANNOUNCEMENT_API, UPDATE_ANNOUNCEMENT_API, DELETE_STUDENT_API, DELETE_PARENT_API, DELETE_SUBJECT_API, DELETE_CLASS_API, DELETE_RESULT_API, DELETE_EVENT_API, DELETE_ANNOUNCEMENT_API, SAVE_BANNER_API, UPDATE_BANNER_API, DELETE_BANNER_API, TOGGLE_BANNER_ACTIVE_API, SAVE_PHOTO_GALLERY_API, UPDATE_PHOTO_GALLERY_API, DELETE_PHOTO_GALLERY_API, TOGGLE_PHOTO_GALLERY_ACTIVE_API } from "@/api/apiParams/admin";
+import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, DELETE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, DELETE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, DELETE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API, SAVE_EVENT_API, UPDATE_EVENT_API, SAVE_ANNOUNCEMENT_API, UPDATE_ANNOUNCEMENT_API, DELETE_STUDENT_API, DELETE_PARENT_API, DELETE_SUBJECT_API, DELETE_CLASS_API, DELETE_RESULT_API, DELETE_EVENT_API, DELETE_ANNOUNCEMENT_API, SAVE_BANNER_API, UPDATE_BANNER_API, DELETE_BANNER_API, TOGGLE_BANNER_ACTIVE_API, SAVE_PHOTO_GALLERY_API, UPDATE_PHOTO_GALLERY_API, DELETE_PHOTO_GALLERY_API, TOGGLE_PHOTO_GALLERY_ACTIVE_API, SAVE_TESTIMONIAL_API, UPDATE_TESTIMONIAL_API, DELETE_TESTIMONIAL_API, TOGGLE_TESTIMONIAL_ACTIVE_API } from "@/api/apiParams/admin";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN } from "@/constants/appConstants";
 
@@ -1929,6 +1929,176 @@ export async function togglePhotoGalleryActive(photoId: string): Promise<FormSta
     };
   } catch (error) {
     console.error("Toggle photo active error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function createTestimonial(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const description = (formData.get("description") as string | null)?.trim() || "";
+    const ratingValue = formData.get("rating");
+    const is_active = formData.get("is_active") as string;
+
+    const rating = Number(ratingValue);
+
+    if (description.length < 4) {
+      return { success: false, error: true, message: "Description must be at least 4 characters long" };
+    }
+
+    if (Number.isNaN(rating) || rating < 0 || rating > 5) {
+      return { success: false, error: true, message: "Rating must be between 0 and 5" };
+    }
+
+    const apiFormData = new FormData();
+    apiFormData.append("description", description);
+    apiFormData.append("rating", String(rating));
+    apiFormData.append("is_active", is_active === "true" ? "true" : "false");
+
+    const response = await api({
+      endpoint: SAVE_TESTIMONIAL_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to create testimonial",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating testimonial:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function updateTestimonial(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const id = (formData.get("id") as string | null)?.trim() || "";
+    const description = (formData.get("description") as string | null)?.trim() || "";
+    const ratingValue = formData.get("rating");
+    const is_active = formData.get("is_active") as string;
+
+    const rating = Number(ratingValue);
+
+    if (!id) {
+      return { success: false, error: true, message: "Testimonial ID is required" };
+    }
+
+    if (description.length < 4) {
+      return { success: false, error: true, message: "Description must be at least 4 characters long" };
+    }
+
+    if (Number.isNaN(rating) || rating < 0 || rating > 5) {
+      return { success: false, error: true, message: "Rating must be between 0 and 5" };
+    }
+
+    const apiFormData = new FormData();
+    apiFormData.append("id", id);
+    apiFormData.append("description", description);
+    apiFormData.append("rating", String(rating));
+    apiFormData.append("is_active", is_active === "true" ? "true" : "false");
+
+    const response = await api({
+      endpoint: UPDATE_TESTIMONIAL_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to update testimonial",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating testimonial:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function deleteTestimonial(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const id = (formData.get("id") as string | null)?.trim() || "";
+
+    if (!id) {
+      return { success: false, error: true, message: "Testimonial ID is required" };
+    }
+
+    const response = await api({
+      endpoint: {
+        ...DELETE_TESTIMONIAL_API,
+        url: `${DELETE_TESTIMONIAL_API.url}?id=${id}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete testimonial",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Testimonial deleted successfully",
+    };
+  } catch (error) {
+    console.error("Delete testimonial error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function toggleTestimonialActive(testimonialId: string): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const response = await api({
+      endpoint: {
+        ...TOGGLE_TESTIMONIAL_ACTIVE_API,
+        url: `${TOGGLE_TESTIMONIAL_ACTIVE_API.url}?id=${testimonialId}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to toggle testimonial status",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Testimonial status updated successfully",
+    };
+  } catch (error) {
+    console.error("Toggle testimonial active error:", error);
     return { success: false, error: true, message: "An unexpected error occurred" };
   }
 }

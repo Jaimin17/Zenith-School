@@ -6,19 +6,18 @@ import SchoolStatistics from "@/components/statistics/SchoolStatistics";
 import { OurTimeline } from "@/components/ui/our-timeline";
 import StackCards from "@/components/ui/StackCards";
 import {
-  ALUMNI_DATA,
   EventsData,
   VisionMissionData,
 } from "@/lib/data";
 import { Box, Typography } from "@mui/material";
 import { AnimatedHeader } from "@/components/AnimatedHeader";
-import { CardCarousel } from "@/components/alumni/CardCarousel";
 import FeaturesCard from "@/components/home/FeaturesCard";
 import HomePhotoGallery from "@/components/home/HomePhotoGallery";
 import AboutUs from "@/components/about/AboutUs";
 import { ContactUsForm } from "@/components/ui/contact-us-form";
 import Events from "@/components/gallery/Events";
 import PublicLayout from "./(public)/layout";
+import HomeTestimonials from "@/components/home/HomeTestimonials";
 
 export default function HomePage() {
   return (
@@ -75,9 +74,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="testimonial-slider owl-carousel owl-theme">
-            <CardCarousel data={ALUMNI_DATA} />
-          </div>
+          <HomeTestimonials />
         </div>
       </div>
 

@@ -14,6 +14,7 @@ import {
   deleteLesson,
   deleteBanner,
   deletePhotoGallery,
+  deleteTestimonial,
 } from "@/lib/actions";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -24,6 +25,7 @@ import { toast } from "sonner";
 import { FormContainerProps } from "./FormContainer";
 import { X, Trash2, AlertTriangle, Plus, Pencil } from "lucide-react";
 import PhotoGalleryForm from "./forms/PhotoGalleryEntryForm";
+import TestimonialEntryForm from "./forms/TestimonialEntryForm";
 
 const deleteActionMap = {
   subject: deleteSubject,
@@ -40,6 +42,7 @@ const deleteActionMap = {
   announcement: deleteAnnouncement,
   banner: deleteBanner,
   photoGallery: deletePhotoGallery,
+  testimonial: deleteTestimonial,
 };
 
 const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
@@ -244,6 +247,14 @@ const forms: {
   ),
   photoGallery: (setOpen, type, data, relatedData) => (
     <PhotoGalleryForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  testimonial: (setOpen, type, data, relatedData) => (
+    <TestimonialEntryForm
       type={type}
       data={data}
       setOpen={setOpen}

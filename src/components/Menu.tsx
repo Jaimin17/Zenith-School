@@ -129,6 +129,12 @@ const menuItems: MenuSection[] = [
         href: "/list/photo-gallery",
         visible: ["admin"],
       },
+      {
+        icon: "/announcement.png",
+        label: "Testimonials",
+        href: "/list/testimonials",
+        visible: ["admin", "student"],
+      },
     ],
   },
   {

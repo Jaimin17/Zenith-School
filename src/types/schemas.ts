@@ -509,3 +509,17 @@ export interface PhotoGallery {
 export interface PhotoGalleryListResponse extends PaginationListResponse {
     data: PhotoGallery[];
 }
+
+export interface Testimonial {
+    id: string;
+    description: string;
+    rating: number;
+    is_active: boolean;
+    is_delete: boolean;
+    created_at: string;
+    student: StudentBase;
+}
+
+export interface TestimonialListResponse extends PaginationListResponse {
+    data: Testimonial[];
+}

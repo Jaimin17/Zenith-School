@@ -218,4 +218,18 @@ export const apiUrls = {
     DELETE_PHOTO_GALLERY_URL: "api/v1/photoGallery/delete",
 
     TOGGLE_PHOTO_GALLERY_ACTIVE_URL: "api/v1/photoGallery/toggle-active",
+
+    GET_TESTIMONIALS_URL: "api/v1/testimonials/getAll",
+
+    GET_TESTIMONIALS_ACTIVE_URL: "api/v1/testimonials/getAllActive",
+
+    GET_TESTIMONIAL_BY_ID_URL: "api/v1/testimonials/get",
+
+    SAVE_TESTIMONIAL_URL: "api/v1/testimonials/save",
+
+    UPDATE_TESTIMONIAL_URL: "api/v1/testimonials/update",
+
+    DELETE_TESTIMONIAL_URL: "api/v1/testimonials/delete",
+
+    TOGGLE_TESTIMONIAL_ACTIVE_URL: "api/v1/testimonials/toggle-active",
 }

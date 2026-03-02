@@ -75,9 +75,7 @@ export default function WhyZenithSchoolPage() {
               </div>
             </div>
           </div>
-          <div className="testimonial-slider owl-carousel owl-theme">
-            <CardCarousel data={ALUMNI_DATA} />
-          </div>
+          <CardCarousel data={ALUMNI_DATA} />
         </div>
       </div>
     </>

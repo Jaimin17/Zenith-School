@@ -2,13 +2,14 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { eventSchema, EventSchema } from "@/lib/formValidationSchemas";
 import { useActionState } from "react";
 import { createEvent, updateEvent } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Calendar, Clock, FileText, Users, Loader2 } from "lucide-react";
+import { Calendar, Clock, FileText, Users, Loader2, ImageIcon, X, Upload } from "lucide-react";
+import { getEventImageUrl } from "@/utils/imageHelpers";
 
 const EventForm = ({
   type,
@@ -22,7 +23,13 @@ const EventForm = ({
   relatedData?: any;
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>(
+    () => (data?.imgs ?? []).map((p: string) => getEventImageUrl(p))
+  );
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const {
     register,
     handleSubmit,
@@ -49,13 +56,17 @@ const EventForm = ({
   );
 
   const onSubmit = handleSubmit((formData) => {
-    const data = new FormData();
+    const fd = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== undefined && value !== "") {
-        data.append(key, value as string);
+        fd.append(key, value as string);
       }
     });
-    formAction(data);
+    // Append each selected image under key 'img' (matches API: img: list[UploadFile])
+    for (const file of imageFiles) {
+      fd.append("img", file);
+    }
+    formAction(fd);
   });
 
   const router = useRouter();
@@ -71,6 +82,30 @@ const EventForm = ({
       toast.error(state.message);
     }
   }, [state, router, type, setOpen]);
+
+  const processFiles = (files: FileList | null) => {
+    if (!files) return;
+    Array.from(files).forEach((file) => {
+      if (!file.type.startsWith("image/")) {
+        toast.error(`"${file.name}" is not an image`);
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error(`"${file.name}" exceeds 5 MB`);
+        return;
+      }
+      setImageFiles((prev) => [...prev, file]);
+      const reader = new FileReader();
+      reader.onloadend = () =>
+        setImagePreviews((prev) => [...prev, reader.result as string]);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeImage = (index: number) => {
+    setImageFiles((prev) => prev.filter((_, i) => i !== index));
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const classes = relatedData?.classes || [];
 
@@ -321,6 +356,70 @@ const EventForm = ({
             ? "Target class cannot be changed for past events" 
             : "Leave empty to make this a school-wide event"}
         </p>
+      </div>
+
+      {/* Event Images */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <ImageIcon className="w-4 h-4 text-gray-400" />
+          <label className="text-sm font-medium text-gray-700">
+            Event Images{" "}
+            <span className="text-xs font-normal text-gray-400">
+              (at least 1 required for new events)
+            </span>
+          </label>
+        </div>
+
+        {/* Drop zone */}
+        <div
+          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={(e) => { e.preventDefault(); setIsDragging(false); processFiles(e.dataTransfer.files); }}
+          onClick={() => fileInputRef.current?.click()}
+          className={`flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-lg px-4 py-5 cursor-pointer transition-colors duration-150 ${
+            isDragging
+              ? "border-gray-900 bg-gray-50"
+              : "border-gray-200 hover:border-gray-400 hover:bg-gray-50"
+          }`}
+        >
+          <Upload className="w-6 h-6 text-gray-400" />
+          <p className="text-sm text-gray-500">
+            <span className="font-medium text-gray-700">Click to upload</span> or drag &amp; drop
+          </p>
+          <p className="text-xs text-gray-400">PNG, JPG, WebP — max 5 MB each</p>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => processFiles(e.target.files)}
+          />
+        </div>
+
+        {/* Preview grid */}
+        {imagePreviews.length > 0 && (
+          <div className="grid grid-cols-3 gap-2 mt-2">
+            {imagePreviews.map((src, i) =>
+              src ? (
+                <div
+                  key={i}
+                  className="relative group aspect-video rounded-lg overflow-hidden border border-gray-200 bg-gray-50"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={src} alt={`preview-${i}`} className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); removeImage(i); }}
+                    className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ) : null
+            )}
+          </div>
+        )}
       </div>
 
       {/* Error Message */}

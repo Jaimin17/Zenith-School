@@ -172,6 +172,33 @@ export function getBannerImageUrl(imagePath: string | null | undefined): string 
 }
 
 /**
+ * Gets event image URL
+ */
+export function getEventImageUrl(imagePath: string | null | undefined): string {
+    if (!imagePath) return '/noAvatar.png'
+
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        return imagePath
+    }
+
+    if (!imagePath.includes('/') && !imagePath.includes('\\')) {
+        return `${BACKEND_URL}/uploads/images/events/${imagePath}`
+    }
+
+    if (imagePath.startsWith('uploads/')) {
+        return `${BACKEND_URL}/${imagePath}`
+    }
+
+    let filename = imagePath
+    if (imagePath.includes('\\') || imagePath.includes(':/')) {
+        const parts = imagePath.split(/[/\\]/)
+        filename = parts[parts.length - 1]
+    }
+
+    return `${BACKEND_URL}/uploads/images/events/${filename}`
+}
+
+/**
  * Gets photo gallery image URL
  */
 export function getPhotoGalleryImageUrl(imagePath: string | null | undefined): string {

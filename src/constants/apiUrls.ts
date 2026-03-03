@@ -105,6 +105,10 @@ export const apiUrls = {
 
     GET_EVENTS_URL: "api/v1/events/getAll",
 
+    GET_EVENT_BY_ID_URL: "api/v1/events/getById",
+
+    GET_PUBLIC_EVENTS_URL: "api/v1/events/getAllPublicEvents",
+
     SAVE_EVENT_URL: "api/v1/events/save",
 
     UPDATE_EVENT_URL: "api/v1/events/update",

@@ -255,6 +255,24 @@ export const ALL_EVENTS_API: ApiType = {
     isForm: false,
 }
 
+export const ALL_PUBLIC_EVENTS_API: ApiType = {
+    url: apiUrls.GET_PUBLIC_EVENTS_URL,
+    method: "GET",
+    withToken: false,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_EVENT_BY_ID_API: ApiType = {
+    url: apiUrls.GET_EVENT_BY_ID_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const SAVE_EVENT_API: ApiType = {
     url: apiUrls.SAVE_EVENT_URL,
     method: "POST",

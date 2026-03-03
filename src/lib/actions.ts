@@ -1264,10 +1264,17 @@ export async function createEvent(formData: FormData): Promise<FormState> {
     apiFormData.append("description", description || "");
     apiFormData.append("start_time", start_time);
     apiFormData.append("end_time", end_time);
-    
-    // Only append class_id if it has a value
+
     if (class_id && class_id.trim() !== "") {
       apiFormData.append("class_id", class_id);
+    }
+
+    // Append all uploaded images (field name must be 'img' to match API)
+    const imgEntries = formData.getAll("img");
+    for (const file of imgEntries) {
+      if (file instanceof File && file.size > 0) {
+        apiFormData.append("img", file);
+      }
     }
 
     const response = await api({
@@ -1278,11 +1285,7 @@ export async function createEvent(formData: FormData): Promise<FormState> {
     });
 
     if (response.error) {
-      return {
-        success: false,
-        error: true,
-        message: response.message || "Failed to create event",
-      };
+      return { success: false, error: true, message: response.message || "Failed to create event" };
     }
 
     return { success: true, error: false };
@@ -1317,10 +1320,17 @@ export async function updateEvent(formData: FormData): Promise<FormState> {
     apiFormData.append("description", description || "");
     apiFormData.append("start_time", start_time);
     apiFormData.append("end_time", end_time);
-    
-    // Only append class_id if it has a value
+
     if (class_id && class_id.trim() !== "") {
       apiFormData.append("class_id", class_id);
+    }
+
+    // Append all uploaded images (field name must be 'img' to match API)
+    const imgEntries = formData.getAll("img");
+    for (const file of imgEntries) {
+      if (file instanceof File && file.size > 0) {
+        apiFormData.append("img", file);
+      }
     }
 
     const response = await api({
@@ -1331,11 +1341,7 @@ export async function updateEvent(formData: FormData): Promise<FormState> {
     });
 
     if (response.error) {
-      return {
-        success: false,
-        error: true,
-        message: response.message || "Failed to update event",
-      };
+      return { success: false, error: true, message: response.message || "Failed to update event" };
     }
 
     return { success: true, error: false };

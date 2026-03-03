@@ -302,6 +302,7 @@ export interface Events {
     id: string,
     title: string,
     description: string,
+    img: string[] | null,
     start_time: string,
     end_time: string,
 }

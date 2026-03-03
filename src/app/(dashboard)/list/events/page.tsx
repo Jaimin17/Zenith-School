@@ -3,11 +3,12 @@ import Pagination from "@/components/FromAnother/Pagination";
 import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
 import Image from "next/image";
+import Link from "next/link";
 import type { EventsWithRelations } from "@/types/schemas";
 import { fetchEventsListAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
-import { Calendar, Clock } from "lucide-react";
+import { Calendar, Clock, Eye } from "lucide-react";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -123,7 +124,7 @@ const EventListPage = async ({
       <td className="flex items-center gap-4 p-4">
         <div className="flex flex-col">
           <h3 className="font-semibold text-gray-900">{item.title}</h3>
-          <p className="text-xs text-gray-500 line-clamp-1">{item.description}</p>
+          <p className="text-xs text-gray-500 line-clamp-1">{item.description.length > 120 ? `${item.description.substring(0, 120)}...` : item.description}</p>
         </div>
       </td>
       <td className="hidden md:table-cell">
@@ -145,6 +146,14 @@ const EventListPage = async ({
       </td>
       <td>
         <div className="flex items-center gap-2">
+          {/* View button available to all roles */}
+          <Link
+            href={`/list/events/${item.id}`}
+            className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky hover:bg-lamaSkyLight transition-colors"
+            title="View event details"
+          >
+            <Eye className="w-3.5 h-3.5 text-sky-700" />
+          </Link>
           {role === "admin" && (
             <>
               <FormContainer table="event" type="update" data={item} disabled={new Date(item.start_time) < new Date()} />

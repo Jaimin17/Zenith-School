@@ -6,6 +6,7 @@ import { ALUMNI_DATA, BANNER_DATA, WHY_ZENITH_DATA } from "@/lib/data";
 import SchoolStatistics from "@/components/statistics/SchoolStatistics";
 import { CardCarousel } from "@/components/alumni/CardCarousel";
 import AboutUs from "@/components/about/AboutUs";
+import HomeTestimonials from "@/components/home/HomeTestimonials";
 
 export default function WhyZenithSchoolPage() {
   const bannerData = BANNER_DATA["why-zenith-school"];
@@ -75,7 +76,7 @@ export default function WhyZenithSchoolPage() {
               </div>
             </div>
           </div>
-          <CardCarousel data={ALUMNI_DATA} />
+          <HomeTestimonials />
         </div>
       </div>
     </>

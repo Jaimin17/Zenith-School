@@ -224,3 +224,84 @@ export function getPhotoGalleryImageUrl(imagePath: string | null | undefined): s
 
     return `${BACKEND_URL}/uploads/images/photoGallery/${filename}`
 }
+
+/**
+ * Gets achievement image URL
+ */
+export function getAchievementImageUrl(imagePath: string | null | undefined): string {
+    if (!imagePath) return '/noAvatar.png'
+
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        return imagePath
+    }
+
+    if (!imagePath.includes('/') && !imagePath.includes('\\')) {
+        return `${BACKEND_URL}/uploads/images/achievements/${imagePath}`
+    }
+
+    if (imagePath.startsWith('uploads/')) {
+        return `${BACKEND_URL}/${imagePath}`
+    }
+
+    let filename = imagePath
+    if (imagePath.includes('\\') || imagePath.includes(':/')) {
+        const parts = imagePath.split(/[/\\]/)
+        filename = parts[parts.length - 1]
+    }
+
+    return `${BACKEND_URL}/uploads/images/achievements/${filename}`
+}
+
+/**
+ * Gets sports program image URL
+ */
+export function getSportsProgramImageUrl(imagePath: string | null | undefined): string {
+    if (!imagePath) return '/noAvatar.png'
+
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        return imagePath
+    }
+
+    if (!imagePath.includes('/') && !imagePath.includes('\\')) {
+        return `${BACKEND_URL}/uploads/images/sportProgram/${imagePath}`
+    }
+
+    if (imagePath.startsWith('uploads/')) {
+        return `${BACKEND_URL}/${imagePath}`
+    }
+
+    let filename = imagePath
+    if (imagePath.includes('\\') || imagePath.includes(':/')) {
+        const parts = imagePath.split(/[/\\]/)
+        filename = parts[parts.length - 1]
+    }
+
+    return `${BACKEND_URL}/uploads/images/sportsPrograms/${filename}`
+}
+
+/**
+ * Gets resume file URL
+ */
+export function getResumeUrl(resumePath: string | null | undefined): string {
+    if (!resumePath) return ''
+
+    if (resumePath.startsWith('http://') || resumePath.startsWith('https://')) {
+        return resumePath
+    }
+
+    if (!resumePath.includes('/') && !resumePath.includes('\\')) {
+        return `${BACKEND_URL}/uploads/pdfs/job_applications/${resumePath}`
+    }
+
+    if (resumePath.startsWith('uploads/')) {
+        return `${BACKEND_URL}/${resumePath}`
+    }
+
+    let filename = resumePath
+    if (resumePath.includes('\\') || resumePath.includes(':/')) {
+        const parts = resumePath.split(/[/\\]/)
+        filename = parts[parts.length - 1]
+    }
+
+    return `${BACKEND_URL}/uploads/pdfs/job_applications/${filename}`
+}

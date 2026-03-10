@@ -1,15 +1,17 @@
 "use client";
 
 import Banner from "@/components/Banner";
-import DynamicGallery from "@/components/ui/dynamic-gallery";
-import { BANNER_DATA, SPORTS_DATA } from "@/lib/data";
-import { GALLERY_DATA } from "@/lib/data";
+import { BANNER_DATA } from "@/lib/data";
 import { Box } from "@mui/material";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import InfiniteCarousel from "@/components/ui/InfiniteCarousel";
 import { AnimatedHeader } from "@/components/AnimatedHeader";
+import PublicPhotoGallery from "@/components/gallery/PublicPhotoGallery";
+import { fetchPublicSportsProgramsAction } from "@/actions/admin";
+import type { SportsProgram } from "@/types/schemas";
+import { getSportsProgramImageUrl } from "@/utils/imageHelpers";
 
-interface Sport {
+interface SportCard {
   title: string;
   description: string;
   image: string;
@@ -18,6 +20,29 @@ interface Sport {
 
 export default function SportsPage() {
   const bannerData = BANNER_DATA["sports"];
+  const [programs, setPrograms] = useState<SportsProgram[]>([]);
+  const [loadingPrograms, setLoadingPrograms] = useState(true);
+
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      setLoadingPrograms(true);
+      try {
+        const result = await fetchPublicSportsProgramsAction(1);
+        if (result.success && result.data?.data) {
+          const activePrograms = result.data.data.filter((item) => item.is_active);
+          setPrograms(activePrograms);
+        } else {
+          setPrograms([]);
+        }
+      } catch (error) {
+        setPrograms([]);
+      } finally {
+        setLoadingPrograms(false);
+      }
+    };
+
+    fetchPrograms();
+  }, []);
 
   return (
     <>
@@ -41,7 +66,7 @@ export default function SportsPage() {
                 </div>
               </div>
             </div>
-            <DynamicGallery data={GALLERY_DATA} />
+            <PublicPhotoGallery isSport showPagination={false} />
           </div>
         </div>
       </Fragment>
@@ -62,62 +87,96 @@ export default function SportsPage() {
           />
         </Box>
 
-        <InfiniteCarousel
-          data={SPORTS_DATA}
-          cardWidth={400}
-          gap={20}
-          speed={60}
-          renderCard={(sport: Sport, index: number) => (
-            <div className="col-12" key={index}>
-              <div
-                className="team-item wow fadeInUp"
-                data-wow-delay={`${0.25 * (index + 1)}s`}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                }}
-              >
-                <div className="team-img">
-                  <img
-                    src={sport.image}
-                    alt={sport.title}
-                    draggable={false}
-                    style={{ userSelect: "none" }}
-                  />
-                </div>
-
-                <div
-                  className="team-content"
-                  style={{
-                    marginTop: "15px",
-                    flex: "1",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <div className="team-bio">
-                    <h5 style={{ marginBottom: "8px" }}>
-                      <a href={sport.link || "#"}>{sport.title}</a>
-                    </h5>
-
-                    <span
-                      style={{
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        minHeight: "60px",
-                        maxHeight: "60px",
-                        color: 'ButtonText'
-                      }}
-                    >
-                      {sport.description}
-                    </span>
+        {loadingPrograms ? (
+          <div className="container">
+            <div className="row">
+              {[1, 2, 3].map((item) => (
+                <div className="col-md-4" key={item}>
+                  <div className="team-item">
+                    <div className="team-img">
+                      <div className="w-full h-56 bg-gray-200 rounded-lg animate-pulse" />
+                    </div>
+                    <div className="team-content" style={{ marginTop: "15px" }}>
+                      <div className="team-bio">
+                        <div className="h-4 bg-gray-200 rounded w-3/4 mb-3" />
+                        <div className="h-3 bg-gray-200 rounded w-full mb-2" />
+                        <div className="h-3 bg-gray-200 rounded w-5/6" />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
-          )}
-        />
+          </div>
+        ) : programs.length === 0 ? (
+          <div className="text-center text-gray-500">No sports programs available.</div>
+        ) : (
+          <InfiniteCarousel
+            data={programs}
+            cardWidth={400}
+            gap={20}
+            speed={60}
+            renderCard={(sport: SportsProgram, index: number) => {
+              const imageSrc = sport.img ? getSportsProgramImageUrl(sport.img) : "/noAvatar.png";
+              const card: SportCard = {
+                title: sport.title,
+                description: sport.description,
+                image: imageSrc,
+              };
+
+              return (
+                <div className="col-12" key={sport.id}>
+                  <div
+                    className="team-item wow fadeInUp"
+                    data-wow-delay={`${0.25 * (index + 1)}s`}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%",
+                    }}
+                  >
+                    <div className="team-img">
+                      <img
+                        src={card.image}
+                        alt={card.title}
+                        draggable={false}
+                        style={{ userSelect: "none" }}
+                      />
+                    </div>
+
+                    <div
+                      className="team-content"
+                      style={{
+                        marginTop: "15px",
+                        flex: "1",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <div className="team-bio">
+                        <h5 style={{ marginBottom: "8px" }}>
+                          <span>{card.title}</span>
+                        </h5>
+
+                        <span
+                          style={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            minHeight: "60px",
+                            maxHeight: "60px",
+                            color: "ButtonText",
+                          }}
+                        >
+                          {card.description}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            }}
+          />
+        )}
       </Fragment>
     </>
   );

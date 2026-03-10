@@ -2,9 +2,8 @@
 
 import { ALUMNI_DATA, BANNER_DATA } from "../../../lib/data";
 import Banner from "../../../components/Banner";
-import { CardCarousel } from "../../../components/alumni/CardCarousel";
 import AlumniStory from "../../../components/alumni/AlumniStory";
-import { JSX } from "react";
+import HomeTestimonials from "@/components/home/HomeTestimonials";
 
 export default function AlumniPage() {
   const bannerData = BANNER_DATA["alumni"];
@@ -33,7 +32,7 @@ export default function AlumniPage() {
               </div>
             </div>
           </div>
-          <CardCarousel data={ALUMNI_DATA} />
+          <HomeTestimonials />
         </div>
       </div>
     </>

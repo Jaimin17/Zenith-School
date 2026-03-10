@@ -1,6 +1,6 @@
 import Banner from "@/components/Banner";
-import Events from "@/components/gallery/Events";
-import { BANNER_DATA, EventsData } from "@/lib/data";
+import PublicEventsGallery from "@/components/gallery/PublicEventsGallery";
+import { BANNER_DATA } from "@/lib/data";
 
 export default function EventsPage() {
   const bannerData = BANNER_DATA["events-gallery"];
@@ -8,7 +8,12 @@ export default function EventsPage() {
   return (
     <>
       <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
-      <Events data={EventsData} />
+      <PublicEventsGallery
+        tagline="Gallery"
+        title="Our Event"
+        highlight="Gallery"
+        description="Explore moments from our school celebrations, activities, and special events."
+      />
     </>
   );
 }

@@ -18,7 +18,11 @@ export type FormContainerProps = {
   | "announcement"
   | "banner"
   | "photoGallery"
-  | "testimonial";
+  | "testimonial"
+  | "sportsProgram"
+  | "achievement"
+  | "jobOpening"
+  | "jobApplication";
   type: "create" | "update" | "delete";
   data?: any;
   id?: number | string;
@@ -226,6 +230,30 @@ const FormContainer = async ({ table, type, data, id, disabled }: FormContainerP
 
       // ---------------- TESTIMONIAL ----------------
       case "testimonial": {
+        relatedData = {};
+        break;
+      }
+
+      // ---------------- SPORTS PROGRAM ----------------
+      case "sportsProgram": {
+        relatedData = {};
+        break;
+      }
+
+      // ---------------- ACHIEVEMENT ----------------
+      case "achievement": {
+        relatedData = {};
+        break;
+      }
+
+      // ---------------- JOB OPENING ----------------
+      case "jobOpening": {
+        relatedData = {};
+        break;
+      }
+
+      // ---------------- JOB APPLICATION ----------------
+      case "jobApplication": {
         relatedData = {};
         break;
       }

@@ -135,6 +135,30 @@ const menuItems: MenuSection[] = [
         href: "/list/testimonials",
         visible: ["admin", "student"],
       },
+      {
+        icon: "/announcement.png",
+        label: "Achievements",
+        href: "/list/achievements",
+        visible: ["admin"],
+      },
+      {
+        icon: "/announcement.png",
+        label: "Sports Programs",
+        href: "/list/sports-programs",
+        visible: ["admin"],
+      },
+      {
+        icon: "/announcement.png",
+        label: "Job Openings",
+        href: "/list/job-openings",
+        visible: ["admin"],
+      },
+      {
+        icon: "/announcement.png",
+        label: "Job Applications",
+        href: "/list/job-applications",
+        visible: ["admin"],
+      },
     ],
   },
   {

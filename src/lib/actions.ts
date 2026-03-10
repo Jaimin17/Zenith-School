@@ -1,7 +1,7 @@
 "use server";
 
 import { api } from "@/api/api";
-import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, DELETE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, DELETE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, DELETE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API, SAVE_EVENT_API, UPDATE_EVENT_API, SAVE_ANNOUNCEMENT_API, UPDATE_ANNOUNCEMENT_API, DELETE_STUDENT_API, DELETE_PARENT_API, DELETE_SUBJECT_API, DELETE_CLASS_API, DELETE_RESULT_API, DELETE_EVENT_API, DELETE_ANNOUNCEMENT_API, SAVE_BANNER_API, UPDATE_BANNER_API, DELETE_BANNER_API, TOGGLE_BANNER_ACTIVE_API, SAVE_PHOTO_GALLERY_API, UPDATE_PHOTO_GALLERY_API, DELETE_PHOTO_GALLERY_API, TOGGLE_PHOTO_GALLERY_ACTIVE_API, SAVE_TESTIMONIAL_API, UPDATE_TESTIMONIAL_API, DELETE_TESTIMONIAL_API, TOGGLE_TESTIMONIAL_ACTIVE_API } from "@/api/apiParams/admin";
+import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_API, SAVE_PARENT_API, UPDATE_PARENT_API, SAVE_SUBJECT_API, UPDATE_SUBJECT_API, SAVE_CLASS_API, UPDATE_CLASS_API, SAVE_LESSON_API, UPDATE_LESSON_API, DELETE_LESSON_API, SAVE_EXAM_API, UPDATE_EXAM_API, DELETE_EXAM_API, SAVE_ASSIGNMENT_API, UPDATE_ASSIGNMENT_API, DELETE_ASSIGNMENT_API, SAVE_RESULT_API, UPDATE_RESULT_API, SAVE_EVENT_API, UPDATE_EVENT_API, SAVE_ANNOUNCEMENT_API, UPDATE_ANNOUNCEMENT_API, DELETE_STUDENT_API, DELETE_PARENT_API, DELETE_SUBJECT_API, DELETE_CLASS_API, DELETE_RESULT_API, DELETE_EVENT_API, DELETE_ANNOUNCEMENT_API, SAVE_BANNER_API, UPDATE_BANNER_API, DELETE_BANNER_API, TOGGLE_BANNER_ACTIVE_API, SAVE_PHOTO_GALLERY_API, UPDATE_PHOTO_GALLERY_API, DELETE_PHOTO_GALLERY_API, TOGGLE_PHOTO_GALLERY_ACTIVE_API, SAVE_TESTIMONIAL_API, UPDATE_TESTIMONIAL_API, DELETE_TESTIMONIAL_API, TOGGLE_TESTIMONIAL_ACTIVE_API, SAVE_ACHIEVEMENT_API, UPDATE_ACHIEVEMENT_API, DELETE_ACHIEVEMENT_API, TOGGLE_ACHIEVEMENT_ACTIVE_API, SAVE_SPORTS_PROGRAM_API, UPDATE_SPORTS_PROGRAM_API, DELETE_SPORTS_PROGRAM_API, TOGGLE_SPORTS_PROGRAM_ACTIVE_API, SAVE_JOB_OPENING_API, UPDATE_JOB_OPENING_API, DELETE_JOB_OPENING_API, TOGGLE_JOB_OPENING_STATUS_API, SAVE_JOB_APPLICATION_API, UPDATE_JOB_APPLICATION_STATUS_API, DELETE_JOB_APPLICATION_API } from "@/api/apiParams/admin";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN } from "@/constants/appConstants";
 
@@ -1784,8 +1784,8 @@ export async function toggleBannerActive(bannerId: string): Promise<FormState> {
   }
 }
 
-// Photo Gallery actions
-export async function createPhotoGallery(formData: FormData): Promise<FormState> {
+// Achievement actions
+export async function createAchievement(formData: FormData): Promise<FormState> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get(ACCESS_TOKEN)?.value;
@@ -1799,6 +1799,318 @@ export async function createPhotoGallery(formData: FormData): Promise<FormState>
 
     apiFormData.append("title", title || "");
     apiFormData.append("description", description || "");
+    apiFormData.append("is_active", is_active === "true" ? "true" : "false");
+
+    if (image && image instanceof File) {
+      apiFormData.append("image", image);
+    }
+
+    const response = await api({
+      endpoint: SAVE_ACHIEVEMENT_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to create achievement",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating achievement:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function updateAchievement(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    const id = formData.get("id") as string;
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const is_active = formData.get("is_active") as string;
+    const image = formData.get("image") as File | null;
+
+    apiFormData.append("id", id || "");
+    apiFormData.append("title", title || "");
+    apiFormData.append("description", description || "");
+    apiFormData.append("is_active", is_active === "true" ? "true" : "false");
+
+    if (image && image instanceof File && image.size > 0) {
+      apiFormData.append("image", image);
+    }
+
+    const response = await api({
+      endpoint: UPDATE_ACHIEVEMENT_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to update achievement",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating achievement:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function deleteAchievement(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const id = formData.get("id") as string;
+
+    const response = await api({
+      endpoint: {
+        ...DELETE_ACHIEVEMENT_API,
+        url: `${DELETE_ACHIEVEMENT_API.url}?id=${id}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete achievement",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Achievement deleted successfully",
+    };
+  } catch (error) {
+    console.error("Delete achievement error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function toggleAchievementActive(achievementId: string): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const response = await api({
+      endpoint: {
+        ...TOGGLE_ACHIEVEMENT_ACTIVE_API,
+        url: `${TOGGLE_ACHIEVEMENT_ACTIVE_API.url}?id=${achievementId}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to toggle achievement status",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Achievement status updated successfully",
+    };
+  } catch (error) {
+    console.error("Toggle achievement active error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+// Sports program actions
+export async function createSportsProgram(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const is_active = formData.get("is_active") as string;
+    const image = formData.get("image") as File | null;
+
+    apiFormData.append("title", title || "");
+    apiFormData.append("description", description || "");
+    apiFormData.append("is_active", is_active === "true" ? "true" : "false");
+
+    if (image && image instanceof File) {
+      apiFormData.append("image", image);
+    }
+
+    const response = await api({
+      endpoint: SAVE_SPORTS_PROGRAM_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to create sports program",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating sports program:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function updateSportsProgram(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    const id = formData.get("id") as string;
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const is_active = formData.get("is_active") as string;
+    const image = formData.get("image") as File | null;
+
+    apiFormData.append("id", id || "");
+    apiFormData.append("title", title || "");
+    apiFormData.append("description", description || "");
+    apiFormData.append("is_active", is_active === "true" ? "true" : "false");
+
+    if (image && image instanceof File && image.size > 0) {
+      apiFormData.append("image", image);
+    }
+
+    const response = await api({
+      endpoint: UPDATE_SPORTS_PROGRAM_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to update sports program",
+      };
+    }
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating sports program:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function deleteSportsProgram(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const id = formData.get("id") as string;
+
+    const response = await api({
+      endpoint: {
+        ...DELETE_SPORTS_PROGRAM_API,
+        url: `${DELETE_SPORTS_PROGRAM_API.url}?id=${id}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to delete sports program",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Sports program deleted successfully",
+    };
+  } catch (error) {
+    console.error("Delete sports program error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function toggleSportsProgramActive(programId: string): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const response = await api({
+      endpoint: {
+        ...TOGGLE_SPORTS_PROGRAM_ACTIVE_API,
+        url: `${TOGGLE_SPORTS_PROGRAM_ACTIVE_API.url}?id=${programId}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return {
+        success: false,
+        error: true,
+        message: response.message || "Failed to toggle sports program status",
+      };
+    }
+
+    return {
+      success: true,
+      error: false,
+      message: response.data?.message || "Sports program status updated successfully",
+    };
+  } catch (error) {
+    console.error("Toggle sports program active error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+// Photo Gallery actions
+export async function createPhotoGallery(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const is_sport = formData.get("is_sport") as string;
+    const is_active = formData.get("is_active") as string;
+    const image = formData.get("image") as File | null;
+
+    apiFormData.append("title", title || "");
+    apiFormData.append("description", description || "");
+    apiFormData.append("is_sport", is_sport === "true" ? "true" : "false");
     apiFormData.append("is_active", is_active === "true" ? "true" : "false");
 
     if (image && image instanceof File) {
@@ -1837,12 +2149,14 @@ export async function updatePhotoGallery(formData: FormData): Promise<FormState>
     const id = formData.get("id") as string;
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
+    const is_sport = formData.get("is_sport") as string;
     const is_active = formData.get("is_active") as string;
     const image = formData.get("image") as File | null;
 
     apiFormData.append("id", id || "");
     apiFormData.append("title", title || "");
     apiFormData.append("description", description || "");
+    apiFormData.append("is_sport", is_sport === "true" ? "true" : "false");
     apiFormData.append("is_active", is_active === "true" ? "true" : "false");
 
     if (image && image instanceof File && image.size > 0) {
@@ -2105,6 +2419,227 @@ export async function toggleTestimonialActive(testimonialId: string): Promise<Fo
     };
   } catch (error) {
     console.error("Toggle testimonial active error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+// ─── Job Opening actions ───────────────────────────────────────────────────────────────
+
+export async function createJobOpening(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+    apiFormData.append("title", (formData.get("title") as string) || "");
+    apiFormData.append("description", (formData.get("description") as string) || "");
+    apiFormData.append("experience", String(Number(formData.get("experience") || 0)));
+    apiFormData.append("positions", String(Number(formData.get("positions") || 1)));
+    const location = formData.get("location") as string;
+    if (location) apiFormData.append("location", location);
+    const salaryRange = formData.get("salary_range") as string;
+    if (salaryRange) apiFormData.append("salary_range", salaryRange);
+    const deadline = formData.get("deadline") as string;
+    if (deadline) apiFormData.append("deadline", deadline);
+    apiFormData.append("job_type", (formData.get("job_type") as string) || "full_time");
+    const subjectId = formData.get("subject_id") as string;
+    if (subjectId) apiFormData.append("subject_id", subjectId);
+    apiFormData.append("is_active", formData.get("is_active") === "true" ? "true" : "false");
+
+    const response = await api({
+      endpoint: SAVE_JOB_OPENING_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { success: false, error: true, message: response.message || "Failed to create job opening" };
+    }
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error creating job opening:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function updateJobOpening(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+    const id = (formData.get("id") as string)?.trim();
+
+    if (!id) return { success: false, error: true, message: "Job opening ID is required" };
+
+    const apiFormData = new FormData();
+    apiFormData.append("id", id);
+    apiFormData.append("title", (formData.get("title") as string) || "");
+    apiFormData.append("description", (formData.get("description") as string) || "");
+    apiFormData.append("experience", String(Number(formData.get("experience") || 0)));
+    apiFormData.append("positions", String(Number(formData.get("positions") || 1)));
+    const location = formData.get("location") as string;
+    if (location) apiFormData.append("location", location);
+    const salaryRange = formData.get("salary_range") as string;
+    if (salaryRange) apiFormData.append("salary_range", salaryRange);
+    const deadline = formData.get("deadline") as string;
+    if (deadline) apiFormData.append("deadline", deadline);
+    apiFormData.append("job_type", (formData.get("job_type") as string) || "full_time");
+    const subjectId = formData.get("subject_id") as string;
+    if (subjectId) apiFormData.append("subject_id", subjectId);
+    apiFormData.append("is_active", formData.get("is_active") === "true" ? "true" : "false");
+
+    const response = await api({
+      endpoint: UPDATE_JOB_OPENING_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { success: false, error: true, message: response.message || "Failed to update job opening" };
+    }
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error updating job opening:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function deleteJobOpening(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+    const id = (formData.get("id") as string | null)?.trim() || "";
+
+    if (!id) return { success: false, error: true, message: "Job opening ID is required" };
+
+    const response = await api({
+      endpoint: {
+        ...DELETE_JOB_OPENING_API,
+        url: `${DELETE_JOB_OPENING_API.url}?id=${id}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { success: false, error: true, message: response.message || "Failed to delete job opening" };
+    }
+    return { success: true, error: false, message: "Job opening deleted successfully" };
+  } catch (error) {
+    console.error("Delete job opening error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function toggleJobOpeningStatus(openingId: string): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const response = await api({
+      endpoint: {
+        ...TOGGLE_JOB_OPENING_STATUS_API,
+        url: `${TOGGLE_JOB_OPENING_STATUS_API.url}?id=${openingId}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { success: false, error: true, message: response.message || "Failed to toggle job opening status" };
+    }
+    return { success: true, error: false, message: "Job opening status updated" };
+  } catch (error) {
+    console.error("Toggle job opening status error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+// ─── Job Application actions ─────────────────────────────────────────────────────────
+
+export async function submitJobApplication(formData: FormData): Promise<FormState> {
+  try {
+    const apiFormData = new FormData();
+    apiFormData.append("jobOpening_id", (formData.get("jobOpening_id") as string) || "");
+    apiFormData.append("name", (formData.get("name") as string) || "");
+    apiFormData.append("email", (formData.get("email") as string) || "");
+    apiFormData.append("phone", (formData.get("phone") as string) || "");
+    apiFormData.append("location", (formData.get("location") as string) || "");
+    const portfolioLink = formData.get("portfolio_link") as string;
+    if (portfolioLink) apiFormData.append("portfolio_link", portfolioLink);
+    apiFormData.append("about_applicant", (formData.get("about_applicant") as string) || "");
+    const resumeFile = formData.get("resume");
+    if (resumeFile instanceof File && resumeFile.size > 0) {
+      apiFormData.append("resume", resumeFile);
+    }
+
+    const response = await api({
+      endpoint: SAVE_JOB_APPLICATION_API,
+      payloadData: apiFormData,
+      isServer: true,
+      withoutToken: true,
+    });
+
+    if (response.error) {
+      return { success: false, error: true, message: response.message || "Failed to submit application" };
+    }
+    return { success: true, error: false };
+  } catch (error) {
+    console.error("Error submitting job application:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function updateJobApplicationStatus(applicationId: string, status: string): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+
+    const apiFormData = new FormData();
+    apiFormData.append("id", applicationId);
+    apiFormData.append("status", status);
+
+    const response = await api({
+      endpoint: UPDATE_JOB_APPLICATION_STATUS_API,
+      payloadData: apiFormData,
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { success: false, error: true, message: response.message || "Failed to update application status" };
+    }
+    return { success: true, error: false, message: "Application status updated" };
+  } catch (error) {
+    console.error("Update application status error:", error);
+    return { success: false, error: true, message: "An unexpected error occurred" };
+  }
+}
+
+export async function deleteJobApplication(formData: FormData): Promise<FormState> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(ACCESS_TOKEN)?.value;
+    const id = (formData.get("id") as string | null)?.trim() || "";
+
+    if (!id) return { success: false, error: true, message: "Application ID is required" };
+
+    const response = await api({
+      endpoint: {
+        ...DELETE_JOB_APPLICATION_API,
+        url: `${DELETE_JOB_APPLICATION_API.url}?id=${id}`,
+      },
+      serverToken: token,
+      isServer: true,
+    });
+
+    if (response.error) {
+      return { success: false, error: true, message: response.message || "Failed to delete application" };
+    }
+    return { success: true, error: false, message: "Application deleted successfully" };
+  } catch (error) {
+    console.error("Delete job application error:", error);
     return { success: false, error: true, message: "An unexpected error occurred" };
   }
 }

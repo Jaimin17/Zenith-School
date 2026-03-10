@@ -3,8 +3,8 @@
 import { cookies } from "next/headers";
 import { api } from '@/api/api';
 import { CHANGE_PASSWORD_API, UPDATE_PROFILE_API, UPDATE_PROFILE_PICTURE_API } from "@/api/apiParams/auth";
-import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_API, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EVENT_BY_ID_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_PARENT_BY_ID_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API, GET_SUPERVISORS_CLASSES_API, GET_STUDENT_BY_ID_API, ATTENDANCE_BY_STUDENT_ID_API, ANNOUNCEMENT_STUDENT_API, LESSONS_FOR_CLASS_API, GET_TEACHERS_OF_CLASS_API, GET_EXAMS_CLASS_API, ASSIGNMENTS_OF_CLASS_API, GET_STUDENT_RESULTS_API, GET_EXAMS_OF_STUDENT_API, ASSIGNMENTS_OF_STUDENT_API, ATTENDANCE_DASHBOARD_SUMMARY_API, ATTENDANCE_DASHBOARD_CLASSES_API, ATTENDANCE_TEACHER_CLASSES_API, ATTENDANCE_CLASS_DETAIL_API, ATTENDANCE_STUDENT_MONTHLY_API, ATTENDANCE_STUDENT_CALENDAR_API, ATTENDANCE_PARENT_CHILDREN_API, ATTENDANCE_TAKE_LESSONS_API, ATTENDANCE_TAKE_ROSTER_API, ATTENDANCE_TAKE_CHECK_API, ATTENDANCE_TAKE_SUBMIT_API, GET_FULL_LIST_SUBJECTS_API, GET_ALL_PARENTS_API, GET_GRADE_LIST_API, GET_LESSONS_FULL_LIST_API, GET_STUDENTS_OF_CLASS_API, GET_EXAMS_OF_CLASS_FULL_LIST_API, ASSIGNMENTS_OF_CLASS_FULL_LIST_API, GET_CURRENT_USER_DETAILS_API, CHAT_BOT_API, BANNER_API, PHOTO_GALLERY_API, TESTIMONIAL_API, TESTIMONIAL_ACTIVE_API, ALL_PUBLIC_EVENTS_API } from '@/api/apiParams/admin';
-import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, StudentWithRelations, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, ParentWithRelations, LessonListResponse, Attendance, AttendanceDashboardSummary, ClasswiseAttendanceResponse, TeacherClassesAttendanceResponse, ClassAttendanceDetailResponse, StudentMonthlyAttendance, CalendarHeatmapResponse, ParentChildrenAttendanceResponse, LessonsForDateResponse, LessonRosterResponse, AttendanceTakeRequest, AttendanceTakeResponse, AttendanceCheckResponse, TeacherClassSummary, Subject, Grade, SubjectWithRelations, AssignmentWithRelations, EventsWithRelations, UserProfile, ChangeUserPasswordRequest, UpdateProfileRequest, BannerListResponse, PhotoGalleryListResponse, TestimonialListResponse, Testimonial } from '@/types/schemas';
+import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_API, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EVENT_BY_ID_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_PARENT_BY_ID_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API, GET_SUPERVISORS_CLASSES_API, GET_STUDENT_BY_ID_API, ATTENDANCE_BY_STUDENT_ID_API, ANNOUNCEMENT_STUDENT_API, LESSONS_FOR_CLASS_API, GET_TEACHERS_OF_CLASS_API, GET_EXAMS_CLASS_API, ASSIGNMENTS_OF_CLASS_API, GET_STUDENT_RESULTS_API, GET_EXAMS_OF_STUDENT_API, ASSIGNMENTS_OF_STUDENT_API, ATTENDANCE_DASHBOARD_SUMMARY_API, ATTENDANCE_DASHBOARD_CLASSES_API, ATTENDANCE_TEACHER_CLASSES_API, ATTENDANCE_CLASS_DETAIL_API, ATTENDANCE_STUDENT_MONTHLY_API, ATTENDANCE_STUDENT_CALENDAR_API, ATTENDANCE_PARENT_CHILDREN_API, ATTENDANCE_TAKE_LESSONS_API, ATTENDANCE_TAKE_ROSTER_API, ATTENDANCE_TAKE_CHECK_API, ATTENDANCE_TAKE_SUBMIT_API, GET_FULL_LIST_SUBJECTS_API, GET_ALL_PARENTS_API, GET_GRADE_LIST_API, GET_LESSONS_FULL_LIST_API, GET_STUDENTS_OF_CLASS_API, GET_EXAMS_OF_CLASS_FULL_LIST_API, ASSIGNMENTS_OF_CLASS_FULL_LIST_API, GET_CURRENT_USER_DETAILS_API, CHAT_BOT_API, BANNER_API, PHOTO_GALLERY_API, TESTIMONIAL_API, TESTIMONIAL_ACTIVE_API, ALL_PUBLIC_EVENTS_API, GET_PUBLIC_EVENT_BY_ID_API, ACHIEVEMENT_API, SPORTS_PROGRAM_API, JOB_OPENINGS_API, JOB_OPENINGS_PUBLIC_API, JOB_APPLICATIONS_API } from '@/api/apiParams/admin';
+import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, StudentWithRelations, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, ParentWithRelations, LessonListResponse, Attendance, AttendanceDashboardSummary, ClasswiseAttendanceResponse, TeacherClassesAttendanceResponse, ClassAttendanceDetailResponse, StudentMonthlyAttendance, CalendarHeatmapResponse, ParentChildrenAttendanceResponse, LessonsForDateResponse, LessonRosterResponse, AttendanceTakeRequest, AttendanceTakeResponse, AttendanceCheckResponse, TeacherClassSummary, Subject, Grade, SubjectWithRelations, AssignmentWithRelations, EventsWithRelations, UserProfile, ChangeUserPasswordRequest, UpdateProfileRequest, BannerListResponse, PhotoGalleryListResponse, TestimonialListResponse, Testimonial, AchievementListResponse, SportsProgramListResponse, JobOpeningListResponse, JobOpening, JobApplicationListResponse, JobApplication } from '@/types/schemas';
 import { getServerAuthTokens } from "@/utils/cookie";
 
 export async function getChatBotTokenAction(): Promise<{
@@ -839,6 +839,33 @@ export async function fetchEventsListAction(searchTerm?: string, pageNo: number 
         };
     }
 }
+
+export async function fetchPublicEventByIdAction(eventId: string): Promise<{
+    success: boolean;
+    data: EventsWithRelations | null;
+    error?: string;
+}> {
+    try {
+
+        const response = await api<EventsWithRelations>({
+            endpoint: {
+                ...GET_PUBLIC_EVENT_BY_ID_API,
+                url: `${GET_PUBLIC_EVENT_BY_ID_API.url}/${eventId}`,
+            },
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return { success: false, data: null, error: response.message || 'Failed to fetch public event' };
+        }
+
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in fetchPublicEventByIdAction:', error);
+        return { success: false, data: null, error: 'An unexpected error occurred' };
+    }
+}
+
 
 export async function fetchEventByIdAction(eventId: string): Promise<{
     success: boolean;
@@ -3572,9 +3599,9 @@ export async function fetchPublicBannersAction(): Promise<{
     }
 }
 
-export async function fetchPhotoGalleryAction(searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchAchievementsAction(searchTerm?: string, pageNo: number = 1): Promise<{
     success: boolean;
-    data: PhotoGalleryListResponse | null;
+    data: AchievementListResponse | null;
     totalCount: number;
     error?: string;
 }> {
@@ -3597,6 +3624,196 @@ export async function fetchPhotoGalleryAction(searchTerm?: string, pageNo: numbe
         } : {
             page: pageNo
         };
+
+        const response = await api<AchievementListResponse>({
+            endpoint: ACHIEVEMENT_API,
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: response.message || 'Failed to fetch achievements'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+            totalCount: response.data.total_count || 0,
+        };
+    } catch (error) {
+        console.error('Error in fetchAchievementsAction:', error);
+        return {
+            success: false,
+            data: null,
+            totalCount: 0,
+            error: 'An unexpected error occurred while fetching achievements'
+        };
+    }
+}
+
+export async function fetchPublicAchievementsAction(page: number = 1): Promise<{
+    success: boolean;
+    data: AchievementListResponse | null;
+    error?: string;
+}> {
+    try {
+        const response = await api<AchievementListResponse>({
+            endpoint: ACHIEVEMENT_API,
+            params: { page },
+            isServer: true,
+            withoutToken: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch achievements'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+        };
+    } catch (error) {
+        console.error('Error in fetchPublicAchievementsAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching achievements'
+        };
+    }
+}
+
+export async function fetchSportsProgramsAction(searchTerm?: string, pageNo: number = 1): Promise<{
+    success: boolean;
+    data: SportsProgramListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params = searchTerm ? {
+            search: searchTerm,
+            page: pageNo
+        } : {
+            page: pageNo
+        };
+
+        const response = await api<SportsProgramListResponse>({
+            endpoint: SPORTS_PROGRAM_API,
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: response.message || 'Failed to fetch sports programs'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+            totalCount: response.data.total_count || 0,
+        };
+    } catch (error) {
+        console.error('Error in fetchSportsProgramsAction:', error);
+        return {
+            success: false,
+            data: null,
+            totalCount: 0,
+            error: 'An unexpected error occurred while fetching sports programs'
+        };
+    }
+}
+
+export async function fetchPublicSportsProgramsAction(page: number = 1): Promise<{
+    success: boolean;
+    data: SportsProgramListResponse | null;
+    error?: string;
+}> {
+    try {
+        const response = await api<SportsProgramListResponse>({
+            endpoint: SPORTS_PROGRAM_API,
+            params: { page },
+            isServer: true,
+            withoutToken: true,
+        });
+
+        if (response.error || !response.data) {
+            return {
+                success: false,
+                data: null,
+                error: response.message || 'Failed to fetch sports programs'
+            };
+        }
+
+        return {
+            success: true,
+            data: response.data,
+        };
+    } catch (error) {
+        console.error('Error in fetchPublicSportsProgramsAction:', error);
+        return {
+            success: false,
+            data: null,
+            error: 'An unexpected error occurred while fetching sports programs'
+        };
+    }
+}
+
+export async function fetchPhotoGalleryAction(searchTerm?: string, pageNo: number = 1, isSport?: boolean): Promise<{
+    success: boolean;
+    data: PhotoGalleryListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return {
+                success: false,
+                data: null,
+                totalCount: 0,
+                error: 'Unauthorized: No authentication token found'
+            };
+        }
+
+        const params: Record<string, string | number | boolean> = searchTerm ? {
+            search: searchTerm,
+            page: pageNo
+        } : {
+            page: pageNo
+        };
+
+        if (typeof isSport === "boolean") {
+            params.is_sport = isSport;
+        }
 
         const response = await api<PhotoGalleryListResponse>({
             endpoint: PHOTO_GALLERY_API,
@@ -3630,7 +3847,7 @@ export async function fetchPhotoGalleryAction(searchTerm?: string, pageNo: numbe
     }
 }
 
-export async function fetchPublicPhotoGalleryAction(page: number = 1): Promise<{
+export async function fetchPublicPhotoGalleryAction(page: number = 1, isSport: boolean = false): Promise<{
     success: boolean;
     data: PhotoGalleryListResponse | null;
     error?: string;
@@ -3638,7 +3855,7 @@ export async function fetchPublicPhotoGalleryAction(page: number = 1): Promise<{
     try {
         const response = await api<PhotoGalleryListResponse>({
             endpoint: PHOTO_GALLERY_API,
-            params: { page },
+            params: { page, is_sport: isSport },
             isServer: true,
             withoutToken: true,
         });
@@ -3754,5 +3971,114 @@ export async function fetchPublicTestimonialsAction(): Promise<{
             data: [],
             error: 'An unexpected error occurred while fetching testimonials'
         };
+    }
+}
+
+// ─── Job Openings ─────────────────────────────────────────────────────────────
+
+export async function fetchJobOpeningsAction(searchTerm?: string, pageNo: number = 1): Promise<{
+    success: boolean;
+    data: JobOpeningListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return { success: false, data: null, totalCount: 0, error: 'Unauthorized: No authentication token found' };
+        }
+
+        const params = searchTerm ? { search: searchTerm, page: pageNo } : { page: pageNo };
+
+        const response = await api<JobOpeningListResponse>({
+            endpoint: JOB_OPENINGS_API,
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return { success: false, data: null, totalCount: 0, error: response.message || 'Failed to fetch job openings' };
+        }
+
+        return { success: true, data: response.data, totalCount: response.data.total_count || 0 };
+    } catch (error) {
+        console.error('Error in fetchJobOpeningsAction:', error);
+        return { success: false, data: null, totalCount: 0, error: 'An unexpected error occurred' };
+    }
+}
+
+export async function fetchPublicJobOpeningsAction(search?: string, page: number = 1): Promise<{
+    success: boolean;
+    data: JobOpeningListResponse | null;
+    error?: string;
+}> {
+    try {
+        const params: any = { page };
+        if (search) params.search = search;
+
+        const response = await api<JobOpeningListResponse>({
+            endpoint: JOB_OPENINGS_PUBLIC_API,
+            params,
+            isServer: true,
+            withoutToken: true,
+        });
+
+        if (response.error || !response.data) {
+            return { success: false, data: null, error: response.message || 'Failed to fetch job openings' };
+        }
+
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in fetchPublicJobOpeningsAction:', error);
+        return { success: false, data: null, error: 'An unexpected error occurred' };
+    }
+}
+
+// ─── Job Applications ─────────────────────────────────────────────────────────
+
+export async function fetchJobApplicationsAction(
+    searchTerm?: string,
+    pageNo: number = 1,
+    openingId?: string,
+    status?: string,
+    isReviewed?: boolean
+): Promise<{
+    success: boolean;
+    data: JobApplicationListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return { success: false, data: null, totalCount: 0, error: 'Unauthorized: No authentication token found' };
+        }
+
+        const params: any = { page: pageNo };
+        if (searchTerm) params.search = searchTerm;
+        if (openingId) params.opening_id = openingId;
+        if (status) params.status = status;
+        if (isReviewed !== undefined) params.is_reviewed = isReviewed;
+
+        const response = await api<JobApplicationListResponse>({
+            endpoint: JOB_APPLICATIONS_API,
+            params,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return { success: false, data: null, totalCount: 0, error: response.message || 'Failed to fetch job applications' };
+        }
+
+        return { success: true, data: response.data, totalCount: response.data.total_count || 0 };
+    } catch (error) {
+        console.error('Error in fetchJobApplicationsAction:', error);
+        return { success: false, data: null, totalCount: 0, error: 'An unexpected error occurred' };
     }
 }

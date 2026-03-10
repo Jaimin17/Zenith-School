@@ -27,7 +27,7 @@ export default function PhotoGalleryPage() {
               </div>
             </div>
           </div>
-          <PublicPhotoGallery />
+          <PublicPhotoGallery isSport={false} />
         </div>
       </div>
     </>

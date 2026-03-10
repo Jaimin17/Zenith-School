@@ -1,21 +1,12 @@
 "use client";
 
-import ActivityEventGallery from "@/components/activityAndEvents/ActivityEventGallery";
 import { ImagesSliderDemo } from "@/components/home/ImagesSlider";
 import SchoolStatistics from "@/components/statistics/SchoolStatistics";
-import { OurTimeline } from "@/components/ui/our-timeline";
-import StackCards from "@/components/ui/StackCards";
-import {
-  EventsData,
-  VisionMissionData,
-} from "@/lib/data";
-import { Box, Typography } from "@mui/material";
-import { AnimatedHeader } from "@/components/AnimatedHeader";
 import FeaturesCard from "@/components/home/FeaturesCard";
 import HomePhotoGallery from "@/components/home/HomePhotoGallery";
 import AboutUs from "@/components/about/AboutUs";
 import { ContactUsForm } from "@/components/ui/contact-us-form";
-import Events from "@/components/gallery/Events";
+import PublicEventsGallery from "@/components/gallery/PublicEventsGallery";
 import PublicLayout from "./(public)/layout";
 import HomeTestimonials from "@/components/home/HomeTestimonials";
 
@@ -30,7 +21,7 @@ export default function HomePage() {
 
       <SchoolStatistics />
 
-      <Events data={EventsData} />
+      <PublicEventsGallery showPagination={false} />
 
       <div className="gallery-area py-120">
         <div className="container">

@@ -264,6 +264,15 @@ export const ALL_PUBLIC_EVENTS_API: ApiType = {
     isForm: false,
 }
 
+export const GET_PUBLIC_EVENT_BY_ID_API: ApiType = {
+    url: apiUrls.GET_PUBLIC_EVENT_BY_ID_URL,
+    method: "GET",
+    withToken: false,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const GET_EVENT_BY_ID_API: ApiType = {
     url: apiUrls.GET_EVENT_BY_ID_URL,
     method: "GET",
@@ -1014,6 +1023,208 @@ export const DELETE_TESTIMONIAL_API: ApiType = {
 export const TOGGLE_TESTIMONIAL_ACTIVE_API: ApiType = {
     url: apiUrls.TOGGLE_TESTIMONIAL_ACTIVE_URL,
     method: "PATCH",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const ACHIEVEMENT_API: ApiType = {
+    url: apiUrls.GET_ACHIEVEMENTS_URL,
+    method: "GET",
+    withToken: false,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const ACHIEVEMENT_BY_ID_API: ApiType = {
+    url: apiUrls.GET_ACHIEVEMENT_BY_ID_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const SAVE_ACHIEVEMENT_API: ApiType = {
+    url: apiUrls.SAVE_ACHIEVEMENT_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_ACHIEVEMENT_API: ApiType = {
+    url: apiUrls.UPDATE_ACHIEVEMENT_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const DELETE_ACHIEVEMENT_API: ApiType = {
+    url: apiUrls.DELETE_ACHIEVEMENT_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const TOGGLE_ACHIEVEMENT_ACTIVE_API: ApiType = {
+    url: apiUrls.TOGGLE_ACHIEVEMENT_ACTIVE_URL,
+    method: "PATCH",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const SPORTS_PROGRAM_API: ApiType = {
+    url: apiUrls.GET_SPORTS_PROGRAMS_URL,
+    method: "GET",
+    withToken: false,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const SPORTS_PROGRAM_BY_ID_API: ApiType = {
+    url: apiUrls.GET_SPORTS_PROGRAM_BY_ID_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const SAVE_SPORTS_PROGRAM_API: ApiType = {
+    url: apiUrls.SAVE_SPORTS_PROGRAM_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_SPORTS_PROGRAM_API: ApiType = {
+    url: apiUrls.UPDATE_SPORTS_PROGRAM_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const DELETE_SPORTS_PROGRAM_API: ApiType = {
+    url: apiUrls.DELETE_SPORTS_PROGRAM_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const TOGGLE_SPORTS_PROGRAM_ACTIVE_API: ApiType = {
+    url: apiUrls.TOGGLE_SPORTS_PROGRAM_ACTIVE_URL,
+    method: "PATCH",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+// ─── Job Openings ─────────────────────────────────────────────────────────────
+
+export const JOB_OPENINGS_API: ApiType = {
+    url: apiUrls.GET_JOB_OPENINGS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const JOB_OPENINGS_PUBLIC_API: ApiType = {
+    url: apiUrls.GET_JOB_OPENINGS_PUBLIC_URL,
+    method: "GET",
+    withToken: false,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const SAVE_JOB_OPENING_API: ApiType = {
+    url: apiUrls.SAVE_JOB_OPENING_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_JOB_OPENING_API: ApiType = {
+    url: apiUrls.UPDATE_JOB_OPENING_URL,
+    method: "PUT",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const DELETE_JOB_OPENING_API: ApiType = {
+    url: apiUrls.DELETE_JOB_OPENING_URL,
+    method: "DELETE",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const TOGGLE_JOB_OPENING_STATUS_API: ApiType = {
+    url: apiUrls.TOGGLE_JOB_OPENING_STATUS_URL,
+    method: "PATCH",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+// ─── Job Applications ─────────────────────────────────────────────────────────
+
+export const JOB_APPLICATIONS_API: ApiType = {
+    url: apiUrls.GET_JOB_APPLICATIONS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const SAVE_JOB_APPLICATION_API: ApiType = {
+    url: apiUrls.SAVE_JOB_APPLICATION_URL,
+    method: "POST",
+    withToken: false,
+    isMultipart: true,
+    showToast: false,
+    isForm: false,
+}
+
+export const UPDATE_JOB_APPLICATION_STATUS_API: ApiType = {
+    url: apiUrls.UPDATE_JOB_APPLICATION_STATUS_URL,
+    method: "PATCH",
+    withToken: true,
+    isMultipart: true,
+    showToast: true,
+    isForm: false,
+}
+
+export const DELETE_JOB_APPLICATION_API: ApiType = {
+    url: apiUrls.DELETE_JOB_APPLICATION_URL,
+    method: "DELETE",
     withToken: true,
     isMultipart: false,
     showToast: true,

@@ -3,8 +3,8 @@
 import { cookies } from "next/headers";
 import { api } from '@/api/api';
 import { CHANGE_PASSWORD_API, UPDATE_PROFILE_API, UPDATE_PROFILE_PICTURE_API } from "@/api/apiParams/auth";
-import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_API, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EVENT_BY_ID_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_PARENT_BY_ID_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API, GET_SUPERVISORS_CLASSES_API, GET_STUDENT_BY_ID_API, ATTENDANCE_BY_STUDENT_ID_API, ANNOUNCEMENT_STUDENT_API, LESSONS_FOR_CLASS_API, GET_TEACHERS_OF_CLASS_API, GET_EXAMS_CLASS_API, ASSIGNMENTS_OF_CLASS_API, GET_STUDENT_RESULTS_API, GET_EXAMS_OF_STUDENT_API, ASSIGNMENTS_OF_STUDENT_API, ATTENDANCE_DASHBOARD_SUMMARY_API, ATTENDANCE_DASHBOARD_CLASSES_API, ATTENDANCE_TEACHER_CLASSES_API, ATTENDANCE_CLASS_DETAIL_API, ATTENDANCE_STUDENT_MONTHLY_API, ATTENDANCE_STUDENT_CALENDAR_API, ATTENDANCE_PARENT_CHILDREN_API, ATTENDANCE_TAKE_LESSONS_API, ATTENDANCE_TAKE_ROSTER_API, ATTENDANCE_TAKE_CHECK_API, ATTENDANCE_TAKE_SUBMIT_API, GET_FULL_LIST_SUBJECTS_API, GET_ALL_PARENTS_API, GET_GRADE_LIST_API, GET_LESSONS_FULL_LIST_API, GET_STUDENTS_OF_CLASS_API, GET_EXAMS_OF_CLASS_FULL_LIST_API, ASSIGNMENTS_OF_CLASS_FULL_LIST_API, GET_CURRENT_USER_DETAILS_API, CHAT_BOT_API, BANNER_API, PHOTO_GALLERY_API, TESTIMONIAL_API, TESTIMONIAL_ACTIVE_API, ALL_PUBLIC_EVENTS_API } from '@/api/apiParams/admin';
-import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, StudentWithRelations, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, ParentWithRelations, LessonListResponse, Attendance, AttendanceDashboardSummary, ClasswiseAttendanceResponse, TeacherClassesAttendanceResponse, ClassAttendanceDetailResponse, StudentMonthlyAttendance, CalendarHeatmapResponse, ParentChildrenAttendanceResponse, LessonsForDateResponse, LessonRosterResponse, AttendanceTakeRequest, AttendanceTakeResponse, AttendanceCheckResponse, TeacherClassSummary, Subject, Grade, SubjectWithRelations, AssignmentWithRelations, EventsWithRelations, UserProfile, ChangeUserPasswordRequest, UpdateProfileRequest, BannerListResponse, PhotoGalleryListResponse, TestimonialListResponse, Testimonial } from '@/types/schemas';
+import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_API, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EVENT_BY_ID_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_PARENT_BY_ID_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API, GET_SUPERVISORS_CLASSES_API, GET_STUDENT_BY_ID_API, ATTENDANCE_BY_STUDENT_ID_API, ANNOUNCEMENT_STUDENT_API, LESSONS_FOR_CLASS_API, GET_TEACHERS_OF_CLASS_API, GET_EXAMS_CLASS_API, ASSIGNMENTS_OF_CLASS_API, GET_STUDENT_RESULTS_API, GET_EXAMS_OF_STUDENT_API, ASSIGNMENTS_OF_STUDENT_API, ATTENDANCE_DASHBOARD_SUMMARY_API, ATTENDANCE_DASHBOARD_CLASSES_API, ATTENDANCE_TEACHER_CLASSES_API, ATTENDANCE_CLASS_DETAIL_API, ATTENDANCE_STUDENT_MONTHLY_API, ATTENDANCE_STUDENT_CALENDAR_API, ATTENDANCE_PARENT_CHILDREN_API, ATTENDANCE_TAKE_LESSONS_API, ATTENDANCE_TAKE_ROSTER_API, ATTENDANCE_TAKE_CHECK_API, ATTENDANCE_TAKE_SUBMIT_API, GET_FULL_LIST_SUBJECTS_API, GET_ALL_PARENTS_API, GET_GRADE_LIST_API, GET_LESSONS_FULL_LIST_API, GET_STUDENTS_OF_CLASS_API, GET_EXAMS_OF_CLASS_FULL_LIST_API, ASSIGNMENTS_OF_CLASS_FULL_LIST_API, GET_CURRENT_USER_DETAILS_API, CHAT_BOT_API, BANNER_API, PHOTO_GALLERY_API, TESTIMONIAL_API, TESTIMONIAL_ACTIVE_API, ALL_PUBLIC_EVENTS_API, GET_ACADEMIC_YEARS_ALL_API, GET_ACADEMIC_YEARS_API, GET_ACADEMIC_YEAR_ACTIVE_API, SAVE_ACADEMIC_YEAR_API, ACTIVATE_ACADEMIC_YEAR_API, GET_CHILDREN_OF_PARENT_API, BULK_PROMOTE_STUDENTS_API, ASSIGN_CLASS_TO_STUDENT_API, UPDATE_ACADEMIC_YEAR_API, SEED_STUDENTS_TO_YEAR_API, GET_STUDENT_SELF_YEAR_DATA_API, GET_LESSONS_BY_YEAR_API, GET_VISIBLE_ACADEMIC_YEARS_API } from '@/api/apiParams/admin';
+import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, StudentWithRelations, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, ParentWithRelations, LessonListResponse, Attendance, AttendanceDashboardSummary, ClasswiseAttendanceResponse, TeacherClassesAttendanceResponse, ClassAttendanceDetailResponse, StudentMonthlyAttendance, CalendarHeatmapResponse, ParentChildrenAttendanceResponse, LessonsForDateResponse, LessonRosterResponse, AttendanceTakeRequest, AttendanceTakeResponse, AttendanceCheckResponse, TeacherClassSummary, Subject, Grade, SubjectWithRelations, AssignmentWithRelations, EventsWithRelations, UserProfile, ChangeUserPasswordRequest, UpdateProfileRequest, BannerListResponse, PhotoGalleryListResponse, TestimonialListResponse, Testimonial, AcademicYear, AcademicYearListResponse, ChildItem, BulkPromoteRequest, BulkPromoteResponse, StudentYearDataResponse, StudentHistoryResponse } from '@/types/schemas';
 import { getServerAuthTokens } from "@/utils/cookie";
 
 export async function getChatBotTokenAction(): Promise<{
@@ -39,7 +39,7 @@ export async function getChatBotTokenAction(): Promise<{
 }
 
 
-export async function fetchUserCountsAction(): Promise<{
+export async function fetchUserCountsAction(yearId?: string): Promise<{
     success: boolean;
     data: UsersCount | null;
     error?: string;
@@ -56,8 +56,11 @@ export async function fetchUserCountsAction(): Promise<{
             };
         }
 
+        const params = yearId ? { year_id: yearId } : undefined;
+
         const response = await api<UsersCount>({
             endpoint: USER_COUNT_API,
+            params,
             serverToken: token.accessToken,
             isServer: true,
         });
@@ -84,7 +87,12 @@ export async function fetchUserCountsAction(): Promise<{
     }
 }
 
-export async function fetchAnnouncementsAction(searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchAnnouncementsAction(
+    searchTerm?: string,
+    pageNo: number = 1,
+    fromDate?: string,
+    toDate?: string,
+): Promise<{
     success: boolean;
     data: AnnouncementListResponse | null;
     totalCount: number;
@@ -104,13 +112,11 @@ export async function fetchAnnouncementsAction(searchTerm?: string, pageNo: numb
             };
         }
 
-        // Build params if search term provided
-        const params = searchTerm ? { 
-                search: searchTerm,
-                page: pageNo
-            } : {
-                page: pageNo
-            };
+        // Build params
+        const params: Record<string, string | number> = { page: pageNo };
+        if (searchTerm) params.search = searchTerm;
+        if (fromDate) params.from_date = fromDate;
+        if (toDate) params.to_date = toDate;
 
         // Make API request with server token
         const response = await api<AnnouncementListResponse>({
@@ -280,7 +286,8 @@ export async function fetchAssignmentsAction(
     subjectId?: string,
     teacherId?: string,
     status?: string,
-    dueDate?: string
+    dueDate?: string,
+    yearId?: string
 ): Promise<{
     success: boolean;
     data: AssignmentListResponse | null;
@@ -324,6 +331,10 @@ export async function fetchAssignmentsAction(
 
         if (dueDate) {
             params.due_date = dueDate;
+        }
+
+        if (yearId) {
+            params.academic_year_id = yearId;
         }
 
         // Make API request with server token
@@ -780,7 +791,7 @@ export async function fetchPublicEventsListAction(pageNo: number = 1): Promise<{
 }
 
 
-export async function fetchEventsListAction(searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchEventsListAction(searchTerm?: string, pageNo: number = 1, fromDate?: string, toDate?: string): Promise<{
     success: boolean;
     data: EventListResponse | null;
     totalCount: number;
@@ -800,12 +811,10 @@ export async function fetchEventsListAction(searchTerm?: string, pageNo: number 
             };
         }
 
-        const params = searchTerm ? { 
-            search: searchTerm,
-            page: pageNo.toString()
-         } : {
-            page: pageNo.toString()
-         };
+        const params: Record<string, string> = { page: pageNo.toString() };
+        if (searchTerm) params.search = searchTerm;
+        if (fromDate) params.from_date = fromDate;
+        if (toDate) params.to_date = toDate;
 
         // Make API request with server token
         const response = await api<EventListResponse>({
@@ -922,7 +931,7 @@ export async function fetchLessonsWeeklyAction(): Promise<{
     }
 }
 
-export async function fetchLessonsAction(searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchLessonsAction(searchTerm?: string, pageNo: number = 1, yearId?: string): Promise<{
     success: boolean;
     data: LessonListResponse | null;
     totalCount: number;
@@ -942,7 +951,9 @@ export async function fetchLessonsAction(searchTerm?: string, pageNo: number = 1
             };
         }
 
-        const params = searchTerm ? { search: searchTerm, page: pageNo.toString() } : { page: pageNo.toString() };
+        const params: Record<string, string> = { page: pageNo.toString() };
+        if (searchTerm) params.search = searchTerm;
+        if (yearId) params.academic_year_id = yearId;
 
         // Make API request with server token
         const response = await api<LessonListResponse>({
@@ -1126,7 +1137,7 @@ export async function fetchLessonsTeacherWeeklyAction(
     }
 }
 
-export async function fetchLessonsForTeacherAction(teacherId: string, searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchLessonsForTeacherAction(teacherId: string, searchTerm?: string, pageNo: number = 1, yearId?: string): Promise<{
     success: boolean;
     data: LessonListResponse | null;
     totalCount: number;
@@ -1146,7 +1157,9 @@ export async function fetchLessonsForTeacherAction(teacherId: string, searchTerm
             };
         }
 
-        const params = searchTerm ? { search: searchTerm, page: pageNo.toString() } : { page: pageNo.toString() };
+        const params: Record<string, string> = { page: pageNo.toString() };
+        if (searchTerm) params.search = searchTerm;
+        if (yearId) params.academic_year_id = yearId;
 
         // Make API request with server token
         const response = await api<LessonListResponse>({
@@ -1184,7 +1197,7 @@ export async function fetchLessonsForTeacherAction(teacherId: string, searchTerm
     }
 }
 
-export async function fetchLessonsForClassAction(classId: string, searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchLessonsForClassAction(classId: string, searchTerm?: string, pageNo: number = 1, yearId?: string): Promise<{
     success: boolean;
     data: LessonListResponse | null;
     totalCount: number;
@@ -1204,7 +1217,9 @@ export async function fetchLessonsForClassAction(classId: string, searchTerm?: s
             };
         }
 
-        const params = searchTerm ? { search: searchTerm, page: pageNo.toString() } : { page: pageNo.toString() };
+        const params: Record<string, string> = { page: pageNo.toString() };
+        if (searchTerm) params.search = searchTerm;
+        if (yearId) params.academic_year_id = yearId;
 
         // Make API request with server token
         const response = await api<LessonListResponse>({
@@ -1250,6 +1265,7 @@ export async function fetchResultsAction(
         examId?: string;
         assignmentId?: string;
         type?: string;
+        yearId?: string;
     }
 ): Promise<{
     success: boolean;
@@ -1278,6 +1294,7 @@ export async function fetchResultsAction(
         if (filters?.examId) params.exam_id = filters.examId;
         if (filters?.assignmentId) params.assignment_id = filters.assignmentId;
         if (filters?.type) params.type = filters.type;
+        if (filters?.yearId) params.academic_year_id = filters.yearId;
 
         // Make API request with server token
         const response = await api<ResultListResponse>({
@@ -1434,7 +1451,7 @@ export async function fetchStudentClassAction(): Promise<{
 }
 
 
-export async function fetchStudentsAction(searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchStudentsAction(searchTerm?: string, pageNo: number = 1, yearId?: string): Promise<{
     success: boolean;
     data: StudentListResponse | null;
     totalCount: number;
@@ -1454,7 +1471,9 @@ export async function fetchStudentsAction(searchTerm?: string, pageNo: number = 
             };
         }
 
-        const params = searchTerm ? { search: searchTerm, page: pageNo.toString() } : { page: pageNo.toString() };
+        const params: Record<string, string> = { page: pageNo.toString() };
+        if (searchTerm) params.search = searchTerm;
+        if (yearId) params.year_id = yearId;
 
         // Make API request with server token
         const response = await api<StudentListResponse>({
@@ -1684,7 +1703,7 @@ export async function fetchStudentByIdAction(id: string): Promise<{
     }
 }
 
-export async function fetchStudentsOfTeacherAction(teacherId: string, searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchStudentsOfTeacherAction(teacherId: string, searchTerm?: string, pageNo: number = 1, yearId?: string): Promise<{
     success: boolean;
     data: StudentListResponse | null;
     totalCount: number;
@@ -1704,7 +1723,9 @@ export async function fetchStudentsOfTeacherAction(teacherId: string, searchTerm
             };
         }
 
-        const params = searchTerm ? { search: searchTerm, page: pageNo.toString() } : { page: pageNo.toString() };
+        const params: Record<string, string> = { page: pageNo.toString() };
+        if (searchTerm) params.search = searchTerm;
+        if (yearId) params.year_id = yearId;
 
         // Make API request with server token
         const response = await api<StudentListResponse>({
@@ -1743,7 +1764,7 @@ export async function fetchStudentsOfTeacherAction(teacherId: string, searchTerm
 }
 
 
-export async function fetchParentsAction(searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchParentsAction(searchTerm?: string, pageNo: number = 1, yearId?: string): Promise<{
     success: boolean;
     data: ParentListResponse | null;
     totalCount: number;
@@ -1763,7 +1784,9 @@ export async function fetchParentsAction(searchTerm?: string, pageNo: number = 1
             };
         }
 
-        const params = searchTerm ? { search: searchTerm, page: pageNo.toString() } : { page: pageNo.toString() };
+        const params: Record<string, string> = { page: pageNo.toString() };
+        if (searchTerm) params.search = searchTerm;
+        if (yearId) params.year_id = yearId;
 
         // Make API request with server token
         const response = await api<ParentListResponse>({
@@ -2313,7 +2336,8 @@ export async function fetchExamListAction(
     searchTerm?: string, 
     pageNo: number = 1,
     classId?: string,
-    teacherId?: string
+    teacherId?: string,
+    yearId?: string
 ): Promise<{
     success: boolean;
     data: ExamListResponse | null;
@@ -2348,6 +2372,10 @@ export async function fetchExamListAction(
         
         if (teacherId) {
             params.append('teacherId', teacherId);
+        }
+
+        if (yearId) {
+            params.append('academic_year_id', yearId);
         }
 
         // Make API request with server token
@@ -2440,7 +2468,7 @@ export async function fetchExamListAction(
     }
 }
 
-export async function fetchExamsOfTeacherListAction(teacherId: string, searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchExamsOfTeacherListAction(teacherId: string, searchTerm?: string, pageNo: number = 1, yearId?: string): Promise<{
     success: boolean;
     data: ExamListResponse | null;
     totalCount: number;
@@ -2460,12 +2488,9 @@ export async function fetchExamsOfTeacherListAction(teacherId: string, searchTer
             };
         }
 
-        const params = searchTerm ? { 
-            search: searchTerm,
-            page: pageNo.toString()
-         } : {
-            page: pageNo.toString()
-         };
+        const params: Record<string, string> = { page: pageNo.toString() };
+        if (searchTerm) params.search = searchTerm;
+        if (yearId) params.academic_year_id = yearId;
 
         // Make API request with server token
         const response = await api<ExamListResponse>({
@@ -2503,7 +2528,7 @@ export async function fetchExamsOfTeacherListAction(teacherId: string, searchTer
     }
 }
 
-export async function fetchExamsOfClassListAction(classId: string, searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchExamsOfClassListAction(classId: string, searchTerm?: string, pageNo: number = 1, yearId?: string): Promise<{
     success: boolean;
     data: ExamListResponse | null;
     totalCount: number;
@@ -2523,12 +2548,9 @@ export async function fetchExamsOfClassListAction(classId: string, searchTerm?: 
             };
         }
 
-        const params = searchTerm ? { 
-            search: searchTerm,
-            page: pageNo.toString()
-         } : {
-            page: pageNo.toString()
-         };
+        const params: Record<string, string> = { page: pageNo.toString() };
+        if (searchTerm) params.search = searchTerm;
+        if (yearId) params.academic_year_id = yearId;
 
         // Make API request with server token
         const response = await api<ExamListResponse>({
@@ -2566,7 +2588,7 @@ export async function fetchExamsOfClassListAction(classId: string, searchTerm?: 
     }
 }
 
-export async function fetchExamsOfStudentListAction(studentId: string, searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchExamsOfStudentListAction(studentId: string, searchTerm?: string, pageNo: number = 1, yearId?: string): Promise<{
     success: boolean;
     data: ExamListResponse | null;
     totalCount: number;
@@ -2586,12 +2608,9 @@ export async function fetchExamsOfStudentListAction(studentId: string, searchTer
             };
         }
 
-        const params = searchTerm ? { 
-            search: searchTerm,
-            page: pageNo.toString()
-         } : {
-            page: pageNo.toString()
-         };
+        const params: Record<string, string> = { page: pageNo.toString() };
+        if (searchTerm) params.search = searchTerm;
+        if (yearId) params.academic_year_id = yearId;
 
         // Make API request with server token
         const response = await api<ExamListResponse>({
@@ -3754,5 +3773,345 @@ export async function fetchPublicTestimonialsAction(): Promise<{
             data: [],
             error: 'An unexpected error occurred while fetching testimonials'
         };
+    }
+}
+// -- Academic Years ------------------------------------------------------------
+
+export async function fetchAcademicYearsAllAction(): Promise<{
+    success: boolean;
+    data: AcademicYear[];
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const response = await api<AcademicYear[]>({
+            endpoint: GET_ACADEMIC_YEARS_ALL_API,
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: [], error: response.message || 'Failed to fetch academic years' };
+        }
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in fetchAcademicYearsAllAction:', error);
+        return { success: false, data: [], error: 'An unexpected error occurred' };
+    }
+}
+
+export async function fetchVisibleAcademicYearsAction(): Promise<{
+    success: boolean;
+    data: AcademicYear[];
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const response = await api<AcademicYear[]>({
+            endpoint: GET_VISIBLE_ACADEMIC_YEARS_API,
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: [], error: response.message || 'Failed to fetch visible academic years' };
+        }
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in fetchVisibleAcademicYearsAction:', error);
+        return { success: false, data: [], error: 'An unexpected error occurred' };
+    }
+}
+
+export async function fetchAcademicYearsAction(pageNo?: number): Promise<{
+    success: boolean;
+    data: AcademicYearListResponse | null;
+    totalCount: number;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const params: Record<string, string | number> = {};
+        if (pageNo) params.page = pageNo;
+        const response = await api<AcademicYearListResponse>({
+            endpoint: GET_ACADEMIC_YEARS_API,
+            params,
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: null, totalCount: 0, error: response.message || 'Failed to fetch academic years' };
+        }
+        return { success: true, data: response.data, totalCount: response.data.total_count };
+    } catch (error) {
+        console.error('Error in fetchAcademicYearsAction:', error);
+        return { success: false, data: null, totalCount: 0, error: 'An unexpected error occurred' };
+    }
+}
+
+export async function fetchActiveAcademicYearAction(): Promise<{
+    success: boolean;
+    data: AcademicYear | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const response = await api<AcademicYear>({
+            endpoint: GET_ACADEMIC_YEAR_ACTIVE_API,
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: null, error: response.message || 'No active academic year found' };
+        }
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in fetchActiveAcademicYearAction:', error);
+        return { success: false, data: null, error: 'An unexpected error occurred' };
+    }
+}
+
+export async function activateAcademicYearAction(yearId: string): Promise<{
+    success: boolean;
+    data: AcademicYear | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const response = await api<AcademicYear>({
+            endpoint: { ...ACTIVATE_ACADEMIC_YEAR_API, url: `api/v1/academic-years/${yearId}/activate` },
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: null, error: response.message || 'Failed to activate academic year' };
+        }
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in activateAcademicYearAction:', error);
+        return { success: false, data: null, error: 'An unexpected error occurred' };
+    }
+}
+
+export async function updateAcademicYearAction(yearId: string, data: { year_label?: string; start_date?: string; end_date?: string }): Promise<{
+    success: boolean;
+    data: AcademicYear | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const response = await api<AcademicYear>({
+            endpoint: { ...UPDATE_ACADEMIC_YEAR_API, url: `api/v1/academic-years/${yearId}` },
+            isServer: true,
+            serverToken: token?.accessToken,
+            payloadData: data,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: null, error: response.message || 'Failed to update academic year' };
+        }
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in updateAcademicYearAction:', error);
+        return { success: false, data: null, error: 'An unexpected error occurred' };
+    }
+}
+
+export async function seedStudentsToAcademicYearAction(yearId: string): Promise<{
+    success: boolean;
+    data: { created: number; skipped: number } | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const response = await api<{ created: number; skipped: number }>({
+            endpoint: { ...SEED_STUDENTS_TO_YEAR_API, url: `api/v1/academic-years/${yearId}/seed-students` },
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: null, error: response.message || 'Failed to seed students' };
+        }
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in seedStudentsToAcademicYearAction:', error);
+        return { success: false, data: null, error: 'An unexpected error occurred' };
+    }
+}
+
+// -- Parent Child Selection ----------------------------------------------------
+
+export async function fetchChildrenOfParentAction(): Promise<{
+    success: boolean;
+    data: ChildItem[];
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const response = await api<ChildItem[]>({
+            endpoint: GET_CHILDREN_OF_PARENT_API,
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: [], error: response.message || 'Failed to fetch children' };
+        }
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in fetchChildrenOfParentAction:', error);
+        return { success: false, data: [], error: 'An unexpected error occurred' };
+    }
+}
+
+// -- Student Year Data ---------------------------------------------------------
+
+export async function fetchStudentYearDataAction(studentId: string, yearId: string): Promise<{
+    success: boolean;
+    data: StudentYearDataResponse | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const response = await api<StudentYearDataResponse>({
+            endpoint: { url: `api/v1/student/${studentId}/year-data/${yearId}`, method: 'GET', withToken: true, showToast: false, isMultipart: false, isForm: false },
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: null, error: response.message || 'Failed to fetch year data' };
+        }
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in fetchStudentYearDataAction:', error);
+        return { success: false, data: null, error: 'An unexpected error occurred' };
+    }
+}
+
+export async function fetchStudentHistoryAction(studentId: string): Promise<{
+    success: boolean;
+    data: StudentHistoryResponse | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const response = await api<StudentHistoryResponse>({
+            endpoint: { url: `api/v1/student/${studentId}/history`, method: 'GET', withToken: true, showToast: false, isMultipart: false, isForm: false },
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: null, error: response.message || 'Failed to fetch student history' };
+        }
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in fetchStudentHistoryAction:', error);
+        return { success: false, data: null, error: 'An unexpected error occurred' };
+    }
+}
+
+// -- Admin: Bulk Promotion -----------------------------------------------------
+
+export async function fetchMyStudentYearDataAction(yearId: string): Promise<{
+    success: boolean;
+    data: StudentYearDataResponse | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const response = await api<StudentYearDataResponse>({
+            endpoint: { ...GET_STUDENT_SELF_YEAR_DATA_API, url: `api/v1/student/self/year-data/${yearId}` },
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: null, error: response.message || 'Failed to fetch year data' };
+        }
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in fetchMyStudentYearDataAction:', error);
+        return { success: false, data: null, error: 'An unexpected error occurred' };
+    }
+}
+
+export async function fetchTeacherLessonsByYearAction(yearId: string): Promise<{
+    success: boolean;
+    data: Lesson[] | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const response = await api<Lesson[]>({
+            endpoint: GET_LESSONS_BY_YEAR_API,
+            params: { academic_year_id: yearId },
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: null, error: response.message || 'Failed to fetch lessons' };
+        }
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in fetchTeacherLessonsByYearAction:', error);
+        return { success: false, data: null, error: 'An unexpected error occurred' };
+    }
+}
+
+// -- Admin: Bulk Promotion (prev comment moved above) --------------------------
+
+export async function bulkPromoteStudentsAction(payload: BulkPromoteRequest): Promise<{
+    success: boolean;
+    data: BulkPromoteResponse | null;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const response = await api<BulkPromoteResponse>({
+            endpoint: BULK_PROMOTE_STUDENTS_API,
+            payloadData: payload,
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error || !response.data) {
+            return { success: false, data: null, error: response.message || 'Promotion failed' };
+        }
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in bulkPromoteStudentsAction:', error);
+        return { success: false, data: null, error: 'An unexpected error occurred' };
+    }
+}
+
+export async function assignClassToStudentAction(studentId: string, classId: string, academicYearId?: string): Promise<{
+    success: boolean;
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+        const payload: { class_id: string; academic_year_id?: string } = { class_id: classId };
+        if (academicYearId) payload.academic_year_id = academicYearId;
+        const response = await api({
+            endpoint: { ...ASSIGN_CLASS_TO_STUDENT_API, url: `api/v1/student/${studentId}/assign-class` },
+            payloadData: payload,
+            isServer: true,
+            serverToken: token?.accessToken,
+        });
+        if (response.error) {
+            return { success: false, error: response.message || 'Failed to assign class' };
+        }
+        return { success: true };
+    } catch (error) {
+        console.error('Error in assignClassToStudentAction:', error);
+        return { success: false, error: 'An unexpected error occurred' };
     }
 }

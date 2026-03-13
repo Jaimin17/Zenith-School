@@ -16,6 +16,7 @@ interface ResultFiltersProps {
   currentType?: string;
   currentSearch?: string;
   studentId?: string;
+  role?: string | null;
 }
 
 const ResultFilters = ({
@@ -28,6 +29,7 @@ const ResultFilters = ({
   currentType,
   currentSearch,
   studentId,
+  role,
 }: ResultFiltersProps) => {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -116,7 +118,7 @@ const ResultFilters = ({
         <div className="p-4 bg-white border-x border-b border-gray-200 rounded-b-xl">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Class Filter */}
-            <div className="space-y-1.5">
+            {role !== "student" && <div className="space-y-1.5">
               <label className="flex items-center gap-2 text-xs font-medium text-gray-600">
                 <GraduationCap className="w-3.5 h-3.5" />
                 Class
@@ -139,6 +141,7 @@ const ResultFilters = ({
                 </div>
               </div>
             </div>
+            }
 
             {/* Type Filter */}
             <div className="space-y-1.5">

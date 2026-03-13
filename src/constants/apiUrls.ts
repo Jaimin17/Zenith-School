@@ -236,4 +236,23 @@ export const apiUrls = {
     DELETE_TESTIMONIAL_URL: "api/v1/testimonials/delete",
 
     TOGGLE_TESTIMONIAL_ACTIVE_URL: "api/v1/testimonials/toggle-active",
+
+    // Academic Years
+    GET_ACADEMIC_YEARS_URL: "api/v1/academic-years",
+    GET_ACADEMIC_YEARS_ALL_URL: "api/v1/academic-years/all",
+    GET_VISIBLE_ACADEMIC_YEARS_URL: "api/v1/academic-years/visible",
+    GET_ACADEMIC_YEAR_ACTIVE_URL: "api/v1/academic-years/active",
+    SAVE_ACADEMIC_YEAR_URL: "api/v1/academic-years",
+    ACTIVATE_ACADEMIC_YEAR_URL: "api/v1/academic-years",
+    UPDATE_ACADEMIC_YEAR_URL: "api/v1/academic-years",
+    SEED_STUDENTS_TO_YEAR_URL: "api/v1/academic-years",
+
+    // Student: children list, promotion, history, year-data
+    GET_CHILDREN_OF_PARENT_URL: "api/v1/student/children",
+    BULK_PROMOTE_STUDENTS_URL: "api/v1/student/bulk-promote",
+    ASSIGN_CLASS_TO_STUDENT_URL: "api/v1/student",
+    GET_STUDENT_YEAR_DATA_URL: "api/v1/student",
+    GET_STUDENT_SELF_YEAR_DATA_URL: "api/v1/student/self/year-data",
+    GET_STUDENT_HISTORY_URL: "api/v1/student",
+    GET_LESSONS_BY_YEAR_URL: "api/v1/lesson/getAllByYear",
 }

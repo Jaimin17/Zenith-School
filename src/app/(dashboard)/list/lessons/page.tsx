@@ -7,6 +7,7 @@ import { fetchLessonsAction, fetchLessonsForClassAction, fetchLessonsForTeacherA
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { BookOpen, Clock, Users, User } from "lucide-react";
+import { cookies } from "next/headers";
 
 // Helper function to format time
 const formatTime = (timeString: string): string => {
@@ -87,14 +88,17 @@ const LessonListPage = async ({
   const teacherId = params.teacherId || undefined;
   const classId = params.classId || undefined;
 
+  const cookieStore = await cookies();
+  const yearId = cookieStore.get("selected_year_id")?.value;
+
   let result;
 
   if(teacherId){
-    result = await fetchLessonsForTeacherAction(teacherId, search, page);
+    result = await fetchLessonsForTeacherAction(teacherId, search, page, yearId);
   } else if (classId) {
-    result = await fetchLessonsForClassAction(classId, search, page);
+    result = await fetchLessonsForClassAction(classId, search, page, yearId);
   } else {
-    result = await fetchLessonsAction(search, page);
+    result = await fetchLessonsAction(search, page, yearId);
   }
 
   const hasError = !result.success || !result.data;

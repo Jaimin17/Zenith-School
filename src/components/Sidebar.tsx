@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/contexts/authContext";
+import { useAcademicYear } from "@/contexts/AcademicYearContext";
 import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -14,6 +15,7 @@ interface User {
 
 const Navbar: React.FC = () => {
   const { user, role, logout, loading } = useAuth();
+  const { years, selectedYearId, setYear } = useAcademicYear();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -60,6 +62,20 @@ const Navbar: React.FC = () => {
 
       {/* ICONS AND USER */}
       <div className="flex items-center gap-6 justify-end w-full">
+        {/* YEAR SELECTOR */}
+        {years.length > 0 && (
+          <select
+            value={selectedYearId ?? ""}
+            onChange={(e) => setYear(e.target.value)}
+            className="text-xs border border-gray-300 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-lamaPurple cursor-pointer"
+          >
+            {years.map((y) => (
+              <option key={y.id} value={y.id}>
+                {y.year_label}{y.is_active ? " ★" : ""}
+              </option>
+            ))}
+          </select>
+        )}
         <div className="bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer">
           <Image src="/message.png" alt="Messages" width={20} height={20} />
         </div>

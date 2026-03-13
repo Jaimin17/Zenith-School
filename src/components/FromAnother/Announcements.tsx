@@ -18,9 +18,10 @@ interface AnnouncementsProps {
   initialAnnouncements: AnnouncementListResponse;
   userId?: string;
   role?: string;
+  activeYear?: any;
 }
 
-const Announcements = ({ initialAnnouncements, userId, role }: AnnouncementsProps) => {
+const Announcements = ({ initialAnnouncements, activeYear, userId, role }: AnnouncementsProps) => {
     const [announcements, setAnnouncements] = useState<Announcement[]>(initialAnnouncements.data);
     const [isPending, startTransition] = useTransition();
 
@@ -33,7 +34,7 @@ const Announcements = ({ initialAnnouncements, userId, role }: AnnouncementsProp
             result = await fetchAnnouncementsOfTeacherAction(userId);
           } else {
             // For admin, student, parent or when no specific filter
-            result = await fetchAnnouncementsAction();
+            result = await fetchAnnouncementsAction("", 1, activeYear?.start_date, activeYear?.end_date);
           }
           
           if (result.success && result.data) {

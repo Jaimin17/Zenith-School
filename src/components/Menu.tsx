@@ -135,6 +135,18 @@ const menuItems: MenuSection[] = [
         href: "/list/testimonials",
         visible: ["admin", "student"],
       },
+      {
+        icon: "/subject.png",
+        label: "Academic Years",
+        href: "/list/academic-years",
+        visible: ["admin"],
+      },
+      {
+        icon: "/student.png",
+        label: "Bulk Promote",
+        href: "/list/students/bulk-promote",
+        visible: ["admin"],
+      },
     ],
   },
   {

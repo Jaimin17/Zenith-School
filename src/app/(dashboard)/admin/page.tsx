@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Announcements from "../../../components/FromAnother/Announcements";
 import AttendanceChartContainer from "../../../components/FromAnother/AttendanceChartContainer";
 import CountChartContainer from "../../../components/FromAnother/CountChartContainer";
@@ -7,13 +7,35 @@ import UserCard from "../../../components/FromAnother/UserCard";
 import { Box } from "@mui/material";
 import type { StudentCount } from "../../../components/FromAnother/CountChartContainer";
 import type { UserStat } from "../../../components/FromAnother/UserCard";
-import { fetchUserCountsAction, fetchAnnouncementsAction } from "@/actions/admin";
+import {
+  fetchUserCountsAction,
+  fetchAnnouncementsAction,
+  fetchAcademicYearsAllAction,
+} from "@/actions/admin";
 import { AnnouncementListResponse } from "@/types/schemas";
+import { cookies } from "next/headers";
+
+export const dynamic = "force-dynamic";
 
 const AdminPage = async () => {
+  const cookieStore = await cookies();
+  const selectedYearId = cookieStore.get("selected_year_id")?.value ?? null;
+
+  const [yearsResult] = await Promise.all([
+    fetchAcademicYearsAllAction(),
+  ]);
+
+  const years = yearsResult.data ?? [];
+  const selectedYear = years.find((y) => y.id === selectedYearId) ?? years.find((y) => y.is_active) ?? years[0] ?? null;
+  const resolvedYearId = selectedYear?.id ?? null;
+
+  // Filter announcements and user counts by the selected year's date range
+  const fromDate = selectedYear?.start_date ?? undefined;
+  const toDate = selectedYear?.end_date ?? undefined;
+
   const [userCountsResult, announcementsResult] = await Promise.all([
-    fetchUserCountsAction(),
-    fetchAnnouncementsAction(),
+    fetchUserCountsAction(resolvedYearId ?? undefined),
+    fetchAnnouncementsAction(undefined, 1, fromDate, toDate),
   ]);
 
   if (!userCountsResult.success || !userCountsResult.data) {
@@ -75,14 +97,9 @@ const AdminPage = async () => {
 
       {/* RIGHT */}
       <div className="w-full lg:w-1/3 flex flex-col gap-8">
-        <EventCalendarContainer />
+        <EventCalendarContainer defaultDate={fromDate} />
         <Announcements initialAnnouncements={announcements} />
       </div>
-
-      {/*
-        NOTE: The AI Terminal chatbot is rendered globally in layout.tsx
-        and floats over this page via position:fixed — no need to add it here.
-      */}
     </div>
   );
 };

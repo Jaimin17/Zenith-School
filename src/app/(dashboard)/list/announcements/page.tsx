@@ -4,11 +4,12 @@ import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
 import Image from "next/image";
 import type { Announcement } from "@/types/schemas";
-import { fetchAnnouncementsAction } from "@/actions/admin";
+import { fetchAcademicYearsAllAction, fetchAnnouncementsAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { Calendar, FileText } from "lucide-react";
 import { getAnnouncementPdfUrl } from "@/utils/imageHelpers";
+import { cookies } from "next/headers";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -55,10 +56,22 @@ const AnnouncementListPage = async ({
     );
   }
 
+  const cookieStore = await cookies();
+  const yearId = cookieStore.get("selected_year_id")?.value;
+
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
 
-  const result = await fetchAnnouncementsAction(search, page);
+  let fromDate: string | undefined;
+  let toDate: string | undefined;
+  if (yearId) {
+    const yearsResult = await fetchAcademicYearsAllAction();
+    const selectedYear = yearsResult.data?.find((y) => y.id === yearId);
+    fromDate = selectedYear?.start_date;
+    toDate = selectedYear?.end_date;
+  }
+
+  const result = await fetchAnnouncementsAction(search, page, fromDate, toDate);
 
   const hasError = !result.success || !result.data;
 

@@ -7,6 +7,7 @@ import Loader from "@/components/loader/preloader";
 import SearchPopUp from "@/components/search-popup/SearchPopUp";
 import Script from "next/script";
 import { AuthProvider } from "@/contexts/authContext";
+import NextTopLoader from "nextjs-toploader";
 import type { ReactNode } from "react";
 
 interface RootLayoutProps {
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         </head>
 
         <body>
+          <NextTopLoader color="#1976D2" showSpinner={false} height={3} />
           <CssBaseline />
 
           {/* Scripts */}

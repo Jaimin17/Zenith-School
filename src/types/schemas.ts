@@ -373,6 +373,7 @@ export interface LessonBase {
     day: string,
     start_time: string,
     end_time: string,
+    academic_year_id: string | null,
 }
 
 export interface Lesson extends LessonBase {
@@ -523,4 +524,94 @@ export interface Testimonial {
 
 export interface TestimonialListResponse extends PaginationListResponse {
     data: Testimonial[];
+}
+
+// ── Academic Year ────────────────────────────────────────────────────────────
+export interface AcademicYear {
+    id: string;
+    year_label: string;
+    start_date: string;
+    end_date: string;
+    is_active: boolean;
+    is_delete: boolean;
+    created_at: string;
+}
+
+export interface AcademicYearListResponse extends PaginationListResponse {
+    data: AcademicYear[];
+}
+
+export interface SeedStudentsResponse {
+    created: number;
+    skipped: number;
+}
+
+// ── Student Class History ─────────────────────────────────────────────────────
+export interface StudentClassHistoryRecord {
+    id: string;
+    academic_year_label: string;
+    class_name: string | null;
+    grade_level: number | null;
+}
+
+export interface StudentHistoryResponse {
+    student_id: string;
+    history: StudentClassHistoryRecord[];
+}
+
+// ── Parent Child Selection ────────────────────────────────────────────────────
+export type StudentStatus = 'active' | 'graduated' | 'inactive';
+
+export interface ChildItem {
+    id: string;
+    first_name: string;
+    last_name: string;
+    username: string;
+    img: string | null;
+    status: StudentStatus;
+}
+
+// ── Bulk Promotion ───────────────────────────────────────────────────────────
+export interface BulkPromoteRequest {
+    from_year_id: string;
+    to_year_id: string;
+    dry_run?: boolean;
+}
+
+export interface PromoteStudentResult {
+    student_id: string;
+    student_name: string;
+    action: 'promoted' | 'graduated' | 'skipped' | 'error';
+    previous_class_name: string | null;
+    class_assigned: string | null;
+    class_not_found: boolean;
+    from_grade_level: number | null;
+    to_grade_level: number | null;
+    detail: string | null;
+}
+
+export interface BulkPromoteResponse {
+    dry_run: boolean;
+    from_year: string;
+    to_year: string;
+    total: number;
+    promoted_count: number;
+    graduated_count: number;
+    skipped_count: number;
+    error_count: number;
+    class_not_found_count: number;
+    results: PromoteStudentResult[];
+}
+
+// ── Student Historical Year Data ──────────────────────────────────────────────
+export interface StudentYearDataResponse {
+    student_id: string;
+    academic_year: AcademicYear;
+    class_id: string | null;
+    class_name: string | null;
+    grade_id: string | null;
+    grade_level: number | null;
+    attendance: StudentAttendanceRecord[];
+    results: ResultWithRelations[];
+    lessons: LessonBase[];
 }

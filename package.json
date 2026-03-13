@@ -29,6 +29,7 @@
     "motion": "^12.23.12",
     "next": "15.4.10",
     "next-cloudinary": "^6.17.5",
+    "nextjs-toploader": "^3.9.17",
     "owl.carousel": "^2.3.4",
     "react": "^18.2.0",
     "react-big-calendar": "^1.19.4",

@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import EventCalendar from "./EventCalendar";
 import EventList from "./EventList";
 
-const EventCalendarContainer = () => {
+const EventCalendarContainer = ({ defaultDate }: { defaultDate?: string }) => {
   return (
     <Box
       sx={{
@@ -13,7 +13,7 @@ const EventCalendarContainer = () => {
       }}
     >
       {/* CALENDAR */}
-      <EventCalendar />
+      <EventCalendar defaultDate={defaultDate} />
 
       {/* HEADER */}
       <Box

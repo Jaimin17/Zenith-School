@@ -5,10 +5,11 @@ import TableSearch from "@/components/FromAnother/TableSearch";
 import Image from "next/image";
 import Link from "next/link";
 import type { EventsWithRelations } from "@/types/schemas";
-import { fetchEventsListAction } from "@/actions/admin";
+import { fetchEventsListAction, fetchAcademicYearsAllAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { Calendar, Clock, Eye } from "lucide-react";
+import { cookies } from "next/headers";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -59,7 +60,19 @@ const EventListPage = async ({
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
 
-  const result = await fetchEventsListAction(search, page);
+  const cookieStore = await cookies();
+  const yearId = cookieStore.get("selected_year_id")?.value;
+
+  let fromDate: string | undefined;
+  let toDate: string | undefined;
+  if (yearId) {
+    const yearsResult = await fetchAcademicYearsAllAction();
+    const selectedYear = yearsResult.data?.find((y) => y.id === yearId);
+    fromDate = selectedYear?.start_date;
+    toDate = selectedYear?.end_date;
+  }
+
+  const result = await fetchEventsListAction(search, page, fromDate, toDate);
 
   const hasError = !result.success || !result.data;
 

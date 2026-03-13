@@ -10,6 +10,7 @@ import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { getStudentImageUrl } from "@/utils/imageHelpers";
 import { Eye, GraduationCap, Users } from "lucide-react";
+import { cookies } from "next/headers";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -60,12 +61,15 @@ const StudentListPage = async ({
   const search = params.search || undefined;
   const teacherId = params.teacherId || undefined;
 
+  const cookieStore = await cookies();
+  const yearId = cookieStore.get("selected_year_id")?.value;
+
   let result;
 
   if(teacherId){
-    result = await fetchStudentsOfTeacherAction(teacherId, search, page);
+    result = await fetchStudentsOfTeacherAction(teacherId, search, page, yearId);
   } else {
-    result = await fetchStudentsAction(search, page);
+    result = await fetchStudentsAction(search, page, yearId);
   }
 
 

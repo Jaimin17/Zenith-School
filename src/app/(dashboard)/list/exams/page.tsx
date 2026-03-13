@@ -8,6 +8,7 @@ import { fetchExamListAction, fetchTeachersListAction, fetchClassesListAction, f
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { Calendar, Clock, BookOpen } from "lucide-react";
+import { cookies } from "next/headers";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -62,6 +63,9 @@ const ExamListPage = async ({
   const classId = params.classId || undefined;
   const studentId = params.studentId || undefined;
 
+  const cookieStore = await cookies();
+  const yearId = cookieStore.get("selected_year_id")?.value;
+
   let teachers: any[] = [];
   let classes: any[] = [];
   // Fetch exams and filter data in parallel
@@ -79,13 +83,13 @@ const ExamListPage = async ({
   let result;
 
   if(teacherId){
-    result = await fetchExamsOfTeacherListAction(teacherId, search, page);
+    result = await fetchExamsOfTeacherListAction(teacherId, search, page, yearId);
   } else if (classId) {
-    result = await fetchExamsOfClassListAction(classId, search, page);
+    result = await fetchExamsOfClassListAction(classId, search, page, yearId);
   } else if (studentId) {
-    result = await fetchExamsOfStudentListAction(studentId, search, page);
+    result = await fetchExamsOfStudentListAction(studentId, search, page, yearId);
   } else {
-    result = await fetchExamListAction(search, page, filterClassId, filterTeacherId);
+    result = await fetchExamListAction(search, page, filterClassId, filterTeacherId, yearId);
   }
 
   const hasError = !result.success || !result.data;

@@ -10,6 +10,7 @@ import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { getStudentImageUrl } from "@/utils/imageHelpers";
 import { Award, User, ClipboardList, FileText, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { cookies } from "next/headers";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -104,9 +105,12 @@ const ResultsPage = async ({
   const filterType = params.type || undefined;
   const studentId = params.studentId || undefined;
 
+  const cookieStore = await cookies();
+  const yearId = cookieStore.get("selected_year_id")?.value;
+
   // Fetch results and filter data in parallel
   const [classesResult, examsResult, assignmentsResult] = await Promise.all([
-    fetchAllClassesAction(),
+    role !== "student" ? fetchAllClassesAction() : Promise.resolve(null),
     fetchExamListAction(undefined, 1),
     fetchAssignmentsAction(undefined, 1),
   ]);
@@ -125,7 +129,8 @@ const ResultsPage = async ({
       classId,
       examId,
       assignmentId,
-      type: filterType
+      type: filterType,
+      yearId,
     });
   }
 
@@ -140,7 +145,7 @@ const ResultsPage = async ({
   let count: number = originalCount;
 
   // Get filter data
-  const classes = classesResult.data || [];
+  const classes = classesResult?.data || [];
   const exams = examsResult.data?.data || [];
   const assignments = assignmentsResult.data?.data || [];
 
@@ -290,6 +295,7 @@ const ResultsPage = async ({
         currentType={filterType}
         currentSearch={search}
         studentId={studentId}
+        role={role}
       />
 
       {/* ERROR STATE */}

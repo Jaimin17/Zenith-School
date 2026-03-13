@@ -36,8 +36,11 @@ const LoginPage: React.FC = () => {
       const success = await login(username.trim(), password);
       if (!success) {
         setMsg("Login failed. Check your username and password, or try again later.");
+        setLoading(false); // only dismiss overlay on failure; on success the page unmounts
       }
-    } finally {
+      // On success: login() already called router.push(); let the component
+      // unmount naturally so the overlay stays visible during navigation.
+    } catch {
       setLoading(false);
     }
   };

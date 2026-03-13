@@ -1019,3 +1019,122 @@ export const TOGGLE_TESTIMONIAL_ACTIVE_API: ApiType = {
     showToast: true,
     isForm: false,
 }
+
+// ── Academic Years ────────────────────────────────────────────────────────────
+export const GET_ACADEMIC_YEARS_API: ApiType = {
+    url: apiUrls.GET_ACADEMIC_YEARS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_ACADEMIC_YEARS_ALL_API: ApiType = {
+    url: apiUrls.GET_ACADEMIC_YEARS_ALL_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_VISIBLE_ACADEMIC_YEARS_API: ApiType = {
+    url: apiUrls.GET_VISIBLE_ACADEMIC_YEARS_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_ACADEMIC_YEAR_ACTIVE_API: ApiType = {
+    url: apiUrls.GET_ACADEMIC_YEAR_ACTIVE_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const SAVE_ACADEMIC_YEAR_API: ApiType = {
+    url: apiUrls.SAVE_ACADEMIC_YEAR_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const ACTIVATE_ACADEMIC_YEAR_API: ApiType = {
+    url: apiUrls.ACTIVATE_ACADEMIC_YEAR_URL,
+    method: "PATCH",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const UPDATE_ACADEMIC_YEAR_API: ApiType = {
+    url: apiUrls.UPDATE_ACADEMIC_YEAR_URL,
+    method: "PATCH",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const SEED_STUDENTS_TO_YEAR_API: ApiType = {
+    url: apiUrls.SEED_STUDENTS_TO_YEAR_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+// ── Students: children / promotion / history ─────────────────────────────────
+export const GET_CHILDREN_OF_PARENT_API: ApiType = {
+    url: apiUrls.GET_CHILDREN_OF_PARENT_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const BULK_PROMOTE_STUDENTS_API: ApiType = {
+    url: apiUrls.BULK_PROMOTE_STUDENTS_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const ASSIGN_CLASS_TO_STUDENT_API: ApiType = {
+    url: apiUrls.ASSIGN_CLASS_TO_STUDENT_URL,
+    method: "PATCH",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
+export const GET_STUDENT_SELF_YEAR_DATA_API: ApiType = {
+    url: apiUrls.GET_STUDENT_SELF_YEAR_DATA_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const GET_LESSONS_BY_YEAR_API: ApiType = {
+    url: apiUrls.GET_LESSONS_BY_YEAR_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}

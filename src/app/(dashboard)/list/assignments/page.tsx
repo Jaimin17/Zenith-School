@@ -9,6 +9,7 @@ import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { FileText, Calendar, BookOpen, User, Clock, ExternalLink } from "lucide-react";
 import { getAssignmentPdfUrl } from "@/utils/imageHelpers";
+import { cookies } from "next/headers";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -112,6 +113,9 @@ const AssignmentsPage = async ({
   const classId = params.classId || undefined;
   const studentId = params.studentId || undefined;
 
+  const cookieStore = await cookies();
+  const yearId = cookieStore.get("selected_year_id")?.value;
+
   // Fetch assignments, teachers, and subjects in parallel
   const [teachersResult, subjectsResult] = await Promise.all([
     fetchTeachersListAction(undefined, 1),
@@ -127,7 +131,7 @@ const AssignmentsPage = async ({
   } else if (studentId) {
     result = await fetchAssignmentsOfStudentAction(studentId, search, page, subjectId, filterTeacherId, status, filterDate);
   } else {
-    result = await fetchAssignmentsAction(search, page, subjectId, filterTeacherId, status, filterDate);
+    result = await fetchAssignmentsAction(search, page, subjectId, filterTeacherId, status, filterDate, yearId);
   }
 
   const hasError = !result.success || !result.data;

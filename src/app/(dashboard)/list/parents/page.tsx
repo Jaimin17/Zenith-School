@@ -10,6 +10,7 @@ import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { getParentImageUrl } from "@/utils/imageHelpers";
 import { Eye, UserCircle, Users } from "lucide-react";
+import { cookies } from "next/headers";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -59,7 +60,10 @@ const ParentListPage = async ({
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
 
-  const result = await fetchParentsAction(search, page);
+  const cookieStore = await cookies();
+  const yearId = cookieStore.get("selected_year_id")?.value;
+
+  const result = await fetchParentsAction(search, page, yearId);
 
   const hasError = !result.success || !result.data;
 

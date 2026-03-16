@@ -172,7 +172,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } else if (role === USER_ROLES.TEACHER) {
           router.push('/teacher')
         } else if (role === USER_ROLES.PARENT) {
-          router.push('/parent')
+          router.push('/parent/select-child')
         } else if (role === USER_ROLES.STUDENT) {
           router.push('/student')
         } else {

@@ -62,6 +62,7 @@ const EventListPage = async ({
 
   const cookieStore = await cookies();
   const yearId = cookieStore.get("selected_year_id")?.value;
+  const selectedChildId = cookieStore.get("selected_child_id")?.value;
 
   let fromDate: string | undefined;
   let toDate: string | undefined;
@@ -72,7 +73,7 @@ const EventListPage = async ({
     toDate = selectedYear?.end_date;
   }
 
-  const result = await fetchEventsListAction(search, page, fromDate, toDate);
+  const result = await fetchEventsListAction(search, page, fromDate, toDate, selectedChildId);
 
   const hasError = !result.success || !result.data;
 

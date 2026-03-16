@@ -107,22 +107,25 @@ const ResultsPage = async ({
 
   const cookieStore = await cookies();
   const yearId = cookieStore.get("selected_year_id")?.value;
+  const selectedChildId = cookieStore.get("selected_child_id")?.value;
+  const effectiveStudentId = role === "parent" ? (selectedChildId || studentId) : studentId;
 
   // Fetch results and filter data in parallel
   const [classesResult, examsResult, assignmentsResult] = await Promise.all([
-    role !== "student" ? fetchAllClassesAction() : Promise.resolve(null),
+    (role !== "student" && role !== "parent") ? fetchAllClassesAction() : Promise.resolve(null),
     fetchExamListAction(undefined, 1),
     fetchAssignmentsAction(undefined, 1),
   ]);
 
   let result;
 
-  if (studentId) {
-    result = await fetchResultsOfStudentAction(search, page, studentId, {
+  if (effectiveStudentId) {
+    result = await fetchResultsOfStudentAction(search, page, effectiveStudentId, {
       classId,
       examId,
       assignmentId,
-      type: filterType
+      type: filterType,
+      yearId,
     });
   } else {
     result = await fetchResultsAction(search, page, {
@@ -294,7 +297,7 @@ const ResultsPage = async ({
         currentAssignmentId={assignmentId}
         currentType={filterType}
         currentSearch={search}
-        studentId={studentId}
+        studentId={effectiveStudentId}
         role={role}
       />
 

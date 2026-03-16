@@ -58,6 +58,7 @@ const AnnouncementListPage = async ({
 
   const cookieStore = await cookies();
   const yearId = cookieStore.get("selected_year_id")?.value;
+  const selectedChildId = cookieStore.get("selected_child_id")?.value;
 
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
@@ -71,7 +72,7 @@ const AnnouncementListPage = async ({
     toDate = selectedYear?.end_date;
   }
 
-  const result = await fetchAnnouncementsAction(search, page, fromDate, toDate);
+  const result = await fetchAnnouncementsAction(search, page, fromDate, toDate, selectedChildId);
 
   const hasError = !result.success || !result.data;
 

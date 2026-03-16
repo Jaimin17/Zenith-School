@@ -8,6 +8,7 @@ import {
 } from "@/actions/admin";
 import { AdminAttendanceDashboard, TeacherAttendanceView, StudentAttendanceView } from "@/components/attendance"; 
 import ParentAttendanceView from "@/components/attendance/ParentAttendanceView";
+import { cookies } from "next/headers";
 
 const AttendanceListPage = async ({
   searchParams,
@@ -77,6 +78,24 @@ const AttendanceListPage = async ({
 
   // Parent View
   if (role === 'parent') {
+    const cookieStore = await cookies();
+    const selectedChildId = cookieStore.get("selected_child_id")?.value;
+
+    if (selectedChildId) {
+      const calendarResult = await fetchStudentCalendarAttendanceAction(selectedChildId, month, year);
+
+      return (
+        <StudentAttendanceView
+          studentId={selectedChildId}
+          month={month}
+          year={year}
+          calendarData={calendarResult.data}
+          hasError={!calendarResult.success}
+          errorMessage={calendarResult.error}
+        />
+      );
+    }
+
     const childrenResult = await fetchParentChildrenAttendanceAction(month, year);
 
     return (

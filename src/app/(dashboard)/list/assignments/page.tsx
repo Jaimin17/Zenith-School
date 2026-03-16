@@ -115,6 +115,8 @@ const AssignmentsPage = async ({
 
   const cookieStore = await cookies();
   const yearId = cookieStore.get("selected_year_id")?.value;
+  const selectedChildId = cookieStore.get("selected_child_id")?.value;
+  const effectiveStudentId = role === "parent" ? (selectedChildId || studentId) : studentId;
 
   // Fetch assignments, teachers, and subjects in parallel
   const [teachersResult, subjectsResult] = await Promise.all([
@@ -128,8 +130,8 @@ const AssignmentsPage = async ({
     result = await fetchAssignmentsOfTeacherAction(teacherId, search, page, subjectId, status, filterDate);
   } else if (classId) {
     result = await fetchAssignmentsOfClassAction(classId, search, page, subjectId, filterTeacherId, status, filterDate);
-  } else if (studentId) {
-    result = await fetchAssignmentsOfStudentAction(studentId, search, page, subjectId, filterTeacherId, status, filterDate);
+  } else if (effectiveStudentId) {
+    result = await fetchAssignmentsOfStudentAction(effectiveStudentId, search, page, subjectId, filterTeacherId, status, filterDate, yearId);
   } else {
     result = await fetchAssignmentsAction(search, page, subjectId, filterTeacherId, status, filterDate, yearId);
   }
@@ -283,7 +285,7 @@ const AssignmentsPage = async ({
         currentSearch={search}
         teacherId={teacherId}
         classId={classId}
-        studentId={studentId}
+        studentId={effectiveStudentId}
       />
 
       {/* ERROR STATE */}

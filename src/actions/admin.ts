@@ -92,6 +92,7 @@ export async function fetchAnnouncementsAction(
     pageNo: number = 1,
     fromDate?: string,
     toDate?: string,
+    selectedChildId?: string | null
 ): Promise<{
     success: boolean;
     data: AnnouncementListResponse | null;
@@ -117,6 +118,7 @@ export async function fetchAnnouncementsAction(
         if (searchTerm) params.search = searchTerm;
         if (fromDate) params.from_date = fromDate;
         if (toDate) params.to_date = toDate;
+        if (selectedChildId) params.student_id = selectedChildId;
 
         // Make API request with server token
         const response = await api<AnnouncementListResponse>({
@@ -552,7 +554,8 @@ export async function fetchAssignmentsOfStudentAction(
     subjectId?: string,
     filterTeacherId?: string,
     status?: string,
-    dueDate?: string
+    dueDate?: string,
+    yearId?: string
 ): Promise<{
     success: boolean;
     data: AssignmentListResponse | null;
@@ -595,6 +598,10 @@ export async function fetchAssignmentsOfStudentAction(
 
         if (filterTeacherId) {
             params.teacher_id = filterTeacherId;
+        }
+
+        if (yearId) {
+            params.academic_year_id = yearId;
         }
 
         console.log('Fetching assignments for student:', studentId, 'with params:', params);
@@ -791,7 +798,7 @@ export async function fetchPublicEventsListAction(pageNo: number = 1): Promise<{
 }
 
 
-export async function fetchEventsListAction(searchTerm?: string, pageNo: number = 1, fromDate?: string, toDate?: string): Promise<{
+export async function fetchEventsListAction(searchTerm?: string, pageNo: number = 1, fromDate?: string, toDate?: string, selectedChildId?: string): Promise<{
     success: boolean;
     data: EventListResponse | null;
     totalCount: number;
@@ -815,7 +822,7 @@ export async function fetchEventsListAction(searchTerm?: string, pageNo: number 
         if (searchTerm) params.search = searchTerm;
         if (fromDate) params.from_date = fromDate;
         if (toDate) params.to_date = toDate;
-
+        if (selectedChildId) params.student_id = selectedChildId;
         // Make API request with server token
         const response = await api<EventListResponse>({
             endpoint: ALL_EVENTS_API,
@@ -1338,7 +1345,9 @@ export async function fetchResultsOfStudentAction(
         examId?: string;
         assignmentId?: string;
         type?: string;
-    }
+        yearId?: string;
+    },
+
 ): Promise<{
     success: boolean;
     data: ResultListResponse | null;
@@ -1366,6 +1375,7 @@ export async function fetchResultsOfStudentAction(
         if (filters?.examId) params.exam_id = filters.examId;
         if (filters?.assignmentId) params.assignment_id = filters.assignmentId;
         if (filters?.type) params.type = filters.type;
+        if (filters?.yearId) params.academic_year_id = filters.yearId;
 
         // Make API request with server token
         const response = await api<ResultListResponse>({

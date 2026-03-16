@@ -7,7 +7,6 @@ import {
 } from "@/actions/admin";
 import Announcements from "../../../components/FromAnother/Announcements";
 import BigCalendarContainer from "../../../components/FromAnother/BigCalendarContainer";
-import ChildSelector from "../../../components/ChildSelector";
 import { Announcement, AnnouncementListResponse, Lesson, LessonBase, StudentYearDataResponse } from "@/types/schemas";
 import { Suspense } from "react";
 import { cookies } from "next/headers";
@@ -128,28 +127,25 @@ const CurrentSchedule = async ({
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
-interface ParentPageProps {
-    searchParams: Promise<{ childId?: string }>;
-}
-
-const ParentPage = async ({ searchParams }: ParentPageProps) => {
-    const params = await searchParams;
+const ParentPage = async () => {
     const cookieStore = await cookies();
     const selectedYearId = cookieStore.get("selected_year_id")?.value ?? null;
+    const selectedChildCookieId = cookieStore.get("selected_child_id")?.value ?? null;
 
     // Fetch children list, academic years, and announcements in parallel
-    const [childrenResult, yearsResult, announcementsResult] = await Promise.all([
+    const [childrenResult, yearsResult] = await Promise.all([
         fetchChildrenOfParentAction(),
         fetchAcademicYearsAllAction(),
-        fetchAnnouncementsAction(),
     ]);
 
     const children = childrenResult.data;
     const years = yearsResult.data;
     const activeYear = years.find((y) => y.is_active) ?? years[0] ?? null;
 
+    const announcementsResult = await fetchAnnouncementsAction(undefined, 1, activeYear?.start_date, activeYear?.end_date, selectedChildCookieId);
+
     // Resolve selected child
-    const selectedChildId = params.childId ?? children[0]?.id ?? null;
+    const selectedChildId = selectedChildCookieId ?? children[0]?.id ?? null;
     const selectedChild = children.find((c) => c.id === selectedChildId) ?? children[0] ?? null;
 
     // Resolve selected year
@@ -178,14 +174,6 @@ const ParentPage = async ({ searchParams }: ParentPageProps) => {
         <div className="flex-1 p-4 flex gap-4 flex-col xl:flex-row">
             {/* LEFT - Selected Student Schedule */}
             <div className="w-full xl:w-2/3 flex flex-col gap-4">
-                {/* Selectors row */}
-                <div className="flex flex-wrap gap-3 items-center">
-                    {/* ChildSelector is a client component — wrap in Suspense */}
-                    <Suspense fallback={null}>
-                        <ChildSelector children={children} selectedChildId={selectedChildId} />
-                    </Suspense>
-                </div>
-
                 {/* Schedule content */}
                 {!selectedChild ? (
                     <div className="bg-white p-4 rounded-md">
@@ -226,7 +214,7 @@ const ParentPage = async ({ searchParams }: ParentPageProps) => {
                             </p>
                         </div>
                     ) : (
-                        <Announcements initialAnnouncements={announcements} />
+                        <Announcements userId={selectedChildId} activeYear={activeYear} role="parent" initialAnnouncements={announcements} />
                     )}
                 </Suspense>
             </div>

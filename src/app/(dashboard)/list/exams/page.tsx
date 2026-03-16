@@ -65,11 +65,13 @@ const ExamListPage = async ({
 
   const cookieStore = await cookies();
   const yearId = cookieStore.get("selected_year_id")?.value;
+  const selectedChildId = cookieStore.get("selected_child_id")?.value;
+  const effectiveStudentId = role === "parent" ? (selectedChildId || studentId) : studentId;
 
   let teachers: any[] = [];
   let classes: any[] = [];
   // Fetch exams and filter data in parallel
-  if (!teacherId && !classId && !studentId){
+  if (!teacherId && !classId && !effectiveStudentId){
     const [teachersResult, classesResult] = await Promise.all([
       fetchFullTeachersListAction(),
       fetchAllClassesAction()
@@ -86,8 +88,8 @@ const ExamListPage = async ({
     result = await fetchExamsOfTeacherListAction(teacherId, search, page, yearId);
   } else if (classId) {
     result = await fetchExamsOfClassListAction(classId, search, page, yearId);
-  } else if (studentId) {
-    result = await fetchExamsOfStudentListAction(studentId, search, page, yearId);
+  } else if (effectiveStudentId) {
+    result = await fetchExamsOfStudentListAction(effectiveStudentId, search, page, yearId);
   } else {
     result = await fetchExamListAction(search, page, filterClassId, filterTeacherId, yearId);
   }
@@ -213,7 +215,7 @@ const ExamListPage = async ({
       </div>
 
       {/* FILTERS */}
-      {(!teacherId && !classId && !studentId) && <ExamFilters
+      {(!teacherId && !classId && !effectiveStudentId) && <ExamFilters
         classes={classes ? classes : []}
         teachers={teachers ? teachers : []}
         currentClassId={filterClassId}

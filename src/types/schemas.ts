@@ -505,11 +505,82 @@ export interface PhotoGallery {
     description: string;
     img: string | null;
     is_active: boolean;
+    is_sport: boolean;
     created_at: string;
 }
 
 export interface PhotoGalleryListResponse extends PaginationListResponse {
     data: PhotoGallery[];
+}
+
+export interface Achievement {
+    id: string;
+    title: string;
+    description: string;
+    img: string | null;
+    is_active: boolean;
+    created_at: string;
+}
+
+export interface AchievementListResponse extends PaginationListResponse {
+    data: Achievement[];
+}
+
+export interface SportsProgram {
+    id: string;
+    title: string;
+    description: string;
+    img: string | null;
+    is_active: boolean;
+    created_at: string;
+}
+
+export interface SportsProgramListResponse extends PaginationListResponse {
+    data: SportsProgram[];
+}
+
+export type JobType = "full_time" | "part_time" | "contract" | "internship";
+export type ApplicationStatus = "pending" | "reviewed" | "accepted" | "rejected";
+
+export interface JobOpening {
+    id: string;
+    title: string;
+    description: string;
+    experience: number;
+    positions: number;
+    location: string | null;
+    salary_range: string | null;
+    deadline: string | null;
+    job_type: JobType;
+    is_active: boolean;
+    is_delete: boolean;
+    created_at: string;
+    subject_id: string | null;
+}
+
+export interface JobOpeningListResponse extends PaginationListResponse {
+    data: JobOpening[];
+}
+
+export interface JobApplication {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    location: string;
+    portfolio_link: string | null;
+    jobOpening_id: string;
+    about_applicant: string;
+    resume: string;
+    status: ApplicationStatus;
+    created_at: string;
+    is_reviewed: boolean;
+    is_delete: boolean;
+    jobOpenings?: JobOpening;
+}
+
+export interface JobApplicationListResponse extends PaginationListResponse {
+    data: JobApplication[];
 }
 
 export interface Testimonial {

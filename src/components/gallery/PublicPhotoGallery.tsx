@@ -21,7 +21,13 @@ const GallerySkeleton = () => {
   );
 };
 
-const PublicPhotoGallery = () => {
+const PublicPhotoGallery = ({
+  isSport = false,
+  showPagination = true,
+}: {
+  isSport?: boolean;
+  showPagination?: boolean;
+}) => {
   const [images, setImages] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -34,7 +40,7 @@ const PublicPhotoGallery = () => {
       setError(null);
 
       try {
-        const result = await fetchPublicPhotoGalleryAction(page);
+        const result = await fetchPublicPhotoGalleryAction(page, isSport);
 
         if (!result.success || !result.data) {
           setImages([]);
@@ -59,7 +65,7 @@ const PublicPhotoGallery = () => {
     };
 
     fetchPhotos();
-  }, [page]);
+  }, [page, isSport]);
 
   const pageNumbers = useMemo(() => {
     const maxVisible = 3;
@@ -88,7 +94,7 @@ const PublicPhotoGallery = () => {
         <DynamicGallery data={images} />
       )}
 
-      {totalPages > 1 && (
+      {showPagination && totalPages > 1 && (
         <div className="pagination-area mt-8">
           <div aria-label="Photo gallery pagination">
             <ul className="pagination">

@@ -3,14 +3,13 @@ import Pagination from "@/components/FromAnother/Pagination";
 import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
 import Image from "next/image";
-import type { PhotoGallery } from "@/types/schemas";
-import { fetchPhotoGalleryAction } from "@/actions/admin";
+import type { SportsProgram } from "@/types/schemas";
+import { fetchSportsProgramsAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { ImageIcon } from "lucide-react";
-import { getPhotoGalleryImageUrl } from "@/utils/imageHelpers";
-import PhotoGalleryActiveToggle from "@/components/FromAnother/PhotoGalleryActiveToggle";
-import { ITEM_PER_PAGE } from "@/lib/settings";
+import { getSportsProgramImageUrl } from "@/utils/imageHelpers";
+import SportsProgramActiveToggle from "@/components/FromAnother/SportsProgramActiveToggle";
 
 const TableSkeleton = () => (
   <div>
@@ -29,7 +28,7 @@ const TableSkeleton = () => (
   </div>
 );
 
-const PhotoGalleryListPage = async ({
+const SportsProgramsListPage = async ({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | undefined }>;
@@ -43,8 +42,12 @@ const PhotoGalleryListPage = async ({
     return (
       <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
         <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
-          <h2 className="text-lg font-semibold text-red-700 mb-2">Access Denied</h2>
-          <p className="text-red-600 text-sm">You do not have permission to view this page.</p>
+          <h2 className="text-lg font-semibold text-red-700 mb-2">
+            Access Denied
+          </h2>
+          <p className="text-red-600 text-sm">
+            You do not have permission to view this page.
+          </p>
         </div>
       </div>
     );
@@ -52,28 +55,33 @@ const PhotoGalleryListPage = async ({
 
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
-  const sportFilter = params.is_sport === "true" ? true : params.is_sport === "false" ? false : undefined;
 
-  const result = await fetchPhotoGalleryAction(search, page, sportFilter);
-
+  const result = await fetchSportsProgramsAction(search, page);
   const hasError = !result.success || !result.data;
-  const data: PhotoGallery[] = result.data?.data || [];
-  const count: number = result.totalCount || (result.data?.total_pages ? result.data.total_pages * ITEM_PER_PAGE : 0);
+
+  if (hasError) {
+    console.error("Failed to fetch sports programs:", result.error);
+  }
+
+  const data: SportsProgram[] = result.data?.data || [];
+  const count: number = result.totalCount || 0;
 
   const columns = [
-    { header: "Photo", accessor: "photo" },
+    { header: "Program", accessor: "program" },
     { header: "Description", accessor: "description", className: "hidden md:table-cell" },
-    { header: "Type", accessor: "type", className: "hidden md:table-cell" },
     { header: "Status", accessor: "status", className: "hidden md:table-cell" },
     { header: "Actions", accessor: "action" },
   ];
 
-  const renderRow = (item: PhotoGallery) => (
-    <tr key={item.id} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight">
+  const renderRow = (item: SportsProgram) => (
+    <tr
+      key={item.id}
+      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
+    >
       <td className="flex items-center gap-4 p-4">
         {item.img ? (
           <img
-            src={getPhotoGalleryImageUrl(item.img)}
+            src={getSportsProgramImageUrl(item.img)}
             alt={item.title}
             className="w-20 h-14 object-cover rounded-md"
           />
@@ -90,15 +98,12 @@ const PhotoGalleryListPage = async ({
         <span className="text-gray-600 line-clamp-2">{item.description}</span>
       </td>
       <td className="hidden md:table-cell">
-        <span className="text-gray-600">{item.is_sport ? "Sports" : "General"}</span>
-      </td>
-      <td className="hidden md:table-cell">
-        <PhotoGalleryActiveToggle photoId={item.id} isActive={item.is_active} />
+        <SportsProgramActiveToggle programId={item.id} isActive={item.is_active} />
       </td>
       <td>
         <div className="flex items-center gap-2">
-          <FormContainer table="photoGallery" type="update" data={item} />
-          <FormContainer table="photoGallery" type="delete" id={item.id} />
+          <FormContainer table="sportsProgram" type="update" data={item} />
+          <FormContainer table="sportsProgram" type="delete" id={item.id} />
         </div>
       </td>
     </tr>
@@ -107,30 +112,12 @@ const PhotoGalleryListPage = async ({
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">Photo Gallery</h1>
+        <h1 className="hidden md:block text-lg font-semibold">
+          Sports Programs
+        </h1>
 
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
-          <div className="flex items-center gap-2 text-sm">
-            <a
-              className={`px-3 py-1.5 rounded-full border ${sportFilter === undefined ? "bg-gray-900 text-white border-gray-900" : "border-gray-200 text-gray-600"}`}
-              href={`/list/photo-gallery${search ? `?search=${encodeURIComponent(search)}` : ""}`}
-            >
-              All
-            </a>
-            <a
-              className={`px-3 py-1.5 rounded-full border ${sportFilter === false ? "bg-gray-900 text-white border-gray-900" : "border-gray-200 text-gray-600"}`}
-              href={`/list/photo-gallery?is_sport=false${search ? `&search=${encodeURIComponent(search)}` : ""}`}
-            >
-              General
-            </a>
-            <a
-              className={`px-3 py-1.5 rounded-full border ${sportFilter === true ? "bg-gray-900 text-white border-gray-900" : "border-gray-200 text-gray-600"}`}
-              href={`/list/photo-gallery?is_sport=true${search ? `&search=${encodeURIComponent(search)}` : ""}`}
-            >
-              Sports
-            </a>
-          </div>
           <div className="flex items-center gap-4 self-end">
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/filter.png" alt="" width={14} height={14} />
@@ -138,20 +125,27 @@ const PhotoGalleryListPage = async ({
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            <FormContainer table="photoGallery" type="create" />
+
+            <FormContainer table="sportsProgram" type="create" />
           </div>
         </div>
       </div>
 
       {hasError ? (
         <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
-          <h2 className="text-lg font-semibold text-red-700 mb-2">Error Loading Photos</h2>
-          <p className="text-red-600 text-sm">{result.error || "Unable to load photos. Please try again later."}</p>
+          <h2 className="text-lg font-semibold text-red-700 mb-2">
+            Error Loading Sports Programs
+          </h2>
+          <p className="text-red-600 text-sm">
+            {result.error || "Unable to load sports programs. Please try again later."}
+          </p>
         </div>
       ) : data.length === 0 ? (
         <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-md text-center">
           <p className="text-gray-600">
-            {search ? `No photos found matching "${search}"` : "No photos available. Add your first photo!"}
+            {search
+              ? `No sports programs found matching "${search}"`
+              : "No sports programs available. Create your first program!"}
           </p>
         </div>
       ) : (
@@ -165,4 +159,4 @@ const PhotoGalleryListPage = async ({
   );
 };
 
-export default PhotoGalleryListPage;
+export default SportsProgramsListPage;

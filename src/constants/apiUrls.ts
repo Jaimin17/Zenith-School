@@ -107,6 +107,8 @@ export const apiUrls = {
 
     GET_EVENT_BY_ID_URL: "api/v1/events/getById",
 
+    GET_PUBLIC_EVENT_BY_ID_URL: "api/v1/events/getPublicEventById",
+
     GET_PUBLIC_EVENTS_URL: "api/v1/events/getAllPublicEvents",
 
     SAVE_EVENT_URL: "api/v1/events/save",
@@ -255,4 +257,31 @@ export const apiUrls = {
     GET_STUDENT_SELF_YEAR_DATA_URL: "api/v1/student/self/year-data",
     GET_STUDENT_HISTORY_URL: "api/v1/student",
     GET_LESSONS_BY_YEAR_URL: "api/v1/lesson/getAllByYear",
+    GET_ACHIEVEMENTS_URL: "api/v1/achievement/getAll",
+    GET_ACHIEVEMENT_BY_ID_URL: "api/v1/achievement/get",
+    SAVE_ACHIEVEMENT_URL: "api/v1/achievement/save",
+    UPDATE_ACHIEVEMENT_URL: "api/v1/achievement/update",
+    DELETE_ACHIEVEMENT_URL: "api/v1/achievement/delete",
+    TOGGLE_ACHIEVEMENT_ACTIVE_URL: "api/v1/achievement/toggle-active",
+
+    GET_SPORTS_PROGRAMS_URL: "api/v1/sportProgram/getAll",
+    GET_SPORTS_PROGRAM_BY_ID_URL: "api/v1/sportProgram/get",
+    SAVE_SPORTS_PROGRAM_URL: "api/v1/sportProgram/save",
+    UPDATE_SPORTS_PROGRAM_URL: "api/v1/sportProgram/update",
+    DELETE_SPORTS_PROGRAM_URL: "api/v1/sportProgram/delete",
+    TOGGLE_SPORTS_PROGRAM_ACTIVE_URL: "api/v1/sportProgram/toggle-active",
+
+    // Job Openings
+    GET_JOB_OPENINGS_URL: "api/v1/job-openings/getAll",
+    GET_JOB_OPENINGS_PUBLIC_URL: "api/v1/job-openings/public",
+    SAVE_JOB_OPENING_URL: "api/v1/job-openings/save",
+    UPDATE_JOB_OPENING_URL: "api/v1/job-openings/update",
+    DELETE_JOB_OPENING_URL: "api/v1/job-openings/delete",
+    TOGGLE_JOB_OPENING_STATUS_URL: "api/v1/job-openings/toggle-active",
+
+    // Job Applications
+    GET_JOB_APPLICATIONS_URL: "api/v1/job-applications/getAll",
+    SAVE_JOB_APPLICATION_URL: "api/v1/job-applications/save",
+    UPDATE_JOB_APPLICATION_STATUS_URL: "api/v1/job-applications/update-status",
+    DELETE_JOB_APPLICATION_URL: "api/v1/job-applications/delete",
 }

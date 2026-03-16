@@ -28,7 +28,7 @@ const HomePhotoGallery = () => {
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
-        const result = await fetchPublicPhotoGalleryAction();
+        const result = await fetchPublicPhotoGalleryAction(1, false);
 
         if (result.success && result.data?.data) {
           const activeImages = result.data.data

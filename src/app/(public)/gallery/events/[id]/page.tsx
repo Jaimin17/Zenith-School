@@ -1,28 +1,26 @@
-import SingleEvents from '../../../../../components/gallery/SingleEvents';
-import { BANNER_DATA, SINGLE_EVENTS_DETAILS } from '../../../../../lib/data';
-import React, { JSX } from 'react';
-import Banner from '../../../../../components/Banner';
+import SingleEvents from "../../../../../components/gallery/SingleEvents";
+import { fetchPublicEventByIdAction } from "@/actions/admin";
+import { BANNER_DATA } from "../../../../../lib/data";
+import Banner from "../../../../../components/Banner";
 
-interface EventProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
-async function Event(props: EventProps) {
+async function Event({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const bannerData = BANNER_DATA["events-gallery"];
-  const { id } = await props.params;
-  
-  const data = SINGLE_EVENTS_DETAILS.find(
-    (item) => item.id === Number(id)
-  );
 
-  if (!data) {
+  const { id } = await params;
+
+  const result = await fetchPublicEventByIdAction(id);
+
+  if (!result.success || !result.data) {
     return (
       <>
         <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
         <div className="container py-120">
           <h2>Event not found</h2>
+          <p>{result.error || "We could not load this event right now."}</p>
         </div>
       </>
     );
@@ -31,7 +29,7 @@ async function Event(props: EventProps) {
   return (
     <>
       <Banner title={bannerData.title} backgroundImage={bannerData.imageUrl} />
-      <SingleEvents eventData={data} />
+      <SingleEvents eventData={result.data} />
     </>
   );
 }

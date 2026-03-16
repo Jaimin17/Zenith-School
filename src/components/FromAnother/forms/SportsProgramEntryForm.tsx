@@ -2,16 +2,16 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Dispatch, SetStateAction, useEffect, useState, useRef } from "react";
-import { photoGallerySchema, PhotoGallerySchema } from "@/lib/formValidationSchemas";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { sportsProgramSchema, SportsProgramSchema } from "@/lib/formValidationSchemas";
 import { useActionState } from "react";
-import { createPhotoGallery, updatePhotoGallery } from "@/lib/actions";
+import { createSportsProgram, updateSportsProgram } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { ImageIcon, X, Upload, Loader2, ExternalLink } from "lucide-react";
-import { getPhotoGalleryImageUrl } from "@/utils/imageHelpers";
+import { getSportsProgramImageUrl } from "@/utils/imageHelpers";
 
-const PhotoGalleryForm = ({
+const SportsProgramEntryForm = ({
   type,
   data,
   setOpen,
@@ -23,19 +23,18 @@ const PhotoGalleryForm = ({
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isActive, setIsActive] = useState<boolean>(data?.is_active ?? true);
-  const [isSport, setIsSport] = useState<boolean>(data?.is_sport ?? false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<PhotoGallerySchema>({
-    resolver: zodResolver(photoGallerySchema),
+  } = useForm<SportsProgramSchema>({
+    resolver: zodResolver(sportsProgramSchema),
   });
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(
-    data?.img ? getPhotoGalleryImageUrl(data.img) : null
+    data?.img ? getSportsProgramImageUrl(data.img) : null
   );
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -45,8 +44,8 @@ const PhotoGalleryForm = ({
       setIsSubmitting(true);
       const result =
         type === "create"
-          ? await createPhotoGallery(formData)
-          : await updatePhotoGallery(formData);
+          ? await createSportsProgram(formData)
+          : await updateSportsProgram(formData);
       setIsSubmitting(false);
       return result;
     },
@@ -64,7 +63,6 @@ const PhotoGalleryForm = ({
         formData.append(key, value as string);
       }
     });
-    formData.append("is_sport", String(isSport));
     formData.append("is_active", String(isActive));
     if (imageFile) {
       formData.append("image", imageFile);
@@ -76,7 +74,7 @@ const PhotoGalleryForm = ({
 
   useEffect(() => {
     if (state.success) {
-      toast.success(`Photo has been ${type === "create" ? "created" : "updated"}!`);
+      toast.success(`Sports program has been ${type === "create" ? "created" : "updated"}!`);
       setOpen(false);
       router.refresh();
     } else if (state.error && state.message) {
@@ -121,7 +119,7 @@ const PhotoGalleryForm = ({
           type="text"
           {...register("title")}
           defaultValue={data?.title}
-          placeholder="Enter photo title"
+          placeholder="Enter sports program title"
           className={`w-full px-3.5 py-2.5 border rounded-lg text-sm transition-colors duration-150 bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 outline-none ${
             errors.title
               ? "border-red-400 focus:ring-red-400 focus:border-red-400"
@@ -140,7 +138,7 @@ const PhotoGalleryForm = ({
         <textarea
           {...register("description")}
           defaultValue={data?.description}
-          placeholder="Write photo description..."
+          placeholder="Write sports program description..."
           rows={3}
           className={`w-full px-3.5 py-2.5 border rounded-lg text-sm transition-colors duration-150 bg-white focus:ring-2 focus:ring-gray-900 focus:border-gray-900 outline-none resize-none ${
             errors.description
@@ -157,31 +155,9 @@ const PhotoGalleryForm = ({
 
       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
         <div>
-          <label className="text-sm font-medium text-gray-700">Sports Gallery</label>
-          <p className="text-xs text-gray-400 mt-0.5">
-            {isSport ? "Photo will appear on Sports page" : "Photo will appear in main gallery"}
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setIsSport(!isSport)}
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 ${
-            isSport ? "bg-blue-500" : "bg-gray-300"
-          }`}
-        >
-          <span
-            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 shadow-sm ${
-              isSport ? "translate-x-6" : "translate-x-1"
-            }`}
-          />
-        </button>
-      </div>
-
-      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
-        <div>
           <label className="text-sm font-medium text-gray-700">Active Status</label>
           <p className="text-xs text-gray-400 mt-0.5">
-            {isActive ? "Photo is visible in public gallery" : "Photo is hidden from public gallery"}
+            {isActive ? "Sports program is visible on the public page" : "Sports program is hidden from the public page"}
           </p>
         </div>
         <button
@@ -201,7 +177,7 @@ const PhotoGalleryForm = ({
 
       <div className="space-y-1.5">
         <label className="text-sm font-medium text-gray-700">
-          Photo Image {type === "create" && <span className="text-red-400">*</span>}
+          Program Image {type === "create" && <span className="text-red-400">*</span>}
         </label>
 
         {!imagePreview ? (
@@ -246,11 +222,11 @@ const PhotoGalleryForm = ({
           </div>
         ) : (
           <div className="relative rounded-lg overflow-hidden border border-gray-200">
-            <img src={imagePreview} alt="Photo preview" className="w-full h-48 object-cover" />
+            <img src={imagePreview} alt="Sports program preview" className="w-full h-48 object-cover" />
             <div className="absolute top-2 right-2 flex gap-2">
               {!imageFile && data?.img && (
                 <a
-                  href={getPhotoGalleryImageUrl(data.img)}
+                  href={getSportsProgramImageUrl(data.img)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-1.5 bg-white/90 text-blue-500 hover:text-blue-700 rounded-md transition-colors shadow-sm"
@@ -269,7 +245,7 @@ const PhotoGalleryForm = ({
             </div>
             <div className="p-2 bg-gray-50 text-xs text-gray-500 flex items-center gap-2">
               <ImageIcon className="w-3.5 h-3.5" />
-              {imageFile ? imageFile.name : "Current photo image"}
+              {imageFile ? imageFile.name : "Current program image"}
             </div>
           </div>
         )}
@@ -301,7 +277,7 @@ const PhotoGalleryForm = ({
               {type === "create" ? "Creating..." : "Saving..."}
             </>
           ) : type === "create" ? (
-            "Create Photo"
+            "Create Program"
           ) : (
             "Save Changes"
           )}
@@ -311,4 +287,4 @@ const PhotoGalleryForm = ({
   );
 };
 
-export default PhotoGalleryForm;
+export default SportsProgramEntryForm;

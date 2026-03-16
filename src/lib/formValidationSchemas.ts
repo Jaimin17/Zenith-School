@@ -153,10 +153,63 @@ export const photoGallerySchema = z.object({
   id: z.string().optional(),
   title: z.string().min(1, "Title is required").max(200, "Title must be less than 200 characters"),
   description: z.string().min(1, "Description is required"),
+  is_sport: z.boolean().optional(),
   is_active: z.boolean().optional(),
 });
 
 export type PhotoGallerySchema = z.infer<typeof photoGallerySchema>;
+
+export const achievementSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(1, "Title is required").max(200, "Title must be less than 200 characters"),
+  description: z.string().min(1, "Description is required"),
+  is_active: z.boolean().optional(),
+});
+
+export type AchievementSchema = z.infer<typeof achievementSchema>;
+
+export const sportsProgramSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(1, "Title is required").max(200, "Title must be less than 200 characters"),
+  description: z.string().min(1, "Description is required"),
+  is_active: z.boolean().optional(),
+});
+
+export type SportsProgramSchema = z.infer<typeof sportsProgramSchema>;
+
+export const jobOpeningSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(1, "Title is required").max(200, "Title must be less than 200 characters"),
+  description: z.string().min(1, "Description is required"),
+  experience: z.coerce.number().min(0, "Experience must be 0 or more").default(0),
+  positions: z.coerce.number().min(1, "At least 1 position required").default(1),
+  location: z.string().optional(),
+  salary_range: z.string().optional(),
+  deadline: z.string().optional(),
+  job_type: z.enum(["full_time", "part_time", "contract", "internship"]).default("full_time"),
+  subject_id: z.string().optional(),
+  is_active: z.boolean().optional(),
+});
+
+export type JobOpeningSchema = z.infer<typeof jobOpeningSchema>;
+
+export const jobApplicationSchema = z.object({
+  jobOpening_id: z.string().min(1, "Job opening is required"),
+  name: z.string().min(1, "Full name is required"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().min(1, "Phone number is required"),
+  location: z.string().min(1, "Location is required"),
+  portfolio_link: z.string().url("Invalid URL").optional().or(z.literal("")),
+  about_applicant: z.string().min(10, "Please tell us more about yourself (min 10 characters)"),
+});
+
+export type JobApplicationSchema = z.infer<typeof jobApplicationSchema>;
+
+export const jobApplicationStatusSchema = z.object({
+  status: z.enum(["pending", "reviewed", "accepted", "rejected"]),
+});
+
+export type JobApplicationStatusSchema = z.infer<typeof jobApplicationStatusSchema>;
 
 export const testimonialSchema = z.object({
   id: z.string().optional(),

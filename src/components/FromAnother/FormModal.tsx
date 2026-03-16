@@ -15,6 +15,10 @@ import {
   deleteBanner,
   deletePhotoGallery,
   deleteTestimonial,
+  deleteAchievement,
+  deleteSportsProgram,
+  deleteJobOpening,
+  deleteJobApplication,
 } from "@/lib/actions";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -26,6 +30,9 @@ import { FormContainerProps } from "./FormContainer";
 import { X, Trash2, AlertTriangle, Plus, Pencil } from "lucide-react";
 import PhotoGalleryForm from "./forms/PhotoGalleryEntryForm";
 import TestimonialEntryForm from "./forms/TestimonialEntryForm";
+import AchievementEntryForm from "./forms/AchievementEntryForm";
+import SportsProgramEntryForm from "./forms/SportsProgramEntryForm";
+import JobOpeningEntryForm from "./forms/JobOpeningEntryForm";
 
 const deleteActionMap = {
   subject: deleteSubject,
@@ -43,6 +50,10 @@ const deleteActionMap = {
   banner: deleteBanner,
   photoGallery: deletePhotoGallery,
   testimonial: deleteTestimonial,
+  achievement: deleteAchievement,
+  sportsProgram: deleteSportsProgram,
+  jobOpening: deleteJobOpening,
+  jobApplication: deleteJobApplication,
 };
 
 const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
@@ -261,6 +272,31 @@ const forms: {
       relatedData={relatedData}
     />
   ),
+  achievement: (setOpen, type, data, relatedData) => (
+    <AchievementEntryForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  sportsProgram: (setOpen, type, data, relatedData) => (
+    <SportsProgramEntryForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  jobOpening: (setOpen, type, data, relatedData) => (
+    <JobOpeningEntryForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  jobApplication: () => <div />,
 };
 
 const FormModal = ({

@@ -105,6 +105,12 @@ const menuItems: MenuSection[] = [
         href: "/list/events",
         visible: ["admin", "teacher", "student", "parent"],
       },
+      {
+        icon: "/calendar.png",
+        label: "Holidays",
+        href: "/list/holidays",
+        visible: ["admin", "teacher", "student", "parent"],
+      },
       // {
       //   icon: "/message.png",
       //   label: "Messages",

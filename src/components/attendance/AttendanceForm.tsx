@@ -18,11 +18,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { LessonRosterResponse, StudentRosterItem, AttendanceRecord } from "@/types/schemas";
+import type { ClassRosterResponse, StudentRosterItem, AttendanceRecord } from "@/types/schemas";
 import { submitAttendanceAction } from "@/actions/admin";
 
 interface AttendanceFormProps {
-  rosterData: LessonRosterResponse | null;
+  rosterData: ClassRosterResponse | null;
   selectedDate: string;
   hasError?: boolean;
   errorMessage?: string;
@@ -105,7 +105,7 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
 
     startTransition(async () => {
       const result = await submitAttendanceAction({
-        lesson_id: rosterData.lesson_id,
+        class_id: rosterData.class_id,
         attendance_date: selectedDate,
         records,
         overwrite_existing: rosterData.attendance_exists,
@@ -145,7 +145,7 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
             className="mt-4 inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Lessons
+            Back to Classes
           </Link>
         </div>
       </div>
@@ -166,7 +166,7 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
             className="mt-4 inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Lessons
+            Back to Classes
           </Link>
         </div>
       </div>
@@ -180,7 +180,7 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-3">
-              <h2 className="text-xl font-bold text-gray-800">{rosterData.lesson_name}</h2>
+              <h2 className="text-xl font-bold text-gray-800">{rosterData.class_name}</h2>
               {rosterData.attendance_exists && (
                 <span className="px-2.5 py-1 text-xs font-medium bg-amber-100 text-amber-700 rounded-full">
                   Edit Mode
@@ -191,7 +191,6 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
               <span className="flex items-center gap-1.5">
                 <BookOpen className="w-4 h-4 text-gray-400" />
                 {rosterData.class_name}
-                {rosterData.subject_name && ` • ${rosterData.subject_name}`}
               </span>
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4 text-gray-400" />

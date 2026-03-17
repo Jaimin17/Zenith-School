@@ -7,6 +7,7 @@ import {
 } from "@/actions/admin";
 import Announcements from "../../../components/FromAnother/Announcements";
 import BigCalendarContainer from "../../../components/FromAnother/BigCalendarContainer";
+import YearAttendanceSummaryCard from "@/components/attendance/YearAttendanceSummaryCard";
 import { Announcement, AnnouncementListResponse, Lesson, LessonBase, StudentYearDataResponse } from "@/types/schemas";
 import { Suspense } from "react";
 import { cookies } from "next/headers";
@@ -161,12 +162,12 @@ const ParentPage = async () => {
         has_prev: false,
     };
 
-    // If viewing a historical year, fetch the year-data for the selected child
-    let historicalYearData: StudentYearDataResponse | null = null;
-    if (!isCurrentYear && selectedChild && resolvedYearId) {
+    // Fetch selected year data for attendance summary and historical schedule
+    let selectedYearData: StudentYearDataResponse | null = null;
+    if (selectedChild && resolvedYearId) {
         const yearDataResult = await fetchStudentYearDataAction(selectedChild.id, resolvedYearId);
         if (yearDataResult.success) {
-            historicalYearData = yearDataResult.data;
+            selectedYearData = yearDataResult.data;
         }
     }
 
@@ -180,12 +181,12 @@ const ParentPage = async () => {
                         <h1 className="text-xl font-semibold">No Students Found</h1>
                         <p className="text-gray-500 mt-2">No students are currently assigned to your account.</p>
                     </div>
-                ) : !isCurrentYear && historicalYearData ? (
+                ) : !isCurrentYear && selectedYearData ? (
                     <HistoricalSchedule
-                        yearData={historicalYearData}
+                        yearData={selectedYearData}
                         studentName={`${selectedChild.first_name} ${selectedChild.last_name}`}
                     />
-                ) : !isCurrentYear && !historicalYearData ? (
+                ) : !isCurrentYear && !selectedYearData ? (
                     <div className="bg-white p-4 rounded-md">
                         <h1 className="text-xl font-semibold mb-2">
                             Schedule ({selectedChild.first_name} {selectedChild.last_name})
@@ -205,6 +206,12 @@ const ParentPage = async () => {
 
             {/* RIGHT - Announcements */}
             <div className="w-full xl:w-1/3 flex flex-col gap-4">
+                {selectedYearData && (
+                    <YearAttendanceSummaryCard
+                        yearData={selectedYearData}
+                        title={`${selectedChild?.first_name ?? "Student"}'s Attendance`}
+                    />
+                )}
                 <Suspense fallback={<AnnouncementsSkeleton />}>
                     {!announcementsResult.success ? (
                         <div className="bg-white p-4 rounded-md">

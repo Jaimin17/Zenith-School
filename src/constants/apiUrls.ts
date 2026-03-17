@@ -53,7 +53,7 @@ export const apiUrls = {
     GET_ATTENDANCE_PARENT_CHILDREN_URL: "api/v1/attendance/parent/children",
 
     // Attendance Taking URLs
-    GET_ATTENDANCE_TAKE_LESSONS_URL: "api/v1/attendance/take/lessons",
+    GET_ATTENDANCE_TAKE_LESSONS_URL: "api/v1/attendance/take/classes",
 
     GET_ATTENDANCE_TAKE_ROSTER_URL: "api/v1/attendance/take/roster",
 

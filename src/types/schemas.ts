@@ -122,8 +122,8 @@ export interface StudentAttendanceRecord {
     id: string;
     date: string;
     present: boolean;
-    lesson_id: string;
-    lesson_name: string;
+    class_id: string;
+    class_name: string;
     subject_name: string | null;
 }
 
@@ -186,10 +186,10 @@ export interface ClassAttendanceDetailResponse {
 export interface TeacherClassSummary {
     class_id: string;
     class_name: string;
-    lesson_id: string;
-    lesson_name: string;
+    lesson_id: string | null;
+    lesson_name: string | null;
     subject_name: string | null;
-    day: string;
+    day: string | null;
     total_students: number;
     attendance_marked: boolean;
     present_count: number;
@@ -221,29 +221,22 @@ export interface ParentChildrenAttendanceResponse {
 }
 
 // Attendance Taking Types
-export interface LessonForDateItem {
-    lesson_id: string;
-    lesson_name: string;
+export interface ClassForDateItem {
     class_id: string;
     class_name: string;
-    subject_id: string | null;
-    subject_name: string | null;
     teacher_id: string | null;
     teacher_name: string | null;
-    start_time: string;
-    end_time: string;
-    day: string;
     attendance_status: 'not_taken' | 'partial' | 'complete';
     students_count: number;
     present_count: number;
     absent_count: number;
 }
 
-export interface LessonsForDateResponse {
+export interface ClassesForDateResponse {
     date: string;
     day_of_week: string;
-    total_lessons: number;
-    lessons: LessonForDateItem[];
+    total_classes: number;
+    classes: ClassForDateItem[];
 }
 
 export interface StudentRosterItem {
@@ -255,12 +248,9 @@ export interface StudentRosterItem {
     present: boolean | null;
 }
 
-export interface LessonRosterResponse {
-    lesson_id: string;
-    lesson_name: string;
+export interface ClassRosterResponse {
     class_id: string;
     class_name: string;
-    subject_name: string | null;
     target_date: string;
     total_students: number;
     attendance_exists: boolean;
@@ -274,7 +264,7 @@ export interface AttendanceRecord {
 }
 
 export interface AttendanceTakeRequest {
-    lesson_id: string;
+    class_id: string;
     attendance_date: string;
     records: AttendanceRecord[];
     overwrite_existing: boolean;
@@ -282,7 +272,7 @@ export interface AttendanceTakeRequest {
 
 export interface AttendanceTakeResponse {
     message: string;
-    lesson_id: string;
+    class_id: string;
     attendance_date: string;
     total_students: number;
     created_count: number;
@@ -292,10 +282,17 @@ export interface AttendanceTakeResponse {
 }
 
 export interface AttendanceCheckResponse {
-    lesson_id: string;
-    attendance_date: string;
-    exists: boolean;
-    record_count: number;
+    class_id: string;
+    class_name: string;
+    date: string;
+    attendance_exists: boolean;
+    total_students: number;
+    marked_count: number;
+    present_count: number;
+    absent_count: number;
+    not_marked_count: number;
+    is_holiday: boolean;
+    holiday_reason: string | null;
 }
 
 export interface Events {
@@ -683,6 +680,34 @@ export interface StudentYearDataResponse {
     grade_id: string | null;
     grade_level: number | null;
     attendance: StudentAttendanceRecord[];
+    attendance_summary: {
+        total_working_days: number;
+        working_days_left: number;
+        public_holiday_count: number;
+        present_days: number;
+        absent_days: number;
+        attendance_percentage: number;
+    };
     results: ResultWithRelations[];
     lessons: LessonBase[];
+}
+
+export interface Holiday {
+    id: string;
+    date: string;
+    name: string;
+    description: string | null;
+}
+
+export interface HolidayCreateRequest {
+    date: string;
+    name: string;
+    description?: string | null;
+}
+
+export interface HolidayUpdateRequest {
+    id: string;
+    date?: string;
+    name?: string;
+    description?: string | null;
 }

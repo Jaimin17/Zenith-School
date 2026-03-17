@@ -4,9 +4,9 @@ import Menu from "@/components/Menu";
 import Sidebar from "@/components/Sidebar";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu as MenuIcon } from "lucide-react";
-import { Drawer, IconButton } from "@mui/material";
+import { Drawer, IconButton, useMediaQuery } from "@mui/material";
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -14,9 +14,20 @@ interface DashboardShellProps {
 
 export default function DashboardShell({ children }: DashboardShellProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  // Tailwind `lg` starts at 1024px; keep JS and CSS breakpoints in sync.
+  const isDesktop = useMediaQuery("(min-width:1024px)");
 
-  const openDrawer = () => setDrawerOpen(true);
+  const openDrawer = () => {
+    if (!isDesktop) setDrawerOpen(true);
+  };
   const closeDrawer = () => setDrawerOpen(false);
+
+  useEffect(() => {
+    // Ensure the mobile drawer never overlays the desktop fixed sidebar.
+    if (isDesktop && drawerOpen) {
+      setDrawerOpen(false);
+    }
+  }, [isDesktop, drawerOpen]);
 
   return (
     <div className="h-screen flex bg-[#F7F8FA]">
@@ -37,7 +48,7 @@ export default function DashboardShell({ children }: DashboardShellProps) {
       <div className="lg:hidden">
         <Drawer
           anchor="left"
-          open={drawerOpen}
+          open={!isDesktop && drawerOpen}
           onClose={closeDrawer}
           PaperProps={{
             sx: {
@@ -49,7 +60,7 @@ export default function DashboardShell({ children }: DashboardShellProps) {
             },
           }}
           ModalProps={{
-            keepMounted: true,
+            keepMounted: false,
             slotProps: { backdrop: { sx: { backgroundColor: "rgba(0,0,0,0.3)" } } },
           }}
         >
@@ -71,13 +82,15 @@ export default function DashboardShell({ children }: DashboardShellProps) {
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top bar: hamburger (mobile/tablet) + Sidebar */}
         <div className="flex items-center flex-shrink-0 bg-white border-b border-gray-200/80 shadow-sm">
-          <IconButton
-            onClick={openDrawer}
-            className="lg:hidden ml-1 mr-0.5"
-            aria-label="Open menu"
-          >
-            <MenuIcon className="w-6 h-6 text-gray-600" />
-          </IconButton>
+          {!isDesktop && (
+            <IconButton
+              onClick={openDrawer}
+              className="ml-1 mr-0.5"
+              aria-label="Open menu"
+            >
+              <MenuIcon className="w-6 h-6 text-gray-600" />
+            </IconButton>
+          )}
           <div className="flex-1 min-w-0">
             <Sidebar />
           </div>

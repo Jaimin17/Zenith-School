@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { api } from '@/api/api';
 import { CHANGE_PASSWORD_API, UPDATE_PROFILE_API, UPDATE_PROFILE_PICTURE_API } from "@/api/apiParams/auth";
 import { USER_COUNT_API, ANNOUNCEMENT_API, EVENTS_API, LESSONS_WEEK_API, GET_STUDENT_CLASS_API, GET_STUDENT_API, LESSONS_FOR_PARENT_STUDENT_WEEK_API, GET_TEACHER_API, GET_CLASSES_API, ALL_EVENTS_API, GET_EVENT_BY_ID_API, GET_EXAMS_API, GET_CLASS_EXAMS_API, GET_TEACHER_EXAMS_API, GET_FULL_TEACHERS_API, GET_ALL_CLASSES_API, GET_SUBJECTS_API, ASSIGNMENT_API, GET_RESULTS_API, GET_PARENTS_API, GET_PARENT_BY_ID_API, GET_TEACHER_BY_ID_API, ANNOUNCEMENT_TEACHER_API, LESSONS_TEACHER_WEEK_API, GET_TEACHERS_STUDENT_API, GET_LESSONS_API, LESSONS_FOR_TEACHER_API, GET_EXAMS_TEACHER_API, ASSIGNMENTS_OF_TEACHER_API, GET_SUPERVISORS_CLASSES_API, GET_STUDENT_BY_ID_API, ATTENDANCE_BY_STUDENT_ID_API, ANNOUNCEMENT_STUDENT_API, LESSONS_FOR_CLASS_API, GET_TEACHERS_OF_CLASS_API, GET_EXAMS_CLASS_API, ASSIGNMENTS_OF_CLASS_API, GET_STUDENT_RESULTS_API, GET_EXAMS_OF_STUDENT_API, ASSIGNMENTS_OF_STUDENT_API, ATTENDANCE_DASHBOARD_SUMMARY_API, ATTENDANCE_DASHBOARD_CLASSES_API, ATTENDANCE_TEACHER_CLASSES_API, ATTENDANCE_CLASS_DETAIL_API, ATTENDANCE_STUDENT_MONTHLY_API, ATTENDANCE_STUDENT_CALENDAR_API, ATTENDANCE_PARENT_CHILDREN_API, ATTENDANCE_TAKE_LESSONS_API, ATTENDANCE_TAKE_ROSTER_API, ATTENDANCE_TAKE_CHECK_API, ATTENDANCE_TAKE_SUBMIT_API, GET_FULL_LIST_SUBJECTS_API, GET_ALL_PARENTS_API, GET_GRADE_LIST_API, GET_LESSONS_FULL_LIST_API, GET_STUDENTS_OF_CLASS_API, GET_EXAMS_OF_CLASS_FULL_LIST_API, ASSIGNMENTS_OF_CLASS_FULL_LIST_API, GET_CURRENT_USER_DETAILS_API, CHAT_BOT_API, BANNER_API, PHOTO_GALLERY_API, TESTIMONIAL_API, TESTIMONIAL_ACTIVE_API, ALL_PUBLIC_EVENTS_API, GET_ACADEMIC_YEARS_ALL_API, GET_ACADEMIC_YEARS_API, GET_ACADEMIC_YEAR_ACTIVE_API, SAVE_ACADEMIC_YEAR_API, ACTIVATE_ACADEMIC_YEAR_API, GET_CHILDREN_OF_PARENT_API, BULK_PROMOTE_STUDENTS_API, ASSIGN_CLASS_TO_STUDENT_API, UPDATE_ACADEMIC_YEAR_API, SEED_STUDENTS_TO_YEAR_API, GET_STUDENT_SELF_YEAR_DATA_API, GET_LESSONS_BY_YEAR_API, GET_VISIBLE_ACADEMIC_YEARS_API } from '@/api/apiParams/admin';
-import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, StudentWithRelations, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, ParentWithRelations, LessonListResponse, Attendance, AttendanceDashboardSummary, ClasswiseAttendanceResponse, TeacherClassesAttendanceResponse, ClassAttendanceDetailResponse, StudentMonthlyAttendance, CalendarHeatmapResponse, ParentChildrenAttendanceResponse, LessonsForDateResponse, LessonRosterResponse, AttendanceTakeRequest, AttendanceTakeResponse, AttendanceCheckResponse, TeacherClassSummary, Subject, Grade, SubjectWithRelations, AssignmentWithRelations, EventsWithRelations, UserProfile, ChangeUserPasswordRequest, UpdateProfileRequest, BannerListResponse, PhotoGalleryListResponse, TestimonialListResponse, Testimonial, AcademicYear, AcademicYearListResponse, ChildItem, BulkPromoteRequest, BulkPromoteResponse, StudentYearDataResponse, StudentHistoryResponse } from '@/types/schemas';
+import type { UsersCount, Announcement, Events, Lesson, ClassReadonly, StudentWithRelations, Teacher, TeacherWithRelations, TeacherListResponse, AnnouncementListResponse, ClassListResponse, ClassBase, EventListResponse, ExamListResponse, SubjectListResponse, StudentListResponse, AssignmentListResponse, ResultListResponse, ParentListResponse, ParentWithRelations, LessonListResponse, Attendance, AttendanceDashboardSummary, ClasswiseAttendanceResponse, TeacherClassesAttendanceResponse, ClassAttendanceDetailResponse, StudentMonthlyAttendance, CalendarHeatmapResponse, ParentChildrenAttendanceResponse, ClassesForDateResponse, ClassRosterResponse, AttendanceTakeRequest, AttendanceTakeResponse, AttendanceCheckResponse, TeacherClassSummary, Subject, Grade, SubjectWithRelations, AssignmentWithRelations, EventsWithRelations, UserProfile, ChangeUserPasswordRequest, UpdateProfileRequest, BannerListResponse, PhotoGalleryListResponse, TestimonialListResponse, Testimonial, AcademicYear, AcademicYearListResponse, ChildItem, BulkPromoteRequest, BulkPromoteResponse, StudentYearDataResponse, StudentHistoryResponse } from '@/types/schemas';
 import { getServerAuthTokens } from "@/utils/cookie";
 
 export async function getChatBotTokenAction(): Promise<{
@@ -3123,9 +3123,9 @@ export async function fetchParentChildrenAttendanceAction(month?: number, year?:
 
 // ==================== ATTENDANCE TAKING ACTIONS ====================
 
-export async function fetchLessonsForTakingAttendanceAction(targetDate?: string, classId?: string): Promise<{
+export async function fetchClassesForTakingAttendanceAction(targetDate?: string, classId?: string): Promise<{
     success: boolean;
-    data: LessonsForDateResponse | null;
+    data: ClassesForDateResponse | null;
     error?: string;
 }> {
     try {
@@ -3144,7 +3144,7 @@ export async function fetchLessonsForTakingAttendanceAction(targetDate?: string,
         if (targetDate) params.target_date = targetDate;
         if (classId) params.class_id = classId;
 
-        const response = await api<LessonsForDateResponse>({
+        const response = await api<ClassesForDateResponse>({
             endpoint: ATTENDANCE_TAKE_LESSONS_API,
             params,
             serverToken: token.accessToken,
@@ -3164,7 +3164,7 @@ export async function fetchLessonsForTakingAttendanceAction(targetDate?: string,
             data: response.data,
         };
     } catch (error) {
-        console.error('Error in fetchLessonsForTakingAttendanceAction:', error);
+        console.error('Error in fetchClassesForTakingAttendanceAction:', error);
         return {
             success: false,
             data: null,
@@ -3173,9 +3173,9 @@ export async function fetchLessonsForTakingAttendanceAction(targetDate?: string,
     }
 }
 
-export async function fetchLessonRosterAction(lessonId: string, targetDate?: string): Promise<{
+export async function fetchClassRosterAction(classId: string, targetDate?: string): Promise<{
     success: boolean;
-    data: LessonRosterResponse | null;
+    data: ClassRosterResponse | null;
     error?: string;
 }> {
     try {
@@ -3193,10 +3193,10 @@ export async function fetchLessonRosterAction(lessonId: string, targetDate?: str
         const params: Record<string, string> = {};
         if (targetDate) params.target_date = targetDate;
 
-        const response = await api<LessonRosterResponse>({
+        const response = await api<ClassRosterResponse>({
             endpoint: {
                 ...ATTENDANCE_TAKE_ROSTER_API,
-                url: `${ATTENDANCE_TAKE_ROSTER_API.url}/${lessonId}`,
+                url: `${ATTENDANCE_TAKE_ROSTER_API.url}/${classId}`,
             },
             params,
             serverToken: token.accessToken,
@@ -3216,7 +3216,7 @@ export async function fetchLessonRosterAction(lessonId: string, targetDate?: str
             data: response.data,
         };
     } catch (error) {
-        console.error('Error in fetchLessonRosterAction:', error);
+        console.error('Error in fetchClassRosterAction:', error);
         return {
             success: false,
             data: null,
@@ -3225,7 +3225,7 @@ export async function fetchLessonRosterAction(lessonId: string, targetDate?: str
     }
 }
 
-export async function checkAttendanceExistsAction(lessonId: string, targetDate?: string): Promise<{
+export async function checkAttendanceExistsAction(classId: string, targetDate?: string): Promise<{
     success: boolean;
     data: AttendanceCheckResponse | null;
     error?: string;
@@ -3248,7 +3248,7 @@ export async function checkAttendanceExistsAction(lessonId: string, targetDate?:
         const response = await api<AttendanceCheckResponse>({
             endpoint: {
                 ...ATTENDANCE_TAKE_CHECK_API,
-                url: `${ATTENDANCE_TAKE_CHECK_API.url}/${lessonId}`,
+                url: `${ATTENDANCE_TAKE_CHECK_API.url}/${classId}`,
             },
             params,
             serverToken: token.accessToken,
@@ -3807,6 +3807,156 @@ export async function fetchAcademicYearsAllAction(): Promise<{
     } catch (error) {
         console.error('Error in fetchAcademicYearsAllAction:', error);
         return { success: false, data: [], error: 'An unexpected error occurred' };
+    }
+}
+
+// -- Holidays -----------------------------------------------------------------
+
+export async function fetchHolidaysAction(skip: number = 0, limit: number = 200): Promise<{
+    success: boolean;
+    data: { id: string; date: string; name: string; description: string | null }[];
+    error?: string;
+}> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return { success: false, data: [], error: 'Unauthorized: No authentication token found' };
+        }
+
+        const response = await api<{ id: string; date: string; name: string; description: string | null }[]>({
+            endpoint: {
+                url: 'api/v1/holiday/',
+                method: 'GET',
+                withToken: true,
+                isMultipart: false,
+                showToast: false,
+                isForm: false,
+            },
+            params: { skip, limit },
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error || !response.data) {
+            return { success: false, data: [], error: response.message || 'Failed to fetch holidays' };
+        }
+
+        return { success: true, data: response.data };
+    } catch (error) {
+        console.error('Error in fetchHolidaysAction:', error);
+        return { success: false, data: [], error: 'An unexpected error occurred while fetching holidays' };
+    }
+}
+
+export async function createHolidayAction(payload: {
+    date: string;
+    name: string;
+    description?: string | null;
+}): Promise<{ success: boolean; error?: string }> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return { success: false, error: 'Unauthorized: No authentication token found' };
+        }
+
+        const response = await api({
+            endpoint: {
+                url: 'api/v1/holiday/',
+                method: 'POST',
+                withToken: true,
+                isMultipart: false,
+                showToast: true,
+                isForm: false,
+            },
+            payloadData: payload,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error) {
+            return { success: false, error: response.message || 'Failed to create holiday' };
+        }
+
+        return { success: true };
+    } catch (error) {
+        console.error('Error in createHolidayAction:', error);
+        return { success: false, error: 'An unexpected error occurred while creating holiday' };
+    }
+}
+
+export async function updateHolidayAction(payload: {
+    id: string;
+    date?: string;
+    name?: string;
+    description?: string | null;
+}): Promise<{ success: boolean; error?: string }> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return { success: false, error: 'Unauthorized: No authentication token found' };
+        }
+
+        const response = await api({
+            endpoint: {
+                url: `api/v1/holiday/${payload.id}`,
+                method: 'PATCH',
+                withToken: true,
+                isMultipart: false,
+                showToast: true,
+                isForm: false,
+            },
+            payloadData: payload,
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error) {
+            return { success: false, error: response.message || 'Failed to update holiday' };
+        }
+
+        return { success: true };
+    } catch (error) {
+        console.error('Error in updateHolidayAction:', error);
+        return { success: false, error: 'An unexpected error occurred while updating holiday' };
+    }
+}
+
+export async function deleteHolidayAction(id: string): Promise<{ success: boolean; error?: string }> {
+    try {
+        const cookieStore = await cookies();
+        const token = getServerAuthTokens(cookieStore);
+
+        if (!token) {
+            return { success: false, error: 'Unauthorized: No authentication token found' };
+        }
+
+        const response = await api({
+            endpoint: {
+                url: `api/v1/holiday/${id}`,
+                method: 'DELETE',
+                withToken: true,
+                isMultipart: false,
+                showToast: true,
+                isForm: false,
+            },
+            serverToken: token.accessToken,
+            isServer: true,
+        });
+
+        if (response.error) {
+            return { success: false, error: response.message || 'Failed to delete holiday' };
+        }
+
+        return { success: true };
+    } catch (error) {
+        console.error('Error in deleteHolidayAction:', error);
+        return { success: false, error: 'An unexpected error occurred while deleting holiday' };
     }
 }
 

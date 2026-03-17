@@ -219,7 +219,7 @@ const StudentAttendanceView = ({
             <div className="w-4 h-4 rounded bg-green-500"></div>
             <span className="text-gray-600">100% Present</span>
           </div>
-          <div className="flex items-center gap-1.5">
+          {/* <div className="flex items-center gap-1.5">
             <div className="w-4 h-4 rounded bg-green-300"></div>
             <span className="text-gray-600">75%+</span>
           </div>
@@ -230,7 +230,7 @@ const StudentAttendanceView = ({
           <div className="flex items-center gap-1.5">
             <div className="w-4 h-4 rounded bg-orange-300"></div>
             <span className="text-gray-600">&lt;50%</span>
-          </div>
+          </div> */}
           <div className="flex items-center gap-1.5">
             <div className="w-4 h-4 rounded bg-red-500"></div>
             <span className="text-gray-600">Absent</span>

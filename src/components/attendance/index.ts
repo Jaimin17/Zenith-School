@@ -5,5 +5,5 @@ export { default as ParentAttendanceView } from './ParentAttendanceView';
 export { default as ClassAttendanceDetail } from './ClassAttendanceDetail';
 export { default as AttendanceDatePicker } from './AttendanceDatePicker';
 export { default as SimpleDatePicker } from './SimpleDatePicker';
-export { default as LessonSelector } from './LessonSelector';
+export { default as ClassSelector } from './ClassSelector';
 export { default as AttendanceForm } from './AttendanceForm';

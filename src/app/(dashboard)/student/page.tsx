@@ -9,6 +9,7 @@ import {
 import Announcements from "../../../components/FromAnother/Announcements";
 import BigCalendarContainer from "../../../components/FromAnother/BigCalendarContainer";
 import EventCalendarContainer from "@/components/FromAnother/EventCalendarContainer";
+import YearAttendanceSummaryCard from "@/components/attendance/YearAttendanceSummaryCard";
 import { AnnouncementListResponse, Lesson, StudentYearDataResponse } from "@/types/schemas";
 import { cookies } from "next/headers";
 
@@ -106,10 +107,10 @@ async function SidebarSection({ activeYear }: { activeYear?: any }) {
     };
 
     return (
-        <div className="w-full xl:w-1/3 flex flex-col gap-8">
+        <>
             <EventCalendarContainer />
             <Announcements initialAnnouncements={announcements} activeYear={activeYear} />
-        </div>
+        </>
     );
 }
 
@@ -130,10 +131,10 @@ const StudentPage = async ({ searchParams: _searchParams }: StudentPageProps) =>
     const resolvedYearId = selectedYearId ?? activeYear?.id ?? null;
     const isCurrentYear = !resolvedYearId || resolvedYearId === activeYear?.id;
 
-    let historicalYearData: StudentYearDataResponse | null = null;
-    if (!isCurrentYear && resolvedYearId) {
+    let selectedYearData: StudentYearDataResponse | null = null;
+    if (resolvedYearId) {
         const result = await fetchMyStudentYearDataAction(resolvedYearId);
-        if (result.success) historicalYearData = result.data;
+        if (result.success) selectedYearData = result.data;
     }
 
     return (
@@ -141,9 +142,9 @@ const StudentPage = async ({ searchParams: _searchParams }: StudentPageProps) =>
             {/* LEFT */}
             <div className="w-full xl:w-2/3 flex flex-col gap-4">
                 {/* Schedule */}
-                {!isCurrentYear && historicalYearData ? (
-                    <HistoricalSchedule yearData={historicalYearData} />
-                ) : !isCurrentYear && !historicalYearData ? (
+                {!isCurrentYear && selectedYearData ? (
+                    <HistoricalSchedule yearData={selectedYearData} />
+                ) : !isCurrentYear && !selectedYearData ? (
                     <div className="h-full bg-white p-4 rounded-md">
                         <h1 className="text-xl font-semibold">Schedule</h1>
                         <p className="text-gray-400 text-sm mt-2">No data found for the selected academic year.</p>
@@ -157,7 +158,10 @@ const StudentPage = async ({ searchParams: _searchParams }: StudentPageProps) =>
 
             {/* RIGHT */}
             <Suspense fallback={<SidebarSkeleton />}>
-                <SidebarSection activeYear={isCurrentYear ? activeYear : historicalYearData?.academic_year} />
+                <div className="w-full xl:w-1/3 flex flex-col gap-8">
+                    {selectedYearData && <YearAttendanceSummaryCard yearData={selectedYearData} title="My Attendance" />}
+                    <SidebarSection activeYear={isCurrentYear ? activeYear : selectedYearData?.academic_year} />
+                </div>
             </Suspense>
         </div>
     );

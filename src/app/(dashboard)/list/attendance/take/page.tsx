@@ -1,9 +1,9 @@
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { 
-  fetchLessonsForTakingAttendanceAction,
-  fetchLessonRosterAction
+  fetchClassesForTakingAttendanceAction,
+  fetchClassRosterAction
 } from "@/actions/admin";
-import { LessonSelector, AttendanceForm, SimpleDatePicker } from "@/components/attendance"; 
+import { ClassSelector, AttendanceForm, SimpleDatePicker } from "@/components/attendance"; 
 import { Calendar, ClipboardCheck, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -34,12 +34,11 @@ const TakeAttendancePage = async ({
 
   // Get date from params or use today
   const selectedDate = params.date || new Date().toISOString().split('T')[0];
-  const lessonId = params.lessonId;
   const classId = params.classId;
 
-  // If a lesson is selected, show the attendance form
-  if (lessonId) {
-    const rosterResult = await fetchLessonRosterAction(lessonId, selectedDate);
+  // If a class is selected, show the attendance form
+  if (classId) {
+    const rosterResult = await fetchClassRosterAction(classId, selectedDate);
 
     return (
       <div className="bg-gray-50 min-h-screen">
@@ -55,7 +54,7 @@ const TakeAttendancePage = async ({
                   {rosterResult.data?.attendance_exists ? "Edit Attendance" : "Take Attendance"}
                 </h1>
                 <p className="text-sm text-gray-500">
-                  Mark student attendance for this lesson
+                  Mark student attendance for this class
                 </p>
               </div>
             </div>
@@ -73,8 +72,8 @@ const TakeAttendancePage = async ({
     );
   }
 
-  // Otherwise show lesson selector
-  const lessonsResult = await fetchLessonsForTakingAttendanceAction(selectedDate, classId);
+  // Otherwise show class selector
+  const lessonsResult = await fetchClassesForTakingAttendanceAction(selectedDate, classId);
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -89,7 +88,7 @@ const TakeAttendancePage = async ({
               <div>
                 <h1 className="text-2xl font-bold text-gray-800">Take Attendance</h1>
                 <p className="text-sm text-gray-500">
-                  Select a lesson to mark attendance
+                  Select a class to mark attendance
                 </p>
               </div>
             </div>
@@ -121,9 +120,9 @@ const TakeAttendancePage = async ({
           </div>
         </div>
 
-        {/* Lesson Selector */}
-        <LessonSelector
-          lessonsData={lessonsResult.data}
+        {/* Class Selector */}
+        <ClassSelector
+          classesData={lessonsResult.data}
           selectedDate={selectedDate}
           hasError={!lessonsResult.success}
           errorMessage={lessonsResult.error}

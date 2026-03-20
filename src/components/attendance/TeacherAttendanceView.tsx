@@ -12,14 +12,15 @@ import {
   Users,
   BookOpen,
   AlertCircle,
-  ClipboardCheck
+  ClipboardCheck,
+  Ban
 } from "lucide-react";
 import type { TeacherClassesAttendanceResponse, TeacherClassSummary } from "@/types/schemas";
 import AttendanceDatePicker from "./AttendanceDatePicker";
 
 interface TeacherAttendanceViewProps {
   selectedDate: string;
-  teacherData: TeacherClassSummary[] | null;
+  teacherData: TeacherClassesAttendanceResponse | null;
   hasError: boolean;
   errorMessage?: string;
 }
@@ -76,8 +77,11 @@ const TeacherAttendanceView = ({
     );
   }
 
-  const markedClasses = teacherData?.filter(c => c.attendance_marked) || [];
-  const pendingClasses = teacherData?.filter(c => !c.attendance_marked) || [];
+  const classes = teacherData?.classes || [];
+  const markedClasses = classes.filter(c => c.attendance_marked);
+  const pendingClasses = classes.filter(c => !c.attendance_marked);
+  const isHoliday = Boolean(teacherData?.is_holiday);
+  const holidayReason = teacherData?.holiday_reason || "Holiday";
 
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
@@ -90,13 +94,20 @@ const TeacherAttendanceView = ({
         
         <div className="flex items-center gap-3">
           {/* Take Attendance Button */}
-          <Link
-            href={`/list/attendance/take?date=${selectedDate}`}
-            className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm font-medium"
-          >
-            <ClipboardCheck className="w-5 h-5" />
-            <span>Take Attendance</span>
-          </Link>
+          {isHoliday ? (
+            <div className="flex items-center gap-2 px-4 py-2.5 bg-amber-100 text-amber-800 rounded-lg border border-amber-200 font-medium">
+              <Ban className="w-5 h-5" />
+              <span>Attendance Locked</span>
+            </div>
+          ) : (
+            <Link
+              href={`/list/attendance/take?date=${selectedDate}`}
+              className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm font-medium"
+            >
+              <ClipboardCheck className="w-5 h-5" />
+              <span>Take Attendance</span>
+            </Link>
+          )}
 
           {/* Date Picker */}
           <div className="relative">
@@ -117,6 +128,16 @@ const TeacherAttendanceView = ({
           </div>
         </div>
       </div>
+
+      {isHoliday && (
+        <div className="mb-6 rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 p-4">
+          <h2 className="text-sm font-semibold text-amber-900">Attendance closed for this date</h2>
+          <p className="text-sm text-amber-800 mt-1">
+            Reason: <span className="font-medium">{holidayReason}</span>. Attendance can be marked only on working days.
+          </p>
+          <p className="text-xs text-amber-700 mt-1">Choose another date from the date picker to continue.</p>
+        </div>
+      )}
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -165,9 +186,9 @@ const TeacherAttendanceView = ({
             Pending Attendance
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {pendingClasses.map((classItem: TeacherClassSummary) => (
+              {pendingClasses.map((classItem: TeacherClassSummary) => (
               <Link
-                key={classItem.lesson_id}
+                  key={classItem.class_id}
                 href={`/list/attendance/class/${classItem.class_id}?date=${selectedDate}`}
                 className="bg-amber-50 border border-amber-200 rounded-xl p-4 hover:shadow-md transition-all group"
               >
@@ -214,7 +235,7 @@ const TeacherAttendanceView = ({
             <div className="divide-y divide-gray-100">
               {markedClasses.map((classItem: TeacherClassSummary) => (
                 <Link
-                  key={classItem.lesson_id}
+                  key={classItem.class_id}
                   href={`/list/attendance/class/${classItem.class_id}?date=${selectedDate}`}
                   className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors group"
                 >
@@ -251,13 +272,17 @@ const TeacherAttendanceView = ({
       )}
 
       {/* Empty State */}
-      {(!teacherData || teacherData.length === 0) && (
+      {(!teacherData || classes.length === 0) && (
         <div className="text-center py-12">
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <BookOpen className="w-8 h-8 text-gray-400" />
           </div>
-          <h3 className="text-gray-600 font-medium">No Classes Today</h3>
-          <p className="text-gray-400 text-sm mt-1">You don&apos;t have any classes scheduled for this date</p>
+          <h3 className="text-gray-600 font-medium">{isHoliday ? "Attendance Not Available" : "No Classes Today"}</h3>
+          <p className="text-gray-400 text-sm mt-1">
+            {isHoliday
+              ? `No attendance can be marked on ${holidayReason}.`
+              : "You don&apos;t have any classes scheduled for this date"}
+          </p>
         </div>
       )}
     </div>

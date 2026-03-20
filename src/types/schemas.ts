@@ -91,6 +91,8 @@ export interface Attendance {
 // Attendance Dashboard Types
 export interface AttendanceDashboardSummary {
     date: string;
+    is_holiday: boolean;
+    holiday_reason: string | null;
     total_classes: number;
     classes_with_attendance: number;
     pending_classes: number;
@@ -199,6 +201,8 @@ export interface TeacherClassSummary {
 export interface TeacherClassesAttendanceResponse {
     date: string;
     teacher_id: string;
+    is_holiday: boolean;
+    holiday_reason: string | null;
     classes: TeacherClassSummary[];
 }
 
@@ -235,6 +239,8 @@ export interface ClassForDateItem {
 export interface ClassesForDateResponse {
     date: string;
     day_of_week: string;
+    is_holiday: boolean;
+    holiday_reason: string | null;
     total_classes: number;
     classes: ClassForDateItem[];
 }

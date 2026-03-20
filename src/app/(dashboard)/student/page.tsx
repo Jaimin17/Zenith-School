@@ -72,6 +72,8 @@ async function ScheduleSection() {
 
     const lessons = lessonsResult.success ? lessonsResult.data || [] : [];
 
+    const announcementYear = isCurrentYear ? activeYear : selectedYearData?.academic_year;
+
     return (
         <div className="h-full bg-white p-4 rounded-md">
             <h1 className="text-xl font-semibold">
@@ -137,6 +139,8 @@ const StudentPage = async ({ searchParams: _searchParams }: StudentPageProps) =>
         if (result.success) selectedYearData = result.data;
     }
 
+    const announcementYear = isCurrentYear ? activeYear : selectedYearData?.academic_year;
+
     return (
         <div className="p-4 flex gap-4 flex-col xl:flex-row">
             {/* LEFT */}
@@ -160,7 +164,7 @@ const StudentPage = async ({ searchParams: _searchParams }: StudentPageProps) =>
             <Suspense fallback={<SidebarSkeleton />}>
                 <div className="w-full xl:w-1/3 flex flex-col gap-8">
                     {selectedYearData && <YearAttendanceSummaryCard yearData={selectedYearData} title="My Attendance" />}
-                    <SidebarSection activeYear={isCurrentYear ? activeYear : selectedYearData?.academic_year} />
+                    <SidebarSection activeYear={announcementYear} />
                 </div>
             </Suspense>
         </div>

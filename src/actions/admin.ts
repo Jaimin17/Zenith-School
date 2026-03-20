@@ -2868,7 +2868,7 @@ export async function fetchAttendanceDashboardClassesAction(date?: string): Prom
 
 export async function fetchTeacherClassesAttendanceAction(teacherId: string, date?: string): Promise<{
     success: boolean;
-    data: TeacherClassSummary[] | null;
+    data: TeacherClassesAttendanceResponse | null;
     error?: string;
 }> {
     try {
@@ -2885,7 +2885,7 @@ export async function fetchTeacherClassesAttendanceAction(teacherId: string, dat
 
         const params = date ? { target_date: date } : {};
 
-        const response = await api<TeacherClassSummary[]>({
+        const response = await api<TeacherClassesAttendanceResponse>({
             endpoint: ATTENDANCE_TEACHER_CLASSES_API,
             params,
             serverToken: token.accessToken,
@@ -3155,7 +3155,7 @@ export async function fetchClassesForTakingAttendanceAction(targetDate?: string,
             return {
                 success: false,
                 data: null,
-                error: response.message || 'Failed to fetch lessons for attendance'
+                error: response.message || 'Failed to fetch classes for attendance'
             };
         }
 
@@ -3168,7 +3168,7 @@ export async function fetchClassesForTakingAttendanceAction(targetDate?: string,
         return {
             success: false,
             data: null,
-            error: 'An unexpected error occurred while fetching lessons'
+            error: 'An unexpected error occurred while fetching classes'
         };
     }
 }
@@ -3207,7 +3207,7 @@ export async function fetchClassRosterAction(classId: string, targetDate?: strin
             return {
                 success: false,
                 data: null,
-                error: response.message || 'Failed to fetch lesson roster'
+                error: response.message || 'Failed to fetch class roster'
             };
         }
 

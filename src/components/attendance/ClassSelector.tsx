@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Calendar, Users, CheckCircle, AlertCircle, MinusCircle } from "lucide-react";
+import { Calendar, Users, CheckCircle, AlertCircle, MinusCircle, Ban } from "lucide-react";
 import Link from "next/link";
 import type { ClassForDateItem, ClassesForDateResponse } from "@/types/schemas";
 
@@ -55,14 +55,23 @@ const ClassSelector: React.FC<ClassSelectorProps> = ({
   }
 
   if (!classesData || classesData.classes.length === 0) {
+    const isHoliday = Boolean(classesData?.is_holiday);
+    const holidayReason = classesData?.holiday_reason || "Holiday";
+
     return (
       <div className="bg-white rounded-xl p-8 border border-gray-200">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Calendar className="w-8 h-8 text-gray-400" />
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isHoliday ? "bg-amber-100" : "bg-gray-100"}`}>
+            {isHoliday ? <Ban className="w-8 h-8 text-amber-600" /> : <Calendar className="w-8 h-8 text-gray-400" />}
           </div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">No Classes Found</h3>
-          <p className="text-gray-500">There are no classes available for {classesData?.day_of_week || "this date"}</p>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            {isHoliday ? "Attendance Locked" : "No Classes Found"}
+          </h3>
+          <p className="text-gray-500">
+            {isHoliday
+              ? `Attendance cannot be taken on ${holidayReason}.`
+              : `There are no classes available for ${classesData?.day_of_week || "this date"}`}
+          </p>
         </div>
       </div>
     );

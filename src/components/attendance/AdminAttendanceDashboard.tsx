@@ -109,6 +109,9 @@ const AdminAttendanceDashboard = ({
     return colors[index % colors.length];
   };
 
+  const isHoliday = Boolean(summary?.is_holiday);
+  const holidayReason = summary?.holiday_reason || "Holiday";
+
   if (hasError) {
     return (
       <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
@@ -137,11 +140,15 @@ const AdminAttendanceDashboard = ({
         <div className="flex items-center gap-3">
           {/* Take Attendance Button */}
           <Link
-            href={`/list/attendance/take?date=${selectedDate}`}
-            className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm font-medium"
+            href={isHoliday ? "#" : `/list/attendance/take?date=${selectedDate}`}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-colors shadow-sm font-medium ${
+              isHoliday
+                ? "bg-amber-100 text-amber-800 border border-amber-200 cursor-not-allowed pointer-events-none"
+                : "bg-indigo-600 text-white hover:bg-indigo-700"
+            }`}
           >
             <ClipboardCheck className="w-5 h-5" />
-            <span>Take Attendance</span>
+            <span>{isHoliday ? "Attendance Locked" : "Take Attendance"}</span>
           </Link>
 
           {/* Date Picker */}
@@ -163,6 +170,16 @@ const AdminAttendanceDashboard = ({
           </div>
         </div>
       </div>
+
+      {isHoliday && (
+        <div className="mb-6 rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-orange-50 p-4">
+          <h2 className="text-sm font-semibold text-amber-900">Attendance closed for this date</h2>
+          <p className="text-sm text-amber-800 mt-1">
+            Reason: <span className="font-medium">{holidayReason}</span>. Attendance can be marked only on working days.
+          </p>
+          <p className="text-xs text-amber-700 mt-1">Select another date from the picker to continue.</p>
+        </div>
+      )}
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">

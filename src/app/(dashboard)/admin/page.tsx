@@ -11,6 +11,7 @@ import {
   fetchUserCountsAction,
   fetchAnnouncementsAction,
   fetchAcademicYearsAllAction,
+  fetchAttendanceDashboardSummaryAction,
 } from "@/actions/admin";
 import { AnnouncementListResponse } from "@/types/schemas";
 import { cookies } from "next/headers";
@@ -33,9 +34,10 @@ const AdminPage = async () => {
   const fromDate = selectedYear?.start_date ?? undefined;
   const toDate = selectedYear?.end_date ?? undefined;
 
-  const [userCountsResult, announcementsResult] = await Promise.all([
+  const [userCountsResult, announcementsResult, attendanceSummaryResult] = await Promise.all([
     fetchUserCountsAction(resolvedYearId ?? undefined),
     fetchAnnouncementsAction(undefined, 1, fromDate, toDate),
+    fetchAttendanceDashboardSummaryAction(),
   ]);
 
   if (!userCountsResult.success || !userCountsResult.data) {
@@ -43,6 +45,9 @@ const AdminPage = async () => {
   }
   if (!announcementsResult.success || !announcementsResult.data) {
     console.error("Failed to fetch announcements:", announcementsResult.error);
+  }
+  if (!attendanceSummaryResult.success || !attendanceSummaryResult.data) {
+    console.error("Failed to fetch attendance summary:", attendanceSummaryResult.error);
   }
 
   const usersCount = userCountsResult.data ?? {
@@ -90,7 +95,7 @@ const AdminPage = async () => {
             <CountChartContainer data={studentStats} />
           </div>
           <div className="w-full lg:w-2/3 h-[450px]">
-            <AttendanceChartContainer />
+            <AttendanceChartContainer summary={attendanceSummaryResult.data} />
           </div>
         </div>
       </div>
@@ -98,7 +103,11 @@ const AdminPage = async () => {
       {/* RIGHT */}
       <div className="w-full lg:w-1/3 flex flex-col gap-8">
         <EventCalendarContainer defaultDate={fromDate} />
-        <Announcements initialAnnouncements={announcements} />
+        <Announcements
+          initialAnnouncements={announcements}
+          fromDate={fromDate}
+          toDate={toDate}
+        />
       </div>
     </div>
   );

@@ -17,15 +17,17 @@ const TeacherPage = async () => {
     const cookieStore = await cookies();
     const selectedYearId = cookieStore.get("selected_year_id")?.value ?? null;
 
-    const [announcementsResult, yearsResult] = await Promise.all([
-        fetchAnnouncementsAction(),
-        fetchAcademicYearsAllAction(),
-    ]);
+    const yearsResult = await fetchAcademicYearsAllAction();
 
     const years = yearsResult.data ?? [];
     const activeYear = years.find((y) => y.is_active) ?? years[0] ?? null;
     const resolvedYearId = selectedYearId ?? activeYear?.id ?? null;
     const isCurrentYear = !resolvedYearId || resolvedYearId === activeYear?.id;
+    const selectedYear = years.find((y) => y.id === resolvedYearId) ?? activeYear;
+    const fromDate = selectedYear?.start_date;
+    const toDate = selectedYear?.end_date;
+
+    const announcementsResult = await fetchAnnouncementsAction(undefined, 1, fromDate, toDate);
 
     // For historical years, fetch all lessons tagged to that year
     let historicalLessons: Lesson[] | null = null;
@@ -59,7 +61,7 @@ const TeacherPage = async () => {
         has_prev: false,
     };
 
-    const selectedYear = years.find((y) => y.id === resolvedYearId);
+    const selectedYearInfo = years.find((y) => y.id === resolvedYearId);
 
     return (
         <div className="flex-1 p-4 flex gap-4 flex-col xl:flex-row">
@@ -67,9 +69,9 @@ const TeacherPage = async () => {
             <div className="w-full xl:w-2/3 flex flex-col gap-4">
                 <div className="h-full bg-white p-4 rounded-md">
                     <h1 className="text-xl font-semibold mb-1">Schedule</h1>
-                    {!isCurrentYear && selectedYear && (
+                    {!isCurrentYear && selectedYearInfo && (
                         <p className="text-sm text-gray-500 mb-3">
-                            Academic Year: {selectedYear.year_label}
+                            Academic Year: {selectedYearInfo.year_label}
                         </p>
                     )}
 
@@ -103,7 +105,11 @@ const TeacherPage = async () => {
                     </Alert>
                 )}
 
-                <Announcements initialAnnouncements={announcements} />
+                <Announcements
+                    initialAnnouncements={announcements}
+                    fromDate={fromDate}
+                    toDate={toDate}
+                />
             </div>
         </div>
     );

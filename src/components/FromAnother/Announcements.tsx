@@ -1,12 +1,12 @@
 "use client";
 
 import { Box, Typography, Skeleton } from "@mui/material";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import type { Announcement, AnnouncementListResponse } from "@/types/schemas";
 import AnnouncementIcon from '@mui/icons-material/Campaign';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { fetchAnnouncementsAction, fetchAnnouncementsOfTeacherAction } from "@/actions/admin";
+import { fetchAnnouncementsAction, fetchAnnouncementsOfStudentAction, fetchAnnouncementsOfTeacherAction } from "@/actions/admin";
 
 const cardColors = [
   "rgba(56, 189, 248, 0.15)",   // sky light
@@ -19,22 +19,39 @@ interface AnnouncementsProps {
   userId?: string;
   role?: string;
   activeYear?: any;
+  fromDate?: string;
+  toDate?: string;
 }
 
-const Announcements = ({ initialAnnouncements, activeYear, userId, role }: AnnouncementsProps) => {
+const Announcements = ({ initialAnnouncements, activeYear, userId, role, fromDate, toDate }: AnnouncementsProps) => {
     const [announcements, setAnnouncements] = useState<Announcement[]>(initialAnnouncements.data);
     const [isPending, startTransition] = useTransition();
+
+    const effectiveFromDate = fromDate ?? activeYear?.start_date;
+    const effectiveToDate = toDate ?? activeYear?.end_date;
+
+    useEffect(() => {
+      setAnnouncements(initialAnnouncements.data ?? []);
+    }, [initialAnnouncements]);
 
     const handleRefresh = () => {
       startTransition(async () => {
           let result;
-          
-          // Fetch based on role and userId
-          if (userId && role === 'teacher') {
+
+          // Detail pages use role-specific endpoints.
+          if (userId && role === 'teacher' && !effectiveFromDate && !effectiveToDate) {
             result = await fetchAnnouncementsOfTeacherAction(userId);
+          } else if (userId && role === 'student' && !effectiveFromDate && !effectiveToDate) {
+            result = await fetchAnnouncementsOfStudentAction(userId);
           } else {
-            // For admin, student, parent or when no specific filter
-            result = await fetchAnnouncementsAction("", 1, activeYear?.start_date, activeYear?.end_date);
+            // Dashboard refresh should preserve current year/child filters.
+            result = await fetchAnnouncementsAction(
+              "",
+              1,
+              effectiveFromDate,
+              effectiveToDate,
+              role === "parent" ? userId : undefined
+            );
           }
           
           if (result.success && result.data) {

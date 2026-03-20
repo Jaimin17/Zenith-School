@@ -143,8 +143,6 @@ const ParentPage = async () => {
     const years = yearsResult.data;
     const activeYear = years.find((y) => y.is_active) ?? years[0] ?? null;
 
-    const announcementsResult = await fetchAnnouncementsAction(undefined, 1, activeYear?.start_date, activeYear?.end_date, selectedChildCookieId);
-
     // Resolve selected child
     const selectedChildId = selectedChildCookieId ?? children[0]?.id ?? null;
     const selectedChild = children.find((c) => c.id === selectedChildId) ?? children[0] ?? null;
@@ -152,6 +150,17 @@ const ParentPage = async () => {
     // Resolve selected year
     const resolvedYearId = selectedYearId ?? activeYear?.id ?? null;
     const isCurrentYear = !resolvedYearId || resolvedYearId === activeYear?.id;
+    const selectedYear = years.find((y) => y.id === resolvedYearId) ?? activeYear;
+    const announcementsFromDate = selectedYear?.start_date;
+    const announcementsToDate = selectedYear?.end_date;
+
+    const announcementsResult = await fetchAnnouncementsAction(
+        undefined,
+        1,
+        announcementsFromDate,
+        announcementsToDate,
+        selectedChildCookieId
+    );
 
     const announcements: AnnouncementListResponse = announcementsResult.data ?? {
         data: [],
@@ -221,7 +230,13 @@ const ParentPage = async () => {
                             </p>
                         </div>
                     ) : (
-                        <Announcements userId={selectedChildId} activeYear={activeYear} role="parent" initialAnnouncements={announcements} />
+                        <Announcements
+                            userId={selectedChildId}
+                            role="parent"
+                            initialAnnouncements={announcements}
+                            fromDate={announcementsFromDate}
+                            toDate={announcementsToDate}
+                        />
                     )}
                 </Suspense>
             </div>

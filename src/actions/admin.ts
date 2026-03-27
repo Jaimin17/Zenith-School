@@ -378,7 +378,8 @@ export async function fetchAssignmentsOfTeacherAction(
     pageNo: number = 1,
     subjectId?: string,
     status?: string,
-    dueDate?: string
+    dueDate?: string,
+    yearId?: string
 ): Promise<{
     success: boolean;
     data: AssignmentListResponse | null;
@@ -417,6 +418,10 @@ export async function fetchAssignmentsOfTeacherAction(
 
         if (dueDate) {
             params.due_date = dueDate;
+        }
+
+        if (yearId) {
+            params.academic_year_id = yearId;
         }
 
         console.log('Fetching assignments for teacher:', teacherId, 'with params:', params);
@@ -995,7 +1000,7 @@ export async function fetchLessonsAction(searchTerm?: string, pageNo: number = 1
     }
 }
 
-export async function fetchLessonsFullListAction(): Promise<{
+export async function fetchLessonsFullListAction(academic_year_id: string | undefined): Promise<{
     success: boolean;
     data: Lesson[] | [];
     error?: string;
@@ -1016,6 +1021,7 @@ export async function fetchLessonsFullListAction(): Promise<{
         // Make API request with server token
         const response = await api<Lesson[]>({
             endpoint: GET_LESSONS_FULL_LIST_API,
+            params: { academic_year_id },
             serverToken: token.accessToken,
             isServer: true,
         });

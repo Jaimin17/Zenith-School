@@ -37,7 +37,7 @@ const Announcements = ({ initialAnnouncements, activeYear, userId, role, fromDat
     const handleRefresh = () => {
       startTransition(async () => {
           let result;
-
+          
           // Detail pages use role-specific endpoints.
           if (userId && role === 'teacher' && !effectiveFromDate && !effectiveToDate) {
             result = await fetchAnnouncementsOfTeacherAction(userId);

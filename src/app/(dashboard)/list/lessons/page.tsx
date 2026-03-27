@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { BookOpen, Clock, Users, User } from "lucide-react";
 import { cookies } from "next/headers";
+import { resolveAcademicYearContext } from "@/lib/academicYear";
 
 // Helper function to format time
 const formatTime = (timeString: string): string => {
@@ -89,7 +90,9 @@ const LessonListPage = async ({
   const classId = params.classId || undefined;
 
   const cookieStore = await cookies();
-  const yearId = cookieStore.get("selected_year_id")?.value;
+  const yearIdFromCookie = cookieStore.get("selected_year_id")?.value;
+  const { resolvedYearId } = await resolveAcademicYearContext(yearIdFromCookie ?? null);
+  const yearId = role === "teacher" ? (resolvedYearId ?? undefined) : yearIdFromCookie;
 
   let result;
 

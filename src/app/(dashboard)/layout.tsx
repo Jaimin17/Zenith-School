@@ -22,7 +22,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
     return (
         <AuthGuard>
             <AdminProvider>
-                <AcademicYearProvider initialYearId={selectedYearId}>
+                <AcademicYearProvider initialYearId={selectedYearId} role={auth.role}>
                     <ChildProvider initialChildId={selectedChildId} role={auth.role}>
                         <Toaster position="top-right" richColors />
                         <DashboardShell>{children}</DashboardShell>

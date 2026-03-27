@@ -10,6 +10,7 @@ import { requireAuth } from "@/lib/auth/serverAuth";
 import { FileText, Calendar, BookOpen, User, Clock, ExternalLink } from "lucide-react";
 import { getAssignmentPdfUrl } from "@/utils/imageHelpers";
 import { cookies } from "next/headers";
+import { resolveAcademicYearContext } from "@/lib/academicYear";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -114,7 +115,9 @@ const AssignmentsPage = async ({
   const studentId = params.studentId || undefined;
 
   const cookieStore = await cookies();
-  const yearId = cookieStore.get("selected_year_id")?.value;
+  const yearIdFromCookie = cookieStore.get("selected_year_id")?.value;
+  const { resolvedYearId } = await resolveAcademicYearContext(yearIdFromCookie ?? null);
+  const yearId = role === "teacher" ? (resolvedYearId ?? undefined) : yearIdFromCookie;
   const selectedChildId = cookieStore.get("selected_child_id")?.value;
   const effectiveStudentId = role === "parent" ? (selectedChildId || studentId) : studentId;
 
@@ -127,7 +130,7 @@ const AssignmentsPage = async ({
   let result;
 
   if (teacherId) {
-    result = await fetchAssignmentsOfTeacherAction(teacherId, search, page, subjectId, status, filterDate);
+    result = await fetchAssignmentsOfTeacherAction(teacherId, search, page, subjectId, status, filterDate, yearId);
   } else if (classId) {
     result = await fetchAssignmentsOfClassAction(classId, search, page, subjectId, filterTeacherId, status, filterDate);
   } else if (effectiveStudentId) {
@@ -174,7 +177,7 @@ const AssignmentsPage = async ({
       accessor: "status",
       className: "hidden lg:table-cell",
     },
-    ...(role === "admin" ? [{ header: "Actions", accessor: "action" }] : []),
+    ...((role === "admin" || role === "teacher") ? [{ header: "Actions", accessor: "action" }] : []),
   ];
 
   const renderRow = (item: AssignmentWithRelations) => (
@@ -267,7 +270,7 @@ const AssignmentsPage = async ({
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            {role === "admin" && (
+            {(role === "admin" || role === "teacher") && (
               <FormContainer table="assignment" type="create" />
             )}
           </div>

@@ -4,12 +4,12 @@ import BigCalendarContainer from "../../../components/FromAnother/BigCalendarCon
 import {
     fetchAnnouncementsAction,
     fetchLessonsWeeklyAction,
-    fetchAcademicYearsAllAction,
     fetchTeacherLessonsByYearAction,
 } from "@/actions/admin";
 import { Alert } from "@mui/material";
 import { AnnouncementListResponse, Lesson } from "@/types/schemas";
 import { cookies } from "next/headers";
+import { resolveAcademicYearContext } from "@/lib/academicYear";
 
 export const dynamic = "force-dynamic";
 
@@ -17,15 +17,10 @@ const TeacherPage = async () => {
     const cookieStore = await cookies();
     const selectedYearId = cookieStore.get("selected_year_id")?.value ?? null;
 
-    const yearsResult = await fetchAcademicYearsAllAction();
-
-    const years = yearsResult.data ?? [];
-    const activeYear = years.find((y) => y.is_active) ?? years[0] ?? null;
-    const resolvedYearId = selectedYearId ?? activeYear?.id ?? null;
+    const { years, activeYear, selectedYear, resolvedYearId, fromDate, toDate } = await resolveAcademicYearContext(
+        selectedYearId
+    );
     const isCurrentYear = !resolvedYearId || resolvedYearId === activeYear?.id;
-    const selectedYear = years.find((y) => y.id === resolvedYearId) ?? activeYear;
-    const fromDate = selectedYear?.start_date;
-    const toDate = selectedYear?.end_date;
 
     const announcementsResult = await fetchAnnouncementsAction(undefined, 1, fromDate, toDate);
 
@@ -61,7 +56,7 @@ const TeacherPage = async () => {
         has_prev: false,
     };
 
-    const selectedYearInfo = years.find((y) => y.id === resolvedYearId);
+    const selectedYearInfo = selectedYear ?? years.find((y) => y.id === resolvedYearId) ?? null;
 
     return (
         <div className="flex-1 p-4 flex gap-4 flex-col xl:flex-row">

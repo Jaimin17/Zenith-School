@@ -9,6 +9,7 @@ import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { Calendar, Clock, BookOpen } from "lucide-react";
 import { cookies } from "next/headers";
+import { resolveAcademicYearContext } from "@/lib/academicYear";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -64,7 +65,9 @@ const ExamListPage = async ({
   const studentId = params.studentId || undefined;
 
   const cookieStore = await cookies();
-  const yearId = cookieStore.get("selected_year_id")?.value;
+  const yearIdFromCookie = cookieStore.get("selected_year_id")?.value;
+  const { resolvedYearId } = await resolveAcademicYearContext(yearIdFromCookie ?? null);
+  const yearId = role === "teacher" ? (resolvedYearId ?? undefined) : yearIdFromCookie;
   const selectedChildId = cookieStore.get("selected_child_id")?.value;
   const effectiveStudentId = role === "parent" ? (selectedChildId || studentId) : studentId;
 

@@ -94,7 +94,7 @@ export default function SportsPage() {
                 <div className="col-md-4" key={item}>
                   <div className="team-item">
                     <div className="team-img">
-                      <div className="w-full h-56 bg-gray-200 rounded-lg animate-pulse" />
+                      <div className="w-full h-56 bg-gray-200 rounded-lg skeleton-shimmer" />
                     </div>
                     <div className="team-content" style={{ marginTop: "15px" }}>
                       <div className="team-bio">

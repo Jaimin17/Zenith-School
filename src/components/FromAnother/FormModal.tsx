@@ -388,7 +388,7 @@ const FormModal = ({
         {/* Delete Warning Icon with Animation */}
         <div className="flex justify-center mb-6">
           <div className="relative">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center animate-pulse">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center">
                 <AlertTriangle className="w-8 h-8 text-red-600" />
               </div>

@@ -423,8 +423,9 @@ export interface StudentBase {
 
 export interface StudentWithRelations extends StudentBase {
     parent: Parent | null,
-    related_class: ClassBase,
-    grade: Grade,
+    related_class: ClassBase | null,
+    grade: Grade | null,
+    class_histories: StudentClassHistoryRead[],
 }
 
 export interface StudentListResponse extends PaginationListResponse {
@@ -621,16 +622,22 @@ export interface SeedStudentsResponse {
 }
 
 // ── Student Class History ─────────────────────────────────────────────────────
-export interface StudentClassHistoryRecord {
+export interface StudentClassHistoryRead {
     id: string;
-    academic_year_label: string;
+    student_id: string;
+    academic_year_id: string;
+    academic_year: AcademicYear | null;
+    class_id: string | null;
+    grade_id: string | null;
     class_name: string | null;
     grade_level: number | null;
+    created_at: string;
 }
 
 export interface StudentHistoryResponse {
     student_id: string;
-    history: StudentClassHistoryRecord[];
+    student_name: string;
+    history: StudentClassHistoryRead[];
 }
 
 // ── Parent Child Selection ────────────────────────────────────────────────────
@@ -679,7 +686,7 @@ export interface BulkPromoteResponse {
 
 // ── Student Historical Year Data ──────────────────────────────────────────────
 export interface StudentYearDataResponse {
-    student_id: string;
+    student_id?: string;
     academic_year: AcademicYear;
     class_id: string | null;
     class_name: string | null;

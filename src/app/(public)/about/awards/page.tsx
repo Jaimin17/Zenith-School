@@ -68,7 +68,7 @@ export default function AwardsPage() {
               <div className="col-md-6 col-lg-3" key={index}>
                 <div className="team-item" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
                   <div className="team-img">
-                    <div className="w-full h-48 bg-gray-200 rounded-lg animate-pulse" />
+                    <div className="w-full h-48 bg-gray-200 rounded-lg skeleton-shimmer" />
                   </div>
                   <div className="team-content" style={{ marginTop: "15px" }}>
                     <div className="team-bio">

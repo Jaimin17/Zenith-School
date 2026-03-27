@@ -63,11 +63,11 @@ export const ContactUsContainer: React.FC = () => {
               </div>
             </div>
           </div>
-          <ContactUsForm />
+          {/* <ContactUsForm /> */}
         </div>
       </div>
 
-      <div className="contact-map">
+      {/* <div className="contact-map">
         <iframe 
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d615510.5022021453!2d72.68842878400444!3d21.92553907244295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be0241d43bf5073%3A0x31ca5d2247a19cc4!2sZenith%20High%20School!5e1!3m2!1sen!2sin!4v1757358371115!5m2!1sen!2sin" 
           width="600" 
@@ -77,7 +77,7 @@ export const ContactUsContainer: React.FC = () => {
           loading="lazy"
           title="Zenith High School Location"
         />
-      </div>
+      </div> */}
     </>
   );
 };

@@ -122,7 +122,7 @@ const PublicEventsGallery = ({
               <div key={item} className="col-lg-4">
                 <div className="event-item">
                   <div className="event-img">
-                    <div className="w-full h-64 bg-gray-200 rounded-lg animate-pulse" />
+                    <div className="w-full h-64 bg-gray-200 rounded-lg skeleton-shimmer" />
                   </div>
                   <div className="event-info">
                     <div className="w-2/3 h-4 bg-gray-200 rounded mb-3" />

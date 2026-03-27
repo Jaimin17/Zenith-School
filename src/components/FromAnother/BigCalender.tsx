@@ -21,18 +21,20 @@ const BigCalendar = ({
   console.log("BigCalendar data:", data);
 
   return (
-    <Calendar
-      localizer={localizer}
-      events={data}
-      startAccessor="start"
-      endAccessor="end"
-      views={["work_week", "day"]}
-      view={view}
-      style={{ height: "98%" }}
-      onView={handleOnChangeView}
-      min={new Date(0, 0, 0, 7, 0, 0)}  // 7:00 AM
-      max={new Date(0, 0, 0, 18, 0, 0)} // 6:00 PM
-    />
+    <div className="h-full w-full min-w-0 overflow-x-auto overflow-y-hidden rounded-md">
+      <Calendar
+        localizer={localizer}
+        events={data}
+        startAccessor="start"
+        endAccessor="end"
+        views={["work_week", "day"]}
+        view={view}
+        style={{ height: "92%", width: "100%", minWidth: "680px" }}
+        onView={handleOnChangeView}
+        min={new Date(0, 0, 0, 7, 0, 0)}  // 7:00 AM
+        max={new Date(0, 0, 0, 18, 0, 0)} // 6:00 PM
+      />
+    </div>
   );
 };
 

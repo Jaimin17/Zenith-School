@@ -72,8 +72,6 @@ async function ScheduleSection() {
 
     const lessons = lessonsResult.success ? lessonsResult.data || [] : [];
 
-    const announcementYear = isCurrentYear ? activeYear : selectedYearData?.academic_year;
-
     return (
         <div className="h-full bg-white p-4 rounded-md">
             <h1 className="text-xl font-semibold">

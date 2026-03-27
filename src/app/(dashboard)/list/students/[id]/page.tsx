@@ -10,11 +10,13 @@ import {
   fetchAnnouncementsOfStudentAction, 
   fetchAttendanceByStudentIdAction, 
   fetchStudentByIdAction,
+  fetchStudentYearDataAction,
   fetchLessonsForStudentsWeeklyAction 
 } from "@/actions/admin";
 import { AnnouncementListResponse, StudentWithRelations, Attendance, Lesson } from "@/types/schemas";
 import { getStudentImageUrl } from "@/utils/imageHelpers";
 import { Droplets, Cake, Mail, Phone, GraduationCap, BookOpen, Users, Calendar } from "lucide-react";
+import { cookies } from "next/headers";
 
 // Helper function to format date
 const formatDate = (dateString: string | Date | null | undefined): string => {
@@ -40,6 +42,8 @@ const SingleStudentPage = async ({
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
+  const cookieStore = await cookies();
+  const selectedYearId = cookieStore.get("selected_year_id")?.value ?? null;
 
   const auth = await requireAuth();
   const role = auth.role;
@@ -61,17 +65,19 @@ const SingleStudentPage = async ({
   }
 
   // Fetch all data in parallel
-  const [studentResult, attendanceResult, announcementResult, lessonsResult] = await Promise.all([
+  const [studentResult, attendanceResult, announcementResult, lessonsResult, yearDataResult] = await Promise.all([
     fetchStudentByIdAction(id),
     fetchAttendanceByStudentIdAction(id),
     fetchAnnouncementsOfStudentAction(id),
     fetchLessonsForStudentsWeeklyAction(id),
+    selectedYearId ? fetchStudentYearDataAction(id, selectedYearId) : Promise.resolve(null),
   ]);
 
   const hasStudentError = !studentResult.success || !studentResult.data;
   const hasAttendanceError = !attendanceResult.success;
   const hasAnnouncementsError = !announcementResult.success || !announcementResult.data;
   const hasLessonsError = !lessonsResult.success;
+  const hasYearDataError = Boolean(selectedYearId && yearDataResult && !yearDataResult.success);
 
   if (hasStudentError) {
     console.error('Failed to fetch student:', studentResult.error);
@@ -84,6 +90,9 @@ const SingleStudentPage = async ({
   }
   if (hasLessonsError) {
     console.error('Failed to fetch lessons:', lessonsResult.error);
+  }
+  if (hasYearDataError) {
+    console.error('Failed to fetch selected-year student data:', yearDataResult?.error);
   }
 
   const student: StudentWithRelations | null = studentResult.data || null;
@@ -104,8 +113,49 @@ const SingleStudentPage = async ({
 
   const attendancePercentage = calculateAttendancePercentage(attendance);
 
+  const selectedYearHasNoClassHistory = Boolean(
+    selectedYearId &&
+    yearDataResult?.success &&
+    yearDataResult.data &&
+    !yearDataResult.data.class_id
+  );
+
+  const resolvedClassName = selectedYearId
+    ? (yearDataResult?.success ? yearDataResult.data?.class_name || null : student.related_class?.name || null)
+    : student.related_class?.name || null;
+
+  const resolvedClassId = selectedYearId
+    ? (yearDataResult?.success ? yearDataResult.data?.class_id || null : student.related_class?.id || null)
+    : student.related_class?.id || null;
+
+  const resolvedGradeLevel = selectedYearId
+    ? (yearDataResult?.success ? yearDataResult.data?.grade_level ?? null : student.grade?.level ?? null)
+    : student.grade?.level ?? null;
+
   // Show error messages for partial failures
-  const hasPartialErrors = hasAttendanceError || hasAnnouncementsError || hasLessonsError;
+  const hasPartialErrors = hasAttendanceError || hasAnnouncementsError || hasLessonsError || hasYearDataError;
+
+  const shortcutClassName =
+    "px-4 py-2.5 rounded-lg transition-colors text-center";
+
+  const renderClassShortcut = (href: string, label: string, activeClassName: string) => {
+    if (!resolvedClassId || selectedYearHasNoClassHistory) {
+      return (
+        <span
+          className={`${shortcutClassName} bg-gray-100 text-gray-400 cursor-not-allowed`}
+          title="No class assigned for selected year"
+        >
+          {label}
+        </span>
+      );
+    }
+
+    return (
+      <Link className={`${shortcutClassName} ${activeClassName}`} href={`${href}?classId=${resolvedClassId}`}>
+        {label}
+      </Link>
+    );
+  };
 
   return (
     <div className="flex-1 p-4 flex flex-col gap-4 xl:flex-row">
@@ -117,6 +167,7 @@ const SingleStudentPage = async ({
             {hasAttendanceError && " Attendance may be incomplete."}
             {hasLessonsError && " Schedule may be incomplete."}
             {hasAnnouncementsError && " Announcements may be unavailable."}
+            {hasYearDataError && " Selected-year class details may be unavailable."}
           </p>
         </div>
       )}
@@ -152,7 +203,9 @@ const SingleStudentPage = async ({
                   )}
                 </div>
                 <p className="text-sm text-blue-100">
-                  Student at {student.related_class?.name || "N/A"}
+                  {selectedYearHasNoClassHistory
+                    ? "No class assigned for selected year"
+                    : `Student at ${resolvedClassName || "N/A"}`}
                 </p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
@@ -205,7 +258,7 @@ const SingleStudentPage = async ({
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-gray-800">
-                    {student.grade?.level || "-"}
+                    {resolvedGradeLevel ?? "-"}
                   </h2>
                   <span className="text-xs text-gray-500">Grade</span>
                 </div>
@@ -232,7 +285,9 @@ const SingleStudentPage = async ({
                   <Users className="w-5 h-5 text-amber-500" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-gray-800">{student.related_class?.name || "-"}</h2>
+                  <h2 className="text-lg font-bold text-gray-800">
+                    {selectedYearHasNoClassHistory ? "-" : (resolvedClassName || "-")}
+                  </h2>
                   <span className="text-xs text-gray-500">Class</span>
                 </div>
               </div>
@@ -249,31 +304,30 @@ const SingleStudentPage = async ({
       <div className="w-full xl:w-1/3 flex flex-col gap-4">
         <div className="bg-gradient-to-br from-slate-50 to-gray-100 p-5 rounded-xl border border-gray-200 shadow-sm">
           <h1 className="text-lg font-semibold text-gray-800">Shortcuts</h1>
+          {selectedYearHasNoClassHistory && (
+            <p className="mt-2 text-xs text-amber-700">No class assigned for selected year</p>
+          )}
           <div className="mt-4 grid grid-cols-3 gap-3 text-xs font-medium">
-            <Link
-              className="px-4 py-2.5 rounded-lg bg-sky-100 text-sky-700 hover:bg-sky-200 transition-colors text-center"
-              href={`/list/lessons?classId=${student.related_class?.id}`}
-            >
-              Student&apos;s Lessons
-            </Link>
-            <Link
-              className="px-4 py-2.5 rounded-lg bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors text-center"
-              href={`/list/teachers?classId=${student.related_class?.id}`}
-            >
-              Student&apos;s Teachers
-            </Link>
-            <Link
-              className="px-4 py-2.5 rounded-lg bg-pink-100 text-pink-700 hover:bg-pink-200 transition-colors text-center"
-              href={`/list/exams?classId=${student.related_class?.id}`}
-            >
-              Student&apos;s Exams
-            </Link>
-            <Link
-              className="px-4 py-2.5 rounded-lg bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors text-center"
-              href={`/list/assignments?classId=${student.related_class?.id}`}
-            >
-              Student&apos;s Assignments
-            </Link>
+            {renderClassShortcut(
+              "/list/lessons",
+              "Student's Lessons",
+              "bg-sky-100 text-sky-700 hover:bg-sky-200"
+            )}
+            {renderClassShortcut(
+              "/list/teachers",
+              "Student's Teachers",
+              "bg-purple-100 text-purple-700 hover:bg-purple-200"
+            )}
+            {renderClassShortcut(
+              "/list/exams",
+              "Student's Exams",
+              "bg-pink-100 text-pink-700 hover:bg-pink-200"
+            )}
+            {renderClassShortcut(
+              "/list/assignments",
+              "Student's Assignments",
+              "bg-amber-100 text-amber-700 hover:bg-amber-200"
+            )}
             <Link
               className="px-4 py-2.5 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors text-center"
               href={`/list/results?studentId=${student.id}`}

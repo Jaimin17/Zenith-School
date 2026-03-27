@@ -37,7 +37,7 @@ export const ImagesSliderDemo: React.FC = () => {
   if (loading) {
     return (
       <div className="hero-section">
-        <div className="hero-slider" style={{ minHeight: "65vh", background: "#f3f4f6" }}>
+        <div className="hero-slider" style={{ minHeight: "75vh", background: "#f3f4f6" }}>
           <div className="flex items-center justify-center h-full">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>

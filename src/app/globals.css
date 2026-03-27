@@ -91,6 +91,7 @@ body {
 
 .rbc-time-content {
   border: none !important;
+  overflow-x: hidden !important;
 }
 
 .rbc-time-gutter.rbc-time-column {
@@ -98,7 +99,7 @@ body {
 }
 
 .rbc-time-gutter.rbc-time-column .rbc-timeslot-group {
-  padding: 0px 20px !important;
+  padding: 0px 8px !important;
 }
 
 .rbc-timeslot-group {
@@ -112,9 +113,10 @@ body {
 .rbc-event {
   border: none !important;
   color: black !important;
-  padding: 10px !important;
-  margin: 10px !important;
-  width: 99% !important;
+  padding: 8px !important;
+  margin: 2px !important;
+  width: auto !important;
+  border-radius: 8px !important;
 }
 
 .rbc-event:nth-child(1) {
@@ -156,4 +158,29 @@ body {
 
 .animate-shake {
   animation: shake 0.5s ease-in-out;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(110deg, #edf2f7 25%, #dfe7f1 37%, #edf2f7 63%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s linear infinite;
+}
+
+.MuiSkeleton-root {
+  background: linear-gradient(110deg, #edf2f7 25%, #dfe7f1 37%, #edf2f7 63%) !important;
+  background-size: 200% 100% !important;
+  animation: skeleton-shimmer 1.4s linear infinite !important;
+}
+
+.MuiSkeleton-pulse {
+  animation: skeleton-shimmer 1.4s linear infinite !important;
 }

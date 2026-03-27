@@ -12,7 +12,7 @@ const GallerySkeleton = () => {
         <div key={col} className="col-md-4">
           {[1, 2].map((item) => (
             <div key={item} className="gallery-item mb-4">
-              <div className="w-full h-56 bg-gray-200 rounded-lg animate-pulse" />
+              <div className="w-full h-56 bg-gray-200 rounded-lg skeleton-shimmer" />
             </div>
           ))}
         </div>
@@ -28,7 +28,7 @@ const HomePhotoGallery = () => {
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
-        const result = await fetchPublicPhotoGalleryAction(1, false);
+        const result = await fetchPublicPhotoGalleryAction(1);
 
         if (result.success && result.data?.data) {
           const activeImages = result.data.data

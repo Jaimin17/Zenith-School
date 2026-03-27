@@ -43,7 +43,7 @@ const ImagesSlider: React.FC<ImagesSliderProps> = ({ images }) => {
               backgroundImage: `url(${img})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
-              minHeight: "65vh",
+              minHeight: "75vh",
             }}
           ></div>
         ))}

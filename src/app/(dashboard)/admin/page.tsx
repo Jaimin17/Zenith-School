@@ -14,11 +14,14 @@ import {
   fetchAttendanceDashboardSummaryAction,
 } from "@/actions/admin";
 import { AnnouncementListResponse } from "@/types/schemas";
+import { requireAuth } from "@/lib/auth/serverAuth";
 import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
 const AdminPage = async () => {
+  await requireAuth("/admin");
+
   const cookieStore = await cookies();
   const selectedYearId = cookieStore.get("selected_year_id")?.value ?? null;
 

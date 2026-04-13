@@ -1019,9 +1019,14 @@ export async function fetchLessonsFullListAction(academic_year_id: string | unde
         }
 
         // Make API request with server token
+        const params: { academic_year_id?: string } = {};
+        if (academic_year_id && academic_year_id.trim().toLowerCase() !== 'undefined') {
+            params.academic_year_id = academic_year_id;
+        }
+
         const response = await api<Lesson[]>({
             endpoint: GET_LESSONS_FULL_LIST_API,
-            params: { academic_year_id },
+            params,
             serverToken: token.accessToken,
             isServer: true,
         });

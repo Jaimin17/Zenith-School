@@ -228,6 +228,201 @@
   border-left: 2px solid #00ff4133;
 }
 
+.msgRow.bot .msgText :first-child {
+  margin-top: 0;
+}
+
+.msgRow.bot .msgText :last-child {
+  margin-bottom: 0;
+}
+
+.mdH1,
+.mdH2,
+.mdH3 {
+  color: #e8ffe8;
+  letter-spacing: 0.01em;
+  margin: 0.3rem 0 0.5rem;
+  font-weight: 700;
+}
+
+.mdH1 { font-size: 1rem; }
+.mdH2 { font-size: 0.95rem; }
+.mdH3 { font-size: 0.9rem; }
+
+.mdP {
+  margin: 0.35rem 0;
+  color: #d7ffe2;
+}
+
+.mdUl,
+.mdOl {
+  margin: 0.3rem 0 0.5rem;
+  padding-left: 1.2rem;
+}
+
+.mdLi {
+  margin: 0.2rem 0;
+}
+
+.mdStrong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.mdEm {
+  color: #9ad8aa;
+}
+
+.mdInlineCode {
+  background: #00ff4112;
+  border: 1px solid #00ff4126;
+  border-radius: 4px;
+  padding: 0.05rem 0.3rem;
+  color: #dcffe5;
+  font-size: 0.85em;
+}
+
+.mdCodeBlock {
+  display: block;
+  white-space: pre-wrap;
+  background: #050505;
+  border: 1px solid #00ff4126;
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  margin: 0.45rem 0;
+}
+
+.mdTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+  font-size: 12px;
+  background: #0b120b;
+  border: 1px solid #00ff4126;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mdThead {
+  background: #00ff410f;
+}
+
+.mdTh,
+.mdTd {
+  border: 1px solid #00ff411f;
+  padding: 0.45rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mdTh {
+  color: #f2fff4;
+  font-weight: 700;
+}
+
+.mdTd {
+  color: #d1f9dc;
+}
+
+.assistantCards {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.45rem;
+}
+
+.assistantCard {
+  border: 1px solid #00ff412e;
+  background: linear-gradient(145deg, #0c140f 0%, #0a110c 100%);
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+  box-shadow: inset 0 0 0 1px #00ff4114;
+}
+
+.assistantCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.assistantCardTitle {
+  margin: 0 0 0.35rem;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #f1fff3;
+  display: flex;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+.assistantCardIcon {
+  width: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  opacity: 0.88;
+}
+
+.assistantCardActions {
+  display: flex;
+  align-items: center;
+  gap: 0.32rem;
+}
+
+.cardActionBtn {
+  border: 1px solid #ffffff22;
+  background: #ffffff0a;
+  color: #dfffe4;
+  font-family: inherit;
+  font-size: 10px;
+  line-height: 1;
+  padding: 0.23rem 0.38rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.cardActionBtn:hover {
+  border-color: #00ff4180;
+  background: #00ff4115;
+  color: #f1fff3;
+}
+
+.cardActionBtnCopied {
+  border-color: #89f7a0aa;
+  background: #89f7a020;
+  color: #d7ffe0;
+}
+
+.cardToneSummary {
+  border-color: #00ff4170;
+  background: linear-gradient(145deg, #0c1a12 0%, #0a140f 100%);
+}
+
+.cardToneSummary .assistantCardIcon {
+  color: #88ffb3;
+}
+
+.cardToneDetails {
+  border-color: #5ec8ff55;
+  background: linear-gradient(145deg, #0a141a 0%, #091116 100%);
+}
+
+.cardToneDetails .assistantCardIcon {
+  color: #8fdcff;
+}
+
+.cardToneNote {
+  border-color: #ffd16655;
+  background: linear-gradient(145deg, #17150b 0%, #121106 100%);
+}
+
+.cardToneNote .assistantCardIcon {
+  color: #ffe08a;
+}
+
 .msgRow.error .msgText {
   color: #ff6b6b;
   border-left-color: #ff6b6b44;

@@ -3,6 +3,8 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { getChatBotTokenAction } from "@/actions/admin";
 import styles from "./TerminalChatbot.module.css";
 
@@ -37,8 +39,93 @@ interface SSEStartEvent { type: "start"; }
 interface SSEErrorEvent { type: "error"; message: string; }
 type SSEEvent = SSETokenEvent | SSEDoneEvent | SSEStartEvent | SSEErrorEvent;
 
+interface AssistantCard {
+  title: string;
+  body: string;
+  tone: "summary" | "details" | "note" | "default";
+}
+
 // ── Helpers ──────────────────────────────────────────────────────
 const uid = () => Math.random().toString(36).slice(2, 9);
+
+function normalizeCardTone(title: string): AssistantCard["tone"] {
+  const t = title.toLowerCase();
+  if (t.includes("summary")) return "summary";
+  if (t.includes("detail") || t.includes("count") || t.includes("data")) return "details";
+  if (t.includes("note") || t.includes("tip") || t.includes("next")) return "note";
+  return "default";
+}
+
+function toneIcon(tone: AssistantCard["tone"]): string {
+  switch (tone) {
+    case "summary":
+      return "◆";
+    case "details":
+      return "▣";
+    case "note":
+      return "✦";
+    default:
+      return "•";
+  }
+}
+
+function parseAssistantCards(text: string): { intro: string; cards: AssistantCard[] } {
+  const lines = text.split(/\r?\n/);
+  const cards: AssistantCard[] = [];
+  let introLines: string[] = [];
+
+  let currentTitle: string | null = null;
+  let currentBody: string[] = [];
+
+  const sectionLine = /^\s*(?:[-*]\s*)?(?:\*\*)?([A-Za-z][A-Za-z\s]{2,32})(?:\*\*)?\s*:?\s*$/;
+  const expectedSections = new Set([
+    "quick summary",
+    "key details",
+    "next helpful note",
+    "missing data",
+    "next step",
+    "active academic year",
+    "counts of items",
+  ]);
+
+  const pushCurrent = () => {
+    if (!currentTitle) return;
+    cards.push({
+      title: currentTitle,
+      body: currentBody.join("\n").trim(),
+      tone: normalizeCardTone(currentTitle),
+    });
+    currentTitle = null;
+    currentBody = [];
+  };
+
+  for (const line of lines) {
+    const match = line.match(sectionLine);
+    const candidate = match?.[1]?.trim() ?? "";
+    const normalized = candidate.toLowerCase();
+    const isSection = expectedSections.has(normalized);
+
+    if (isSection) {
+      pushCurrent();
+      currentTitle = candidate;
+      continue;
+    }
+
+    if (currentTitle) {
+      currentBody.push(line);
+    } else {
+      introLines.push(line);
+    }
+  }
+
+  pushCurrent();
+
+  if (cards.length === 0) {
+    return { intro: text, cards: [] };
+  }
+
+  return { intro: introLines.join("\n").trim(), cards: cards.filter((c) => c.body) };
+}
 
 /**
  * Converts UI messages → backend chat_history format.
@@ -75,6 +162,8 @@ const TerminalChatbot = () => {
   const [input, setInput]         = useState("");
   const [streaming, setStreaming] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
+  const [collapsedCards, setCollapsedCards] = useState<Record<string, boolean>>({});
+  const [copiedCards, setCopiedCards] = useState<Record<string, boolean>>({});
 
   const bottomRef    = useRef<HTMLDivElement>(null);
   const abortRef     = useRef<AbortController | null>(null);
@@ -263,6 +352,22 @@ const TerminalChatbot = () => {
   // ── Clear terminal ─────────────────────────────────────────────
   const clearTerminal = useCallback(() => setMessages([]), []);
 
+  const toggleCardCollapse = useCallback((cardId: string) => {
+    setCollapsedCards((prev) => ({ ...prev, [cardId]: !prev[cardId] }));
+  }, []);
+
+  const copyCardBody = useCallback(async (cardId: string, cardText: string) => {
+    try {
+      await navigator.clipboard.writeText(cardText);
+      setCopiedCards((prev) => ({ ...prev, [cardId]: true }));
+      setTimeout(() => {
+        setCopiedCards((prev) => ({ ...prev, [cardId]: false }));
+      }, 1500);
+    } catch {
+      // Clipboard access can fail on insecure contexts; ignore silently.
+    }
+  }, []);
+
   // ── Keyboard ───────────────────────────────────────────────────
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -328,10 +433,100 @@ const TerminalChatbot = () => {
                   <span className={styles.msgPrefix}>
                     {msg.type === "user" ? "┌─ you" : msg.type === "error" ? "┌─ error" : "┌─ assistant"}
                   </span>
-                  <span className={styles.msgText}>
-                    {msg.text}
+                  <div className={styles.msgText}>
+                    {msg.type === "bot" ? (
+                      (() => {
+                        const parsed = parseAssistantCards(msg.text);
+                        const mdComponents = {
+                          h1: ({ node, ...props }) => <h1 className={styles.mdH1} {...props} />,
+                          h2: ({ node, ...props }) => <h2 className={styles.mdH2} {...props} />,
+                          h3: ({ node, ...props }) => <h3 className={styles.mdH3} {...props} />,
+                          p: ({ node, ...props }) => <p className={styles.mdP} {...props} />,
+                          ul: ({ node, ...props }) => <ul className={styles.mdUl} {...props} />,
+                          ol: ({ node, ...props }) => <ol className={styles.mdOl} {...props} />,
+                          li: ({ node, ...props }) => <li className={styles.mdLi} {...props} />,
+                          strong: ({ node, ...props }) => <strong className={styles.mdStrong} {...props} />,
+                          em: ({ node, ...props }) => <em className={styles.mdEm} {...props} />,
+                          table: ({ node, ...props }) => <table className={styles.mdTable} {...props} />,
+                          thead: ({ node, ...props }) => <thead className={styles.mdThead} {...props} />,
+                          th: ({ node, ...props }) => <th className={styles.mdTh} {...props} />,
+                          td: ({ node, ...props }) => <td className={styles.mdTd} {...props} />,
+                          code: ({ node, inline, ...props }: any) =>
+                            inline ? (
+                              <code className={styles.mdInlineCode} {...props} />
+                            ) : (
+                              <code className={styles.mdCodeBlock} {...props} />
+                            ),
+                        };
+
+                        return (
+                          <>
+                            {parsed.intro && (
+                              <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
+                                {parsed.intro}
+                              </ReactMarkdown>
+                            )}
+
+                            {parsed.cards.length > 0 && (
+                              <div className={styles.assistantCards}>
+                                {parsed.cards.map((card, idx) => (
+                                  (() => {
+                                    const cardId = `${msg.id}-${idx}`;
+                                    const isCollapsed = !!collapsedCards[cardId];
+                                    const isCopied = !!copiedCards[cardId];
+                                    return (
+                                  <motion.article
+                                    key={cardId}
+                                    className={`${styles.assistantCard} ${styles[`cardTone${card.tone[0].toUpperCase()}${card.tone.slice(1)}`]}`}
+                                    initial={{ opacity: 0, y: 8, scale: 0.985 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    transition={{ duration: 0.22, delay: idx * 0.05, ease: [0.2, 0.9, 0.2, 1] }}
+                                  >
+                                    <div className={styles.assistantCardHeader}>
+                                      <h4 className={styles.assistantCardTitle}>
+                                        <span className={styles.assistantCardIcon}>{toneIcon(card.tone)}</span>
+                                        {card.title}
+                                      </h4>
+
+                                      <div className={styles.assistantCardActions}>
+                                        <button
+                                          type="button"
+                                          className={`${styles.cardActionBtn} ${isCopied ? styles.cardActionBtnCopied : ""}`}
+                                          onClick={() => copyCardBody(cardId, card.body)}
+                                          title="Copy section"
+                                        >
+                                          {isCopied ? "copied" : "copy"}
+                                        </button>
+                                        <button
+                                          type="button"
+                                          className={styles.cardActionBtn}
+                                          onClick={() => toggleCardCollapse(cardId)}
+                                          title={isCollapsed ? "Expand section" : "Collapse section"}
+                                        >
+                                          {isCollapsed ? "expand" : "collapse"}
+                                        </button>
+                                      </div>
+                                    </div>
+
+                                    {!isCollapsed && (
+                                      <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
+                                        {card.body}
+                                      </ReactMarkdown>
+                                    )}
+                                  </motion.article>
+                                    );
+                                  })()
+                                ))}
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()
+                    ) : (
+                      msg.text
+                    )}
                     {msg.streaming && <span className={styles.cursor} />}
-                  </span>
+                  </div>
                 </div>
               ))}
 

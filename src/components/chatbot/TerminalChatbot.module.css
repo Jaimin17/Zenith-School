@@ -51,7 +51,7 @@
 
 /* ── Terminal Window ────────────────────────────────────────────── */
 .terminal {
-  width: 560px;
+  width: 860px;
   height: 480px;
   background: #080808;
   border: 1px solid #00ff4155;
@@ -113,6 +113,115 @@
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.titleActionBtn {
+  background: #00ff410f;
+  border: 1px solid #00ff4140;
+  color: #b5ffc8;
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.titleActionBtn:hover {
+  border-color: #00ff4190;
+  color: #e4ffea;
+}
+
+.body {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+}
+
+.sessionPanel {
+  width: 260px;
+  border-right: 1px solid #00ff411f;
+  background: linear-gradient(180deg, #0a0f0b 0%, #080b08 100%);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  z-index: 2;
+}
+
+.sessionPanelHeader {
+  padding: 10px;
+  border-bottom: 1px solid #00ff411f;
+}
+
+.sessionPanelTitle {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: #8ddf9d;
+  text-transform: uppercase;
+}
+
+.sessionList {
+  overflow-y: auto;
+  min-height: 0;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sessionHint {
+  font-size: 11px;
+  color: #81b48a;
+  padding: 8px;
+}
+
+.sessionItem {
+  text-align: left;
+  border: 1px solid #00ff4126;
+  background: #0b130d;
+  color: #c5ffd1;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.sessionItem:hover {
+  border-color: #00ff4166;
+}
+
+.sessionItemActive {
+  border-color: #00ff41;
+  box-shadow: inset 0 0 0 1px #00ff4126;
+  background: #102015;
+}
+
+.sessionItemTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #e5ffee;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.sessionItemMeta {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #89ca98;
+  margin-bottom: 4px;
+}
+
+.sessionItemPreview {
+  font-size: 11px;
+  color: #bdeec8;
+  line-height: 1.35;
+}
+
+.chatPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .statusIndicator {
@@ -545,8 +654,20 @@
 @media (max-width: 600px) {
   .terminal {
     width: calc(100vw - 32px);
-    height: 420px;
+    height: 500px;
   }
+
+  .body {
+    flex-direction: column;
+  }
+
+  .sessionPanel {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #00ff411f;
+    max-height: 140px;
+  }
+
   .shell {
     bottom: 16px;
     right: 16px;

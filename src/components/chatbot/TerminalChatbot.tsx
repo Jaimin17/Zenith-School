@@ -11,6 +11,7 @@ import styles from "./TerminalChatbot.module.css";
 // ── Constants ────────────────────────────────────────────────────
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 const CHAT_ENDPOINT = `${API_BASE_URL}api/v1/chatbot/chat`;
+const CHAT_SESSIONS_ENDPOINT = `${API_BASE_URL}api/v1/chatbot/sessions`;
 
 // Max past exchanges to send with each request.
 // 1 exchange = 1 user msg + 1 bot msg = 2 history entries.
@@ -25,6 +26,28 @@ interface Message {
   streaming?: boolean;
 }
 
+interface ChatSessionSummary {
+  id: string;
+  title: string;
+  message_count: number;
+  last_message_preview?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface ChatSessionDetail {
+  id: string;
+  title: string;
+  created_at: string;
+  updated_at: string;
+  messages: Array<{
+    id: string;
+    role: "user" | "assistant";
+    content: string;
+    created_at: string;
+  }>;
+}
+
 // Matches backend ChatRequest exactly:
 // chat_history: list[dict] = []  →  [{"role": "user"|"assistant", "content": "..."}]
 interface HistoryEntry {
@@ -35,7 +58,7 @@ interface HistoryEntry {
 // SSE event shapes from FastAPI
 interface SSETokenEvent { type: "token";  value: string; }
 interface SSEDoneEvent  { type: "done"; }
-interface SSEStartEvent { type: "start"; }
+interface SSEStartEvent { type: "start"; session_id?: string; }
 interface SSEErrorEvent { type: "error"; message: string; }
 type SSEEvent = SSETokenEvent | SSEDoneEvent | SSEStartEvent | SSEErrorEvent;
 
@@ -159,6 +182,9 @@ function buildChatHistory(messages: Message[]): HistoryEntry[] {
 const TerminalChatbot = () => {
   const [open, setOpen]           = useState(false);
   const [messages, setMessages]   = useState<Message[]>([]);
+  const [sessions, setSessions]   = useState<ChatSessionSummary[]>([]);
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  const [loadingSessions, setLoadingSessions] = useState(false);
   const [input, setInput]         = useState("");
   const [streaming, setStreaming] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
@@ -196,6 +222,112 @@ const TerminalChatbot = () => {
     tokenRef.current = result.accessToken;
     return result.accessToken;
   }, []);
+
+  const refreshSessions = useCallback(async () => {
+    const accessToken = await ensureToken();
+    if (!accessToken) return;
+
+    setLoadingSessions(true);
+    try {
+      const response = await fetch(`${CHAT_SESSIONS_ENDPOINT}?page=1`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Could not load chats (${response.status})`);
+      }
+
+      const payload = await response.json() as { data?: ChatSessionSummary[] };
+      const list = payload.data ?? [];
+      setSessions(list);
+
+      if (!activeSessionId && list.length > 0) {
+        setActiveSessionId(list[0].id);
+      }
+    } catch (err) {
+      setInitError(err instanceof Error ? err.message : "Could not load previous chats.");
+    } finally {
+      setLoadingSessions(false);
+    }
+  }, [ensureToken, activeSessionId]);
+
+  const createSessionRecord = useCallback(async (): Promise<string | null> => {
+    const accessToken = await ensureToken();
+    if (!accessToken) return null;
+
+    const response = await fetch(CHAT_SESSIONS_ENDPOINT, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Could not create chat (${response.status})`);
+    }
+
+    const payload = await response.json() as { session_id: string };
+    return payload.session_id;
+  }, [ensureToken]);
+
+  const createNewChat = useCallback(async () => {
+    abortRef.current?.abort();
+    setStreaming(false);
+
+    try {
+      const sessionId = await createSessionRecord();
+      if (!sessionId) return;
+
+      setMessages([]);
+      setActiveSessionId(sessionId);
+      setInitError(null);
+      await refreshSessions();
+    } catch (err) {
+      setInitError(err instanceof Error ? err.message : "Could not create a new chat.");
+    }
+  }, [createSessionRecord, refreshSessions]);
+
+  const openSession = useCallback(async (sessionId: string) => {
+    abortRef.current?.abort();
+    setStreaming(false);
+
+    try {
+      const accessToken = await ensureToken();
+      if (!accessToken) return;
+
+      const response = await fetch(`${CHAT_SESSIONS_ENDPOINT}/${sessionId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Could not load chat (${response.status})`);
+      }
+
+      const payload = await response.json() as ChatSessionDetail;
+      setMessages(
+        payload.messages.map((m) => ({
+          id: m.id,
+          type: m.role === "assistant" ? "bot" : "user",
+          text: m.content,
+        }))
+      );
+      setActiveSessionId(sessionId);
+      setInitError(null);
+    } catch (err) {
+      setInitError(err instanceof Error ? err.message : "Could not open previous chat.");
+    }
+  }, [ensureToken]);
+
+  useEffect(() => {
+    if (!open) return;
+    void refreshSessions();
+  }, [open, refreshSessions]);
 
   // ── Message state helpers ──────────────────────────────────────
   const appendToken = useCallback((token: string) => {
@@ -237,6 +369,19 @@ const TerminalChatbot = () => {
   const sendMessage = useCallback(async () => {
     const query = input.trim();
     if (!query || streaming) return;
+
+    let targetSessionId = activeSessionId;
+    if (!targetSessionId) {
+      try {
+        targetSessionId = await createSessionRecord();
+      } catch (err) {
+        setInitError(err instanceof Error ? err.message : "Could not create chat session.");
+      }
+
+      if (!targetSessionId) return;
+      setActiveSessionId(targetSessionId);
+      await refreshSessions();
+    }
 
     setInput("");
     setStreaming(true);
@@ -280,6 +425,7 @@ const TerminalChatbot = () => {
         },
         body: JSON.stringify({
           query,
+          session_id: targetSessionId,
           chat_history: chatHistory,
         }),
         signal: controller.signal,
@@ -317,7 +463,11 @@ const TerminalChatbot = () => {
           try {
             const event = JSON.parse(line.slice(6)) as SSEEvent;
             switch (event.type) {
-              case "start":  break;                               // stream opened
+              case "start":
+                if (event.session_id) {
+                  setActiveSessionId(event.session_id);
+                }
+                break;
               case "token":  appendToken(event.value);   break;  // append token
               case "done":   finishStreaming();            break;  // stop cursor
               case "error":  setLastMessageError(event.message); break;
@@ -339,8 +489,19 @@ const TerminalChatbot = () => {
     } finally {
       setStreaming(false);
       abortRef.current = null;
+      void refreshSessions();
     }
-  }, [input, streaming, ensureToken, appendToken, finishStreaming, setLastMessageError]);
+  }, [
+    input,
+    streaming,
+    activeSessionId,
+    createSessionRecord,
+    refreshSessions,
+    ensureToken,
+    appendToken,
+    finishStreaming,
+    setLastMessageError,
+  ]);
 
   // ── Stop stream ────────────────────────────────────────────────
   const stopStream = useCallback(() => {
@@ -400,12 +561,13 @@ const TerminalChatbot = () => {
               <div className={styles.titleBarLeft}>
                 <div className={styles.titleBarDots}>
                   <div className={`${styles.dot} ${styles.red}`}    onClick={() => setOpen(false)} style={{ cursor: "pointer" }} title="Close" />
-                  <div className={`${styles.dot} ${styles.yellow}`} onClick={clearTerminal}        style={{ cursor: "pointer" }} title="Clear" />
+                  <div className={`${styles.dot} ${styles.yellow}`} onClick={clearTerminal}        style={{ cursor: "pointer" }} title="Clear current view" />
                   <div className={`${styles.dot} ${styles.green}`} />
                 </div>
                 <span className={styles.titleBarText}>SCHOOL-AI — terminal v1.0</span>
               </div>
               <div className={styles.titleBarRight}>
+                <button className={styles.titleActionBtn} onClick={createNewChat} title="Start new chat">+ new chat</button>
                 <span className={`${styles.statusIndicator} ${streaming ? styles.active : ""}`}>
                   {streaming ? "● GENERATING" : "● READY"}
                 </span>
@@ -413,11 +575,41 @@ const TerminalChatbot = () => {
               </div>
             </div>
 
+            <div className={styles.body}>
+              <aside className={styles.sessionPanel}>
+                <div className={styles.sessionPanelHeader}>
+                  <span className={styles.sessionPanelTitle}>previous chats</span>
+                </div>
+
+                <div className={styles.sessionList}>
+                  {loadingSessions && <div className={styles.sessionHint}>loading chats...</div>}
+                  {!loadingSessions && sessions.length === 0 && (
+                    <div className={styles.sessionHint}>no previous chats</div>
+                  )}
+                  {!loadingSessions && sessions.map((chatSession) => (
+                    <button
+                      key={chatSession.id}
+                      type="button"
+                      onClick={() => openSession(chatSession.id)}
+                      className={`${styles.sessionItem} ${activeSessionId === chatSession.id ? styles.sessionItemActive : ""}`}
+                    >
+                      <div className={styles.sessionItemTitle}>{chatSession.title}</div>
+                      <div className={styles.sessionItemMeta}>{chatSession.message_count} msgs</div>
+                      {chatSession.last_message_preview && (
+                        <div className={styles.sessionItemPreview}>{chatSession.last_message_preview}</div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </aside>
+
+              <div className={styles.chatPanel}>
             {/* ── Messages ────────────────────────────── */}
             <div className={styles.messages}>
               <div className={styles.bootMsg}>
                 {`SCHOOL MANAGEMENT AI  [Version 1.0.0]`}<br />
                 {`Connected · ${API_BASE_URL}`}<br />
+                {`Session · ${activeSessionId ? activeSessionId.slice(0, 8) : "none"}`}<br />
                 {`──────────────────────────────────────────`}
               </div>
 
@@ -560,6 +752,8 @@ const TerminalChatbot = () => {
                 ? <button className={`${styles.sendBtn} ${styles.stopBtn}`} onClick={stopStream}>✕ stop</button>
                 : <button className={styles.sendBtn} onClick={sendMessage}>send ↵</button>
               }
+            </div>
+              </div>
             </div>
           </motion.div>
         )}

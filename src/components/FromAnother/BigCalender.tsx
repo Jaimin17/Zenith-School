@@ -2,7 +2,7 @@
 
 import { Calendar, momentLocalizer, View, Views } from "react-big-calendar";
 import moment from "moment";
-// import "react-big-calendar/lib/css/react-big-calendar.css";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useState } from "react";
 
 const localizer = momentLocalizer(moment);
@@ -18,20 +18,18 @@ const BigCalendar = ({
     setView(selectedView);
   };
 
-  console.log("BigCalendar data:", data);
-
   return (
-    <div className="h-full w-full min-w-0 overflow-x-auto overflow-y-hidden rounded-md">
+    <div className="h-full rounded-md">
       <Calendar
         localizer={localizer}
         events={data}
         startAccessor="start"
         endAccessor="end"
-        views={["work_week", "day"]}
+        views={[Views.WORK_WEEK, Views.DAY]}
         view={view}
-        style={{ height: "92%", width: "100%", minWidth: "680px" }}
+        style={{ height: "98%" }}
         onView={handleOnChangeView}
-        min={new Date(0, 0, 0, 7, 0, 0)}  // 7:00 AM
+        min={new Date(0, 0, 0, 7, 0, 0)}
         max={new Date(0, 0, 0, 18, 0, 0)} // 6:00 PM
       />
     </div>

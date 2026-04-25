@@ -42,7 +42,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <>
-      <Banner title="Login" backgroundImage={BANNER_IMAGE} />
+      {/* <Banner title="Login" backgroundImage={BANNER_IMAGE} /> */}
 
       <section className="py-120" style={{ backgroundColor: "var(--theme-bg-light)" }}>
         <div className="container">

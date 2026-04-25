@@ -32,7 +32,7 @@ export default function DashboardShell({ children }: DashboardShellProps) {
   return (
     <div className="h-screen flex bg-[#F7F8FA]">
       {/* Desktop sidebar - visible lg and up */}
-      <aside className="hidden lg:flex lg:flex-col lg:w-64 xl:w-72 flex-shrink-0 bg-white border-r border-gray-200/80 p-4 overflow-y-auto shadow-sm">
+      <aside className="sidebarScroll hidden lg:flex lg:flex-col lg:w-64 xl:w-72 flex-shrink-0 bg-white border-r border-gray-200/80 p-4 overflow-y-auto shadow-sm">
         <Link
           href="/"
           className="flex items-center justify-center lg:justify-start gap-2 flex-shrink-0"
@@ -64,7 +64,7 @@ export default function DashboardShell({ children }: DashboardShellProps) {
             slotProps: { backdrop: { sx: { backgroundColor: "rgba(0,0,0,0.3)" } } },
           }}
         >
-          <div className="flex flex-col h-full p-4 pt-6 bg-white overflow-y-auto">
+          <div className="sidebarScroll flex flex-col h-full p-4 pt-6 bg-white overflow-y-auto">
             <Link
               href="/"
               className="flex items-center gap-2 flex-shrink-0 mb-2"

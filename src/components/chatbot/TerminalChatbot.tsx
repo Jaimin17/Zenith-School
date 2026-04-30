@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getChatBotTokenAction } from "@/actions/admin";
+import { useAcademicYear } from "@/contexts/AcademicYearContext";
 import styles from "./TerminalChatbot.module.css";
 
 // ── Constants ────────────────────────────────────────────────────
@@ -17,9 +18,6 @@ const CHAT_SESSIONS_ENDPOINT = `${API_BASE_URL}api/v1/chatbot/sessions`;
 // 1 exchange = 1 user msg + 1 bot msg = 2 history entries.
 // 6 exchanges = 12 entries — enough context, safe on llama3.2 token budget.
 const MAX_HISTORY_EXCHANGES = 6;
-const MIN_TERMINAL_WIDTH = 680;
-const MAX_TERMINAL_WIDTH = 1200;
-const DEFAULT_TERMINAL_WIDTH = 860;
 
 // ── Types ────────────────────────────────────────────────────────
 interface Message {
@@ -183,26 +181,22 @@ function buildChatHistory(messages: Message[]): HistoryEntry[] {
 
 // ── Component ────────────────────────────────────────────────────
 const TerminalChatbot = () => {
+  const { selectedYearId } = useAcademicYear();
   const [open, setOpen]           = useState(false);
   const [messages, setMessages]   = useState<Message[]>([]);
   const [sessions, setSessions]   = useState<ChatSessionSummary[]>([]);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
-  const [showPreviousChats, setShowPreviousChats] = useState(true);
   const [loadingSessions, setLoadingSessions] = useState(false);
   const [input, setInput]         = useState("");
   const [streaming, setStreaming] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
   const [collapsedCards, setCollapsedCards] = useState<Record<string, boolean>>({});
   const [copiedCards, setCopiedCards] = useState<Record<string, boolean>>({});
-  const [terminalWidth, setTerminalWidth] = useState(DEFAULT_TERMINAL_WIDTH);
-  const [isResizing, setIsResizing] = useState(false);
 
   const bottomRef    = useRef<HTMLDivElement>(null);
   const abortRef     = useRef<AbortController | null>(null);
   const inputRef     = useRef<HTMLTextAreaElement>(null);
   const tokenRef     = useRef<string | null>(null);
-  const resizeStartXRef = useRef(0);
-  const resizeStartWidthRef = useRef(DEFAULT_TERMINAL_WIDTH);
 
   // Keeps a always-fresh copy of messages accessible inside useCallback
   // without adding `messages` to dependency arrays (avoids stale closures).
@@ -337,40 +331,6 @@ const TerminalChatbot = () => {
     void refreshSessions();
   }, [open, refreshSessions]);
 
-  useEffect(() => {
-    if (!open) return;
-
-    const maxFromViewport = Math.max(MIN_TERMINAL_WIDTH, window.innerWidth - 48);
-    setTerminalWidth((prev) => Math.min(prev, Math.min(MAX_TERMINAL_WIDTH, maxFromViewport)));
-  }, [open]);
-
-  useEffect(() => {
-    if (!isResizing) return;
-
-    const onPointerMove = (event: PointerEvent) => {
-      const delta = resizeStartXRef.current - event.clientX;
-      const viewportMax = Math.max(MIN_TERMINAL_WIDTH, window.innerWidth - 48);
-      const constrainedMax = Math.min(MAX_TERMINAL_WIDTH, viewportMax);
-      const nextWidth = Math.max(
-        MIN_TERMINAL_WIDTH,
-        Math.min(resizeStartWidthRef.current + delta, constrainedMax)
-      );
-      setTerminalWidth(nextWidth);
-    };
-
-    const onPointerUp = () => {
-      setIsResizing(false);
-    };
-
-    window.addEventListener("pointermove", onPointerMove);
-    window.addEventListener("pointerup", onPointerUp);
-
-    return () => {
-      window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerup", onPointerUp);
-    };
-  }, [isResizing]);
-
   // ── Message state helpers ──────────────────────────────────────
   const appendToken = useCallback((token: string) => {
     setMessages((prev) => {
@@ -468,6 +428,7 @@ const TerminalChatbot = () => {
         body: JSON.stringify({
           query,
           session_id: targetSessionId,
+          selected_academic_year_id: selectedYearId,
           chat_history: chatHistory,
         }),
         signal: controller.signal,
@@ -540,6 +501,7 @@ const TerminalChatbot = () => {
     createSessionRecord,
     refreshSessions,
     ensureToken,
+    selectedYearId,
     appendToken,
     finishStreaming,
     setLastMessageError,
@@ -554,13 +516,6 @@ const TerminalChatbot = () => {
 
   // ── Clear terminal ─────────────────────────────────────────────
   const clearTerminal = useCallback(() => setMessages([]), []);
-
-  const startResize = useCallback((event: React.PointerEvent<HTMLButtonElement>) => {
-    resizeStartXRef.current = event.clientX;
-    resizeStartWidthRef.current = terminalWidth;
-    setIsResizing(true);
-    event.preventDefault();
-  }, [terminalWidth]);
 
   const toggleCardCollapse = useCallback((cardId: string) => {
     setCollapsedCards((prev) => ({ ...prev, [cardId]: !prev[cardId] }));
@@ -601,21 +556,9 @@ const TerminalChatbot = () => {
             animate={{ opacity: 1, y: 0,  scale: 1    }}
             exit={{   opacity: 0, y: 12,  scale: 0.97 }}
             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              position: "relative",
-              width: `${terminalWidth}px`,
-              maxWidth: "calc(100vw - 32px)",
-              userSelect: isResizing ? "none" : "auto",
-            }}
+            style={{ position: "relative" }}
           >
             <div className={styles.scanlines} />
-            <button
-              type="button"
-              className={`${styles.resizeHandle} ${isResizing ? styles.resizeHandleActive : ""}`}
-              onPointerDown={startResize}
-              title="Resize chatbot width"
-              aria-label="Resize chatbot width"
-            />
 
             {/* ── Title Bar ───────────────────────────── */}
             <div className={styles.titleBar}>
@@ -629,13 +572,6 @@ const TerminalChatbot = () => {
               </div>
               <div className={styles.titleBarRight}>
                 <button className={styles.titleActionBtn} onClick={createNewChat} title="Start new chat">+ new chat</button>
-                <button
-                  className={styles.titleActionBtn}
-                  onClick={() => setShowPreviousChats((prev) => !prev)}
-                  title={showPreviousChats ? "Hide previous chats" : "Show previous chats"}
-                >
-                  {showPreviousChats ? "hide chats" : "show chats"}
-                </button>
                 <span className={`${styles.statusIndicator} ${streaming ? styles.active : ""}`}>
                   {streaming ? "● GENERATING" : "● READY"}
                 </span>
@@ -644,7 +580,7 @@ const TerminalChatbot = () => {
             </div>
 
             <div className={styles.body}>
-              <aside className={`${styles.sessionPanel} ${!showPreviousChats ? styles.sessionPanelHidden : ""}`}>
+              <aside className={styles.sessionPanel}>
                 <div className={styles.sessionPanelHeader}>
                   <span className={styles.sessionPanelTitle}>previous chats</span>
                 </div>
@@ -697,30 +633,24 @@ const TerminalChatbot = () => {
                     {msg.type === "bot" ? (
                       (() => {
                         const parsed = parseAssistantCards(msg.text);
-                        type MarkdownRendererProps = { node?: unknown; [key: string]: any };
-                        type MarkdownCodeProps = { node?: unknown; className?: string; [key: string]: any };
-
-                        const mdComponents = {
-                          h1: ({ node: _node, ...props }: MarkdownRendererProps) => <h1 className={styles.mdH1} {...props} />,
-                          h2: ({ node: _node, ...props }: MarkdownRendererProps) => <h2 className={styles.mdH2} {...props} />,
-                          h3: ({ node: _node, ...props }: MarkdownRendererProps) => <h3 className={styles.mdH3} {...props} />,
-                          p: ({ node: _node, ...props }: MarkdownRendererProps) => <p className={styles.mdP} {...props} />,
-                          ul: ({ node: _node, ...props }: MarkdownRendererProps) => <ul className={styles.mdUl} {...props} />,
-                          ol: ({ node: _node, ...props }: MarkdownRendererProps) => <ol className={styles.mdOl} {...props} />,
-                          li: ({ node: _node, ...props }: MarkdownRendererProps) => <li className={styles.mdLi} {...props} />,
-                          strong: ({ node: _node, ...props }: MarkdownRendererProps) => <strong className={styles.mdStrong} {...props} />,
-                          em: ({ node: _node, ...props }: MarkdownRendererProps) => <em className={styles.mdEm} {...props} />,
-                          table: ({ node: _node, ...props }: MarkdownRendererProps) => <table className={styles.mdTable} {...props} />,
-                          thead: ({ node: _node, ...props }: MarkdownRendererProps) => <thead className={styles.mdThead} {...props} />,
-                          th: ({ node: _node, ...props }: MarkdownRendererProps) => <th className={styles.mdTh} {...props} />,
-                          td: ({ node: _node, ...props }: MarkdownRendererProps) => <td className={styles.mdTd} {...props} />,
-                          code: ({ node: _node, className, ...props }: MarkdownCodeProps) => {
-                            const isBlock = typeof className === "string" && className.includes("language-");
-                            return isBlock ? (
-                              <code className={`${styles.mdCodeBlock} ${className ?? ""}`} {...props} />
-                            ) : (
-                              <code className={`${styles.mdInlineCode} ${className ?? ""}`} {...props} />
-                            );
+                        const mdComponents: any = {
+                          h1: (props: any) => <h1 className={styles.mdH1} {...props} />,
+                          h2: (props: any) => <h2 className={styles.mdH2} {...props} />,
+                          h3: (props: any) => <h3 className={styles.mdH3} {...props} />,
+                          p: (props: any) => <p className={styles.mdP} {...props} />,
+                          ul: (props: any) => <ul className={styles.mdUl} {...props} />,
+                          ol: (props: any) => <ol className={styles.mdOl} {...props} />,
+                          li: (props: any) => <li className={styles.mdLi} {...props} />,
+                          strong: (props: any) => <strong className={styles.mdStrong} {...props} />,
+                          em: (props: any) => <em className={styles.mdEm} {...props} />,
+                          table: (props: any) => <table className={styles.mdTable} {...props} />,
+                          thead: (props: any) => <thead className={styles.mdThead} {...props} />,
+                          th: (props: any) => <th className={styles.mdTh} {...props} />,
+                          td: (props: any) => <td className={styles.mdTd} {...props} />,
+                          code: (props: any) => {
+                            const isInline = Boolean((props as any).inline);
+                            if (isInline) return <code className={styles.mdInlineCode} {...props} />;
+                            return <code className={styles.mdCodeBlock} {...props} />;
                           },
                         };
 

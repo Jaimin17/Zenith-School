@@ -707,6 +707,7 @@ export async function fetchEventsByDateAction(searchDate?: Date): Promise<{
         // Get auth token from cookies
         const cookieStore = await cookies();
         const token = getServerAuthTokens(cookieStore);
+        const selectedYearId = cookieStore.get("selected_year_id")?.value;
 
         if (!token) {
             return {
@@ -1953,6 +1954,7 @@ export async function fetchTeacherByIdAction(id: string): Promise<{
         // Get auth token from cookies
         const cookieStore = await cookies();
         const token = getServerAuthTokens(cookieStore);
+        const selectedYearId = cookieStore.get("selected_year_id")?.value;
 
         if (!token) {
             return {
@@ -1963,11 +1965,17 @@ export async function fetchTeacherByIdAction(id: string): Promise<{
         }
 
         // Make API request with server token
+        const params: Record<string, string> = {};
+        if (selectedYearId) {
+            params.academic_year_id = selectedYearId;
+        }
+
         const response = await api<TeacherWithRelations>({
             endpoint: {
                 ...GET_TEACHER_BY_ID_API,
                 url: `${GET_TEACHER_BY_ID_API.url}/${id}`,
             },
+            params: Object.keys(params).length ? params : undefined,
             serverToken: token.accessToken,
             isServer: true,
         });
@@ -2005,6 +2013,7 @@ export async function fetchTeachersListAction(searchTerm?: string, pageNo: numbe
         // Get auth token from cookies
         const cookieStore = await cookies();
         const token = getServerAuthTokens(cookieStore);
+        const selectedYearId = cookieStore.get("selected_year_id")?.value;
 
         if (!token) {
             return {
@@ -2015,12 +2024,17 @@ export async function fetchTeachersListAction(searchTerm?: string, pageNo: numbe
             };
         }
 
-        const params = searchTerm ? { 
-            search: searchTerm,
-            page: pageNo.toString()
-         } : {
-            page: pageNo.toString()
-         };
+        const params: Record<string, string> = {
+            page: pageNo.toString(),
+        };
+
+        if (searchTerm) {
+            params.search = searchTerm;
+        }
+
+        if (selectedYearId) {
+            params.academic_year_id = selectedYearId;
+        }
 
         // Make API request with server token
         const response = await api<TeacherListResponse>({
@@ -2071,6 +2085,7 @@ export async function fetchTeachersOfClassesListAction(classId: string, searchTe
         // Get auth token from cookies
         const cookieStore = await cookies();
         const token = getServerAuthTokens(cookieStore);
+        const selectedYearId = cookieStore.get("selected_year_id")?.value;
 
         if (!token) {
             return {
@@ -2081,12 +2096,17 @@ export async function fetchTeachersOfClassesListAction(classId: string, searchTe
             };
         }
 
-        const params = searchTerm ? { 
-            search: searchTerm,
-            page: pageNo.toString()
-         } : {
-            page: pageNo.toString()
-         };
+        const params: Record<string, string> = {
+            page: pageNo.toString(),
+        };
+
+        if (searchTerm) {
+            params.search = searchTerm;
+        }
+
+        if (selectedYearId) {
+            params.academic_year_id = selectedYearId;
+        }
 
         // Make API request with server token
         const response = await api<TeacherListResponse>({
@@ -2140,6 +2160,7 @@ export async function fetchFullTeachersListAction(): Promise<{
         // Get auth token from cookies
         const cookieStore = await cookies();
         const token = getServerAuthTokens(cookieStore);
+        const selectedYearId = cookieStore.get("selected_year_id")?.value;
 
         if (!token) {
             return {
@@ -2150,8 +2171,14 @@ export async function fetchFullTeachersListAction(): Promise<{
         }
 
         // Make API request with server token
+        const params: Record<string, string> = {};
+        if (selectedYearId) {
+            params.academic_year_id = selectedYearId;
+        }
+
         const response = await api<TeacherWithRelations[]>({
             endpoint: GET_FULL_TEACHERS_API,
+            params: Object.keys(params).length ? params : undefined,
             serverToken: token.accessToken,
             isServer: true,
         });
@@ -2250,12 +2277,16 @@ export async function fetchClassesListAction(searchTerm?: string, supervisorId?:
             };
         }
 
-        const params = searchTerm ? { 
+        const selectedYearId = cookieStore.get("selected_year_id")?.value;
+
+        const params: Record<string, string> = searchTerm ? {
             search: searchTerm,
             page: pageNo.toString()
-         } : {
+        } : {
             page: pageNo.toString()
-         };
+        };
+
+        if (selectedYearId) params.academic_year_id = selectedYearId;
 
         let response;
         
@@ -2323,9 +2354,12 @@ export async function fetchAllClassesAction(): Promise<{
             };
         }
 
+        const selectedYearId = cookieStore.get("selected_year_id")?.value;
+
         // Make API request with server token
         const response = await api<ClassReadonly[]>({
             endpoint: GET_ALL_CLASSES_API,
+            params: selectedYearId ? { academic_year_id: selectedYearId } : undefined,
             serverToken: token.accessToken,
             isServer: true,
         });

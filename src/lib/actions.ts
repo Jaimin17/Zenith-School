@@ -655,6 +655,7 @@ export async function createClass(formData: FormDataType): Promise<FormState> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get(ACCESS_TOKEN)?.value;
+    const selectedYearId = cookieStore.get("selected_year_id")?.value;
 
     const apiFormData = new FormData();
     
@@ -663,6 +664,7 @@ export async function createClass(formData: FormDataType): Promise<FormState> {
     apiFormData.append("capacity", formData.capacity || 0);
     apiFormData.append("supervisorId", formData.supervisorId || "");
     apiFormData.append("gradeId", formData.gradeId || "");
+    apiFormData.append("academic_year_id", selectedYearId || "");
 
     const response = await api({
       endpoint: SAVE_CLASS_API,
@@ -690,6 +692,7 @@ export async function updateClass(formData: FormDataType): Promise<FormState> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get(ACCESS_TOKEN)?.value;
+    const selectedYearId = cookieStore.get("selected_year_id")?.value;
 
     const apiFormData = new FormData();
     
@@ -699,6 +702,7 @@ export async function updateClass(formData: FormDataType): Promise<FormState> {
     apiFormData.append("capacity", formData.capacity || 0);
     apiFormData.append("supervisorId", formData.supervisorId || "");
     apiFormData.append("gradeId", formData.gradeId || "");
+    apiFormData.append("academic_year_id", selectedYearId || ""); // Include yearId for context
 
     const response = await api({
       endpoint: UPDATE_CLASS_API,

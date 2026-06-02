@@ -258,6 +258,7 @@ export const apiUrls = {
     GET_STUDENT_HISTORY_URL: "api/v1/student",
     GET_LESSONS_BY_YEAR_URL: "api/v1/lesson/getAllByYear",
     GET_ACHIEVEMENTS_URL: "api/v1/achievement/getAll",
+    GET_ACHIEVEMENTS_PUBLIC_URL: "api/v1/achievement/public",
     GET_ACHIEVEMENT_BY_ID_URL: "api/v1/achievement/get",
     SAVE_ACHIEVEMENT_URL: "api/v1/achievement/save",
     UPDATE_ACHIEVEMENT_URL: "api/v1/achievement/update",

@@ -1,6 +1,7 @@
 import { ParentWithRelations } from "@/types/schemas";
 import FormModal from "./FormModal";
 import { fetchSubjectFullListAction, fetchAllClassesAction, fetchParentsAction, fetchAllParentsListAction, fetchFullTeachersListAction, fetchFullGradeListAction, fetchLessonsAction, fetchLessonsFullListAction } from "@/actions/admin";
+import { cookies } from "next/headers";
 
 export type FormContainerProps = {
   table:
@@ -172,7 +173,10 @@ const FormContainer = async ({ table, type, data, id, disabled }: FormContainerP
 
       // ---------------- ASSIGNMENT ----------------
       case "assignment": {
-        const lessonsResponse = await fetchLessonsFullListAction();
+        const cookieStore = await cookies();
+        const yearId = cookieStore.get("selected_year_id")?.value;
+
+        const lessonsResponse = await fetchLessonsFullListAction(yearId);
         const assignmentLessons = lessonsResponse.success && lessonsResponse.data
           ? lessonsResponse.data
           : [];

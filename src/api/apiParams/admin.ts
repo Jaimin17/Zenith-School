@@ -1048,6 +1048,15 @@ export const ACHIEVEMENT_API: ApiType = {
     isForm: false,
 }
 
+export const ACHIEVEMENT_PUBLIC_API: ApiType = {
+    url: apiUrls.GET_ACHIEVEMENTS_PUBLIC_URL,
+    method: "GET",
+    withToken: false,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
 export const ACHIEVEMENT_BY_ID_API: ApiType = {
     url: apiUrls.GET_ACHIEVEMENT_BY_ID_URL,
     method: "GET",

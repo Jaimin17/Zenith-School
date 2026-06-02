@@ -30,8 +30,7 @@ export default function AwardsPage() {
           return;
         }
 
-        const activeAchievements = result.data.data.filter((item) => item.is_active);
-        setAchievements(activeAchievements);
+        setAchievements(result.data.data);
       } catch (err) {
         setAchievements([]);
         setError("Unable to load achievements.");

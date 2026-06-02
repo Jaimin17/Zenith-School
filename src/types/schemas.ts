@@ -191,7 +191,7 @@ export interface TeacherClassSummary {
     lesson_id: string | null;
     lesson_name: string | null;
     subject_name: string | null;
-    day: string | null;
+    day: string;
     total_students: number;
     attendance_marked: boolean;
     present_count: number;

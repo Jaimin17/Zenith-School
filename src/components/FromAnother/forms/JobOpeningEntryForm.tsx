@@ -3,7 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { jobOpeningSchema, JobOpeningSchema } from "@/lib/formValidationSchemas";
+import { jobOpeningSchema } from "@/lib/formValidationSchemas";
+import type { z } from "zod";
 import { useActionState } from "react";
 import { createJobOpening, updateJobOpening } from "@/lib/actions";
 import { useRouter } from "next/navigation";
@@ -34,7 +35,7 @@ const JobOpeningEntryForm = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<JobOpeningSchema>({
+  } = useForm<z.input<typeof jobOpeningSchema>>({
     resolver: zodResolver(jobOpeningSchema),
     mode: "onChange",
     defaultValues: {

@@ -148,7 +148,7 @@ const TeacherAttendanceView = ({
             </div>
             <div>
               <p className="text-blue-600 text-sm font-medium">Total Classes</p>
-              <h3 className="text-2xl font-bold text-blue-700">{teacherData?.length || 0}</h3>
+              <h3 className="text-2xl font-bold text-blue-700">{teacherData?.classes.length || 0}</h3>
             </div>
           </div>
         </div>

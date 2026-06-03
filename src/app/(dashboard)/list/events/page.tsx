@@ -163,10 +163,13 @@ const EventListPage = async ({
           {/* View button available to all roles */}
           <Link
             href={`/list/events/${item.id}`}
-            className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky hover:bg-lamaSkyLight transition-colors"
+            className="w-8 h-8 inline-flex items-center justify-center bg-gray-200 text-sky-700 leading-none overflow-hidden transition-colors hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-1"
             title="View event details"
+            aria-label="View event details"
           >
-            <Eye className="w-3.5 h-3.5 text-sky-700" />
+            <span className="flex h-full w-full items-center justify-center">
+              <Eye className="w-3.5 h-3.5" />
+            </span>
           </Link>
           {role === "admin" && (
             <>

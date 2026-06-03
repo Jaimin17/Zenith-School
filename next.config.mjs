@@ -2,7 +2,8 @@
 const nextConfig = {
     experimental: {
         serverActions: {
-            bodySizeLimit: '10mb',
+      // Keep enough headroom for multipart uploads plus server-action overhead.
+      bodySizeLimit: '25mb',
         },
     },
     images: {

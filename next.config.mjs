@@ -16,7 +16,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'your-production-domain.com', // Your production backend domain
+        hostname: 'zenith-school-backend-production-675d.up.railway.app', // Your production backend domain
         pathname: '/uploads/**',
       },
     ],

@@ -73,11 +73,11 @@ const EventDetailPage = async ({
         <Link
           href="/list/events"
           className="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors group"
+          title="Back to events list"
         >
           <span className="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm group-hover:bg-gray-50 transition-colors">
             <ArrowLeft className="w-4 h-4" />
           </span>
-          <span>Back to Events</span>
         </Link>
 
         {role === "admin" && (

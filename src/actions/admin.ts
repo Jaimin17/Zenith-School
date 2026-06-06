@@ -2811,7 +2811,7 @@ export async function fetchExamsOfStudentListAction(studentId: string, searchTer
     }
 }
 
-export async function fetchSubjectFullListAction(): Promise<{
+export async function fetchSubjectFullListAction(yearId?: string): Promise<{
     success: boolean;
     data: SubjectWithRelations[] | null;
     totalCount: number;
@@ -2831,9 +2831,12 @@ export async function fetchSubjectFullListAction(): Promise<{
             };
         }
 
+        const params = yearId ? { academic_year_id: yearId } : undefined;
+
         // Make API request with server token
         const response = await api<SubjectWithRelations[]>({
             endpoint: GET_FULL_LIST_SUBJECTS_API,
+            params,
             serverToken: token.accessToken,
             isServer: true,
         });
@@ -2863,7 +2866,7 @@ export async function fetchSubjectFullListAction(): Promise<{
     }
 }
 
-export async function fetchSubjectListAction(searchTerm?: string, pageNo: number = 1): Promise<{
+export async function fetchSubjectListAction(searchTerm?: string, pageNo: number = 1, yearId?: string): Promise<{
     success: boolean;
     data: SubjectListResponse | null;
     totalCount: number;
@@ -2883,10 +2886,11 @@ export async function fetchSubjectListAction(searchTerm?: string, pageNo: number
             };
         }
 
-        const params = {
+        const params: Record<string, string> = {
             search: searchTerm || '',
             page: pageNo.toString(),
         }
+        if (yearId) params.academic_year_id = yearId;
 
         // Make API request with server token
         const response = await api<SubjectListResponse>({

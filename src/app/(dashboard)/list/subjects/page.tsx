@@ -8,6 +8,8 @@ import { fetchFullTeachersListAction, fetchSubjectFullListAction, fetchSubjectLi
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { BookOpen, Users } from "lucide-react";
+import { cookies } from "next/headers";
+import { resolveAcademicYearContext } from "@/lib/academicYear";
 
 // Skeleton Component
 const TableSkeleton = () => (
@@ -56,10 +58,14 @@ const SubjectListPage = async ({
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
   const teacherId = params.teacherId || undefined;
+  const cookieStore = await cookies();
+  const yearIdFromCookie = cookieStore.get("selected_year_id")?.value;
+  const { resolvedYearId } = await resolveAcademicYearContext(yearIdFromCookie ?? null);
+  const yearId = role === "teacher" ? (resolvedYearId ?? undefined) : yearIdFromCookie;
 
   // Fetch subjects and teachers in parallel
   const [result, teachersResult] = await Promise.all([
-    fetchSubjectListAction(search, page),
+    fetchSubjectListAction(search, page, yearId),
     fetchFullTeachersListAction()
   ]);
 

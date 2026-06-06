@@ -124,7 +124,7 @@ const AssignmentsPage = async ({
   // Fetch assignments, teachers, and subjects in parallel
   const [teachersResult, subjectsResult] = await Promise.all([
     fetchTeachersListAction(undefined, 1),
-    fetchSubjectFullListAction(),
+    fetchSubjectFullListAction(yearId),
   ]);
 
   let result;

@@ -240,7 +240,7 @@ export const apiUrls = {
     TOGGLE_TESTIMONIAL_ACTIVE_URL: "api/v1/testimonials/toggle-active",
 
     // Academic Years
-    GET_ACADEMIC_YEARS_URL: "api/v1/academic-years",
+    GET_ACADEMIC_YEARS_URL: "api/v1/academic-years/",
     GET_ACADEMIC_YEARS_ALL_URL: "api/v1/academic-years/all",
     GET_VISIBLE_ACADEMIC_YEARS_URL: "api/v1/academic-years/visible",
     GET_ACADEMIC_YEAR_ACTIVE_URL: "api/v1/academic-years/active",

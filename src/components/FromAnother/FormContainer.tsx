@@ -2,6 +2,7 @@ import { ParentWithRelations } from "@/types/schemas";
 import FormModal from "./FormModal";
 import { fetchSubjectFullListAction, fetchAllClassesAction, fetchParentsAction, fetchAllParentsListAction, fetchFullTeachersListAction, fetchFullGradeListAction, fetchLessonsAction, fetchLessonsFullListAction } from "@/actions/admin";
 import { cookies } from "next/headers";
+import { resolveAcademicYearContext } from "@/lib/academicYear";
 
 export type FormContainerProps = {
   table:
@@ -32,6 +33,10 @@ export type FormContainerProps = {
 
 const FormContainer = async ({ table, type, data, id, disabled }: FormContainerProps) => {
   let relatedData: any = {};
+  const cookieStore = await cookies();
+  const yearIdFromCookie = cookieStore.get("selected_year_id")?.value;
+  const { resolvedYearId } = await resolveAcademicYearContext(yearIdFromCookie ?? null);
+  const selectedYearId = resolvedYearId ?? undefined;
 
   const role = "admin";
   const currentUserId = "admin1";
@@ -81,7 +86,7 @@ const FormContainer = async ({ table, type, data, id, disabled }: FormContainerP
       // ---------------- TEACHER ----------------
       case "teacher": {
         // Fetch subjects from the API
-        const subjectsResponse = await fetchSubjectFullListAction();
+        const subjectsResponse = await fetchSubjectFullListAction(selectedYearId);
         const teacherSubjects = subjectsResponse.success && subjectsResponse.data
           ? subjectsResponse.data
           : [];
@@ -134,7 +139,7 @@ const FormContainer = async ({ table, type, data, id, disabled }: FormContainerP
       // ---------------- LESSON ----------------
       case "lesson": {
         const [lessonSubjectsResponse, lessonClassesResponse, lessonTeachersResponse] = await Promise.all([
-          fetchSubjectFullListAction(),
+          fetchSubjectFullListAction(selectedYearId),
           fetchAllClassesAction(),
           fetchFullTeachersListAction(),
         ]);

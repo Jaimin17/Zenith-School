@@ -5,7 +5,7 @@ import { SAVE_TEACHER_API, UPDATE_TEACHER_API, SAVE_STUDENT_API, UPDATE_STUDENT_
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN } from "@/constants/appConstants";
 
-type FormState = {
+export type FormState = {
   success: boolean;
   error: boolean;
   message?: string;

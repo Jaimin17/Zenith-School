@@ -11,7 +11,7 @@ import styles from "./TerminalChatbot.module.css";
 
 // ── Constants ────────────────────────────────────────────────────
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
-const CHAT_ENDPOINT = `${API_BASE_URL}api/v1/chatbot/chat`;
+const CHAT_ENDPOINT = `/api/orchestrated-chat`;
 const CHAT_SESSIONS_ENDPOINT = `${API_BASE_URL}api/v1/chatbot/sessions`;
 
 // Max past exchanges to send with each request.
@@ -423,7 +423,7 @@ const TerminalChatbot = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          // Token is read from cookies server-side by the orchestrator
         },
         body: JSON.stringify({
           query,

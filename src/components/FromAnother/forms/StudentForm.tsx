@@ -11,6 +11,7 @@ import { createStudent, updateStudent } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { getStudentImageUrl } from "@/utils/imageHelpers";
+import UploadProgress from "@/components/ui/UploadProgress";
 
 const StudentForm = ({
   type,
@@ -34,6 +35,7 @@ const StudentForm = ({
 
   const [img, setImg] = useState<File | null>(null);
   const [imgPreview, setImgPreview] = useState<string | null>(data?.img ? getStudentImageUrl(data.img) || null : null);
+  const [uploadingFile, setUploadingFile] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -74,9 +76,11 @@ const StudentForm = ({
     const file = e.target.files?.[0];
     if (file) {
       setImg(file);
+      setUploadingFile(file.name);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImgPreview(reader.result as string);
+        setUploadingFile(null);
       };
       reader.readAsDataURL(file);
     }
@@ -324,6 +328,8 @@ const StudentForm = ({
           </div>
         </div>
       </div>
+
+      <UploadProgress isUploading={!!uploadingFile} fileName={uploadingFile ?? undefined} />
 
       {/* Academic Information Section */}
       <div className="space-y-4">

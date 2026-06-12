@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { FileText, Calendar, BookOpen, Upload, AlignLeft, X, ExternalLink } from "lucide-react";
 import { getAssignmentPdfUrl } from "@/utils/imageHelpers";
+import UploadProgress from "@/components/ui/UploadProgress";
 
 const AssignmentForm = ({
   type,
@@ -32,6 +33,7 @@ const AssignmentForm = ({
 
   const [isPending, startTransition] = useTransition();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isFileLoading, setIsFileLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [state, formAction] = useActionState(
@@ -90,7 +92,9 @@ const AssignmentForm = ({
         toast.error("Please select a PDF file");
         return;
       }
+      setIsFileLoading(true);
       setSelectedFile(file);
+      setTimeout(() => setIsFileLoading(false), 600);
     }
   };
 
@@ -332,7 +336,7 @@ const AssignmentForm = ({
             className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all text-sm file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
           />
         </div>
-        {selectedFile && (
+        {selectedFile && !isFileLoading && (
           <div className="flex items-center gap-2 p-2 bg-green-50 border border-green-200 rounded-lg">
             <FileText className="w-4 h-4 text-green-600" />
             <span className="text-sm text-green-700 flex-1 truncate">{selectedFile.name}</span>
@@ -345,6 +349,7 @@ const AssignmentForm = ({
             </button>
           </div>
         )}
+        <UploadProgress isUploading={isFileLoading} fileName={selectedFile?.name} />
         {data?.pdf_name && !selectedFile && (
           <div className="flex items-center gap-2 p-2 bg-blue-50 border border-blue-200 rounded-lg">
             <FileText className="w-4 h-4 text-blue-600" />

@@ -257,6 +257,8 @@ export const apiUrls = {
     GET_STUDENT_SELF_YEAR_DATA_URL: "api/v1/student/self/year-data",
     GET_STUDENT_HISTORY_URL: "api/v1/student",
     GET_LESSONS_BY_YEAR_URL: "api/v1/lesson/getAllByYear",
+    LESSON_COUNT_BY_YEAR_URL: "api/v1/lesson/countByYear",
+    COPY_LESSONS_FROM_PREVIOUS_YEAR_URL: "api/v1/lesson/copyFromPreviousYear",
     GET_ACHIEVEMENTS_URL: "api/v1/achievement/getAll",
     GET_ACHIEVEMENTS_PUBLIC_URL: "api/v1/achievement/public",
     GET_ACHIEVEMENT_BY_ID_URL: "api/v1/achievement/get",

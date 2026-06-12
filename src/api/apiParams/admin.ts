@@ -1276,6 +1276,24 @@ export const GET_LESSONS_BY_YEAR_API: ApiType = {
     isForm: false,
 }
 
+export const LESSON_COUNT_BY_YEAR_API: ApiType = {
+    url: apiUrls.LESSON_COUNT_BY_YEAR_URL,
+    method: "GET",
+    withToken: true,
+    isMultipart: false,
+    showToast: false,
+    isForm: false,
+}
+
+export const COPY_LESSONS_FROM_PREVIOUS_YEAR_API: ApiType = {
+    url: apiUrls.COPY_LESSONS_FROM_PREVIOUS_YEAR_URL,
+    method: "POST",
+    withToken: true,
+    isMultipart: false,
+    showToast: true,
+    isForm: false,
+}
+
 export const JOB_OPENINGS_PUBLIC_API: ApiType = {
     url: apiUrls.GET_JOB_OPENINGS_PUBLIC_URL,
     method: "GET",

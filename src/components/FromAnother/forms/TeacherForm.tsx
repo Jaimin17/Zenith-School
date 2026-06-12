@@ -11,6 +11,7 @@ import { createTeacher, updateTeacher } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { getTeacherImageUrl } from "@/utils/imageHelpers";
+import UploadProgress from "@/components/ui/UploadProgress";
 
 const TeacherForm = ({
   type,
@@ -33,6 +34,7 @@ const TeacherForm = ({
 
   const [img, setImg] = useState<File | null>(null);
   const [imgPreview, setImgPreview] = useState<string | null>(data?.img ? getTeacherImageUrl(data?.img) || null : null);
+  const [uploadingFile, setUploadingFile] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -70,9 +72,11 @@ const TeacherForm = ({
     const file = e.target.files?.[0];
     if (file) {
       setImg(file);
+      setUploadingFile(file.name);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImgPreview(reader.result as string);
+        setUploadingFile(null);
       };
       reader.readAsDataURL(file);
     }
@@ -335,6 +339,8 @@ const TeacherForm = ({
           </div>
         </div>
       </div>
+
+      <UploadProgress isUploading={!!uploadingFile} fileName={uploadingFile ?? undefined} />
 
       {/* Submit Button */}
       <div className="flex justify-end pt-4 border-t border-gray-100">

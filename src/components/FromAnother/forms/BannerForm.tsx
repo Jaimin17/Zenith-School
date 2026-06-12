@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { ImageIcon, X, Upload, Loader2, ExternalLink } from "lucide-react";
 import { getBannerImageUrl } from "@/utils/imageHelpers";
+import UploadProgress from "@/components/ui/UploadProgress";
 
 const BannerForm = ({
   type,
@@ -38,6 +39,7 @@ const BannerForm = ({
     data?.image ? getBannerImageUrl(data.image) : null
   );
   const [isDragging, setIsDragging] = useState(false);
+  const [uploadingFile, setUploadingFile] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [state, formAction] = useActionState(
@@ -100,10 +102,12 @@ const BannerForm = ({
         toast.error("Image size should be less than 5MB");
         return;
       }
-      setImageFile(file);
+      setUploadingFile(file.name);
       const reader = new FileReader();
       reader.onloadend = () => {
+        setImageFile(file);
         setImagePreview(reader.result as string);
+        setUploadingFile(null);
       };
       reader.readAsDataURL(file);
     }
@@ -286,6 +290,8 @@ const BannerForm = ({
           </div>
         )}
       </div>
+
+      <UploadProgress isUploading={!!uploadingFile} fileName={uploadingFile ?? undefined} />
 
       {/* Error Message */}
       {state.error && (

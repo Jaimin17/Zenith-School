@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { ImageIcon, X, Upload, Loader2, ExternalLink } from "lucide-react";
 import { getSportsProgramImageUrl } from "@/utils/imageHelpers";
+import UploadProgress from "@/components/ui/UploadProgress";
 
 const SportsProgramEntryForm = ({
   type,
@@ -37,6 +38,7 @@ const SportsProgramEntryForm = ({
     data?.img ? getSportsProgramImageUrl(data.img) : null
   );
   const [isDragging, setIsDragging] = useState(false);
+  const [uploadingFile, setUploadingFile] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [state, formAction] = useActionState(
@@ -93,9 +95,11 @@ const SportsProgramEntryForm = ({
         return;
       }
       setImageFile(file);
+      setUploadingFile(file.name);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
+        setUploadingFile(null);
       };
       reader.readAsDataURL(file);
     }
@@ -250,6 +254,8 @@ const SportsProgramEntryForm = ({
           </div>
         )}
       </div>
+
+      <UploadProgress isUploading={!!uploadingFile} fileName={uploadingFile ?? undefined} />
 
       {state.error && (
         <div className="bg-red-50 border border-red-100 rounded-lg px-4 py-3 flex items-center gap-2">

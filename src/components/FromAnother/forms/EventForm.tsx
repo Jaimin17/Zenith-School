@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Calendar, Clock, FileText, Users, Loader2, ImageIcon, X, Upload } from "lucide-react";
 import { getEventImageUrl } from "@/utils/imageHelpers";
+import UploadProgress from "@/components/ui/UploadProgress";
 
 const EventForm = ({
   type,
@@ -28,6 +29,7 @@ const EventForm = ({
     () => (data?.imgs ?? []).map((p: string) => getEventImageUrl(p))
   );
   const [isDragging, setIsDragging] = useState(false);
+  const [loadingFileCount, setLoadingFileCount] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -94,10 +96,13 @@ const EventForm = ({
         toast.error(`"${file.name}" exceeds 5 MB`);
         return;
       }
-      setImageFiles((prev) => [...prev, file]);
+      setLoadingFileCount((prev) => prev + 1);
       const reader = new FileReader();
-      reader.onloadend = () =>
+      reader.onloadend = () => {
+        setImageFiles((prev) => [...prev, file]);
         setImagePreviews((prev) => [...prev, reader.result as string]);
+        setLoadingFileCount((prev) => prev - 1);
+      };
       reader.readAsDataURL(file);
     });
   };
@@ -421,6 +426,11 @@ const EventForm = ({
           </div>
         )}
       </div>
+
+      <UploadProgress
+        isUploading={loadingFileCount > 0}
+        fileCount={loadingFileCount > 1 ? loadingFileCount : undefined}
+      />
 
       {/* Error Message */}
       {state.error && (

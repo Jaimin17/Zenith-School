@@ -2,10 +2,11 @@ import Pagination from "@/components/FromAnother/Pagination";
 import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
 import FormContainer from "@/components/FromAnother/FormContainer";
+import StudentFilters from "@/components/FromAnother/StudentFilters";
 import Image from "next/image";
 import Link from "next/link";
 import type { StudentWithRelations } from "@/types/schemas";
-import { fetchStudentsAction, fetchStudentsOfTeacherAction } from "@/actions/admin";
+import { fetchStudentsAction, fetchStudentsOfTeacherAction, fetchAllClassesAction, fetchFullGradeListAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { getStudentImageUrl } from "@/utils/imageHelpers";
@@ -60,16 +61,26 @@ const StudentListPage = async ({
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
   const teacherId = params.teacherId || undefined;
+  const classId = params.class_id || undefined;
+  const gradeId = params.grade_id || undefined;
+  const sex = params.sex || undefined;
 
   const cookieStore = await cookies();
   const yearId = cookieStore.get("selected_year_id")?.value;
 
+  const [gradesResult, classesResult] = await Promise.all([
+    fetchFullGradeListAction(),
+    fetchAllClassesAction(),
+  ]);
+  const grades = gradesResult.data ?? [];
+  const classes = classesResult.data ?? [];
+
   let result;
 
-  if(teacherId){
+  if (teacherId) {
     result = await fetchStudentsOfTeacherAction(teacherId, search, page, yearId);
   } else {
-    result = await fetchStudentsAction(search, page, yearId);
+    result = await fetchStudentsAction(search, page, yearId, classId, gradeId, sex);
   }
 
 
@@ -189,6 +200,19 @@ const StudentListPage = async ({
         </div>
       </div>
 
+      {/* FILTERS */}
+      {!teacherId && (
+        <StudentFilters
+          grades={grades}
+          classes={classes}
+          currentGradeId={gradeId}
+          currentClassId={classId}
+          currentSex={sex}
+
+          currentSearch={search}
+        />
+      )}
+
       {/* ERROR STATE */}
       {hasError ? (
         <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
@@ -204,9 +228,9 @@ const StudentListPage = async ({
         <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-md text-center">
           <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-3" />
           <p className="text-gray-600 font-medium mb-1">
-            {search 
-              ? `No students found matching "${search}"` 
-              : 'No students available'}
+            {search || classId || gradeId || sex
+              ? "No students match the applied filters"
+              : "No students available"}
           </p>
           <p className="text-gray-500 text-sm">
             {role === "admin" 

@@ -2,8 +2,9 @@ import Pagination from "@/components/FromAnother/Pagination";
 import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
 import FormContainer from "@/components/FromAnother/FormContainer";
+import CopyLessonsButton from "@/components/CopyLessonsButton";
 import type { Lesson } from "@/types/schemas";
-import { fetchLessonsAction, fetchLessonsForClassAction, fetchLessonsForTeacherAction } from "@/actions/admin";
+import { fetchLessonsAction, fetchLessonsForClassAction, fetchLessonsForTeacherAction, countLessonsByYearAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { BookOpen, Clock, Users, User } from "lucide-react";
@@ -105,6 +106,13 @@ const LessonListPage = async ({
   }
 
   const hasError = !result.success || !result.data;
+
+  // Count lessons for the selected year — used to decide whether to show the copy button
+  let lessonCountForYear = 0;
+  if (role === "admin" && yearId && !teacherId && !classId) {
+    const countResult = await countLessonsByYearAction(yearId);
+    if (countResult.success) lessonCountForYear = countResult.count;
+  }
 
   if (hasError) {
     console.error('Failed to fetch lessons:', result.error);
@@ -222,6 +230,9 @@ const LessonListPage = async ({
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
+            {role === "admin" && lessonCountForYear === 0 && yearId && !teacherId && !classId && (
+              <CopyLessonsButton targetYearId={yearId} />
+            )}
             {role === "admin" && (
               <FormContainer table="lesson" type="create" />
             )}

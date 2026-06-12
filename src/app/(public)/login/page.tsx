@@ -52,7 +52,7 @@ const LoginPage: React.FC = () => {
                 className="w-100 h-100 d-flex flex-column justify-content-center"
                 style={{
                   background:
-                    "linear-gradient(155deg, rgba(17,110,99,0.95), rgba(1,39,88,0.94)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1400&auto=format&fit=crop') center/cover no-repeat",
+                    "linear-gradient(155deg, rgba(17,110,99,0.95), rgba(1,39,88,0.94))",
                   borderRadius: "28px",
                   boxShadow: "var(--box-shadow)",
                   padding: "44px 40px",
@@ -100,16 +100,7 @@ const LoginPage: React.FC = () => {
 
             <div className="col-md-10 col-lg-6 col-xl-5">
               <div className={`login-form position-relative ${msg && !isSuccess ? "animate-shake" : ""}`}>
-                {loading && (
-                  <div
-                    className="position-absolute top-0 start-0 w-100"
-                    style={{
-                      height: 4,
-                      background: "linear-gradient(90deg, var(--theme-color), var(--theme-color2))",
-                      borderTopLeftRadius: 50,
-                    }}
-                  />
-                )}
+                {loading && <div className="login-form-progress" />}
 
                 {loading && (
                   <div

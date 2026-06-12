@@ -2,10 +2,11 @@ import Pagination from "@/components/FromAnother/Pagination";
 import Table from "@/components/FromAnother/Table";
 import TableSearch from "@/components/FromAnother/TableSearch";
 import FormContainer from "@/components/FromAnother/FormContainer";
+import ParentFilters from "@/components/FromAnother/ParentFilters";
 import Image from "next/image";
 import Link from "next/link";
 import type { Parent, ParentWithRelations } from "@/types/schemas";
-import { fetchParentsAction } from "@/actions/admin";
+import { fetchParentsAction, fetchAllClassesAction, fetchFullGradeListAction } from "@/actions/admin";
 import { Suspense } from "react";
 import { requireAuth } from "@/lib/auth/serverAuth";
 import { getParentImageUrl } from "@/utils/imageHelpers";
@@ -59,11 +60,20 @@ const ParentListPage = async ({
 
   const page = params.page ? parseInt(params.page) : 1;
   const search = params.search || undefined;
+  const classId = params.class_id || undefined;
+  const gradeId = params.grade_id || undefined;
 
   const cookieStore = await cookies();
   const yearId = cookieStore.get("selected_year_id")?.value;
 
-  const result = await fetchParentsAction(search, page, yearId);
+  const [gradesResult, classesResult] = await Promise.all([
+    fetchFullGradeListAction(),
+    fetchAllClassesAction(),
+  ]);
+  const grades = gradesResult.data ?? [];
+  const classes = classesResult.data ?? [];
+
+  const result = await fetchParentsAction(search, page, yearId, classId, gradeId);
 
   const hasError = !result.success || !result.data;
 
@@ -176,6 +186,15 @@ const ParentListPage = async ({
         </div>
       </div>
 
+      {/* FILTERS */}
+      <ParentFilters
+        grades={grades}
+        classes={classes}
+        currentGradeId={gradeId}
+        currentClassId={classId}
+        currentSearch={search}
+      />
+
       {/* ERROR STATE */}
       {hasError ? (
         <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-md">
@@ -191,9 +210,9 @@ const ParentListPage = async ({
         <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-md text-center">
           <UserCircle className="w-12 h-12 text-gray-400 mx-auto mb-3" />
           <p className="text-gray-600 font-medium mb-1">
-            {search 
-              ? `No parents found matching "${search}"` 
-              : 'No parents available'}
+            {search || classId || gradeId
+              ? "No parents match the applied filters"
+              : "No parents available"}
           </p>
           <p className="text-gray-500 text-sm">
             {role === "admin" 

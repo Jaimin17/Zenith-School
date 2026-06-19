@@ -3,7 +3,6 @@ import Announcements from "../../../components/FromAnother/Announcements";
 import BigCalendarContainer from "../../../components/FromAnother/BigCalendarContainer";
 import {
     fetchAnnouncementsAction,
-    fetchLessonsWeeklyAction,
     fetchTeacherLessonsByYearAction,
 } from "@/actions/admin";
 import { Alert } from "@mui/material";
@@ -17,32 +16,19 @@ const TeacherPage = async () => {
     const cookieStore = await cookies();
     const selectedYearId = cookieStore.get("selected_year_id")?.value ?? null;
 
-    const { years, activeYear, selectedYear, resolvedYearId, fromDate, toDate } = await resolveAcademicYearContext(
-        selectedYearId
-    );
-    const isCurrentYear = !resolvedYearId || resolvedYearId === activeYear?.id;
+    const { selectedYear, resolvedYearId, fromDate, toDate } = await resolveAcademicYearContext(selectedYearId);
 
     const announcementsResult = await fetchAnnouncementsAction(undefined, 1, fromDate, toDate);
 
-    // For historical years, fetch all lessons tagged to that year
-    let historicalLessons: Lesson[] | null = null;
-    let historicalError: string | null = null;
-    if (!isCurrentYear && resolvedYearId) {
+    let lessons: Lesson[] | null = null;
+    let lessonsError: string | null = null;
+    if (resolvedYearId) {
         const result = await fetchTeacherLessonsByYearAction(resolvedYearId);
         if (result.success) {
-            historicalLessons = result.data as unknown as Lesson[];
+            lessons = result.data as unknown as Lesson[];
         } else {
-            historicalError = result.error ?? "Failed to load lessons for this year.";
+            lessonsError = result.error ?? "Failed to load lessons for this year.";
         }
-    }
-
-    // For current year, fetch weekly lessons
-    let currentLessons: Lesson[] = [];
-    let hasLessonsError = false;
-    if (isCurrentYear) {
-        const lessonsResult = await fetchLessonsWeeklyAction();
-        hasLessonsError = !lessonsResult.success || !lessonsResult.data;
-        currentLessons = lessonsResult.data ?? [];
     }
 
     const hasAnnouncementError = !announcementsResult.success || !announcementsResult.data;
@@ -56,37 +42,29 @@ const TeacherPage = async () => {
         has_prev: false,
     };
 
-    const selectedYearInfo = selectedYear ?? years.find((y) => y.id === resolvedYearId) ?? null;
-
     return (
         <div className="flex-1 p-4 flex gap-4 flex-col xl:flex-row">
             {/* LEFT */}
             <div className="w-full xl:w-2/3 flex flex-col gap-4">
                 <div className="h-full bg-white p-4 rounded-md">
                     <h1 className="text-xl font-semibold mb-1">Schedule</h1>
-                    {!isCurrentYear && selectedYearInfo && (
+                    {selectedYear && (
                         <p className="text-sm text-gray-500 mb-3">
-                            Academic Year: {selectedYearInfo.year_label}
+                            Academic Year: {selectedYear.year_label}
                         </p>
                     )}
 
-                    {/* Error Alert */}
-                    {(hasLessonsError || historicalError) && (
+                    {lessonsError && (
                         <Alert severity="error" sx={{ mb: 2 }}>
-                            {historicalError || "Failed to load schedule"}
+                            {lessonsError}
                         </Alert>
                     )}
 
-                    {/* Calendar Container */}
                     <div className="h-[calc(100%-4rem)]">
-                        {!isCurrentYear && historicalLessons !== null ? (
-                            historicalLessons.length === 0 ? (
-                                <p className="text-gray-400 text-sm">No lessons recorded for this year.</p>
-                            ) : (
-                                <BigCalendarContainer initialLessons={historicalLessons} />
-                            )
+                        {!lessons || lessons.length === 0 ? (
+                            <p className="text-gray-400 text-sm">No lessons recorded for this year.</p>
                         ) : (
-                            <BigCalendarContainer initialLessons={currentLessons} />
+                            <BigCalendarContainer initialLessons={lessons} />
                         )}
                     </div>
                 </div>

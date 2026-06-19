@@ -1,6 +1,5 @@
 import {
     fetchAnnouncementsAction,
-    fetchLessonsForStudentsWeeklyAction,
     fetchChildrenOfParentAction,
     fetchAcademicYearsAllAction,
     fetchStudentYearDataAction,
@@ -8,25 +7,13 @@ import {
 import Announcements from "../../../components/FromAnother/Announcements";
 import BigCalendarContainer from "../../../components/FromAnother/BigCalendarContainer";
 import YearAttendanceSummaryCard from "@/components/attendance/YearAttendanceSummaryCard";
-import { Announcement, AnnouncementListResponse, Lesson, LessonBase, StudentYearDataResponse } from "@/types/schemas";
+import { AnnouncementListResponse, Lesson, StudentYearDataResponse } from "@/types/schemas";
 import { Suspense } from "react";
 import { cookies } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
 // ── Skeleton Components ───────────────────────────────────────────────────────
-
-const BigCalendarSkeleton = () => (
-    <div className="bg-white p-4 rounded-md skeleton-shimmer">
-        <div className="h-6 bg-gray-200 rounded w-48 mb-4"></div>
-        <div className="space-y-3">
-            <div className="h-4 bg-gray-200 rounded w-full"></div>
-            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-            <div className="h-4 bg-gray-200 rounded w-4/6"></div>
-            <div className="h-64 bg-gray-200 rounded w-full mt-4"></div>
-        </div>
-    </div>
-);
 
 const AnnouncementsSkeleton = () => (
     <div className="bg-white p-4 rounded-md skeleton-shimmer">
@@ -42,9 +29,9 @@ const AnnouncementsSkeleton = () => (
     </div>
 );
 
-// ── Historical year schedule (rendered when a past year is selected) ──────────
+// ── Schedule section ──────────────────────────────────────────────────────────
 
-const HistoricalSchedule = ({
+const ScheduleSection = ({
     yearData,
     studentName,
 }: {
@@ -66,61 +53,11 @@ const HistoricalSchedule = ({
                     <p className="text-gray-400 text-sm">No lessons recorded for this year.</p>
                 ) : (
                     <div className="w-full overflow-auto">
-                        {/* Convert LessonBase[] to Lesson[] shape for BigCalendarContainer */}
                         <BigCalendarContainer
                             initialLessons={yearData.lessons as unknown as Lesson[]}
                         />
                     </div>
                 )}
-            </div>
-        </div>
-    );
-};
-
-// ── Current-year schedule ─────────────────────────────────────────────────────
-
-const CurrentSchedule = async ({
-    studentId,
-    studentName,
-    hasClass,
-}: {
-    studentId: string;
-    studentName: string;
-    hasClass: boolean;
-}) => {
-    if (!hasClass) {
-        return (
-            <div className="w-full">
-                <div className="bg-white p-4 rounded-md">
-                    <h1 className="text-xl font-semibold mb-4">Schedule ({studentName})</h1>
-                    <p className="text-gray-500 text-sm">No class assigned to this student.</p>
-                </div>
-            </div>
-        );
-    }
-
-    const lessonsResult = await fetchLessonsForStudentsWeeklyAction(studentId);
-
-    if (!lessonsResult.success || !lessonsResult.data) {
-        return (
-            <div className="w-full">
-                <div className="bg-white p-4 rounded-md">
-                    <h1 className="text-xl font-semibold mb-4">Schedule ({studentName})</h1>
-                    <p className="text-red-500 text-sm">Failed to load schedule. Please try again later.</p>
-                </div>
-            </div>
-        );
-    }
-
-    const lessons: Lesson[] = lessonsResult.data;
-
-    return (
-        <div className="w-full">
-            <div className="bg-white p-4 rounded-md">
-                <h1 className="text-xl font-semibold mb-4">Schedule ({studentName})</h1>
-                <div className="w-full overflow-auto">
-                    <BigCalendarContainer initialLessons={lessons} />
-                </div>
             </div>
         </div>
     );
@@ -133,7 +70,7 @@ const ParentPage = async () => {
     const selectedYearId = cookieStore.get("selected_year_id")?.value ?? null;
     const selectedChildCookieId = cookieStore.get("selected_child_id")?.value ?? null;
 
-    // Fetch children list, academic years, and announcements in parallel
+    // Fetch children list and academic years in parallel
     const [childrenResult, yearsResult] = await Promise.all([
         fetchChildrenOfParentAction(),
         fetchAcademicYearsAllAction(),
@@ -149,7 +86,6 @@ const ParentPage = async () => {
 
     // Resolve selected year
     const resolvedYearId = selectedYearId ?? activeYear?.id ?? null;
-    const isCurrentYear = !resolvedYearId || resolvedYearId === activeYear?.id;
     const selectedYear = years.find((y) => y.id === resolvedYearId) ?? activeYear;
     const announcementsFromDate = selectedYear?.start_date;
     const announcementsToDate = selectedYear?.end_date;
@@ -171,7 +107,7 @@ const ParentPage = async () => {
         has_prev: false,
     };
 
-    // Fetch selected year data for attendance summary and historical schedule
+    // Fetch selected year data (lessons + attendance) for the selected student and year
     let selectedYearData: StudentYearDataResponse | null = null;
     if (selectedChild && resolvedYearId) {
         const yearDataResult = await fetchStudentYearDataAction(selectedChild.id, resolvedYearId);
@@ -184,32 +120,23 @@ const ParentPage = async () => {
         <div className="flex-1 p-4 flex gap-4 flex-col xl:flex-row">
             {/* LEFT - Selected Student Schedule */}
             <div className="w-full xl:w-2/3 flex flex-col gap-4">
-                {/* Schedule content */}
                 {!selectedChild ? (
                     <div className="bg-white p-4 rounded-md">
                         <h1 className="text-xl font-semibold">No Students Found</h1>
                         <p className="text-gray-500 mt-2">No students are currently assigned to your account.</p>
                     </div>
-                ) : !isCurrentYear && selectedYearData ? (
-                    <HistoricalSchedule
+                ) : selectedYearData ? (
+                    <ScheduleSection
                         yearData={selectedYearData}
                         studentName={`${selectedChild.first_name} ${selectedChild.last_name}`}
                     />
-                ) : !isCurrentYear && !selectedYearData ? (
+                ) : (
                     <div className="bg-white p-4 rounded-md">
                         <h1 className="text-xl font-semibold mb-2">
                             Schedule ({selectedChild.first_name} {selectedChild.last_name})
                         </h1>
                         <p className="text-gray-400 text-sm">No data found for the selected academic year.</p>
                     </div>
-                ) : (
-                    <Suspense fallback={<BigCalendarSkeleton />}>
-                        <CurrentSchedule
-                            studentId={selectedChild.id}
-                            studentName={`${selectedChild.first_name} ${selectedChild.last_name}`}
-                            hasClass={!!selectedChild}
-                        />
-                    </Suspense>
                 )}
             </div>
 

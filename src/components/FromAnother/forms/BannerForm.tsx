@@ -217,7 +217,7 @@ const BannerForm = ({
       {/* Banner Image Section */}
       <div className="space-y-1.5">
         <label className="text-sm font-medium text-gray-700">
-          Banner Image {type === "create" && <span className="text-red-400">*</span>}
+          Banner Image {type === "create" && <span className="text-red-400">*</span>} (Recommended: 21:9 ratio)
         </label>
 
         {!imagePreview ? (

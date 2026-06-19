@@ -368,7 +368,7 @@ const EventForm = ({
         <div className="flex items-center gap-2">
           <ImageIcon className="w-4 h-4 text-gray-400" />
           <label className="text-sm font-medium text-gray-700">
-            Event Images{" "}
+            Event Images{" "} (336px wide recommended, e.g 336x256px)
             <span className="text-xs font-normal text-gray-400">
               (at least 1 required for new events)
             </span>
